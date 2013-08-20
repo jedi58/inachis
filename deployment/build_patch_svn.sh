@@ -14,7 +14,7 @@ FILE_LIST=$(svn diff $1 $2 --summarize)
 if [[ "$FILE_LIST" != "" ]] ; then
 	for i in $FILE_LIST
 	do
-		if [ "${i}" == "M" ] || [ "${i}" == "A" ] || [ "${i}" == "D" ] ; then
+		if [ "${i}" == "M" ] || [ "${i}" == "A" ] || [ "${i}" == "D" ] || [ "${i}" == "AM" ]; then
 			LAST_ACTION="${i}"
 			continue
 		fi
@@ -28,24 +28,28 @@ if [[ "$FILE_LIST" != "" ]] ; then
 					touch patch_notes.txt
 					echo "Run SQL: $FILENAME" >> patch_notes.txt
 				fi
-				mkdir -p $FN
+				if [ ! -d "$FN" ]; then
+					mkdir -p $FN
+				fi
 				svn export -r $NEW_REV --force $i $FILENAME >> /dev/null 2>&1
 				FN="$( cut -d '/' -f 1 <<< $FN )"
 			fi
 		elif [ "${LAST_ACTION}" == "D" ] ; then
 			if [ $# -eq 3 ] ; then
 				touch patch_notes.txt
-				echo "Deleted $FILENAME" >> patch_notes.txt
+				echo "Delete $FILENAME" >> patch_notes.txt
 			else
 				echo "Deleted $FILENAME"
 			fi
 		fi
 	done
 	if [ $# -eq 3 ] && [ "$FN" != "" ] ; then
-		mv patch_notes.txt $FN/
-		tar -czf patch${2//:/_to_}.tar.gz $FN
-		rm -rf $FN
-		echo 
-		echo "Patch created as: patch${2//:/_}.tar.gz"
+		if [ -f "patch_notes.txt" ] && [ -d "$FN" ]; then
+			mv patch_notes.txt $FN/
+			tar -czf patch${2//:/_to_}.tar.gz $FN
+			rm -rf $FN
+			echo 
+			echo "Patch created as: patch${2//:/_}.tar.gz"
+		fi
 	fi
 fi
