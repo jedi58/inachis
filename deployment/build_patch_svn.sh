@@ -20,7 +20,7 @@ if [[ "$FILE_LIST" != "" ]] ; then
 		fi
 		FILENAME="${i//$1/}"
 		FN=${FILENAME##*/}
-		FN="${FILENAME//$FN/}"
+		FN="patch/${FILENAME//$FN/}"
 		if [ "${LAST_ACTION}" == "M" ] || [ "${LAST_ACTION}" == "A" ] ; then
 			echo $FILENAME
 			if [ $# -eq 3 ] ; then
@@ -31,7 +31,7 @@ if [[ "$FILE_LIST" != "" ]] ; then
 				if [ ! -d "$FN" ]; then
 					mkdir -p $FN
 				fi
-				svn export -r $NEW_REV --force $i $FILENAME >> /dev/null 2>&1
+				svn export -r $NEW_REV --force $i patch/$FILENAME >> /dev/null 2>&1
 				FN="$( cut -d '/' -f 1 <<< $FN )"
 			fi
 		elif [ "${LAST_ACTION}" == "D" ] ; then
@@ -44,12 +44,12 @@ if [[ "$FILE_LIST" != "" ]] ; then
 		fi
 	done
 	if [ $# -eq 3 ] && [ "$FN" != "" ] ; then
-		if [ -f "patch_notes.txt" ] && [ -d "$FN" ]; then
-			mv patch_notes.txt $FN/
+		if [ -f "patch_notes.txt" ] && [ -d "patch/" ]; then
+			mv patch_notes.txt patch/
 		fi
 		if [ -d "$FN" ]; then
-			tar -czf patch${2//:/_to_}.tar.gz $FN
-			rm -rf $FN
+			tar -czf patch${2//:/_to_}.tar.gz patch
+			rm -rf patch
 			echo 
 			echo "Patch created as: patch${2//:/_}.tar.gz"
 		fi
