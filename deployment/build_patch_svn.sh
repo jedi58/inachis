@@ -46,6 +46,8 @@ if [[ "$FILE_LIST" != "" ]] ; then
 	if [ $# -eq 3 ] && [ "$FN" != "" ] ; then
 		if [ -f "patch_notes.txt" ] && [ -d "$FN" ]; then
 			mv patch_notes.txt $FN/
+		fi
+		if [ -d "$FN" ]; then
 			tar -czf patch${2//:/_to_}.tar.gz $FN
 			rm -rf $FN
 			echo 
