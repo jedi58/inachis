@@ -31,8 +31,10 @@ if [[ "$FILE_LIST" != "" ]] ; then
 				if [ ! -d "$FN" ]; then
 					mkdir -p $FN
 				fi
-				svn export -r $NEW_REV --force $i patch/$FILENAME >> /dev/null 2>&1
-				FN="$( cut -d '/' -f 1 <<< $FN )"
+				if [ "$1" != "$i" ]; then 
+					svn export -r $NEW_REV --force $i patch/$FILENAME >> /dev/null 2>&1
+					FN="$( cut -d '/' -f 1 <<< $FN )"
+				fi
 			fi
 		elif [ "${LAST_ACTION}" == "D" ] ; then
 			if [ $# -eq 3 ] ; then
@@ -49,7 +51,7 @@ if [[ "$FILE_LIST" != "" ]] ; then
 		fi
 		if [ -d "$FN" ]; then
 			tar -czf patch${2//:/_to_}.tar.gz patch
-			rm -rf patch
+			rm -rf $FN
 			echo 
 			echo "Patch created as: patch${2//:/_}.tar.gz"
 		fi
