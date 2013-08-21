@@ -51,7 +51,7 @@ if [[ "$FILE_LIST" != "" ]] ; then
 		fi
 		if [ -d "$FN" ]; then
 			tar -czf patch${2//:/_to_}.tar.gz patch
-			rm -rf $FN
+			rm -rf patch
 			echo 
 			echo "Patch created as: patch${2//:/_}.tar.gz"
 		fi
