@@ -1,16 +1,23 @@
 #!/bin/bash
 if [ $# -lt 2 ] ; then
 	echo "Usage: ./svn_patch.sh REPOSITORY -rCURRENT_TAG:NEW_TAG [true]"
+        echo "REPOSITORY can be local checkout or remote repository"
 	echo "If true is specified a patch file will be generated in the format of patch-CURRENT_TAG_NEW_TAG.tar.gz"
 	exit 1
 fi
+REPOSITORY=$1
+if [[ $REPOSITORY != svn* ]] ; then
+    SVN_INFO=$(svn info $REPOSITORY | grep "URL:" | awk '{print $2}')
+    REPOSITORY=$SVN_INFO
+fi
+OLD_REV="$(echo $2 | cut -d ":" -f 1 | tr -d "\-r")"
 NEW_REV=${2//-r[0-9]*:/}
 echo "Release Notes (r$NEW_REV)"
-NOTES=$(svn log $1 $2)
+NOTES=$(svn log $REPOSITORY -r$((OLD_REV + 1)):$NEW_REV)
 echo "$NOTES"  | perl -pe 's/\n//g => s/^-.*/\n/g'
 echo
 echo "Files:"
-FILE_LIST=$(svn diff $1 $2 --summarize)
+FILE_LIST=$(svn diff $REPOSITORY $2 --summarize)
 if [[ "$FILE_LIST" != "" ]] ; then
 	for i in $FILE_LIST
 	do
@@ -18,7 +25,7 @@ if [[ "$FILE_LIST" != "" ]] ; then
 			LAST_ACTION="${i}"
 			continue
 		fi
-		FILENAME="${i//$1/}"
+		FILENAME="${i//$REPOSITORY/}"
 		FN=${FILENAME##*/}
 		FN="patch/${FILENAME//$FN/}"
 		if [ "${LAST_ACTION}" == "M" ] || [ "${LAST_ACTION}" == "A" ] ; then
@@ -31,7 +38,7 @@ if [[ "$FILE_LIST" != "" ]] ; then
 				if [ ! -d "$FN" ]; then
 					mkdir -p $FN
 				fi
-				if [ "$1" != "$i" ]; then 
+				if [ "$REPOSITORY" != "$i" ]; then 
 					svn export -r $NEW_REV --force $i patch/$FILENAME >> /dev/null 2>&1
 					FN="$( cut -d '/' -f 1 <<< $FN )"
 				fi
