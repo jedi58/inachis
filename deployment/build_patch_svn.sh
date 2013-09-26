@@ -7,7 +7,7 @@ if [ $# -lt 2 ] ; then
 fi
 REPOSITORY=$1
 if [[ $REPOSITORY != svn* ]] ; then
-    SVN_INFO=$(svn info $REPOSITORY | grep "URL:" | awk '{print $2}')
+    SVN_INFO=$(svn info "$REPOSITORY" | grep "URL:" | awk '{print $2}')
     REPOSITORY=$SVN_INFO
 fi
 OLD_REV="$(echo $2 | cut -d ":" -f 1 | tr -d "\-r")"
