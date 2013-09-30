@@ -28,7 +28,7 @@ if [[ "$FILE_LIST" != "" ]] ; then
 		FILENAME="${i//$REPOSITORY/}"
 		FN=${FILENAME##*/}
 		FN="patch/${FILENAME//$FN/}"
-		if [ "${LAST_ACTION}" == "M" ] || [ "${LAST_ACTION}" == "A" ] ; then
+		if [ "${LAST_ACTION}" == "M" ] || [ "${LAST_ACTION}" == "A" ] || [ "${LAST_ACTION}" == "AM" ] ; then
 			echo $FILENAME
 			if [ $# -eq 3 ] ; then
 				if [[ "$FILENAME" == *".sql"* ]]; then
