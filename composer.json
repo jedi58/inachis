@@ -11,8 +11,14 @@
     ],
     "require": {
         "php": ">=5.6.1",
+        "doctrine/dbal": "2.5.*",
+        "doctrine/orm": "2.5.*",
+        "monolog/monolog": "1.*",
+        "twig/twig": "1.*"
     },
     "require-dev": {
+        "php-console/php-console": "3.*",
+        "phpunit/phpunit": "4.*",
         "squizlabs/php_codesniffer": "2.*"
     }
 }
