@@ -1,12 +1,20 @@
-<phpunit colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" bootstrap="tests/Bootstrap.php.dist">
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    bootstrap="tests/phpunit/Bootstrap.php">
+    
     <testsuites>
-        <testsuite name="inachis Test Suite">
-            <directory>./tests</directory>
+        <testsuite name="inachis">
+            <directory>tests/phpunit/</directory>
         </testsuite>
     </testsuites>
+    
     <filter>
         <whitelist>
-            <directory>./src</directory>
+            <directory>src</directory>
         </whitelist>
     </filter>
 </phpunit>
