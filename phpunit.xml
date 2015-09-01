@@ -4,7 +4,7 @@
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
-    bootstrap="tests/phpunit/Bootstrap.php">
+    bootstrap="tests/phpunit/bootstrap.php">
     
     <testsuites>
         <testsuite name="Inachis">
