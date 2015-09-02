@@ -2,13 +2,14 @@
 /**
  * @group unit
  */
-class URLTest extends PHPUnit_Framework_TestCase
+class UrlTest extends PHPUnit_Framework_TestCase
 {
     protected $url;
     
-    public function __construct()
+    public function __construct($name = null, array $data = array(), $dataName = '')
     {        
-        $this->url = new Inachis\Core\URL();
+        $this->url = new Inachis\Core\Url();
+        //parent::__construct($name, $data, $dataName);
     }
    
     public function testInvalidURL()
@@ -51,5 +52,11 @@ class URLTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('an-inachis-basi', 
                 $this->url->urlify('An Inachis\' Basic Title', 15));
+    }
+    
+    public function testGetLinkFromURI()
+    {
+        $this->assertEquals('test-url', 
+                $this->url->fromUri('https://www.test.com/2015/01/01/test-url/?debug#top'));
     }
 }
