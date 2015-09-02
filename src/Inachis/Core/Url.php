@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity @Table
  */
-class URL
+class Url
 {
     /** @Id @Column(type="integer", length=32, unique=true, nullable=false) */
     protected $id;
@@ -92,8 +92,8 @@ class URL
             case 'link':
                 $this->setLink($value);
                 break;
-            default:
-                parent::__set($var, $value);
+            //default:
+            //    parent::__set($var, $value);
         }
     }
 
@@ -135,16 +135,31 @@ class URL
     public function urlify($title, $limit = URL::DEFAULT_URL_SIZE_LIMIT)
     {
         $title = preg_replace(array(
-                '/[\_\s]/',
-                '/[^a-z0-9\-]/i'
-            ), array(
-                '-',
-                ''
-            ),
-            mb_strtolower($title));
+                    '/[\_\s]/',
+                    '/[^a-z0-9\-]/i'
+                ), array(
+                    '-',
+                    ''
+                ),
+                mb_strtolower($title));
         if (mb_strlen($title) > $limit) {
             $title = mb_substr($title, 0, $limit);
         }
         return $title;
+    }
+    
+    /**
+     * Returns a string containing a "short URL" from the given URI
+     * @param string $uri The URL to parse and obtain the short URL for
+     * @return string
+     */
+    public function fromUri($uri)
+    {
+        $uri = parse_url($uri, PHP_URL_PATH);
+        if (substr($uri, -1) == '/') {
+            $uri = substr($uri, 0, -1);
+        }
+        $uri = explode('/', $uri);
+        return end($uri);
     }
 }
