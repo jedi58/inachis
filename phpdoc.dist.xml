@@ -3,11 +3,11 @@
     <title>Inachis</title>
     
     <parser>
-        <target>doc/api</target>
+        <target>docs/api</target>
     </parser>
     
     <transformer>
-        <target>doc/api</target>
+        <target>docs/api</target>
     </transformer>
     
     <files>
