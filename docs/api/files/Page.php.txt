@@ -1,0 +1,116 @@
+<?php
+
+namespace Inachis\Core;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity @Table
+ */
+class Page
+{
+    /** @Column(type="integer", length=32, unique=true, nullable=false) */
+    protected $id;
+    
+    /** @Column(type="string", length=255) **/
+    protected $title;
+    
+    /** @Column(type="string", length=255) **/
+    protected $sub_title;
+    
+    /** @Column(type="longtext") **/
+    protected $content;
+    
+    /*
+     * author
+     * feature_image
+     * snippet
+     * snippet_view
+     * status - draft/published
+     * visibility - public / private
+     * post_date
+     * timezone
+     * password
+     * modified_date
+     * allow_comments
+     */
+    /** @Column(type="boolean", default="false", nullable=false) **/
+    protected $allow_comments;
+    
+    public function __get($var)
+    {
+        switch ($var) {
+            case 'id':
+                return $this->getId();
+            case 'title':
+                return $this->getTitle();
+            case 'sub_title':
+                return $this->getSubTitle();
+            case 'content':
+                return $this->getContent();
+            default:
+                return parent::__get($var);
+        }
+    }
+    
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    
+    public function getSubTitle()
+    {
+        return $this->sub_title;
+    }
+    
+    public function getContent()
+    {
+        return $this->content;
+    }
+    
+    public function __set($var, $value)
+    {
+        switch ($var) {
+            case 'id':
+                $this->setId($value);
+                break;
+            case 'title':
+                $this->setTitle($value);
+                break;
+            case 'sub_title':
+                $this->setSubTitle($value);
+                break;
+            case 'content':
+                $this->setContent($value);
+                break;
+            default:
+                parent::__set($var, $value);
+        }
+    }
+    
+    public function setId($value)
+    {
+        $this->id = (int) $value;
+    }
+    
+    public function setTitle($value)
+    {
+        $this->title = $value;
+    }
+    
+    public function setSubTitle($value)
+    {
+        $this->sub_title = $value;
+    }
+    
+    public function setContent($value)
+    {
+        $this->content = $value;
+    }
+}
+

@@ -1,0 +1,15 @@
+<?php
+
+namespace Inachis\Core;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity @Table
+ */
+class Tag
+{
+    /** @Id @Column(type="integer", length=32, unique=true, nullable=false) */
+    protected $id;
+}
+
