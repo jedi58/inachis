@@ -10,3 +10,7 @@ before_script:
   - php composer.phar install -dev
   - php composer.phar dump-autoload --optimize
   
+matrix:
+    fast_finish: true
+    allow_failures:
+      - php: "7.0"
