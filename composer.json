@@ -11,18 +11,23 @@
     ],
     "require": {
         "php": ">=5.6.1",
+        
         "doctrine/dbal": "2.5.*",
         "doctrine/orm": "2.5.*",
         "monolog/monolog": "1.*",
         "twig/twig": "1.*"
     },
     "require-dev": {
+        "behat/behat": "2.*",
         "php-console/php-console": "3.*",
+        "phpdocumentor/phpdocumentor": "2.*",
         "phpunit/phpunit": "4.*",
         "phpunit/phpunit-skeleton-generator": "*",
         "squizlabs/php_codesniffer": "2.*"
     },
     "autoload": {
-        "psr-4": {"Inachis\\": "src/"}
+        "psr-4": {
+            "Inachis\\": "src/"
+        }
     }
 }
