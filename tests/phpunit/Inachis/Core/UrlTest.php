@@ -59,4 +59,16 @@ class UrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test-url', 
                 $this->url->fromUri('https://www.test.com/2015/01/01/test-url/?debug#top'));
     }
+    
+    public function testGetLinkFromURIWithoutSchema()
+    {
+        $this->assertEquals('test-url', 
+                $this->url->fromUri('www.test.com/2015/01/01/test-url/?debug#top'));
+    }
+    
+    public function testGetLinkFromURIWithPathOnly()
+    {
+        $this->assertEquals('test-url', 
+                $this->url->fromUri('test-url?debug#top'));
+    }
 }
