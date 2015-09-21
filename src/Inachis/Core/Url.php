@@ -2,14 +2,13 @@
 
 namespace Inachis\Core;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * @ORM\Entity @Table
+ * Object for handling custom URLs that are mapped to content
+ * @Entity @Table
  */
 class Url
 {
-    /** @Id @Column(type="integer", length=32, unique=true, nullable=false) */
+    /** @Id @Column(type="integer", length=32, unique=true, nullable=false) @GeneratedValue */
     protected $id;
 
     /** @Column(type="string", length=75) */
@@ -30,16 +29,41 @@ class Url
      * @param string $link The short link for the content
      * @param bool $convert_link Flag specifying if $link should be converted
      */
-    public function __construct($type = '', $id = '', $link = '', $convert_link = false) {
+    public function __construct(
+        $type = '',
+        $id = '',
+        $link = '',
+        $convert_link = false
+    ) {
         $this->__set('content_type', $type);
         $this->__set('content_id', $id);
-        $this->__set('content_link', $convert_link ? $this->urlify($link) : $link);
+        $this->__set('link', $convert_link ? $this->urlify($link) : $link);
+    }
+    
+    /**
+     * D'tor for the class
+     */
+    public function __destruct()
+    {
+        unset($this->id);
+        unset($this->content_type);
+        unset($this->content_id);
+        unset($this->link);
+    }
+    
+    /**
+     * Returns the short URL for the current \Inachis\Core\Url object
+     * @return string The short URL for the current object
+     */
+    public function __toString()
+    {
+        return $this->link;
     }
 
     /**
      * Returns the value of the specified property
-     * @param string $var The name of the propert to return the value for
-     * @return mixed
+     * @param string $var The name of the property to return the value for
+     * @return mixed The contents of the requested property
      */
     public function __get($var)
     {
@@ -92,8 +116,8 @@ class Url
             case 'link':
                 $this->setLink($value);
                 break;
-            //default:
-            //    parent::__set($var, $value);
+            default:
+                parent::__set($var, $value);
         }
     }
 
@@ -109,7 +133,7 @@ class Url
 
     public function setContentId($value)
     {
-        $this->content_id = $value;
+        $this->content_id = (int) $value;
     }
 
     public function setLink($value)
@@ -119,7 +143,8 @@ class Url
     
     /**
      * Test if the current link is a valid SEO-friendly URL
-     * @return bool
+     * @return bool The result of validating if the SEO friendly short URL
+     *              contains only alphanumeric values and hyphens
      */
     public function validateURL()
     {
@@ -128,20 +153,24 @@ class Url
     
     /**
      * Turns a given string into an SEO-friendly URL
-     * @param string $title
-     * @param int $limit
-     * @return string
+     * @param string $title The string to turn into an SEO friendly short URL
+     * @param int $limit The maximum number of characters to allow; the default
+     *                   is defined by URL::DEFAULT_URL_SIZE_LIMIT
+     * @return string The generated SEO-friendly URL
      */
     public function urlify($title, $limit = URL::DEFAULT_URL_SIZE_LIMIT)
     {
-        $title = preg_replace(array(
-                    '/[\_\s]/',
-                    '/[^a-z0-9\-]/i'
-                ), array(
-                    '-',
-                    ''
-                ),
-                mb_strtolower($title));
+        $title = preg_replace(
+            array(
+                '/[\_\s]/',
+                '/[^a-z0-9\-]/i'
+            ),
+            array(
+                '-',
+                ''
+            ),
+            mb_strtolower($title)
+        );
         if (mb_strlen($title) > $limit) {
             $title = mb_substr($title, 0, $limit);
         }
