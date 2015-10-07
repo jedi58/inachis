@@ -1,0 +1,6 @@
+---
+# application tasks to be customized and to run after the main provision
+
+    - name: Run Composer
+      sudo: false
+      shell: /usr/local/bin/composer install chdir=/var/www/inachis/
