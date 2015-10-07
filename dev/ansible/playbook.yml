@@ -1,0 +1,16 @@
+---
+- hosts: all
+  sudo: true
+  vars_files:
+    - vars/all.yml
+  roles:
+    - server
+    - vagrant_local
+    - apache
+    - mysql
+    - rabbitmq
+    - solr
+    - php
+    - xdebug
+    - composer
+    - app
