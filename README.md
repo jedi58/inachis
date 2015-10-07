@@ -12,6 +12,11 @@ composer require jedi58/inachis
 ```
 - Run `composer update`
 
+##Deployment and configuration using Ansible
+Environments deployed using Ansible hav etheir configuration stored in the usual YAML files. For the default passwords used by each service (MySQL, RabbitMQ, etc.) please refer to https://github.com/jedi58/inachis/blob/master/dev/ansible/vars/all.yml
+
+For use in a production environment it is recommended that these passwords are NOT used.
+
 
 ##License
 This code is released under the GNU Lesser General Public License (LGPL). For more information, visit http://www.gnu.org/copyleft/lesser.html
