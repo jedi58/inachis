@@ -2,128 +2,116 @@
 
 namespace Inachis\Core;
 
+use Doctrine\ORM\EntityManager;
 /**
  * Object for handling custom URLs that are mapped to content
  * @Entity @Table
  */
 class Url
 {
-    /** @Id @Column(type="integer", length=32, unique=true, nullable=false) @GeneratedValue */
-    protected $id;
-
-    /** @Column(type="string", length=75) */
-    protected $content_type;
-
-    /** @Column(type="integer", length=32) */
-    protected $content_id;
-
-    /** @Column(type="string", length=512) */
-    protected $link;
-    
+    /**
+     * @const The maximum size allowed for SEO-friendly short URLs
+     */
     const DEFAULT_URL_SIZE_LIMIT = 255;
-    
+    /**
+     *
+     * @var type 
+     */
+    protected $em;
+    /**
+     * @Id @Column(type="string", unique=true, nullable=false)
+     * @GeneratedValue(strategy="UUID")
+     * @var string The unique identifier for the Url
+     */
+    protected $id;
+    /**
+     * @Column(type="string", length=75)
+     * @var string The content type the short link refers to
+     */
+    protected $content_type;
+    /**
+     * @Column(type="string")
+     * @var int The UUID of the content of the type specified by @see $content_type
+     */
+    protected $content_id;
+    /**
+     * @Column(type="string", length=512)
+     * @var string The SEO-friendly short link
+     */
+    protected $link;
+    /**
+     * @Column(type="boolean")
+     * @var bool Flag specifying if the URL is the canonical one to use
+     */
+    protected $default;
+    /**
+     * 
+     * @return type
+     */
+    protected function getRepository()
+    {
+        return $this->em->getRepository('Inachis\Core\Url');
+    }
     /**
      * Default constructor for Inachis\Core\URL entity
      * @param string $type The content type the URL is for
      * @param int $id The ID of the content record
      * @param string $link The short link for the content
      * @param bool $convert_link Flag specifying if $link should be converted
+     * @param bool $default Flag specifying if this link is the canonical one
      */
     public function __construct(
+        EntityManager $em,
         $type = '',
         $id = '',
         $link = '',
-        $convert_link = false
+        $convert_link = false,
+        $default = true
     ) {
-        $this->__set('content_type', $type);
-        $this->__set('content_id', $id);
-        $this->__set('link', $convert_link ? $this->urlify($link) : $link);
+        $this->em = $em;
+        $this->setContentType($type);
+        $this->setContentId($id);
+        $this->setLink($convert_link ? $this->urlify($link) : $link);
+        $this->setDefault($default);
     }
-    
     /**
-     * D'tor for the class
+     * Returns the UUID of the Url
+     * @return string The UUID of the URL
      */
-    public function __destruct()
-    {
-        unset($this->id);
-        unset($this->content_type);
-        unset($this->content_id);
-        unset($this->link);
-    }
-    
-    /**
-     * Returns the short URL for the current \Inachis\Core\Url object
-     * @return string The short URL for the current object
-     */
-    public function __toString()
-    {
-        return $this->link;
-    }
-
-    /**
-     * Returns the value of the specified property
-     * @param string $var The name of the property to return the value for
-     * @return mixed The contents of the requested property
-     */
-    public function __get($var)
-    {
-        switch ($var) {
-            case 'id':
-                return $this->getId();
-            case 'content_type':
-                return $this->getContentType();
-            case 'content_id':
-                return $this->getContentId();
-            case 'link':
-                return $this->getLink();
-            default:
-                return parent::__get($var);
-        }
-    }
-
     public function getId()
     {
-        return (int) $this->id;
+        return $this->id;
     }
-
+    /**
+     * The Entity name of the content being returned
+     * @return string
+     */
     public function getContentType()
     {
         return $this->content_type;
     }
-
+    /**
+     * Returns the UUID of the Content being linked to
+     * @return string The UUID of the content being linked to
+     */
     public function getContentId()
     {
-        return (int) $this->content_id;
+        return $this->content_id;
     }
 
     public function getLink()
     {
         return $this->link;
     }
-
-    public function __set($var, $value)
+    
+    public function getDefault()
     {
-        switch ($var) {
-            case 'id':
-                $this->setId($value);
-                break;
-            case 'content_type':
-                $this->setContentType($value);
-                break;
-            case 'content_id':
-                $this->setContentId($value);
-                break;
-            case 'link':
-                $this->setLink($value);
-                break;
-            default:
-                parent::__set($var, $value);
-        }
+        return $this->default;
     }
 
     public function setId($value)
     {
-        $this->id = (int) $value;
+        $this->id = $value;
     }
 
     public function setContentType($value)
@@ -133,7 +121,7 @@ class Url
 
     public function setContentId($value)
     {
-        $this->content_id = (int) $value;
+        $this->content_id = $value;
     }
 
     public function setLink($value)
@@ -141,6 +129,10 @@ class Url
         $this->link = $value;
     }
     
+    public function setDefault($value)
+    {
+        $this->default = (bool) $value;
+    }
     /**
      * Test if the current link is a valid SEO-friendly URL
      * @return bool The result of validating if the SEO friendly short URL
@@ -150,7 +142,6 @@ class Url
     {
         return preg_match('/^[a-z0-9\-]+$/i', $this->link);
     }
-    
     /**
      * Turns a given string into an SEO-friendly URL
      * @param string $title The string to turn into an SEO friendly short URL
@@ -176,7 +167,6 @@ class Url
         }
         return $title;
     }
-    
     /**
      * Returns a string containing a "short URL" from the given URI
      * @param string $uri The URL to parse and obtain the short URL for
@@ -190,5 +180,19 @@ class Url
         }
         $uri = explode('/', $uri);
         return end($uri);
+    }
+    /**
+     * Fetches the default URL for the specified content type and UUID
+     * @param string $content_type The type of content to return
+     * @param string $content_id The UUID of the content to return
+     */
+    public function getDefaultUrl($content_type, $content_id)
+    {
+        // get results by content_type and content_id where default=true
+        $this->getRepository()->findOneBy(array(
+            'content_type' => $conent_type,
+            'content_id' => $content_id,
+            'default' => true
+        ));
     }
 }
