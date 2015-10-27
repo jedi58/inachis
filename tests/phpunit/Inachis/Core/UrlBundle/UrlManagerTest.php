@@ -1,4 +1,3 @@
-
 <?php
 
 namespace Inachis\Tests\Core\UrlBundle;
