@@ -1,8 +1,8 @@
 <?php
 
-namespace Inachis\Tests\Core;
+namespace Inachis\Tests\Core\UrlBundle;
 
-use Inachis\Core\Url;
+use Inachis\Core\UrlBundle\Url;
 use Mockery;
 /**
  * @Entity
@@ -10,28 +10,20 @@ use Mockery;
  */
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
-    protected $url;
     protected $properties = array();
-    
-    public $em;
-    public $repository;
+    protected $url;
     
     public function setUp()
     {
-        $this->em = Mockery::mock('Doctrine\ORM\EntityManager');
-        $this->em->shouldIgnoreMissing();
-        
-        $this->repository = Mockery::mock('Doctrine\ORM\EntityRepository');
-        $this->em->shouldReceive('getRepository')->andReturn($this->repository);
-        
-        $this->properties = array(
+         $this->properties = array(
             'id' => 'UUID',
             'content_type' => 'Page',
             'content_id' => 'UUID',
             'link' => 'phpunit-test',
-            'default' => true
+            'default' => true,
+            'create_date' => new \DateTime('now')
         );
-        $this->url = new Url($this->em);
+        $this->url = new Url();
     }
     
     private function initialiseDefaultObject()
@@ -41,21 +33,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->url->setContentId($this->properties['content_id']);
         $this->url->setLink($this->properties['link']);
         $this->url->setDefault($this->properties['default']);
-    }
-
-    public function testSettingOfObjectProperties()
-    {
-        $this->initialiseDefaultObject();
-        $this->assertEquals($this->properties['id'],
-                            $this->url->getId());
-        $this->assertEquals($this->properties['content_type'],
-                            $this->url->getContentType());
-        $this->assertEquals($this->properties['content_id'],
-                            $this->url->getContentId());
-        $this->assertEquals($this->properties['link'],
-                            $this->url->getLink());
-        $this->assertEquals($this->properties['default'],
-                            $this->url->getDefault());
     }
    
     public function testInvalidURL()
