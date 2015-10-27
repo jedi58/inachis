@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Core;
+namespace Inachis\Core\UrlBundle;
 
 use Doctrine\ORM\EntityManager;
 /**
@@ -13,11 +13,6 @@ class Url
      * @const The maximum size allowed for SEO-friendly short URLs
      */
     const DEFAULT_URL_SIZE_LIMIT = 255;
-    /**
-     *
-     * @var type 
-     */
-    protected $em;
     /**
      * @Id @Column(type="string", unique=true, nullable=false)
      * @GeneratedValue(strategy="UUID")
@@ -45,14 +40,6 @@ class Url
      */
     protected $default;
     /**
-     * 
-     * @return type
-     */
-    protected function getRepository()
-    {
-        return $this->em->getRepository('Inachis\Core\Url');
-    }
-    /**
      * Default constructor for Inachis\Core\URL entity
      * @param string $type The content type the URL is for
      * @param int $id The ID of the content record
@@ -61,14 +48,12 @@ class Url
      * @param bool $default Flag specifying if this link is the canonical one
      */
     public function __construct(
-        EntityManager $em,
         $type = '',
         $id = '',
         $link = '',
         $convert_link = false,
         $default = true
     ) {
-        $this->em = $em;
         $this->setContentType($type);
         $this->setContentId($id);
         $this->setLink($convert_link ? $this->urlify($link) : $link);
@@ -180,19 +165,5 @@ class Url
         }
         $uri = explode('/', $uri);
         return end($uri);
-    }
-    /**
-     * Fetches the default URL for the specified content type and UUID
-     * @param string $content_type The type of content to return
-     * @param string $content_id The UUID of the content to return
-     */
-    public function getDefaultUrl($content_type, $content_id)
-    {
-        // get results by content_type and content_id where default=true
-        $this->getRepository()->findOneBy(array(
-            'content_type' => $conent_type,
-            'content_id' => $content_id,
-            'default' => true
-        ));
     }
 }
