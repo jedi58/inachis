@@ -19,6 +19,7 @@
     },
     "require-dev": {
         "behat/behat": "2.*",
+        "mockery/mockery": "dev-master",
         "php-console/php-console": "3.*",
         "phpdocumentor/phpdocumentor": "2.*",
         "phpunit/phpunit": "4.*",
