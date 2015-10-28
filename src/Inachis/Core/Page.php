@@ -102,8 +102,8 @@ class Page
         $this->setTitle($title);
         $this->setContent($content);
         $this->setAuthor($author);
-        //$this->setPostDate(date('Y-m-d H:i:s'));
-        //$this->setModDate(date('Y-m-d H:i:s'));
+        $this->setPostDateFromDateTime(new \DateTime('now'));
+        $this->setModDateFromDateTime(new \DateTime('now'));
     }
     /**
      * Returns the value of {@link id}
