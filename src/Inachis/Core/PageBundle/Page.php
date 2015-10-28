@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Core;
+namespace Inachis\Core\PageBundle;
 
 /**
  * Object for handling pages of a site
