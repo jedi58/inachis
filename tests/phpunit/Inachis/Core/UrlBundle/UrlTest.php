@@ -21,7 +21,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'content_id' => 'UUID',
             'link' => 'phpunit-test',
             'default' => true,
-            'create_date' => new \DateTime('now')
+            'create_date' => new \DateTime('yesterday'),
+            'mod_date' => new \DateTime('now')
         );
         $this->url = new Url();
     }
@@ -33,6 +34,21 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->url->setContentId($this->properties['content_id']);
         $this->url->setLink($this->properties['link']);
         $this->url->setDefault($this->properties['default']);
+    }
+    
+    public function testSettingOfObjectProperties()
+    {
+        $this->initialiseDefaultObject();
+        $this->assertEquals($this->properties['id'],
+                            $this->url->getId());
+        $this->assertEquals($this->properties['content_type'],
+                            $this->url->getContentType());
+        $this->assertEquals($this->properties['content_id'],
+                            $this->url->getContentId());
+        $this->assertEquals($this->properties['link'],
+                            $this->url->getLink());
+        $this->assertEquals($this->properties['default'],
+                            $this->url->getDefault());
     }
    
     public function testInvalidURL()

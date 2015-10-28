@@ -40,6 +40,16 @@ class Url
      */
     protected $default;
     /**
+     * @Column(type="datetime", nullable=false)
+     * @var string The date the Url was added
+     */
+    protected $create_date;
+    /**
+     * @Column(type="datetime", nullable=false)
+     * @var string The date the Url was last modified
+     */
+    protected $mod_date;
+    /**
      * Default constructor for Inachis\Core\URL entity
      * @param string $type The content type the URL is for
      * @param int $id The ID of the content record
@@ -58,6 +68,8 @@ class Url
         $this->setContentId($id);
         $this->setLink($convert_link ? $this->urlify($link) : $link);
         $this->setDefault($default);
+        $this->setCreateDateFromDateTime(new \DateTime('now'));
+        $this->setModDateFromDateTime(new \DateTime('now'));
     }
     /**
      * Returns the UUID of the Url
@@ -117,6 +129,36 @@ class Url
     public function setDefault($value)
     {
         $this->default = (bool) $value;
+    }
+    
+    public function setCreateDate($value)
+    {
+        $this->create_date = $value;
+    }
+    
+    public function setCreateDateFromDateTime(\DateTime $value)
+    {
+        $this->create_date = $value->format('Y-m-d H:i:s');
+    }
+    
+    public function setModDate($value)
+    {
+        $this->mod_date = $value;
+    }
+    /**
+     * Sets the mod date to the date/time specified
+     * @param \DateTime $value
+     */
+    public function setModDateFromDateTime(\DateTime $value)
+    {
+        $this->mod_date = $value->format('Y-m-d H:i:s');
+    }
+    /**
+     * Sets the mod date for the {@link Url} to the current date
+     */
+    public function setModDateToNow()
+    {
+        $this->setModDateFromDateTime(new \DateTime('now'));
     }
     /**
      * Test if the current link is a valid SEO-friendly URL
