@@ -12,6 +12,10 @@ class UrlManager extends EntityRepository
      */
     protected $em;
     /**
+     * @var Url 
+     */
+    protected $url;
+    /**
      * 
      * @param EntityManager $em
      */
