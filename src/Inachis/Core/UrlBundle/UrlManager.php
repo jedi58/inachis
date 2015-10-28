@@ -33,6 +33,18 @@ class UrlManager extends EntityRepository
         return new Url();
     }
     
+    public function save()
+    {
+        $this->em->persist($this->url);
+        $this->em->flush();
+    }
+    
+    public function remove()
+    {
+        $this->em->remove($this->url);
+        $this->flush();
+    }
+    
     public function getById($id)
     {
         return $this->getRepository()->find($id);
@@ -46,7 +58,7 @@ class UrlManager extends EntityRepository
     public function getAllForContentTypeAndId($content_type, $content_id)
     {
         return $this->getRepository()->findBy(array(
-            'content_type' => $conent_type,
+            'content_type' => $content_type,
             'content_id' => $content_id
         ));
     }
@@ -58,7 +70,7 @@ class UrlManager extends EntityRepository
     public function getDefaultUrlByContentTypeAndId($content_type, $content_id)
     {
         return $this->getRepository()->findOneBy(array(
-            'content_type' => $conent_type,
+            'content_type' => $content_type,
             'content_id' => $content_id,
             'default' => true
         ));
