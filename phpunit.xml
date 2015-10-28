@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
+    bootstrap="tests/phpunit/bootstrap.php"
     colors="true"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    bootstrap="tests/phpunit/bootstrap.php">
+    convertWarningsToExceptions="true">
     
     <testsuites>
         <testsuite name="Inachis">
@@ -14,7 +14,11 @@
     
     <filter>
         <whitelist>
-            <directory>src</directory>
+            <directory>vendor</directory>
         </whitelist>
     </filter>
+    
+    <logging>
+        <log type="coverage-clover" target="clover.xml"/>
+    </logging>
 </phpunit>
