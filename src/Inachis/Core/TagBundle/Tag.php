@@ -13,7 +13,7 @@ class Tag
      */
     protected $id;
     /**
-     * @Column(type="string", length="50")
+     * @Column(type="string", length=50)
      * @var string The text for the tag
      */
     protected $title;
