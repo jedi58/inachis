@@ -71,13 +71,13 @@ class Page
      */
     protected $visibility = self::VIS_PUBLIC;
     /**
-     * @Column(type="DateTime")
+     * @Column(type="datetime")
      * @var string The date the {@link Page} was published; a future date
      *             indicates the content is scheduled
      */
     protected $post_date;
     /**
-     * @Column(type="DateTime")
+     * @Column(type="datetime")
      * @var string The date the {@link Page} was last modified
      */
     protected $mod_date;
