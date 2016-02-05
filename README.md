@@ -10,7 +10,7 @@ This is currently an experimental framework - more details will be provided as a
 ```{r, engine='bash', composer_install}
 composer require jedi58/inachis
 ```
-- Run `composer update`
+- Run `composer install`
 
 ##Deployment and configuration using Ansible
 Environments deployed using Ansible hav etheir configuration stored in the usual YAML files. For the default passwords used by each service (MySQL, RabbitMQ, etc.) please refer to https://github.com/jedi58/inachis/blob/master/dev/ansible/vars/all.yml
