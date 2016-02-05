@@ -22,6 +22,7 @@
         "mockery/mockery": "dev-master",
         "php-console/php-console": "3.*",
         "phpdocumentor/phpdocumentor": "2.*",
+	"codeclimate/php-test-reporter": "dev-master",
         "phpunit/phpunit": "4.*",
         "phpunit/phpunit-skeleton-generator": "*",
         "squizlabs/php_codesniffer": "2.*"
