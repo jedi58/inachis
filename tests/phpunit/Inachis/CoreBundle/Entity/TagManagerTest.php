@@ -49,7 +49,7 @@ class TagManagerTest extends \PHPUnit_Framework_TestCase
         $tags[] = $this->tag;
         
         $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
-                ->andReturn($tags);
+            ->andReturn($tags);
         $this->assertSame($tags, $this->manager->getAll(10, 0));
     }
     

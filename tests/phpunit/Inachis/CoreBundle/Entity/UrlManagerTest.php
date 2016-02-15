@@ -26,12 +26,12 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->properties = array(
             'id' => 'UUID',
-            'content_type' => 'Page',
-            'content_id' => 'UUID',
+            'contentType' => 'Page',
+            'contentId' => 'UUID',
             'link' => 'phpunit-test',
             'default' => true,
-            'create_date' => new \DateTime('yesterday'),
-            'mod_date' => new \DateTime('now')
+            'createDate' => new \DateTime('yesterday'),
+            'modDate' => new \DateTime('now')
         );
         $this->manager = new UrlManager($this->em);
         $this->url = $this->manager->create();
@@ -41,8 +41,8 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->url = $this->manager->create();
         $this->url->setId($this->properties['id']);
-        $this->url->setContentType($this->properties['content_type']);
-        $this->url->setContentId($this->properties['content_id']);
+        $this->url->setContentType($this->properties['contentType']);
+        $this->url->setContentId($this->properties['contentId']);
         $this->url->setLink($this->properties['link']);
         $this->url->setDefault($this->properties['default']);
     }
@@ -60,7 +60,7 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
         $urls[] = $url;
         
         $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
-                ->andReturn($urls);
+            ->andReturn($urls);
         $this->assertSame($urls, $this->manager->getAll(10, 0));
     }
     
@@ -75,12 +75,16 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->url = $this->manager->create();
         $this->repository->shouldReceive('findBy')
-                ->with(array(
-                    'content_type' => 'Page',
-                    'content_id' => '1'
-                ))->andReturn($this->url);
-        $this->assertSame($this->url, 
-                $this->manager->getAllForContentTypeAndId('Page', 1));
+            ->with(
+                array(
+                    'contentType' => 'Page',
+                    'contentId' => '1'
+                    )
+            )->andReturn($this->url);
+        $this->assertSame(
+            $this->url, 
+            $this->manager->getAllForContentTypeAndId('Page', 1)
+        );
     }
     
     public function testGetAllForContentTypeAndIdReturnsMultiple()
@@ -100,30 +104,36 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
         $urls[] = $this->url;
         
         $this->repository->shouldReceive('findBy')
-                ->with(array(
-                    'content_type' => 'Page',
-                    'content_id' => '2'
-                ))->andReturn($urls);
-        $this->assertSame($urls, 
-                $this->manager->getAllForContentTypeAndId('Page', 2));
+            ->with(
+                array(
+                    'contentType' => 'Page',
+                    'contentId' => '2'
+                    )
+            )->andReturn($urls);
+        $this->assertSame(
+            $urls, 
+            $this->manager->getAllForContentTypeAndId('Page', 2)
+        );
     }
     
     public function testGetDefaultUrlByContentTypeAndId()
     {
         $this->initialiseDefaultObject();
         $this->repository->shouldReceive('findOneBy')
-                ->with(array(
-                    'content_type' => $this->properties['content_type'],
-                    'content_id' => $this->properties['content_id'],
+            ->with(
+                array(
+                    'contentType' => $this->properties['contentType'],
+                    'contentId' => $this->properties['contentId'],
                     'default' => $this->properties['default']
-                ))
-                ->andReturn($this->url);
+                    )
+            )
+            ->andReturn($this->url);
         $this->assertSame(
-                $this->url, 
-                $this->manager->getDefaultUrlByContentTypeAndId(
-                        $this->properties['content_type'], 
-                        $this->properties['content_id']
-                )
+            $this->url, 
+            $this->manager->getDefaultUrlByContentTypeAndId(
+                $this->properties['contentType'], 
+                $this->properties['contentId']
+            )
         );
     }
 }

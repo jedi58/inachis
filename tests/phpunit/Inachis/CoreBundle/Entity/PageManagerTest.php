@@ -74,7 +74,7 @@ class PageManagerTest extends \PHPUnit_Framework_TestCase
         $pages[] = $this->page;
         
         $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
-                ->andReturn($pages);
+            ->andReturn($pages);
         $this->assertSame($pages, $this->manager->getAll(10, 0));
     }
     

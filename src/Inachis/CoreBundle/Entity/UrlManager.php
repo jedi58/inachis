@@ -2,34 +2,19 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-
-class UrlManager extends EntityRepository
+class UrlManager extends AbstractManager
 {
-    /**
-     * @var EntityManager Used for Repository interactions
-     */
-    protected $em;
     /**
      * @var Url 
      */
     protected $url;
     /**
      * 
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-    /**
-     * 
      * @return type
      */
-    protected function getRepository()
+    protected function getClass()
     {
-        return $this->em->getRepository('Url');
+        return 'Url';
     }
     
     public function create()
@@ -55,30 +40,30 @@ class UrlManager extends EntityRepository
     }
     /**
      * 
-     * @param type $content_type
-     * @param type $content_id
+     * @param type $contentType
+     * @param type $contentId
      * @return type
      */
-    public function getAllForContentTypeAndId($content_type, $content_id)
+    public function getAllForContentTypeAndId($contentType, $contentId)
     {
         return $this->getRepository()->findBy(
             array(
-            'content_type' => $content_type,
-            'content_id' => $content_id
+            'contentType' => $contentType,
+            'contentId' => $contentId
             )
         );
     }
     /**
      * Fetches the default URL for the specified content type and UUID
-     * @param string $content_type The type of content to return
-     * @param string $content_id   The UUID of the content to return
+     * @param string $contentType The type of content to return
+     * @param string $contentId   The UUID of the content to return
      */
-    public function getDefaultUrlByContentTypeAndId($content_type, $content_id)
+    public function getDefaultUrlByContentTypeAndId($contentType, $contentId)
     {
         return $this->getRepository()->findOneBy(
             array(
-            'content_type' => $content_type,
-            'content_id' => $content_id,
+            'contentType' => $contentType,
+            'contentId' => $contentId,
             'default' => true
             )
         );

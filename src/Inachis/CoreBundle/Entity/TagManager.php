@@ -2,34 +2,21 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
+use Inachis\Component\CoreBundle\Entity\AbstractManager;
 
-class TagManager extends EntityRepository
+class TagManager extends AbstractManager
 {
-    /**
-     * @var EntityManager Used for Repository interactions
-     */
-    protected $em;
     /**
      * @var Tag
      */
     protected $tag;
     /**
      * 
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-    /**
-     * 
      * @return type
      */
-    protected function getRepository()
+    protected function getClass()
     {
-        return $this->em->getRepository('Tag');
+        return 'Tag';
     }
     
     public function create()

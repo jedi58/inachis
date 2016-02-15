@@ -4,35 +4,35 @@ namespace Inachis\Component\CoreBundle\Entity;
 
 use Inachis\Component\CoreBundle\Entity\AbstractManager;
 
-class PageManager extends AbstractManager
+class CategoryManager extends AbstractManager
 {
     /**
-     * @var Page 
+     * @var Category 
      */
-    protected $page;
+    protected $category;
     /**
      * 
      * @return string 
      */
     protected function getClass()
     {
-        return 'Page';
+        return 'Category';
     }
     
     public function create()
     {
-        return new Page();
+        return new Category();
     }
     
     public function save()
     {
-        $this->em->persist($this->page);
+        $this->em->persist($this->category);
         $this->em->flush();
     }
     
     public function remove()
     {
-        $this->em->remove($this->page);
+        $this->em->remove($this->category);
         $this->flush();
     }
     

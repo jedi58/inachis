@@ -28,9 +28,13 @@ class TagTest extends PHPUnit_Framework_TestCase
     public function testSettingOfObjectProperties()
     {
         $this->initialiseDefaultObject();
-        $this->assertEquals($this->properties['id'],
-                            $this->tag->getId());
-        $this->assertEquals($this->properties['title'],
-                            $this->tag->getTitle());
+        $this->assertEquals(
+            $this->properties['id'],
+            $this->tag->getId()
+        );
+        $this->assertEquals(
+            $this->properties['title'],
+            $this->tag->getTitle()
+        );
     }
 }

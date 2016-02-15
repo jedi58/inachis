@@ -23,8 +23,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'default' => true,
             'create_date' => new \DateTime('yesterday'),
             'mod_date' => new \DateTime('now')
-        );
-        $this->url = new Url();
+         );
+         $this->url = new Url();
     }
     
     private function initialiseDefaultObject()
@@ -39,16 +39,26 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testSettingOfObjectProperties()
     {
         $this->initialiseDefaultObject();
-        $this->assertEquals($this->properties['id'],
-                            $this->url->getId());
-        $this->assertEquals($this->properties['content_type'],
-                            $this->url->getContentType());
-        $this->assertEquals($this->properties['content_id'],
-                            $this->url->getContentId());
-        $this->assertEquals($this->properties['link'],
-                            $this->url->getLink());
-        $this->assertEquals($this->properties['default'],
-                            $this->url->getDefault());
+        $this->assertEquals(
+            $this->properties['id'],
+            $this->url->getId()
+        );
+        $this->assertEquals(
+            $this->properties['content_type'],
+            $this->url->getContentType()
+        );
+        $this->assertEquals(
+            $this->properties['content_id'],
+            $this->url->getContentId()
+        );
+        $this->assertEquals(
+            $this->properties['link'],
+            $this->url->getLink()
+        );
+        $this->assertEquals(
+            $this->properties['default'],
+            $this->url->getDefault()
+        );
     }
    
     public function testInvalidURL()
@@ -83,31 +93,41 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     
     public function testConvertURLWithPunctuation()
     {
-        $this->assertEquals('an-inachis-basic-title', 
-                $this->url->urlify('An Inachis\' Basic Title'));
+        $this->assertEquals(
+            'an-inachis-basic-title', 
+            $this->url->urlify('An Inachis\' Basic Title')
+        );
     }
     
     public function testConvertURLWithSizeLimit()
     {
-        $this->assertEquals('an-inachis-basi', 
-                $this->url->urlify('An Inachis\' Basic Title', 15));
+        $this->assertEquals(
+            'an-inachis-basi', 
+            $this->url->urlify('An Inachis\' Basic Title', 15)
+        );
     }
     
     public function testGetLinkFromURI()
     {
-        $this->assertEquals('test-url', 
-                $this->url->fromUri('https://www.test.com/2015/01/01/test-url/?debug#top'));
+        $this->assertEquals(
+            'test-url', 
+            $this->url->fromUri('https://www.test.com/2015/01/01/test-url/?debug#top')
+        );
     }
     
     public function testGetLinkFromURIWithoutSchema()
     {
-        $this->assertEquals('test-url', 
-                $this->url->fromUri('www.test.com/2015/01/01/test-url/?debug#top'));
+        $this->assertEquals(
+            'test-url', 
+            $this->url->fromUri('www.test.com/2015/01/01/test-url/?debug#top')
+        );
     }
     
     public function testGetLinkFromURIWithPathOnly()
     {
-        $this->assertEquals('test-url', 
-                $this->url->fromUri('test-url?debug#top'));
+        $this->assertEquals(
+            'test-url', 
+            $this->url->fromUri('test-url?debug#top')
+        );
     }
 }
