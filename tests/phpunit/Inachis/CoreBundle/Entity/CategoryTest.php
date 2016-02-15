@@ -7,7 +7,7 @@ namespace Inachis\Component\CoreBundle\Tests\Entity;
  */
 use Inachis\Component\CoreBundle\Entity\Category;
 
-class CategoryTest extends PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $category;
     protected $properties = array();

@@ -7,7 +7,7 @@ namespace Inachis\Component\CoreBundle\Tests\Entity;
  */
 use Inachis\Component\CoreBundle\Entity\Tag;
 
-class TagTest extends PHPUnit_Framework_TestCase
+class TagTest extends \PHPUnit_Framework_TestCase
 {
     protected $tag;
     

@@ -7,7 +7,7 @@ namespace Inachis\Component\CoreBundle\Tests\Entity;
  */
 use Inachis\Component\CoreBundle\Entity\Page;
 
-class PageTest extends PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit_Framework_TestCase
 {
     protected $page;
     protected $properties = array();
