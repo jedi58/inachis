@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Core\TagBundle;
+namespace Inachis\Component\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;

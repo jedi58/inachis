@@ -1,8 +1,8 @@
 <?php
 
-namespace Inachis\Tests\Core\UrlBundle;
+namespace Inachis\Component\CoreBundle\Tests\Entity;
 
-use Inachis\Core\UrlBundle\UrlManager;
+use Inachis\Component\CoreBundle\Entity\UrlManager;
 use Mockery;
 /**
  * @Entity

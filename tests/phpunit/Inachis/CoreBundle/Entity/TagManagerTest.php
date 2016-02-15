@@ -1,8 +1,8 @@
 <?php
 
-namespace Inachis\Tests\Core\TagBundle;
+namespace Inachis\Component\CoreBundle\Tests\Entity;
 
-use Inachis\Core\TagBundle\TagManager;
+use Inachis\Component\CoreBundle\Entity\TagManager;
 use Mockery;
 /**
  * @Entity

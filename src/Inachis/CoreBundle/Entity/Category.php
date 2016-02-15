@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Core\CategoryBundle;
+namespace Inachis\Component\CoreBundle\Entity;
 
 /**
  * Object for handling categories on a site

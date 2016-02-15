@@ -1,9 +1,9 @@
 <?php
 
-namespace Inachis\Tests\Core\PageBundle;
+namespace Inachis\Component\CoreBundle\Tests\Entity;
 
-use Inachis\Core\PageBundle\Page;
-use Inachis\Core\PageBundle\PageManager;
+use Inachis\Component\CoreBundle\Entity\Page;
+use Inachis\Component\CoreBundle\Entity\PageManager;
 use Mockery;
 /**
  * @Entity

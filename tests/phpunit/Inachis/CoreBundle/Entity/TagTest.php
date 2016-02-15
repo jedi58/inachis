@@ -2,7 +2,7 @@
 /**
  * @group unit
  */
-use Inachis\Core\TagBundle\Tag;
+use Inachis\Component\CoreBundle\Entity\Tag;
 
 class TagTest extends PHPUnit_Framework_TestCase
 {

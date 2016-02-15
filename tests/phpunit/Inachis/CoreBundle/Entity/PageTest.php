@@ -2,7 +2,7 @@
 /**
  * @group unit
  */
-use Inachis\Core\PageBundle\Page;
+use Inachis\Component\CoreBundle\Entity\Page;
 
 class PageTest extends PHPUnit_Framework_TestCase
 {

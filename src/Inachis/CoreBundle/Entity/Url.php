@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Core\UrlBundle;
+namespace Inachis\Component\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 /**

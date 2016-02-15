@@ -1,6 +1,7 @@
 <?php
 
-namespace Inachis\Core\TagBundle;
+namespace Inachis\Component\CoreBundle\Entity;
+
 /**
  * @Entity @Table
  */
