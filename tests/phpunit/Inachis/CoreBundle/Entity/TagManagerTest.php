@@ -4,6 +4,7 @@ namespace Inachis\Component\CoreBundle\Tests\Entity;
 
 use Inachis\Component\CoreBundle\Entity\TagManager;
 use Mockery;
+
 /**
  * @Entity
  * @group unit

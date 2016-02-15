@@ -1,4 +1,7 @@
 <?php
+
+namespace Inachis\Component\CoreBundle\Tests\Entity;
+
 /**
  * @group unit
  */
@@ -60,11 +63,11 @@ class PageTest extends PHPUnit_Framework_TestCase
             $this->page->getTitle()
         );
         $this->assertEquals(
-            $this->properties['sub-title'], 
+            $this->properties['sub-title'],
             $this->page->getSubTitle()
         );
         $this->assertEquals(
-            $this->properties['content'], 
+            $this->properties['content'],
             $this->page->getContent()
         );
         $this->assertEquals(

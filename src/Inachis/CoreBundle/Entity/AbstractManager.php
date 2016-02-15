@@ -14,19 +14,19 @@ abstract class AbstractManager extends EntityRepository
     /**
      *
      */
-	public function __construct(EntityManager $em)
-	{
-		$this->em = $em;
-	}
+    public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
+    }
     /**
      *
      */
-	abstract protected function getClass();
+    abstract protected function getClass();
     /**
      *
      */
-	protected function getRepository()
-	{
-		return $this->em->getRepository($this->getClass());
-	}
+    protected function getRepository()
+    {
+        return $this->em->getRepository($this->getClass());
+    }
 }

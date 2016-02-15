@@ -2,17 +2,15 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
-use Inachis\Component\CoreBundle\Entity\AbstractManager;
-
 class PageManager extends AbstractManager
 {
     /**
-     * @var Page 
+     * @var Page
      */
     protected $page;
     /**
-     * 
-     * @return string 
+     *
+     * @return string
      */
     protected function getClass()
     {
@@ -41,7 +39,7 @@ class PageManager extends AbstractManager
         return $this->getRepository()->find($id);
     }
     /**
-     * 
+     *
      * @param type $limit
      * @param type $offset
      * @return type
@@ -49,7 +47,10 @@ class PageManager extends AbstractManager
     public function getAll($limit = -1, $offset = -1)
     {
         return $this->getRepository()->findBy(
-            array(), array(), $limit, $offset
+            array(),
+            array(),
+            $limit,
+            $offset
         );
     }
 }

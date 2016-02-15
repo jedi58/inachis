@@ -2,8 +2,6 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
-use Inachis\Component\CoreBundle\Entity\AbstractManager;
-
 class TagManager extends AbstractManager
 {
     /**
@@ -11,7 +9,7 @@ class TagManager extends AbstractManager
      */
     protected $tag;
     /**
-     * 
+     *
      * @return type
      */
     protected function getClass()
@@ -41,7 +39,7 @@ class TagManager extends AbstractManager
         return $this->getRepository()->find($id);
     }
     /**
-     * 
+     *
      * @param type $limit
      * @param type $offset
      * @return type
@@ -49,7 +47,10 @@ class TagManager extends AbstractManager
     public function getAll($limit = -1, $offset = -1)
     {
         return $this->getRepository()->findBy(
-            array(), array(), $limit, $offset
+            array(),
+            array(),
+            $limit,
+            $offset
         );
     }
 }

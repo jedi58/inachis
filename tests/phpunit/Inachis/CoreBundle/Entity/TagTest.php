@@ -1,4 +1,7 @@
 <?php
+
+namespace Inachis\Component\CoreBundle\Tests\Entity;
+
 /**
  * @group unit
  */
@@ -11,7 +14,7 @@ class TagTest extends PHPUnit_Framework_TestCase
     protected $properties = array();
     
     public function __construct($name = null, array $data = array(), $dataName = '')
-    {        
+    {
         $this->tag = new Tag();
         $this->properties = array(
             'id' => 'UUID',

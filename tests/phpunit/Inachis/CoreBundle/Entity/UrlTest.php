@@ -4,6 +4,7 @@ namespace Inachis\Component\CoreBundle\Tests\Entity;
 
 use Inachis\Component\CoreBundle\Entity\Url;
 use Mockery;
+
 /**
  * @Entity
  * @group unit
@@ -94,7 +95,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testConvertURLWithPunctuation()
     {
         $this->assertEquals(
-            'an-inachis-basic-title', 
+            'an-inachis-basic-title',
             $this->url->urlify('An Inachis\' Basic Title')
         );
     }
@@ -102,7 +103,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testConvertURLWithSizeLimit()
     {
         $this->assertEquals(
-            'an-inachis-basi', 
+            'an-inachis-basi',
             $this->url->urlify('An Inachis\' Basic Title', 15)
         );
     }
@@ -110,7 +111,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetLinkFromURI()
     {
         $this->assertEquals(
-            'test-url', 
+            'test-url',
             $this->url->fromUri('https://www.test.com/2015/01/01/test-url/?debug#top')
         );
     }
@@ -118,7 +119,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetLinkFromURIWithoutSchema()
     {
         $this->assertEquals(
-            'test-url', 
+            'test-url',
             $this->url->fromUri('www.test.com/2015/01/01/test-url/?debug#top')
         );
     }
@@ -126,7 +127,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetLinkFromURIWithPathOnly()
     {
         $this->assertEquals(
-            'test-url', 
+            'test-url',
             $this->url->fromUri('test-url?debug#top')
         );
     }

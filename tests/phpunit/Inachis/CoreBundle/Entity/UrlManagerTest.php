@@ -4,6 +4,7 @@ namespace Inachis\Component\CoreBundle\Tests\Entity;
 
 use Inachis\Component\CoreBundle\Entity\UrlManager;
 use Mockery;
+
 /**
  * @Entity
  * @group unit
@@ -82,7 +83,7 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
                     )
             )->andReturn($this->url);
         $this->assertSame(
-            $this->url, 
+            $this->url,
             $this->manager->getAllForContentTypeAndId('Page', 1)
         );
     }
@@ -111,7 +112,7 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
                     )
             )->andReturn($urls);
         $this->assertSame(
-            $urls, 
+            $urls,
             $this->manager->getAllForContentTypeAndId('Page', 2)
         );
     }
@@ -129,9 +130,9 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
             )
             ->andReturn($this->url);
         $this->assertSame(
-            $this->url, 
+            $this->url,
             $this->manager->getDefaultUrlByContentTypeAndId(
-                $this->properties['contentType'], 
+                $this->properties['contentType'],
                 $this->properties['contentId']
             )
         );

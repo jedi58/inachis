@@ -3,6 +3,7 @@
 namespace Inachis\Component\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
+
 /**
  * Object for handling custom URLs that are mapped to content
  * @Entity @Table
@@ -172,7 +173,8 @@ class Url
     /**
      * Turns a given string into an SEO-friendly URL
      * @param string $title The string to turn into an SEO friendly short URL
-     * @param int    $limit The maximum number of characters to allow; the default is defined by URL::DEFAULT_URL_SIZE_LIMIT
+     * @param int    $limit The maximum number of characters to allow;
+     *                   the default is defined by URL::DEFAULT_URL_SIZE_LIMIT
      *                   is defined by URL::DEFAULT_URL_SIZE_LIMIT
      * @return string The generated SEO-friendly URL
      */

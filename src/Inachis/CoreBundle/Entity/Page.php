@@ -45,7 +45,7 @@ class Page
      * @var string The contents of the {@link Page}
      */
     protected $content;
-    /** 
+    /**
      * @OneToOne(targetEntity="Inachis\Component\AdminBundle\Entity\Admin")
      * @JoinColumn(name="author_id", referencedColumnName="id")
      * @var string The UUID of the author for the {@link Page}

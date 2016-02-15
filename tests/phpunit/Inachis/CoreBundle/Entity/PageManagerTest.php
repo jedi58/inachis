@@ -5,6 +5,7 @@ namespace Inachis\Component\CoreBundle\Tests\Entity;
 use Inachis\Component\CoreBundle\Entity\Page;
 use Inachis\Component\CoreBundle\Entity\PageManager;
 use Mockery;
+
 /**
  * @Entity
  * @group unit
