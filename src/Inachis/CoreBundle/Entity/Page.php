@@ -39,14 +39,15 @@ class Page
      * @Column(type="string", length=255)
      * @var string An optional sub-title for the {@link Page}
      */
-    protected $sub_title;
+    protected $subTitle;
     /**
      * @Column(type="text")
      * @var string The contents of the {@link Page}
      */
     protected $content;
     /** 
-     * @Column(type="string", length=255, nullable=false)
+     * @OneToOne(targetEntity="Inachis\Component\AdminBundle\Entity\Admin")
+     * @JoinColumn(name="author_id", referencedColumnName="id")
      * @var string The UUID of the author for the {@link Page}
      */
     protected $author;
@@ -54,12 +55,12 @@ class Page
      * @Column(type="string", length=255)
      * @var string The featured image for the {@link Page}
      */
-    protected $feature_image;
+    protected $featureImage;
     /**
      * @Column(type="text")
      * @var string A short excerpt describing the contents of the {@link Page}
      */
-    protected $feature_snippet;
+    protected $featureSnippet;
     /**
      * @Column(type="string", length=20)
      * @var string Current status of the {@link Page}, defaults to @{link DRAFT}
@@ -75,12 +76,12 @@ class Page
      * @var string The date the {@link Page} was published; a future date
      *             indicates the content is scheduled
      */
-    protected $post_date;
+    protected $postDate;
     /**
      * @Column(type="datetime")
      * @var string The date the {@link Page} was last modified
      */
-    protected $mod_date;
+    protected $modDate;
     /**
      * @Column(type="string", length=50)
      * @var string The timezone for the publication date; defaults to UTC
@@ -95,7 +96,7 @@ class Page
      * @Column(type="boolean", nullable=false)
      * @var bool Flag determining if the {@link Page} allows comments
      */
-    protected $allow_comments = false;
+    protected $allowComments = false;
     
     public function __construct($title = '', $content = '', $author = '')
     {
@@ -122,12 +123,12 @@ class Page
         return $this->title;
     }
     /**
-     * Returns the value of {@link sub_title}
+     * Returns the value of {@link subTitle}
      * @return string The Sub-title of the {@link Page}
      */
     public function getSubTitle()
     {
-        return $this->sub_title;
+        return $this->subTitle;
     }
     /**
      * Returns the value of {@link content}
@@ -146,20 +147,20 @@ class Page
         return $this->author;
     }
     /**
-     * Returns the value of {@link feature_image}
+     * Returns the value of {@link featureImage}
      * @return string The UUID or URL of the feature image
      */
     public function getFeatureImage()
     {
-        return $this->feature_image;
+        return $this->featureImage;
     }
     /**
-     * Returns the value of {@link feature_snippet}
+     * Returns the value of {@link featureSnippet}
      * @return string The short excerpt to used as the feature
      */
     public function getFeatureSnippet()
     {
-        return $this->feature_snippet;
+        return $this->featureSnippet;
     }
     /**
      * Returns the value of {@link status}
@@ -178,20 +179,20 @@ class Page
         return $this->visibility;
     }
     /**
-     * Returns the value of {@link post_date}
+     * Returns the value of {@link postDate}
      * @return string The publication date of the {@link Page}
      */
     public function getPostDate()
     {
-        return $this->post_date;
+        return $this->postDate;
     }
     /**
-     * Returns the value of {@link mod_date}
+     * Returns the value of {@link modDate}
      * @return string The date the {@link Page} was last modified
      */
     public function getModDate()
     {
-        return $this->mod_date;
+        return $this->modDate;
     }
     /**
      * Returns the value of {@link timezone}
@@ -210,12 +211,12 @@ class Page
         return $this->password;
     }
     /**
-     * Returns the value of {@link allow_comments}
+     * Returns the value of {@link allowComments}
      * @return bool Flag indicating if the {@link Page} allows comments
      */
     public function getAllowComments()
     {
-        return $this->allow_comments;
+        return $this->allowComments;
     }
     /**
      * Sets the value of {@link id}
@@ -234,12 +235,12 @@ class Page
         $this->title = $value;
     }
     /**
-     * Sets the value of {@link sub_title}
+     * Sets the value of {@link subTitle}
      * @param string $value The optional sub-title of the {@link Page}
      */
     public function setSubTitle($value)
     {
-        $this->sub_title = $value;
+        $this->subTitle = $value;
     }
     /**
      * Sets the value of {@link content}
@@ -258,20 +259,20 @@ class Page
         $this->author = $value;
     }
     /**
-     * Sets the value of {@link feature_image}
+     * Sets the value of {@link featureImage}
      * @param string $value The UUID or URL to use for the {@link feature_image}
      */
     public function setFeatureImage($value)
     {
-        $this->feature_image = $value;
+        $this->featureImage = $value;
     }
     /**
-     * Sets the value of {@link feature_snippet}
+     * Sets the value of {@link featureSnippet}
      * @param string $value Short excerpt to use with the {@link feature_image}
      */
     public function setFeatureSnippet($value)
     {
-        $this->feature_snippet = $value;
+        $this->featureSnippet = $value;
     }
     /**
      * Sets the value of {@link status}
@@ -290,36 +291,36 @@ class Page
         $this->visibility = $this->isValidVisibility($value) ? $value : self::VIS_PRIVATE;
     }
     /**
-     * Sets the value of {@link post_date}
+     * Sets the value of {@link postDate}
      * @param string $value The date the post was published
      */
     public function setPostDate($value)
     {
-        $this->post_date = $value;
+        $this->postDate = $value;
     }
     /**
-     * Sets the {@link post_date} from a DateTime object
+     * Sets the {@link postDate} from a DateTime object
      * @param \DateTime $value The date to be set
      */
     public function setPostDateFromDateTime(\DateTime $value)
     {
-        $this->post_date = $value->format('Y-m-d H:i:s');
+        $this->postDate = $value->format('Y-m-d H:i:s');
     }
     /**
-     * Sets the value of {@link mod_date}
+     * Sets the value of {@link modDate}
      * @param string $value Specifies the mod date for the {@link Page}
      */
     public function setModDate($value)
     {
-        $this->mod_date = $value;
+        $this->modDate = $value;
     }
     /**
-     * Sets the {@link mod_date} from a DateTime object
+     * Sets the {@link modDate} from a DateTime object
      * @param \DateTime $value The date to set
      */
     public function setModDateFromDateTime(\DateTime $value)
     {
-        $this->mod_date = $value->format('Y-m-d H:i:s');
+        $this->modDate = $value->format('Y-m-d H:i:s');
     }
     /**
      * Sets the value of {@link timezone}
@@ -338,12 +339,12 @@ class Page
         $this->password = $value;
     }
     /**
-     * Sets the value of {@link allow_comments}
+     * Sets the value of {@link allowComments}
      * @param bool $value Flag specifying if comments allowed on {@link Page}
      */
     public function setAllowComments($value = false)
     {
-        $this->allow_comments = (bool) $value;
+        $this->allowComments = (bool) $value;
     }
     /**
      * Confirms the status being set to the {@link Page} is valid

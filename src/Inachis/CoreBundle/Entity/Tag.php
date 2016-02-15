@@ -19,7 +19,8 @@ class Tag
      */
     protected $title;
     
-    public function __construct($title = '') {
+    public function __construct($title = '') 
+    {
         $this->setTitle($title);
     }
     

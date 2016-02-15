@@ -23,12 +23,12 @@ class Url
      * @Column(type="string", length=75)
      * @var string The content type the short link refers to
      */
-    protected $content_type;
+    protected $contentType;
     /**
      * @Column(type="string")
-     * @var int The UUID of the content of the type specified by @see $content_type
+     * @var int The UUID of the content of the type specified by @see $contentType
      */
-    protected $content_id;
+    protected $contentId;
     /**
      * @Column(type="string", length=512)
      * @var string The SEO-friendly short link
@@ -43,30 +43,30 @@ class Url
      * @Column(type="datetime", nullable=false)
      * @var string The date the Url was added
      */
-    protected $create_date;
+    protected $createDate;
     /**
      * @Column(type="datetime", nullable=false)
      * @var string The date the Url was last modified
      */
-    protected $mod_date;
+    protected $modDate;
     /**
      * Default constructor for Inachis\Core\URL entity
-     * @param string $type The content type the URL is for
-     * @param int $id The ID of the content record
-     * @param string $link The short link for the content
-     * @param bool $convert_link Flag specifying if $link should be converted
-     * @param bool $default Flag specifying if this link is the canonical one
+     * @param string $type         The content type the URL is for
+     * @param int    $id           The ID of the content record
+     * @param string $link         The short link for the content
+     * @param bool   $convertLink Flag specifying if $link should be converted
+     * @param bool   $default      Flag specifying if this link is the canonical one
      */
     public function __construct(
         $type = '',
         $id = '',
         $link = '',
-        $convert_link = false,
+        $convertLink = false,
         $default = true
     ) {
         $this->setContentType($type);
         $this->setContentId($id);
-        $this->setLink($convert_link ? $this->urlify($link) : $link);
+        $this->setLink($convertLink ? $this->urlify($link) : $link);
         $this->setDefault($default);
         $this->setCreateDateFromDateTime(new \DateTime('now'));
         $this->setModDateFromDateTime(new \DateTime('now'));
@@ -85,7 +85,7 @@ class Url
      */
     public function getContentType()
     {
-        return $this->content_type;
+        return $this->contentType;
     }
     /**
      * Returns the UUID of the Content being linked to
@@ -93,7 +93,7 @@ class Url
      */
     public function getContentId()
     {
-        return $this->content_id;
+        return $this->contentId;
     }
 
     public function getLink()
@@ -113,12 +113,12 @@ class Url
 
     public function setContentType($value)
     {
-        $this->content_type = $value;
+        $this->contentType = $value;
     }
 
     public function setContentId($value)
     {
-        $this->content_id = $value;
+        $this->contentId = $value;
     }
 
     public function setLink($value)
@@ -133,17 +133,17 @@ class Url
     
     public function setCreateDate($value)
     {
-        $this->create_date = $value;
+        $this->createDate = $value;
     }
     
     public function setCreateDateFromDateTime(\DateTime $value)
     {
-        $this->create_date = $value->format('Y-m-d H:i:s');
+        $this->createDate = $value->format('Y-m-d H:i:s');
     }
     
     public function setModDate($value)
     {
-        $this->mod_date = $value;
+        $this->modDate = $value;
     }
     /**
      * Sets the mod date to the date/time specified
@@ -151,7 +151,7 @@ class Url
      */
     public function setModDateFromDateTime(\DateTime $value)
     {
-        $this->mod_date = $value->format('Y-m-d H:i:s');
+        $this->modDate = $value->format('Y-m-d H:i:s');
     }
     /**
      * Sets the mod date for the {@link Url} to the current date
@@ -172,7 +172,7 @@ class Url
     /**
      * Turns a given string into an SEO-friendly URL
      * @param string $title The string to turn into an SEO friendly short URL
-     * @param int $limit The maximum number of characters to allow; the default
+     * @param int    $limit The maximum number of characters to allow; the default is defined by URL::DEFAULT_URL_SIZE_LIMIT
      *                   is defined by URL::DEFAULT_URL_SIZE_LIMIT
      * @return string The generated SEO-friendly URL
      */

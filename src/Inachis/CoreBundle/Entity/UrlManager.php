@@ -61,23 +61,27 @@ class UrlManager extends EntityRepository
      */
     public function getAllForContentTypeAndId($content_type, $content_id)
     {
-        return $this->getRepository()->findBy(array(
+        return $this->getRepository()->findBy(
+            array(
             'content_type' => $content_type,
             'content_id' => $content_id
-        ));
+            )
+        );
     }
     /**
      * Fetches the default URL for the specified content type and UUID
      * @param string $content_type The type of content to return
-     * @param string $content_id The UUID of the content to return
+     * @param string $content_id   The UUID of the content to return
      */
     public function getDefaultUrlByContentTypeAndId($content_type, $content_id)
     {
-        return $this->getRepository()->findOneBy(array(
+        return $this->getRepository()->findOneBy(
+            array(
             'content_type' => $content_type,
             'content_id' => $content_id,
             'default' => true
-        ));
+            )
+        );
     }
     /**
      * 
@@ -88,7 +92,7 @@ class UrlManager extends EntityRepository
     public function getAll($limit = -1, $offset = -1)
     {
         return $this->getRepository()->findBy(
-                array(), array(), $limit, $offset
+            array(), array(), $limit, $offset
         );
     }
 }

@@ -62,7 +62,7 @@ class PageManager extends EntityRepository
     public function getAll($limit = -1, $offset = -1)
     {
         return $this->getRepository()->findBy(
-                array(), array(), $limit, $offset
+            array(), array(), $limit, $offset
         );
     }
 }
