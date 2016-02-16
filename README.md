@@ -22,4 +22,4 @@ For use in a production environment it is recommended that these passwords are N
 
 
 ##License
-This code is released under the GNU Lesser General Public License (LGPL). For more information, visit http://www.gnu.org/copyleft/lesser.html
+This code is released under the MIT License (MIT). Please see [License File](https://github.com/jedi58/inachis/blob/master/LICENSE) for more information. 
