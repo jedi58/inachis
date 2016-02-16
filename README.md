@@ -11,7 +11,7 @@ This is currently an experimental framework - more details will be provided as a
 ##Installation using Composer
 - Add the `jedi58/inachis` package to the require section of your composer.json file.
 ```{r, engine='bash', composer_install}
-composer require jedi58/inachis
+$  composer require jedi58/inachis
 ```
 - Run `composer install`
 
