@@ -16,7 +16,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-         $this->properties = array(
+        $this->properties = array(
             'id' => 'UUID',
             'content_type' => 'Page',
             'content_id' => 'UUID',
@@ -25,7 +25,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'create_date' => new \DateTime('yesterday'),
             'mod_date' => new \DateTime('now')
          );
-         $this->url = new Url();
+        $this->url = new Url();
     }
     
     private function initialiseDefaultObject()
