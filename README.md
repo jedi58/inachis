@@ -21,5 +21,21 @@ Environments deployed using Ansible hav etheir configuration stored in the usual
 For use in a production environment it is recommended that these passwords are NOT used.
 
 
+##Testing
+Whilst this framework is still in progress the majority of it's testing is done using PHPUnit. To run these tests, from the root of your checkout you can run:
+
+```{r, engine='bash'}
+$  phpunit
+```
+
+You may however notice the warnings for the timezone (depending on your local PHP set-up). To avoid this it is recommended that you instead use the following:
+
+```{r, engine='bash'}
+$  ./build/run_phpunit.sh
+```
+
+There is also a `./check_psr2.sh` script to check that the code adhere's to the PSR-2 standard. Once the interface is added the test suite will be expanded to include Behat.
+
+
 ##License
 This code is released under the MIT License (MIT). Please see [License File](https://github.com/jedi58/inachis/blob/master/LICENSE) for more information. 
