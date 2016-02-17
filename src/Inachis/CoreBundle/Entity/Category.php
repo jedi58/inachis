@@ -39,7 +39,12 @@ class Category
      * @var string The UUID of the parent category if applicable
      */
     protected $parent;
-    
+    /**
+     * Default constructor for {@link Category}
+     * @param string $title The title of the category
+     * @param string $description The description for the category
+     * @param string $parent The {@link id} of the parent category if applicable
+     */
     public function __construct($title = '', $description = '', $parent = '')
     {
         $this->setTitle($title);

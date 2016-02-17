@@ -12,18 +12,21 @@ abstract class AbstractManager extends EntityRepository
      */
     protected $em;
     /**
-     *
+     * Default consutrctor for AbstractManager
+     * @param EntityManager Used for repository interactions
      */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
     /**
-     *
+     * Implementations of AbstractManager must implement getClass
+     * to indicate the name of the repository
      */
     abstract protected function getClass();
     /**
-     *
+     * Return the repository
+     * @return The repsoitory to return
      */
     protected function getRepository()
     {
