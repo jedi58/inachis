@@ -20,12 +20,10 @@
     "require-dev": {
         "behat/behat": "2.*",
         "mockery/mockery": "*",
-        "php-console/php-console": "3.*",
         "phpdocumentor/phpdocumentor": "2.*",
-	"codeclimate/php-test-reporter": "dev-master",
+        "codeclimate/php-test-reporter": "dev-master",
         "phpunit/phpunit": "4.*",
-        "phpunit/phpunit-skeleton-generator": "*",
-        "squizlabs/php_codesniffer": "2.*"
+        "phpunit/phpunit-skeleton-generator": "*"
     },
     "autoload": {
         "psr-4": {
