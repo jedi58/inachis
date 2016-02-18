@@ -34,7 +34,13 @@ You may however notice the warnings for the timezone (depending on your local PH
 $  ./build/run_phpunit.sh
 ```
 
-There is also a `./check_psr2.sh` script to check that the code adhere's to the PSR-2 standard. Once the interface is added the test suite will be expanded to include Behat.
+There is also a `./check_psr2.sh` script to check that the code adhere's to the PSR-2 standard. To use this you will first need to ensure PHP CodeSniffer and Beautifer are available and in your `PATH`. If you haven't got these, they can be quickly installed using:
+
+```{r, engine='bash'}
+$  ./build/install_phpcs.sh
+```
+
+Once the interface is added the test suite will be expanded to include Behat.
 
 
 ##License
