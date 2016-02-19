@@ -21,9 +21,7 @@
         "behat/behat": "2.*",
         "mockery/mockery": "*",
         "phpdocumentor/phpdocumentor": "2.*",
-        "codeclimate/php-test-reporter": "dev-master",
-        "phpunit/phpunit": "4.*",
-        "phpunit/phpunit-skeleton-generator": "*"
+        "phpunit/phpunit": "4.*"
     },
     "autoload": {
         "psr-4": {
