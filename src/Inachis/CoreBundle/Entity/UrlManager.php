@@ -3,8 +3,7 @@
 namespace Inachis\Component\CoreBundle\Entity;
 
 /**
- * Manager class for handling {@link Url}
- * functions
+ * Manager class for handling {@link Url} interactions
  */
 class UrlManager extends AbstractManager
 {

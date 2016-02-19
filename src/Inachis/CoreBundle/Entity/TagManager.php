@@ -3,8 +3,7 @@
 namespace Inachis\Component\CoreBundle\Entity;
 
 /**
- * Manager class for handling {@link Tag}
- * functions
+ * Class for handling {@link Tag} specific Entity/Repository interactions
  */
 class TagManager extends AbstractManager
 {
