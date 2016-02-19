@@ -7,11 +7,15 @@ php:
   
 before_script:
   - wget http://getcomposer.org/composer.phar
+  - composer require satooshi/php-coveralls:dev-master
   - php composer.phar install -dev
   - php composer.phar dump-autoload --optimize
 
 script:
-  - bin/atoum --test-all  
+  - ./vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
+ 
+after_script:
+  - php vendor/bin/coveralls -v
 
 matrix:
     fast_finish: true
