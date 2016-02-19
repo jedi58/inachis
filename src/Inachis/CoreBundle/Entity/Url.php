@@ -51,24 +51,19 @@ class Url
      */
     protected $modDate;
     /**
-     * Default constructor for Inachis\Core\URL entity
-     * @param string $type         The content type the URL is for
-     * @param int    $id           The ID of the content record
-     * @param string $link         The short link for the content
-     * @param bool   $convertLink Flag specifying if $link should be converted
-     * @param bool   $default      Flag specifying if this link is the canonical one
+     * Default constructor for Inachis\Core\URL entity - by default the
+     * URL will be specified as canonical. This can be overridden using
+     * {@link Url::setDefault}.
+     * @param string $type The content type the URL is for
+     * @param int $id The ID of the content record
+     * @param string $link The short link for the content
      */
-    public function __construct(
-        $type = '',
-        $id = '',
-        $link = '',
-        $convertLink = false,
-        $default = true
-    ) {
+    public function __construct($type = '', $id = '', $link = '')
+    {
         $this->setContentType($type);
         $this->setContentId($id);
-        $this->setLink($convertLink ? $this->urlify($link) : $link);
-        $this->setDefault($default);
+        $this->setLink($this->urlify($link));
+        $this->setDefault(true);
         $this->setCreateDateFromDateTime(new \DateTime('now'));
         $this->setModDateFromDateTime(new \DateTime('now'));
     }
