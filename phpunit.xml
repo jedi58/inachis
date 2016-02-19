@@ -14,7 +14,9 @@
     
     <filter>
         <whitelist>
-            <directory>vendor</directory>
+            <exclude>
+                <directory>./vendor</directory>
+            </exclude>
         </whitelist>
     </filter>
     
