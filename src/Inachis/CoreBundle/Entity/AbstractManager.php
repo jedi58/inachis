@@ -5,6 +5,10 @@ namespace Inachis\Component\CoreBundle\Entity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * Abstract class used to provide common functions to
+ * EntityRepository classes
+ */
 abstract class AbstractManager extends EntityRepository
 {
     /**

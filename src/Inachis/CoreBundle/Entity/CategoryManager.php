@@ -2,6 +2,10 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
+/**
+ * Manager class for handling {@link Category}
+ * functions
+ */
 class CategoryManager extends AbstractManager
 {
     /**
