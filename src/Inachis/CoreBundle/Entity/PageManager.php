@@ -3,8 +3,8 @@
 namespace Inachis\Component\CoreBundle\Entity;
 
 /**
- * Manager class for handling {@link {Page}
- * functions
+ * Used to manage interactions with the {@link Page}
+ * Entity/Repository
  */
 class PageManager extends AbstractManager
 {
