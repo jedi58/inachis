@@ -35,7 +35,7 @@ class PageManager extends AbstractManager
     public function remove()
     {
         $this->em->remove($this->page);
-        $this->flush();
+        $this->em->flush();
     }
     
     public function getById($id)

@@ -34,7 +34,7 @@ class TagManager extends AbstractManager
     public function remove()
     {
         $this->em->remove($this->tag);
-        $this->flush();
+        $this->em->flush();
     }
     
     public function getById($id)

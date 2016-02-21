@@ -34,7 +34,7 @@ class UrlManager extends AbstractManager
     public function remove()
     {
         $this->em->remove($this->url);
-        $this->flush();
+        $this->em->flush();
     }
     
     public function getById($id)

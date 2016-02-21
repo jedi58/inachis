@@ -137,4 +137,22 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    public function testSave()
+    {
+        $this->url = $this->manager->create();
+        $this->em->setMethods(array('persist', 'flush'));
+        $this->repository->shouldReceive('persist')->andReturn(true);
+        $this->repository->shouldReceive('flush')->andReturn(true);
+        $this->assertSame(null, $this->manager->save());
+    }
+
+    public function testRemove()
+    {
+        $this->url = $this->manager->create();
+        $this->em->setMethods(array('remove', 'flush'));
+        $this->repository->shouldReceive('remove')->andReturn(true);
+        $this->repository->shouldReceive('flush')->andReturn(true);
+        $this->assertSame(null, $this->manager->remove());
+    }
 }
