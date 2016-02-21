@@ -102,6 +102,16 @@ class Url
         return $this->default;
     }
 
+    public function getCreateDate()
+    {
+        return $this->createDate;
+    }
+
+    public function getModDate()
+    {
+        return $this->modDate;
+    }
+
     public function setId($value)
     {
         $this->id = $value;

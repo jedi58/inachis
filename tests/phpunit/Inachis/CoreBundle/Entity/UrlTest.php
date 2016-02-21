@@ -35,6 +35,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->url->setContentId($this->properties['content_id']);
         $this->url->setLink($this->properties['link']);
         $this->url->setDefault($this->properties['default']);
+        $this->url->setCreateDate($this->properties['create_date']);
+        $this->url->setModDate($this->properties['mod_date']);
     }
     
     public function testSettingOfObjectProperties()
@@ -59,6 +61,14 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $this->properties['default'],
             $this->url->getDefault()
+        );
+        $this->assertEquals(
+            $this->properties['create_date'],
+            $this->url->getCreateDate()
+        );
+        $this->assertEquals(
+            $this->properties['mod_date'],
+            $this->url->getModDate()
         );
     }
    
@@ -130,5 +140,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'test-url',
             $this->url->fromUri('test-url?debug#top')
         );
+    }
+
+    public function testSetModDateToNow()
+    {
+        $now = (new \DateTime('now'))->format('Y-m-d H:i:s');
+        $this->url->setModDateToNow();
+        $this->assertGreaterThanOrEqual($now, $this->url->getModDate());
     }
 }
