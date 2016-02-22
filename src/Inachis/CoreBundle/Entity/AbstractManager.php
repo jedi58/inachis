@@ -36,4 +36,24 @@ abstract class AbstractManager extends EntityRepository
     {
         return $this->em->getRepository($this->getClass());
     }
+    
+    public function getById($id)
+    {
+        return $this->getRepository()->find($id);
+    }
+    /**
+     *
+     * @param type $limit
+     * @param type $offset
+     * @return type
+     */
+    public function getAll($limit = -1, $offset = -1)
+    {
+        return $this->getRepository()->findBy(
+            array(),
+            array(),
+            $limit,
+            $offset
+        );
+    }
 }
