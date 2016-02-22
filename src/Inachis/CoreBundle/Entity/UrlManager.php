@@ -36,11 +36,6 @@ class UrlManager extends AbstractManager
         $this->em->remove($this->url);
         $this->em->flush();
     }
-    
-    public function getById($id)
-    {
-        return $this->getRepository()->find($id);
-    }
     /**
      *
      * @param type $contentType
@@ -69,21 +64,6 @@ class UrlManager extends AbstractManager
             'contentId' => $contentId,
             'default' => true
             )
-        );
-    }
-    /**
-     *
-     * @param type $limit
-     * @param type $offset
-     * @return type
-     */
-    public function getAll($limit = -1, $offset = -1)
-    {
-        return $this->getRepository()->findBy(
-            array(),
-            array(),
-            $limit,
-            $offset
         );
     }
 }
