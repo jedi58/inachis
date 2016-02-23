@@ -27,7 +27,9 @@ class UrlManager extends AbstractManager
     
     public function save()
     {
-        $this->em->persist($this->url);
+        if (empty($this->getId)) {
+            $this->em->persist($this->url);
+        }
         $this->em->flush();
     }
     

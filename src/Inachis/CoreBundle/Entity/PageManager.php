@@ -28,7 +28,9 @@ class PageManager extends AbstractManager
     
     public function save()
     {
-        $this->em->persist($this->page);
+        if (empty($this->getId)) {
+            $this->em->persist($this->page);
+        }
         $this->em->flush();
     }
     
