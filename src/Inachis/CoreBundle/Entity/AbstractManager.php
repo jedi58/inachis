@@ -36,22 +36,30 @@ abstract class AbstractManager extends EntityRepository
     {
         return $this->em->getRepository($this->getClass());
     }
-    
+    /**
+     * Fetches a specific entity from the repository by the given Id
+     * @param string The Id of the entity to be returned
+     * @return mixed The returned entity
+     */
     public function getById($id)
     {
         return $this->getRepository()->find($id);
     }
     /**
-     *
-     * @param type $limit
-     * @param type $offset
-     * @return type
+     * Returns all entries for the current repository
+     * @param int $limit The maximum number of results to return
+     * @param int $offset The offset from which to return results from
+     * @return array[mixed] The result of fetching the objects
      */
-    public function getAll($limit = -1, $offset = -1)
-    {
+    public function getAll(
+        $limit = -1,
+        $offset = -1,
+        $where = array(),
+        $order = array()
+    ) {
         return $this->getRepository()->findBy(
-            array(),
-            array(),
+            $where,
+            $order,
             $limit,
             $offset
         );

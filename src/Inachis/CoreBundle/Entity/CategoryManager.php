@@ -28,7 +28,9 @@ class CategoryManager extends AbstractManager
     
     public function save()
     {
-        $this->em->persist($this->category);
+        if (empty($this->getId)) {
+            $this->em->persist($this->category);
+        }
         $this->em->flush();
     }
     

@@ -27,7 +27,9 @@ class TagManager extends AbstractManager
     
     public function save()
     {
-        $this->em->persist($this->tag);
+        if (empty($this->getId)) {
+            $this->em->persist($this->tag);
+        }
         $this->em->flush();
     }
     
