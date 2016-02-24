@@ -8,10 +8,6 @@ namespace Inachis\Component\CoreBundle\Entity;
 class TagManager extends AbstractManager
 {
     /**
-     * @var Tag
-     */
-    protected $tag;
-    /**
      *
      * @return type
      */
@@ -25,17 +21,15 @@ class TagManager extends AbstractManager
         return new Tag();
     }
     
-    public function save()
+    public function save(Tag $tag)
     {
-        if (empty($this->getId)) {
-            $this->em->persist($this->tag);
-        }
+        $this->em->persist($tag);
         $this->em->flush();
     }
     
-    public function remove()
+    public function remove(Tag $tag)
     {
-        $this->em->remove($this->tag);
+        $this->em->remove($tag);
         $this->em->flush();
     }
 }

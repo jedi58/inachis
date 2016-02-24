@@ -73,6 +73,11 @@ class Page
     protected $visibility = self::VIS_PUBLIC;
     /**
      * @Column(type="datetime")
+     * @var string The date the {@link Page} was created
+     */
+    protected $createDate;
+    /**
+     * @Column(type="datetime")
      * @var string The date the {@link Page} was published; a future date
      *             indicates the content is scheduled
      */
@@ -103,8 +108,10 @@ class Page
         $this->setTitle($title);
         $this->setContent($content);
         $this->setAuthor($author);
-        $this->setPostDateFromDateTime(new \DateTime('now'));
-        $this->setModDateFromDateTime(new \DateTime('now'));
+        $currentTime = new \DateTime('now');
+        $this->setCreateDateFromDateTime($currentTime);
+        $this->setPostDateFromDateTime($currentTime);
+        $this->setModDateFromDateTime($currentTime);
     }
     /**
      * Returns the value of {@link id}
@@ -177,6 +184,14 @@ class Page
     public function getVisibility()
     {
         return $this->visibility;
+    }
+    /**
+     * Returns the value of {@link createDate}
+     * @return string The creation date of the {@link Page}
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
     }
     /**
      * Returns the value of {@link postDate}
@@ -291,6 +306,22 @@ class Page
         $this->visibility = $this->isValidVisibility($value) ? $value : self::VIS_PRIVATE;
     }
     /**
+     * Sets the value of {@link createDate}
+     * @param string $value The date the post was created
+     */
+    public function setCreateDate($value)
+    {
+        $this->createDate = $value;
+    }
+    /**
+     * Sets the {@link createDate} from a DateTime object
+     * @param \DateTime $value The date to be set
+     */
+    public function setCreateDateFromDateTime(\DateTime $value)
+    {
+        $this->setCreateDate($value->format('Y-m-d H:i:s'));
+    }
+    /**
      * Sets the value of {@link postDate}
      * @param string $value The date the post was published
      */
@@ -304,7 +335,7 @@ class Page
      */
     public function setPostDateFromDateTime(\DateTime $value)
     {
-        $this->postDate = $value->format('Y-m-d H:i:s');
+        $this->setPostDate($value->format('Y-m-d H:i:s'));
     }
     /**
      * Sets the value of {@link modDate}
@@ -320,7 +351,7 @@ class Page
      */
     public function setModDateFromDateTime(\DateTime $value)
     {
-        $this->modDate = $value->format('Y-m-d H:i:s');
+        $this->setModDate($value->format('Y-m-d H:i:s'));
     }
     /**
      * Sets the value of {@link timezone}
@@ -342,7 +373,7 @@ class Page
      * Sets the value of {@link allowComments}
      * @param bool $value Flag specifying if comments allowed on {@link Page}
      */
-    public function setAllowComments($value = false)
+    public function setAllowComments($value = true)
     {
         $this->allowComments = (bool) $value;
     }
