@@ -26,8 +26,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
             'status' => Page::DRAFT,
             'visibility' => Page::VIS_PUBLIC,
             'timezone' => 'UTC',
-            'post_date' => $this->page->setPostDateFromDateTime(new \DateTime('yesterday noon')),
-            'mod_date' => $this->page->setModDateFromDateTime(new \DateTime('now')),
+            'create_date' => new \DateTime('yesterday noon'),
+            'post_date' => new \DateTime('yesterday noon'),
+            'mod_date' => new \DateTime('now'),
             'password' => '',
             'allow_comments' => true
         );
@@ -45,8 +46,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->page->setStatus($this->properties['status']);
         $this->page->setVisibility($this->properties['visibility']);
         $this->page->setTimezone($this->properties['timezone']);
-        $this->page->setPostDate($this->properties['post_date']);
-        $this->page->setModDate($this->properties['mod_date']);
+        $this->page->setCreateDateFromDateTime($this->properties['create_date']);
+        $this->page->setPostDateFromDateTime($this->properties['post_date']);
+        $this->page->setModDateFromDateTime($this->properties['mod_date']);
         $this->page->setPassword($this->properties['password']);
         $this->page->setAllowComments($this->properties['allow_comments']);
     }
@@ -95,11 +97,15 @@ class PageTest extends \PHPUnit_Framework_TestCase
             $this->page->getTimezone()
         );
         $this->assertEquals(
-            $this->properties['post_date'],
+            $this->properties['create_date']->format('Y-m-d H:i:s'),
+            $this->page->getCreateDate()
+        );
+        $this->assertEquals(
+            $this->properties['post_date']->format('Y-m-d H:i:s'),
             $this->page->getPostDate()
         );
         $this->assertEquals(
-            $this->properties['mod_date'],
+            $this->properties['mod_date']->format('Y-m-d H:i:s'),
             $this->page->getModDate()
         );
         $this->assertEquals(

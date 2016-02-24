@@ -8,10 +8,6 @@ namespace Inachis\Component\CoreBundle\Entity;
 class UrlManager extends AbstractManager
 {
     /**
-     * @var Url
-     */
-    protected $url;
-    /**
      *
      * @return type
      */
@@ -25,17 +21,16 @@ class UrlManager extends AbstractManager
         return new Url();
     }
     
-    public function save()
+    public function save(Url $url)
     {
-        if (empty($this->getId)) {
-            $this->em->persist($this->url);
-        }
+        $url->setModDateFromDateTime(new \DateTime('now'));
+        $this->em->persist($url);
         $this->em->flush();
     }
     
-    public function remove()
+    public function remove(Url $url)
     {
-        $this->em->remove($this->url);
+        $this->em->remove($url);
         $this->em->flush();
     }
     /**

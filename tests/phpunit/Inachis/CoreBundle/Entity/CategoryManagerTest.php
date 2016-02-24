@@ -77,7 +77,7 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
         $this->em->setMethods(array('persist', 'flush'));
         $this->repository->shouldReceive('persist')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);
-        $this->assertSame(null, $this->manager->save());
+        $this->assertSame(null, $this->manager->save($this->category));
     }
 
     public function testRemove()
@@ -86,6 +86,6 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
         $this->em->setMethods(array('remove', 'flush'));
         $this->repository->shouldReceive('remove')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);
-        $this->assertSame(null, $this->manager->remove());
+        $this->assertSame(null, $this->manager->remove($this->category));
     }
 }

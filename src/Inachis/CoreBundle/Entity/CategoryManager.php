@@ -9,10 +9,6 @@ namespace Inachis\Component\CoreBundle\Entity;
 class CategoryManager extends AbstractManager
 {
     /**
-     * @var Category
-     */
-    protected $category;
-    /**
      *
      * @return string
      */
@@ -26,17 +22,15 @@ class CategoryManager extends AbstractManager
         return new Category();
     }
     
-    public function save()
+    public function save(Category $category)
     {
-        if (empty($this->getId)) {
-            $this->em->persist($this->category);
-        }
+        $this->em->persist($category);
         $this->em->flush();
     }
     
-    public function remove()
+    public function remove(Category $category)
     {
-        $this->em->remove($this->category);
+        $this->em->remove($category);
         $this->em->flush();
     }
 }

@@ -9,10 +9,6 @@ namespace Inachis\Component\CoreBundle\Entity;
 class PageManager extends AbstractManager
 {
     /**
-     * @var Page
-     */
-    protected $page;
-    /**
      *
      * @return string
      */
@@ -26,17 +22,16 @@ class PageManager extends AbstractManager
         return new Page();
     }
     
-    public function save()
+    public function save(Page $page)
     {
-        if (empty($this->getId)) {
-            $this->em->persist($this->page);
-        }
+        $page->setModDateFromDateTime(new \DateTime('now'));
+        $this->em->persist($page);
         $this->em->flush();
     }
     
-    public function remove()
+    public function remove(Page $page)
     {
-        $this->em->remove($this->page);
+        $this->em->remove($page);
         $this->em->flush();
     }
 }
