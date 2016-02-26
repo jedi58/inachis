@@ -41,7 +41,7 @@ abstract class AbstractManager extends EntityRepository
      */
     protected function hydrate($object, array $values)
     {
-        foreach($values as $key => $value) {
+        foreach ($values as $key => $value) {
             $methodName = 'set' . ucfirst($key);
             if (method_exists($object, $methodName)) {
                 $object->$methodName($value);
