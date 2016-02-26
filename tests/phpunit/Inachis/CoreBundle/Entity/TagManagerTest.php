@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Component\CoreBundle\Tests\Entity;
+namespace Inachis\Tests\CoreBundle\Entity;
 
 use Inachis\Component\CoreBundle\Entity\TagManager;
 use Mockery;
@@ -30,12 +30,12 @@ class TagManagerTest extends \PHPUnit_Framework_TestCase
             'title' => 'awesome-tag'
         );
         $this->manager = new TagManager($this->em);
-        $this->tag = $this->manager->create();
+        $this->tag = $this->manager->create($this->properties);
     }
     
     private function initialiseDefaultObject()
     {
-        $this->tag = $this->manager->create();
+        $this->tag = $this->manager->create($this->properties);
         $this->tag->setId($this->properties['id']);
         $this->tag->setTitle($this->properties['title']);
     }
@@ -43,9 +43,9 @@ class TagManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAll()
     {
         $tags = array();
-        $this->initialiseDefaultObject();
+        $this->tag = $this->manager->create($this->properties);
         $tags[] = $this->tag;
-        $this->initialiseDefaultObject();
+        $this->tag = $this->manager->create($this->properties);
         $this->tag->setTitle('test');
         $tags[] = $this->tag;
         
@@ -56,14 +56,14 @@ class TagManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testGetById()
     {
-        $this->tag = $this->manager->create();
+        $this->tag = $this->manager->create($this->properties);
         $this->repository->shouldReceive('find')->with(1)->andReturn($this->tag);
         $this->assertSame($this->tag, $this->manager->getById(1));
     }
 
     public function testSave()
     {
-        $this->tag = $this->manager->create();
+        $this->tag = $this->manager->create($this->properties);
         $this->em->setMethods(array('persist', 'flush'));
         $this->repository->shouldReceive('persist')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);
@@ -72,7 +72,7 @@ class TagManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testRemove()
     {
-        $this->tag = $this->manager->create();
+        $this->tag = $this->manager->create($this->properties);
         $this->em->setMethods(array('remove', 'flush'));
         $this->repository->shouldReceive('remove')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Component\CoreBundle\Tests\Entity;
+namespace Inachis\Tests\CoreBundle\Entity;
 
 use Inachis\Component\CoreBundle\Entity\Category;
 use Inachis\Component\CoreBundle\Entity\CategoryManager;
@@ -35,26 +35,15 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
             'parent' => 'parent-UUID'
         );
         $this->manager = new CategoryManager($this->em);
-        $this->category = $this->manager->create();
-    }
-    
-    private function initialiseDefaultObject()
-    {
-        $this->category = $this->manager->create();
-        $this->category->setId($this->properties['id']);
-        $this->category->setTitle($this->properties['title']);
-        $this->category->setDescription($this->properties['description']);
-        $this->category->setImage($this->properties['image']);
-        $this->category->setIcon($this->properties['icon']);
-        $this->category->setParent($this->properties['parent']);
+        $this->category = $this->manager->create($this->properties);
     }
     
     public function testGetAll()
     {
         $categories = array();
-        $this->initialiseDefaultObject();
+        $this->category = $this->manager->create($this->properties);
         $categories[] = $this->category;
-        $this->initialiseDefaultObject();
+        $this->category = $this->manager->create($this->properties);
         $this->category->setTitle('Another category');
         $categories[] = $this->category;
         
@@ -65,7 +54,7 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testGetById()
     {
-        $this->category = $this->manager->create();
+        $this->category = $this->manager->create($this->properties);
         $this->repository->shouldReceive('find')->with(1)
             ->andReturn($this->category);
         $this->assertSame($this->category, $this->manager->getById(1));
@@ -73,7 +62,7 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $this->category = $this->manager->create();
+        $this->category = $this->manager->create($this->properties);
         $this->em->setMethods(array('persist', 'flush'));
         $this->repository->shouldReceive('persist')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);
@@ -82,7 +71,7 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testRemove()
     {
-        $this->category = $this->manager->create();
+        $this->category = $this->manager->create($this->properties);
         $this->em->setMethods(array('remove', 'flush'));
         $this->repository->shouldReceive('remove')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);
