@@ -16,10 +16,10 @@ class PageManager extends AbstractManager
     {
         return 'Page';
     }
-    
-    public function create()
+
+    public function create($values = array())
     {
-        return new Page();
+        return $this->hydrate(new Page(), $values);
     }
     
     public function save(Page $page)

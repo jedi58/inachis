@@ -17,9 +17,9 @@ class CategoryManager extends AbstractManager
         return 'Category';
     }
     
-    public function create()
+    public function create($values = array())
     {
-        return new Category();
+        return $this->hydrate(new Category(), $values);
     }
     
     public function save(Category $category)

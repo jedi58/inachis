@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Component\CoreBundle\Tests\Entity;
+namespace Inachis\Tests\CoreBundle\Entity;
 
 /**
  * @group unit

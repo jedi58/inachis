@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Component\CoreBundle\Tests\Entity;
+namespace Inachis\Tests\CoreBundle\Entity;
 
 use Inachis\Component\CoreBundle\Entity\UrlManager;
 use Mockery;
@@ -35,12 +35,12 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
             'modDate' => new \DateTime('now')
         );
         $this->manager = new UrlManager($this->em);
-        $this->url = $this->manager->create();
+        $this->url = $this->manager->create($this->properties);
     }
     
     private function initialiseDefaultObject()
     {
-        $this->url = $this->manager->create();
+        $this->url = $this->manager->create($this->properties);
         $this->url->setId($this->properties['id']);
         $this->url->setContentType($this->properties['contentType']);
         $this->url->setContentId($this->properties['contentId']);
@@ -67,14 +67,14 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testGetById()
     {
-        $this->url = $this->manager->create();
+        $this->url = $this->manager->create($this->properties);
         $this->repository->shouldReceive('find')->with(1)->andReturn($this->url);
         $this->assertSame($this->url, $this->manager->getById(1));
     }
     
     public function testGetAllForContentTypeAndIdReturnsSingle()
     {
-        $this->url = $this->manager->create();
+        $this->url = $this->manager->create($this->properties);
         $this->repository->shouldReceive('findBy')
             ->with(
                 array(
@@ -119,7 +119,7 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testGetDefaultUrlByContentTypeAndId()
     {
-        $this->initialiseDefaultObject();
+        $this->url = $this->manager->create($this->properties);
         $this->repository->shouldReceive('findOneBy')
             ->with(
                 array(
@@ -140,7 +140,7 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $this->url = $this->manager->create();
+        $this->url = $this->manager->create($this->properties);
         $this->em->setMethods(array('persist', 'flush'));
         $this->repository->shouldReceive('persist')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);
@@ -149,7 +149,7 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testRemove()
     {
-        $this->url = $this->manager->create();
+        $this->url = $this->manager->create($this->properties);
         $this->em->setMethods(array('remove', 'flush'));
         $this->repository->shouldReceive('remove')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);

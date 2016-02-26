@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Component\CoreBundle\Tests\Entity;
+namespace Inachis\Tests\CoreBundle\Entity;
 
 use Inachis\Component\CoreBundle\Entity\Page;
 use Inachis\Component\CoreBundle\Entity\PageManager;
@@ -29,48 +29,29 @@ class PageManagerTest extends \PHPUnit_Framework_TestCase
         $this->properties = array(
             'id' => 'UUID',
             'title' => 'My awesome test page',
-            'sub-title' => 'The first page',
+            'subTitle' => 'The first page',
             'content' => '<p>This is a test page.</p>',
             'author' => 'UUID',
-            'feature_image' => 'UUID',
-            'feature_snippet' => 'This is a short excerpt of the page',
+            'featureImage' => 'UUID',
+            'featureSnippet' => 'This is a short excerpt of the page',
             'status' => Page::DRAFT,
             'visibility' => Page::VIS_PUBLIC,
             'timezone' => 'UTC',
-            'post_date' => '',
-            'mod_date' => '',
+            'postDate' => '',
+            'modDate' => '',
             'password' => '',
-            'allow_comments' => true
+            'allowComments' => true
         );
         $this->manager = new PageManager($this->em);
-        $this->page = $this->manager->create();
-    }
-    
-    private function initialiseDefaultObject()
-    {
-        $this->page = $this->manager->create();
-        $this->page->setId($this->properties['id']);
-        $this->page->setTitle($this->properties['title']);
-        $this->page->setSubTitle($this->properties['sub-title']);
-        $this->page->setContent($this->properties['content']);
-        $this->page->setAuthor($this->properties['author']);
-        $this->page->setFeatureImage($this->properties['feature_image']);
-        $this->page->setFeatureSnippet($this->properties['feature_snippet']);
-        $this->page->setStatus($this->properties['status']);
-        $this->page->setVisibility($this->properties['visibility']);
-        $this->page->setTimezone($this->properties['timezone']);
-        $this->page->setPostDate($this->properties['post_date']);
-        $this->page->setModDate($this->properties['mod_date']);
-        $this->page->setPassword($this->properties['password']);
-        $this->page->setAllowComments($this->properties['allow_comments']);
+        $this->page = $this->manager->create($this->properties);
     }
     
     public function testGetAll()
     {
         $pages = array();
-        $this->initialiseDefaultObject();
+        $this->page = $this->manager->create($this->properties);
         $pages[] = $this->page;
-        $this->initialiseDefaultObject();
+        $this->page = $this->manager->create($this->properties);
         $this->page->setTitle('Another page');
         $pages[] = $this->page;
         
@@ -81,14 +62,14 @@ class PageManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testGetById()
     {
-        $this->page = $this->manager->create();
+        $this->page = $this->manager->create($this->properties);
         $this->repository->shouldReceive('find')->with(1)->andReturn($this->page);
         $this->assertSame($this->page, $this->manager->getById(1));
     }
 
     public function testSave()
     {
-        $this->page = $this->manager->create();
+        $this->page = $this->manager->create($this->properties);
         $this->em->setMethods(array('persist', 'flush'));
         $this->repository->shouldReceive('persist')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);
@@ -97,7 +78,7 @@ class PageManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testRemove()
     {
-        $this->page = $this->manager->create();
+        $this->page = $this->manager->create($this->properties);
         $this->em->setMethods(array('remove', 'flush'));
         $this->repository->shouldReceive('remove')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);

@@ -411,8 +411,10 @@ class Page
     public function isScheduledPage()
     {
         $today = new \DateTime('now', new \DateTimeZone($this->getTimezone()));
-        $postDate = new \DateTime($this->getPostDate(),
-                                    new \DateTimeZone($this->getTimezone()));
+        $postDate = new \DateTime(
+            $this->getPostDate(),
+            new \DateTimeZone($this->getTimezone())
+        );
         return $postDate->format('YmdHis') > $today->format('YmdHis');
     }
 }

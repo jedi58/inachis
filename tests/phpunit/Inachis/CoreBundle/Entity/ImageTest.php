@@ -2,20 +2,17 @@
 
 namespace Inachis\Tests\CoreBundle\Entity;
 
-/**
- * @group unit
- */
-use Inachis\Component\CoreBundle\Entity\Tag;
+use Inachis\Component\CoreBundle\Entity\Image;
 
-class TagTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit_Framework_TestCase
 {
-    protected $tag;
+    protected $image;
     
     protected $properties = array();
     
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
-        $this->tag = new Tag();
+        $this->image = new Image();
         $this->properties = array(
             'id' => 'UUID',
             'title' => 'awesome-tag'
@@ -24,20 +21,23 @@ class TagTest extends \PHPUnit_Framework_TestCase
     
     private function initialiseDefaultObject()
     {
-        $this->tag->setId($this->properties['id']);
-        $this->tag->setTitle($this->properties['title']);
+        //$this->tag->setId($this->properties['id']);
+        //$this->tag->setTitle($this->properties['title']);
     }
     
     public function testSettingOfObjectProperties()
     {
         $this->initialiseDefaultObject();
+var_dump($this->image);
+        /*
         $this->assertEquals(
             $this->properties['id'],
-            $this->tag->getId()
+            $this->image->getId()
         );
         $this->assertEquals(
             $this->properties['title'],
-            $this->tag->getTitle()
-        );
+            $this->image->getTitle()
+        );*/
     }
 }
+

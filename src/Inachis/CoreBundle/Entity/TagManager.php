@@ -16,9 +16,9 @@ class TagManager extends AbstractManager
         return 'Tag';
     }
     
-    public function create()
+    public function create($values = array())
     {
-        return new Tag();
+        return $this->hydrate(new Tag(), $values);
     }
     
     public function save(Tag $tag)

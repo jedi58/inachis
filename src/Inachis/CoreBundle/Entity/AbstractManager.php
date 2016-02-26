@@ -29,6 +29,27 @@ abstract class AbstractManager extends EntityRepository
      */
     abstract protected function getClass();
     /**
+     * Returns an instance of the current entity
+     */
+    abstract public function create();
+    /**
+     * Uses the objects setters to populat the object
+     * based on the provided values
+     * @param mixed $object The object to hydrate
+     * @param array[mixed] The values to apply to the obect
+     * @return mixed The hydrated object
+     */
+    protected function hydrate($object, array $values)
+    {
+        foreach($values as $key => $value) {
+            $methodName = 'set' . ucfirst($key);
+            if (method_exists($object, $methodName)) {
+                $object->$methodName($value);
+            }
+        }
+        return $object;
+    }
+    /**
      * Return the repository
      * @return The repsoitory to return
      */
