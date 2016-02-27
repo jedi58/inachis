@@ -32,7 +32,7 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
             'description' => 'This is a test category',
             'image' => 'image-UUID',
             'icon' => 'icon-UUID',
-            'parent' => 'parent-UUID'
+            'parentId' => 'parent-UUID'
         );
         $this->manager = new CategoryManager($this->em);
         $this->category = $this->manager->create($this->properties);
