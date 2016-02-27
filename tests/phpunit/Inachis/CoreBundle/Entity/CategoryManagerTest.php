@@ -52,6 +52,20 @@ class CategoryManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($categories, $this->manager->getAll(10, 0));
     }
     
+    public function testGetChildCategories()
+    {
+        $categories = array();
+        $this->category = $this->manager->create($this->properties);
+        $categories[] = $this->category;
+        $this->category = $this->manager->create($this->properties);
+        $this->category->setTitle('Another category');
+        $categories[] = $this->category;
+        
+        $this->repository->shouldReceive('findBy')->with(array('parentId' => 'UUID'), array('title'), 10, 0)
+            ->andReturn($categories);
+        $this->assertSame($categories, $this->manager->getChildCategories('UUID', 10, 0));
+    }
+    
     public function testGetById()
     {
         $this->category = $this->manager->create($this->properties);
