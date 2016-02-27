@@ -33,4 +33,18 @@ class CategoryManager extends AbstractManager
         $this->em->remove($category);
         $this->em->flush();
     }
+
+    public function getChildCategories(
+        $parentId,
+        $limit = -1,
+        $offset = -1,
+        $orderBy = array('title')
+    ) {
+        return $this->getAll(
+            $limit,
+            $offset,
+            array('parentId' => $parentId),
+            $orderBy
+        );
+    }
 }

@@ -38,18 +38,18 @@ class Category
      * @Column(type="string", length=255)
      * @var string The UUID of the parent category if applicable
      */
-    protected $parent;
+    protected $parentId;
     /**
      * Default constructor for {@link Category}
      * @param string $title The title of the category
      * @param string $description The description for the category
-     * @param string $parent The {@link id} of the parent category if applicable
+     * @param string $parentId The {@link id} of the parent category
      */
-    public function __construct($title = '', $description = '', $parent = '')
+    public function __construct($title = '', $description = '', $parentId = '')
     {
         $this->setTitle($title);
         $this->setDescription($description);
-        $this->setParent($parent);
+        $this->setParentId($parentId);
     }
     /**
      * Returns the value of {@link id}
@@ -92,12 +92,12 @@ class Category
         return $this->icon;
     }
     /**
-     * Returns the value of {@link parent}
+     * Returns the value of {@link parentId}
      * @return string The UUID of the {@link Category} parent if applicable
      */
-    public function getParent()
+    public function getParentId()
     {
-        return $this->parent;
+        return $this->parentId;
     }
     /**
      * Sets the value of {@link id}
@@ -140,12 +140,12 @@ class Category
         $this->icon = $value;
     }
     /**
-     * Sets the value of {@link parent}
+     * Sets the value of {@link parentId}
      * @param string $value The UUID of the {@link Category} parent if applicable
      */
-    public function setParent($value)
+    public function setParentId($value)
     {
-        $this->parent = $value;
+        $this->parentId = $value;
     }
     /**
      * Returns the result of testing if current category is a root category
@@ -153,7 +153,7 @@ class Category
      */
     public function isRootCategory()
     {
-        return empty($this->getParent());
+        return empty($this->getParentId());
     }
     /**
      * Returns the result of testing if the current category is a child category
@@ -161,7 +161,7 @@ class Category
      */
     public function isChildCategory()
     {
-        return !empty($this->getParent());
+        return !empty($this->getParentId());
     }
     /**
      * Returns the result of testing if the category has an image to use

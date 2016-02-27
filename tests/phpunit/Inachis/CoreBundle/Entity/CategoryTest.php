@@ -33,7 +33,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->category->setDescription($this->properties['description']);
         $this->category->setImage($this->properties['image']);
         $this->category->setIcon($this->properties['icon']);
-        $this->category->setParent($this->properties['parent']);
+        $this->category->setParentId($this->properties['parent']);
     }
     
     public function testSettingOfObjectProperties()
@@ -61,14 +61,14 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             $this->properties['parent'],
-            $this->category->getParent()
+            $this->category->getParentId()
         );
     }
     
     public function testParentCategory()
     {
         $this->initialiseDefaultObject();
-        $this->category->setParent('');
+        $this->category->setParentId('');
         $this->assertEquals(true, $this->category->isRootCategory());
     }
     
@@ -87,7 +87,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testNotChildCategory()
     {
         $this->initialiseDefaultObject();
-        $this->category->setParent('');
+        $this->category->setParentId('');
         $this->assertEquals(false, $this->category->isChildCategory());
     }
     
