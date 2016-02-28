@@ -33,13 +33,6 @@ class TagManagerTest extends \PHPUnit_Framework_TestCase
         $this->tag = $this->manager->create($this->properties);
     }
     
-    private function initialiseDefaultObject()
-    {
-        $this->tag = $this->manager->create($this->properties);
-        $this->tag->setId($this->properties['id']);
-        $this->tag->setTitle($this->properties['title']);
-    }
-    
     public function testGetAll()
     {
         $tags = array();
