@@ -36,6 +36,6 @@ class UserManager extends AbstractManager
 
     public function getByUsername($username)
     {
-    	return $this->getRepository()->findOneBy(array('username' => $username));
+        return $this->getRepository()->findOneBy(array('username' => $username));
     }
 }

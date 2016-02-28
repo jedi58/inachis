@@ -231,7 +231,7 @@ class User
         $this->setPasswordModDate($value->format('Y-m-d H:i:s'));
     }
     /**
-     * Sets the value of {@link salt} - the salt itself should be 
+     * Sets the value of {@link salt} - the salt itself should be
      * generated external to this function with sufficent entropy
      * @param string $value The salt to set
      */
@@ -265,6 +265,6 @@ class User
         return time() >= strtotime(
             '+' . (int) $expiryDays . ' days',
             strtotime($this->getPasswordModDate())
-        );        
+        );
     }
 }
