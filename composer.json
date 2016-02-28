@@ -5,9 +5,7 @@
     "keywords": ["dev"],
     "license": "MIT",
     "authors": [
-        {
-            "name": "David G. Paul"
-        }
+        {"name": "David G. Paul"}
     ],
     "require": {
         "php": ">=5.6.1",
@@ -20,14 +18,26 @@
     "require-dev": {
         "behat/behat": "2.*",
         "mockery/mockery": "*",
-        "phpdocumentor/phpdocumentor": "2.*",
-        "codeclimate/php-test-reporter": "dev-master",
+        "phpdocumentor/phpdocumentor": "*",
         "phpunit/phpunit": "4.*",
-        "phpunit/phpunit-skeleton-generator": "*"
+        "satooshi/php-coveralls": "dev-master"
+    },
+    "suggest": {
+        "symfony/console": "If you want to use the command line tools"
     },
     "autoload": {
         "psr-4": {
-            "Inachis\\": "src/"
+            "Inachis\\Component\\": "src/Inachis/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Inachis\\Tests\\": "tests/phpunit/Inachis/"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "tests", "phpunit.xml", ".travis.yml", "build.xml", "*coveralls.yml"
+        ]
     }
 }
