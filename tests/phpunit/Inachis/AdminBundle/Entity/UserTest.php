@@ -19,7 +19,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
-
         $this->em = Mockery::mock('Doctrine\ORM\EntityManager');
         $this->em->shouldIgnoreMissing();
         $this->repository = Mockery::mock('Doctrine\ORM\EntityRepository');
