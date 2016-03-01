@@ -11,23 +11,23 @@ use Doctrine\ORM\EntityManager;
 class User
 {
     /**
-     * @Id @Column(type="string", unique=true, nullable=false)
-     * @GeneratedValue(strategy="UUID")
+     * @Id @Column(type="integer", unique=true, nullable=false)
+     * @GeneratedValue(strategy="AUTO")
      * @var string The unique identifier for the {@link User}
      */
     protected $id;
     /**
-     * @Column(type="string", length=30, unique=true)
+     * @Column(type="string", length=30, unique=true, nullable=false)
      * @var Username of the administrator
      */
     protected $username;
     /**
-     * @Column(type="string", length=64)
+     * @Column(type="string", length=64, nullable=false)
      * @var Password for the administrator
      */
     protected $password;
     /**
-     * @Column(type="string", length=256, unique=true)
+     * @Column(type="string", length=256, nullable=false)
      * @var Email address of the administrator
      */
     protected $email;
