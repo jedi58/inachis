@@ -89,10 +89,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             $this->properties['passwordModDate'],
             $this->user->getModDate()
         );
-        $this->assertEquals(
-            $this->properties['salt'],
-            $this->user->getSalt()
-        );
     }
 
     public function testErase()
@@ -117,5 +113,36 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->user = $this->manager->create($this->properties);
         $this->user->setPasswordModDateFromDateTime(new \DateTime('20 days ago'));
         $this->assertEquals(false, $this->user->hasCredentialsExpired(30));
+    }
+
+    public function testValidEmail()
+    {
+        $this->user = $this->manager->create($this->properties);
+        $this->assertEquals(true, $this->user->validateEmail());
+        $this->user->setEmail('test.apo-str\'ophes@test-domain.co.uk');
+        $this->assertEquals(true, $this->user->validateEmail());
+    }
+
+    public function testInvalidEmail()
+    {
+        $this->user = $this->manager->create($this->properties);
+        $this->user->setEmail('bademail-address.com');
+        $this->assertEquals(false, $this->user->validateEmail());
+        $this->user->setEmail('bademail-address@test');
+        $this->assertEquals(false, $this->user->validateEmail());
+    }
+
+    public function testValidPasswordHash()
+    {
+        $this->user = $this->manager->create($this->properties);
+        $this->user->setPasswordHash('test-Password123');
+        $this->assertEquals(true, $this->user->validatePasswordHash('test-Password123'));
+    }
+
+    public function testInvalidPasswordHash()
+    {
+        $this->user = $this->manager->create($this->properties);
+        $this->user->setPasswordHash('test-Password123');
+        $this->assertEquals(false, $this->user->validatePasswordHash('test-password123'));
     }
 }
