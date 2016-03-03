@@ -57,6 +57,13 @@ abstract class AbstractFile
     /**
      *
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+    /**
+     *
+     */
     public function getTitle()
     {
         return $this->title;
@@ -115,9 +122,23 @@ abstract class AbstractFile
     /**
      *
      */
+    public function setId($value)
+    {
+        $this->id = $value;
+    }
+    /**
+     *
+     */
     public function setTitle($value)
     {
         $this->title = $value;
+    }
+    /**
+     *
+     */
+    public function setDescription($value)
+    {
+        $this->description = $value;
     }
     /**
      *
@@ -138,7 +159,7 @@ abstract class AbstractFile
      */
     public function setFilesize($value)
     {
-        $this->filesize = $value;
+        $this->filesize = (int) $value;
     }
     /**
      *
@@ -178,5 +199,12 @@ abstract class AbstractFile
     public function setModDateFromDateTime(\DateTime $value)
     {
         $this->setModDate($value->format('Y-m-d H:i:s'));
+    }
+    /**
+     *
+     */
+    public function verifyChecksum($checksum)
+    {
+        return $this->checksum === $checksum;
     }
 }
