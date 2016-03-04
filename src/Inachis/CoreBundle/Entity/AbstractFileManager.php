@@ -18,8 +18,8 @@ abstract class AbstractFileManager extends AbstractManager
      */
     private function qbGetByFiletypes($types = array())
     {
-    	$qb = $this->getRepository()->createQueryBuilder('f');
-    	return $qb->where(
+        $qb = $this->getRepository()->createQueryBuilder('f');
+        return $qb->where(
             $qb->expr()->in('f.filetype', $types)
         );
     }

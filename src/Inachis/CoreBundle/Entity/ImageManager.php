@@ -37,7 +37,7 @@ class ImageManager extends AbstractFileManager
     /**
      * Removed the provided {@link Image} from it's repository
      * @param Image $image The image to remove
-     */    
+     */
     public function remove(Image $image)
     {
         $this->em->remove($image);
