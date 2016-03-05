@@ -12,7 +12,7 @@ class ImageManager extends AbstractManager
      */
     protected function getClass()
     {
-        return 'Image';
+        return 'Inachis\\Component\\CoreBundle\\Entity\\Image';
     }
     
     public function create($values = array())
