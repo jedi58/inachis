@@ -13,7 +13,7 @@ class UrlManager extends AbstractManager
      */
     protected function getClass()
     {
-        return 'Url';
+        return 'Inachis\\Component\\CoreBundle\\Entity\\Url';
     }
     /**
      * Creates and returns a new instance of {@link Url}
