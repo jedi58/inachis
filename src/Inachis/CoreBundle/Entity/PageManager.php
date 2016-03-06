@@ -14,7 +14,7 @@ class PageManager extends AbstractManager
      */
     protected function getClass()
     {
-        return 'Page';
+        return 'Inachis\\Component\\CoreBundle\\Entity\\Page';
     }
 
     public function create($values = array())
