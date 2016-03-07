@@ -14,7 +14,7 @@ class CategoryManager extends AbstractManager
      */
     protected function getClass()
     {
-        return 'Category';
+        return 'Inachis\\Component\\CoreBundle\\Entity\\Category';
     }
     
     public function create($values = array())

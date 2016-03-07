@@ -13,7 +13,7 @@ class TagManager extends AbstractManager
      */
     protected function getClass()
     {
-        return 'Tag';
+        return 'Inachis\\Component\\CoreBundle\\Entity\\Tag';
     }
     
     public function create($values = array())

@@ -13,7 +13,7 @@ class UserManager extends AbstractManager
      */
     protected function getClass()
     {
-        return 'User';
+        return 'Inachis\\Component\\AdminBundle\\Entity\\User';
     }
     
     public function create($values = array())
