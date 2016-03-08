@@ -1,13 +1,11 @@
 {
     "name": "jedi58/inachis",
     "type": "library",
-    "description": "A simple PHP library that provides simple site functions",
+    "description": "A basic framework for use in producing simple post/page driven websites",
     "keywords": ["dev"],
     "license": "MIT",
     "authors": [
-        {
-            "name": "David G. Paul"
-        }
+        { "name": "David G. Paul" }
     ],
     "require": {
         "php": ">=5.6.1",
