@@ -14,8 +14,8 @@
         
         "doctrine/dbal": "2.5.*",
         "doctrine/orm": "2.5.*",
+        "klein/klein": "^2.1",
         "monolog/monolog": "1.*",
-        "symfony/routing": "3.*",
         "twig/twig": "1.*"
     },
     "require-dev": {
