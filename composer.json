@@ -7,12 +7,36 @@
     "authors": [
         { "name": "David G. Paul" }
     ],
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "michelf/php-markdown",
+                "version": "1.0",
+                "dist": {
+                    "url": "https://github.com/michelf/php-markdown/zipball/extra",
+                    "type": "zip"
+                },
+                "autoload": {
+                    "files": [
+                        "markdown.php"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "vcs",
+            "url": "http://github.com/geta6/Twig-Markdown"
+        }
+    ],
     "require": {
-        "php": ">=5.6.1",
+        "php": ">=5.5",
         
         "doctrine/dbal": "2.5.*",
         "doctrine/orm": "2.5.*",
+        "geta6/twig-markdown": "@dev",
         "klein/klein": "^2.1",
+        "michelf/php-markdown": "1.*",
         "monolog/monolog": "1.*",
         "twig/twig": "1.*"
     },
