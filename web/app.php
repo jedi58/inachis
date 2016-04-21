@@ -1,10 +1,9 @@
 <?php
 
-$loader = require __DIR__ . '/../app/autoload.php';
+use Inachis\Component\Common\Application;
 
-// add code for handling requests and responses - this should utilise the router
+$loader = require __DIR__ . '/../vendor/autoload.php';
 
-//$request = Request::createFromGlobals();
-//$response = $kernel->handle($request);
-//$response->send();
-//$kernel->terminate($request, $response);
+$app = Application::getInstance();
+$app->config->loadAll();
+$app->router->dispatch();
