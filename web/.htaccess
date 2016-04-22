@@ -1,4 +1,8 @@
-# Apache (.htaccess or httpd.conf)
 RewriteEngine On
+
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule . /app.php [L] 
+RewriteRule ^.*$ /app_dev.php [L] 
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{ENV:MODE} ^prod$
+RewriteRule ^.*$ /app.php [L] 
