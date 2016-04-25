@@ -1,0 +1,62 @@
+[
+	{
+		"methods": [ "GET" ],
+		"path": "/[*:pageTitle]",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPage"
+	},
+	{
+		"methods": [ "GET", "POST" ],
+		"path": "/inadmin/[*:pageTitle]",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPageAdmin"
+	},
+	{
+		"methods": [ "GET" ],
+		"path": "/[i:year]/[i:month]/[i:day]/[*:postTitle]",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPost"
+	},
+	{
+		"methods": [ "GET", "POST" ],
+		"path": "/inadmin/[i:year]/[i:month]/[i:day]/[*:postTitle]",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
+	},
+	{
+		"methods": [ "GET", "POST" ],
+		"path": "/inadmin/signin",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getSignin"
+	},
+	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/signout",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getSignout"
+	},
+	{
+		"methods": [ "GET" ],
+		"path": "/inadmin/forgot-password",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getForgotPassword"
+	},
+	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/forgot-password",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getForgotPasswordSent"
+	},
+	{
+		"methods": [ "GET", "POST" ],
+		"path": "/inadmin/user-management",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminList"
+	},
+	{
+		"methods": [ "GET", "POST" ],
+		"path": "/inadmin/user/[a:userId]",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDetails"
+	},
+	{
+		"methods": [ "GET", "POST" ],
+		"path": "/inadmin/dashboard",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDashboard"
+	},
+	{
+		"methods": [ "GET", "POST" ],
+		"path": "/inadmin/settings",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminSettingsMain"
+	}
+]
