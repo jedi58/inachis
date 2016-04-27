@@ -6,19 +6,37 @@ class AccountController
 {
     public static function getSignin($request, $response, $service, $app)
     {
-        $response->body('Signin page');
+        $data = array(
+            'data' => array(
+                'loginUsername' => $request->paramsPost()->get('loginUsername'),
+                'rememberMe' => $request->cookies()->get('rememberMe')
+            )
+        );
+        $response->body($app->twig->render('admin__signin.html.twig', $data));
     }
     public static function getSignout($request, $response, $service, $app)
     {
-        $response->body('Show signed out message');
+        // need to perform actual signout
+        $response->body($app->twig->render('admin__signed-out.html.twig'));
     }
     public static function getForgotPassword($request, $response, $service, $app)
     {
-        $response->body('Show request for forgotten password reset');
+        $data = array(
+            'data' => array(
+                "resetEmailAddress" => $request->paramsPost()->get('resetEmailAddress')
+            ),
+            'error' =>array(
+                //validate email address format
+            )
+        );
+        $response->body($app->twig->render('admin__forgot-password.html.twig', $data));
     }
     public static function getForgotPasswordSent($request, $response, $service, $app)
     {
-        $response->body('Show confirmation for forgotten password');
+        if (false) {
+            // if request contains errors then use self::getForgotPassword($request, $response, $service, $app) instead
+        }
+        $response->body($app->twig->render('admin__forgot-password-sent.html.twig', array()));
     }
     public static function getAdminList($request, $response, $service, $app)
     {

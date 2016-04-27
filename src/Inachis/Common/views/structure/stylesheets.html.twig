@@ -1,0 +1,8 @@
+{% block stylesheets %}
+	<link type="text/css" rel="stylesheet" href="/min/f=/css/default.css{% if data.google_map is defined and data.google_map %},/css/leaflet.css{% endif %}" media="screen" />
+    <link type="text/css" rel="stylesheet" href="/min/f=/css/print.css" media="print" />
+	<!--[if lt IE 9]>
+	<link type="text/css" rel="stylesheet" href="/min/f=/css/ie.css" media="screen" />
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]--> 
+{% endblock stylesheets %}

@@ -2,6 +2,7 @@
 namespace Inachis\Component\Common\Routing;
 
 use Klein\Klein;
+use Inachis\Component\Common\Application;
 use Inachis\Component\Common\Routing\Route;
 use Inachis\Component\Common\Configuration\ConfigManager;
 
@@ -22,7 +23,7 @@ class RoutingManager
     public function __construct()
     {
         $this->klein = new Klein();
-        $this->addErrorHandlers();
+        $this->addDefaultRoutes();
     }
     /**
      * Returns an instance of {@link RoutingManager}
@@ -72,12 +73,39 @@ class RoutingManager
         $this->klein->dispatch();
     }
     /**
-     * Adds default responder routes for error handling and standard admin interface pages
+     *
      */
-    private function addErrorHandlers()
+    public function addDefaultRoutes()
+    {
+        $this->registerViewHandler();
+        $this->registerErrorHandlers();
+    }
+    /**
+     *
+     */
+    public function registerViewHandler()
     {
         $router = $this->klein;
-        $router->onHttpError(function ($code, $router) {
+        $this->klein->respond(function ($request, $response, $service, $app) use ($router) {
+            $app->register('twig', function () {
+                $loader = new \Twig_Loader_Filesystem(array(
+                    Application::getApplicationRoot() . 'resources/views/',
+                    Application::getApplicationRoot() . 'src/Inachis/Common/views/'
+                ));
+                $options = array(); //ConfigManager::load('system');
+                //cache = true|false
+                //auto_reload  = true|false
+                return new \Twig_Environment($loader, $options);
+            });
+        });
+    }
+    /**
+     * Adds default responder routes for error handling and standard admin interface pages
+     */
+    private function registerErrorHandlers()
+    {
+        $router = $this->klein;
+        $this->klein->onHttpError(function ($code, $router) {
             if ($code >= 400 && $code < 500) {
                 // @todo replace with templated error page
                 $router->response()->body(
