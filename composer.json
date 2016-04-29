@@ -44,8 +44,7 @@
         "behat/behat": "2.*",
         "mockery/mockery": "*",
         "phpdocumentor/phpdocumentor": "2.*",
-        "phpunit/phpunit": "4.*",
-        "codeclimate/php-test-reporter": "^0.3.2"
+        "phpunit/phpunit": "4.*"
     },
     "autoload": {
         "psr-4": {
