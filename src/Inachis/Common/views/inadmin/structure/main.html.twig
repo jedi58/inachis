@@ -15,6 +15,37 @@
 	{% include "admin__stylesheets.html.twig" %}
 </head> 
 <body>
-{% block content %}{% endblock content %}
+
+<section class="admin__body-container">
+	{% block content %}{% endblock content %}
+</section>
+
+<section class="admin__container admin__container--collapsed">
+	<section class="admin__identity">
+		<h2><span>Inachis</span></h2>
+	</section>
+	<section class="admin__nav-main">
+		<ul>
+			<li>
+				<a class="button admin__add-content" href="#"><i>edit</i><span> Add Content</span></a>
+				<ul>
+					<li><a href="{{ settings.domain }}/inadmin/post/new"><i>post</i><span> Post</span></a></li>
+					<li><a href="{{ settings.domain }}/inadmin/page/new"><i>page</i><span> Page</span></a></li>
+				</ul>
+			</li>
+			<li><a href="{{ settings.domain }}/inadmin/dashboard"><i>dashboard</i><span> Dashboard</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/post/list"><i>post</i><span> Posts</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/page/list"><i>page</i><span> Pages</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/url/list"><i>links</i><span> URLs</span></a></li>
+			<li>
+				<a href="{{ settings.domain }}/inadmin/settings"><i>settings</i><span>Settings</span></a>
+				<ul>
+					<li><a href="{{ settings.domain }}/inadmin/user-management"><i>users</i><span> Users</span></a></li>
+					<li><a href="{{ settings.domain }}/inadmin/settings/advanced"><i>advanced</i><span> Advanced</span></a></li>
+				</ul>
+			</li>
+		</ul>
+		<p><a class="button" href="#collapse"><span>Collapse</span></a></p>
+	</section>
 </body> 
 </html>

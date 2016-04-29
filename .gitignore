@@ -1,13 +1,17 @@
-# Bootstrap
-app/bootstrap*
-
-# Symfony directories
+# Third-party modules
+node_modules/*
 vendor/*
+
+# Temporary data
 */logs/*
 */cache/*
-web/uploads/*
-web/bundles/*
+.sass-cache/*
 
-# Configuration files
-app/config/parameters.ini
-app/config/parameters.yml
+# Generated files
+web/assets/css/*
+web/assets/js/*
+web/assets/images/*
+web/inadmin/assets/css/*
+web/inadmin/assets/js/*
+web/inadmin/assets/images/*
+

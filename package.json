@@ -1,10 +1,15 @@
 {
   "devDependencies": {
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-cssnano": "^2.1.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-ruby-sass": "^2.0.6",
-    "gulp-run-sequence": "^0.3.2",
-    "require-dir": "^0.3.0"
+    "gulp": "^3.*",
+    "gulp-autoprefixer": "*",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssnano": "*",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-rename": "*",
+    "gulp-ruby-sass": "*",
+    "gulp-run-sequence": "*",
+    "gulp-uglify": "^1.5.3",
+    "require-dir": "*"
   }
 }

@@ -1,5 +1,13 @@
 var gulp = require('gulp');
 gulp.task('default', [
-	//'js:compile',
-	'sass:compile'
+	//'clean',
+	'js:compile',
+	'sass:compile',
+	'images:min'
+]);
+
+gulp.task('watchall', [
+	'images:watch',
+	'js:watch',
+	'sass:watch'
 ]);
