@@ -1,0 +1,62 @@
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ settings.language }}" lang="{{ settings.language }}" dir="{{ settings.textdirection }}"> 
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>{{ data.page.title }}{% if data.page.title != '' %} / {% endif %}{{ settings.siteTitle }}</title> 
+	<base href="{{ settings.domain }}" > 
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> 
+	<meta http-equiv="keywords" content="{{ data.page.keywords }}" /> 
+	<meta http-equiv="Content-Style-Type" content="text/css" /> 
+	<meta http-equiv="Last-Update" content="{{ data.page.lastModifiedDate }}" /> 
+	<meta http-equiv="Content-Language" content="en" /> 
+	<meta http-equiv="imagetoolbar" content="no" /> 
+	<meta name="Author" content="{{ data.page.author.name }}" /> 
+	<meta name="Copyright" content="&copy; {{ settings.copyright }}" /> 
+	<meta name="keywords" content="{% if data.page.keywords is not empty %}, {{ data.page.keywords }}{% endif %}" /> 
+	<meta name="description" content="{{ data.page.description }}" /> 
+	<meta name="abstract" content="{{ settings.abstract }}" /> 
+	<meta name="robots" content="index,follow" /> 
+	<meta name="googlebot" content="NOODP" /> 
+	<meta name="language" content="{{ settings.language }}" /> 
+	<meta name="revised" content="{{ data.page.lastModifiedDateFriendly }}" /> 
+	<meta name="ICBM" content="{{ data.page.geo.position }}" /> 
+	<meta name="geo.position" content="{{ data.page.geo.position }}" /> 
+	<meta name="geo.placename" content="{{ data.page.geo.placename }}" /> 
+	<meta name="geo.region" content="{{ data.page.geo.region }}" /> 
+	<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" /> 
+	<link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" /> 
+	<meta name="DC.title" content="{{ settings.siteTitle }}" /> 
+	<meta name="DC.creator" content="{{ data.page.author.name }}" /> 
+	<meta name="DC.subject" content="{{ data.page.keywords }}" /> 
+	<meta name="DC.description" content="{{ data.page.description }}" /> 
+	<meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" /> 
+	<meta name="DC.format" content="text/html" /> 
+	<meta name="DC.identifier" scheme="DCTERMS.URI" content="{{ settings.domain }}" /> 
+	<meta name="generator" content="inachis" /> 
+	<link rel="canonical" href="{{ date.page.self }}" /> 
+	<link rel="search" type="application/opensearchdescription+xml" title="Fauna.me" href="/search.xml" /> 
+	<link rel="Shortcut Icon" type="image/x-icon" href="{{ settings.domain }}/favicon.ico" /> 
+	<link rel="icon" type="image/x-icon" href="{{ settings.domain }}/favicon.ico" /> 
+	<link rel="apple-touch-icon" href="{{ settings.domain }}/images/apple-touch.png" /> 
+	<link rel="P3Pv1" href="{{ settings.domain }}/w3c/p3p.xml" /> 
+	<link rel="index" title="Fauna.me" href="{{ settings.domain }}" /> 
+	{% include "stylesheet.html.twig" %}
+</head> 
+<body> 
+<div id="site_wrapper">
+	{% include "structure_mast.twig" %}
+	<div id="wrapper">
+		<section id="main" role="main"{% if type is defined and type == 'paddlingless' %}class="no_padding"{% endif %}>
+			{% block content %}{% endblock %}
+		</section>
+{% if type is not defined or type != 'paddlingless' %}
+		<aside id="column">
+			{% include "structure_column.twig" %}
+		</aside>
+{% endif %}
+	</div>
+	{% include "structure_footer.twig" %}
+</div>
+</body> 
+</html>

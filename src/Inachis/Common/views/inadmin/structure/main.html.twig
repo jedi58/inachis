@@ -1,0 +1,20 @@
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ settings.language }}" lang="{{ settings.language }}" dir="{{ settings.textdirection }}"> 
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>{{ data.page.title }}{% if data.page.title != '' %} / {% endif %}{{ settings.siteTitle }}</title> 
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> 
+	<meta http-equiv="Content-Style-Type" content="text/css" /> 
+	<meta name="robots" content="noindex,nofollow" /> 
+	<link rel="Shortcut Icon" type="image/x-icon" href="{{ settings.domain }}/favicon.ico" /> 
+	<link rel="icon" type="image/x-icon" href="{{ settings.domain }}/favicon.ico" /> 
+	<link rel="apple-touch-icon" href="{{ settings.domain }}/images/apple-touch.png" /> 
+	<link rel="P3Pv1" href="{{ settings.domain }}/w3c/p3p.xml" /> 
+	<link rel="index" title="Fauna.me" href="{{ settings.domain }}" /> 
+	{% include "admin__stylesheets.html.twig" %}
+</head> 
+<body>
+{% block content %}{% endblock content %}
+</body> 
+</html>
