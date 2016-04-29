@@ -14,7 +14,7 @@ This is currently an experimental framework - more details will be provided as a
 $  composer require jedi58/inachis
 ```
 - Run `composer install`
-- 
+ 
 If you would like to use the default templates then you will need `npm` and `gulp` so that you can then run `npm install` followed by `gulp` to build prepare the assets.
 
 
