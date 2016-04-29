@@ -1,7 +1,7 @@
 Inachis Framework
 =======
 
-![alt text](https://travis-ci.org/jedi58/inachis.svg?branch=master "Build status")
+[![TravisCI](https://travis-ci.org/jedi58/inachis.svg?branch=master)](https://travis-ci.org/jedi58/inachis)
 [![StyleCI](https://styleci.io/repos/12222371/shield)](https://styleci.io/repos/12222371)
 [![Code Climate](https://codeclimate.com/github/jedi58/inachis/badges/gpa.svg)](https://codeclimate.com/github/jedi58/inachis)
 [![Coverage Status](https://coveralls.io/repos/github/jedi58/inachis/badge.svg?branch=master)](https://coveralls.io/github/jedi58/inachis?branch=master)
