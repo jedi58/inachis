@@ -6,8 +6,8 @@ module.exports = {
 				web: ''
 			},
 			js: {
-				admin: '',
-				web: ''
+				admin: 'web/inadmin/assets/js/',
+				web: 'web/assets/js/'
 			},
 			sass: {
 				admin: 'web/inadmin/assets/css/',
@@ -20,8 +20,8 @@ module.exports = {
 				web: ''
 			},
 			js: {
-				admin: '',
-				web: ''
+				admin: 'resources/assets/js/admin/',
+				web: 'resources/assets/js/web/'
 			},
 			sass: { 
 				admin: 'resources/assets/scss/admin/',

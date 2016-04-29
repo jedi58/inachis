@@ -44,11 +44,25 @@
         "behat/behat": "2.*",
         "mockery/mockery": "*",
         "phpdocumentor/phpdocumentor": "2.*",
-        "phpunit/phpunit": "4.*"
+        "phpunit/phpunit": "4.*",
+        "codeclimate/php-test-reporter": "^0.3.2"
     },
     "autoload": {
         "psr-4": {
             "Inachis\\Component\\": "src/Inachis/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "composer dump-autoload --optimize",
+            "sudo npm install",
+            "gulp"
+        ],
+        "post-update-cmd": [
+            "npm update"
+        ]
+    },
+    "archive": {
+        "exclude": [ "tests" ]
     }
 }
