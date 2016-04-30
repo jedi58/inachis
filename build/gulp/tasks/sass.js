@@ -17,7 +17,7 @@ gulp.task('sass:compile-web', function() {
     .pipe(gulp.dest(config.paths.dist.sass.web));
 });
 gulp.task('sass:compile-admin', function() {
-  return sass(config.paths.src.sass.web + '**/*.scss', { style: 'expanded' })
+  return sass(config.paths.src.sass.admin + '**/*.scss', { style: 'expanded' })
     .pipe(autoprefixer('last 2 version'))
     .pipe(cssnano())
     .pipe(rename({suffix: '.min'}))

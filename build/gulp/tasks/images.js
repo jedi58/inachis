@@ -9,19 +9,12 @@ gulp.task('images:min', [
 gulp.task('images:min-web', function() {
     return gulp.src(config.paths.src.images.web)
         .pipe(imagemin())
-        .pipe(gulp.dest(config.paths.dist.images.web))
-  //return gulp.src(config.paths.src.js.web + '**/*.js')
-  //  .pipe(concat('scripts.js'))
-  //  .pipe(uglify())
-  //  .pipe(rename({suffix: '.min'}))
-  //  .pipe(gulp.dest(config.paths.dist.js.web));
+        .pipe(gulp.dest(config.paths.dist.images.web));
 });
 gulp.task('images:min-admin', function() {
-  //return gulp.src(config.paths.src.js.admin + '**/*.js')
-  //  .pipe(concat('scripts.js'))
-  //  .pipe(uglify())
-  //  .pipe(rename({suffix: '.min'}))
-  //  .pipe(gulp.dest(config.paths.dist.js.admin));
+    return gulp.src(config.paths.dist.images.admin)
+        .pipe(imagemin())
+        .pipe(gulp.dest(config.paths.dist.images.admin));
 });
 
 gulp.task('images:watch', function() {

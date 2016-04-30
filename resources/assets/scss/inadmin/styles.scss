@@ -1,7 +1,136 @@
 @import '../shared/_reset';
 
-// add body style here
+body { font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif; }
 
 @import '../shared/_col';
 @import '../shared/_8cols';
 
+
+// Admin Container Variables
+$admin__container--collapsed-width: 40px;
+$admin__container--expanded-width: 130px;
+$admin__container-button--hover: #0cf;
+$admin__container-add-button: #069;
+
+
+.admin__container {
+	background-color: #333;
+	color: #fff;
+	height: 100%;
+	left: 0;
+	position: fixed;
+	overflow: hidden;
+	top: 0;
+
+	&.admin__container--collapsed {
+		width: $admin__container--collapsed-width;
+
+		ul {
+			li {
+				margin: 5px auto;
+				padding: 5px;
+			}
+			span {
+				display: none;
+			}
+			ul {
+				display: none;
+			}
+		}
+
+		.admin__nav-collapse {
+			display: none;
+		}
+		li.admin__nav-expand {
+			margin-top: 30px;
+		}
+	}
+
+	&.admin__container--expanded {
+		width: $admin__container--expanded-width;
+
+		ul {
+			li {
+				margin: 10px 5px;
+				text-align: left;
+			}
+
+			ul {
+				display: none;
+			}
+		}
+
+		.admin__nav-expand {
+			display: none;
+		}
+		li.admin__nav-collapse {
+			margin-top: 30px;
+		}
+
+		.button.admin__add-content {
+			padding: 10px;
+			vertical-align: middle;
+			width: 5em;
+
+			span {
+				display: inline;
+			}
+		}
+	}
+
+	.admin__identity {
+		height: 35px;
+		margin:0 auto 20px auto;
+		width: 50px;
+
+		span {
+			display: none;
+		}
+	}
+
+	a, a:visited {
+		color: #fff;
+		text-decoration: none;
+	}
+
+	a:hover {
+		color: $admin__container-button--hover;
+	}
+
+	li {
+		text-align: center;
+		vertical-align: middle;
+	}
+
+	ul, li {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.button.admin__add-content {
+		background-color: $admin__container-add-button;
+		border: 1px solid darken($admin__container-add-button, 10%);
+		display: block;
+		margin:5px auto 10px auto;
+		padding: 0;
+
+		&:hover {
+			background-color: $admin__container-button--hover;
+			border: 1px solid $admin__container-add-button;
+			color: #fff;
+		}
+
+		& span {
+			display: none;
+		}
+	}
+}
+
+.admin__body-container {
+	margin-left: $admin__container--collapsed-width;
+	
+	@import '../shared/_forms';
+}
+
+@import '../shared/_buttons';
