@@ -7,7 +7,7 @@ gulp.task('default', [
 ]);
 
 gulp.task('watchall', [
-	'images:watch',
+	'sass:watch',
 	'js:watch',
-	'sass:watch'
+	'images:watch'
 ]);

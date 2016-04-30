@@ -44,8 +44,7 @@
         "behat/behat": "2.*",
         "mockery/mockery": "*",
         "phpdocumentor/phpdocumentor": "2.*",
-        "phpunit/phpunit": "4.*",
-        "codeclimate/php-test-reporter": "^0.3.2"
+        "phpunit/phpunit": "4.*"
     },
     "autoload": {
         "psr-4": {
@@ -54,9 +53,9 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "composer dump-autoload --optimize",
-            "sudo npm install",
-            "gulp"
+            //"composer dump-autoload --optimize",
+            //"sudo npm install",
+            //"gulp"
         ],
         "post-update-cmd": [
             "npm update"

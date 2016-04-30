@@ -27,25 +27,28 @@
 	<section class="admin__nav-main">
 		<ul>
 			<li>
-				<a class="button admin__add-content" href="#"><i>edit</i><span> Add Content</span></a>
+				<a class="button admin__add-content" href="#" title="Add new content"><i class="material-icons md-48 md-light">edit</i><span> Add Content</span></a>
 				<ul>
-					<li><a href="{{ settings.domain }}/inadmin/post/new"><i>post</i><span> Post</span></a></li>
-					<li><a href="{{ settings.domain }}/inadmin/page/new"><i>page</i><span> Page</span></a></li>
+					<li><a href="{{ settings.domain }}/inadmin/post/new" title="Add a new post"><i class="material-icons">post</i><span> Post</span></a></li>
+					<li><a href="{{ settings.domain }}/inadmin/page/new" title="Add a new page"><i class="material-icons">page</i><span> Page</span></a></li>
 				</ul>
 			</li>
-			<li><a href="{{ settings.domain }}/inadmin/dashboard"><i>dashboard</i><span> Dashboard</span></a></li>
-			<li><a href="{{ settings.domain }}/inadmin/post/list"><i>post</i><span> Posts</span></a></li>
-			<li><a href="{{ settings.domain }}/inadmin/page/list"><i>page</i><span> Pages</span></a></li>
-			<li><a href="{{ settings.domain }}/inadmin/url/list"><i>links</i><span> URLs</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/dashboard" title="View dashboard"><i class="material-icons">dashboard</i><span> Dashboard</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/post/list" title="View list of posts"><i class="material-icons">insert_drive_file</i><span> Posts</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/page/list" title="View list of pages"><i class="material-icons">note</i><span> Pages</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/url/list" title="View list of defined URLs"><i class="material-icons">insert_link</i><span> URLs</span></a></li>
 			<li>
-				<a href="{{ settings.domain }}/inadmin/settings"><i>settings</i><span>Settings</span></a>
+				<a href="{{ settings.domain }}/inadmin/settings" title="Change settings"><i class="material-icons">settings</i><span> Settings</span></a>
 				<ul>
-					<li><a href="{{ settings.domain }}/inadmin/user-management"><i>users</i><span> Users</span></a></li>
-					<li><a href="{{ settings.domain }}/inadmin/settings/advanced"><i>advanced</i><span> Advanced</span></a></li>
+					<li><a href="{{ settings.domain }}/inadmin/user-management" title="Manage users"><i class="material-icons">users</i><span> Users</span></a></li>
+					<li><a href="{{ settings.domain }}/inadmin/settings/advanced" title="Change advanced settings">
+						<i class="material-icons">advanced</i><span> Advanced</span></a>
+					</li>
 				</ul>
 			</li>
+			<li class="admin__nav-expand"><a href="#expand"><i class="material-icons">keyboard_arrow_right</i><span> Expand</span></a></li>
+			<li class="admin__nav-collapse"><a href="#collapse"><i class="material-icons">keyboard_arrow_left</i><span> Collapse</span></a></li>
 		</ul>
-		<p><a class="button" href="#collapse"><span>Collapse</span></a></p>
 	</section>
 </body> 
 </html>

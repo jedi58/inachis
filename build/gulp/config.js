@@ -2,8 +2,8 @@ module.exports = {
 	paths: {
 		dist: {
 			images: {
-				admin: '',
-				web: ''
+				admin: 'web/inadmin/assets/images/',
+				web: 'web/assets/images/'
 			},
 			js: {
 				admin: 'web/inadmin/assets/js/',
@@ -16,15 +16,15 @@ module.exports = {
 		},
 		src: {
 			images: {
-				admin: '',
-				web: ''
+				admin: 'resources/assets/images/inadmin/',
+				web: 'resources/assets/images/web/'
 			},
 			js: {
-				admin: 'resources/assets/js/admin/',
+				admin: 'resources/assets/js/inadmin/',
 				web: 'resources/assets/js/web/'
 			},
 			sass: { 
-				admin: 'resources/assets/scss/admin/',
+				admin: 'resources/assets/scss/inadmin/',
 				web: 'resources/assets/scss/web/'
 			}
 		}
