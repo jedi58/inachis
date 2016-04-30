@@ -53,9 +53,6 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "composer dump-autoload --optimize",
-            "npm install",
-            "gulp"
         ],
         "post-update-cmd": [
             "npm update"
