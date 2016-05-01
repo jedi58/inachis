@@ -2,14 +2,14 @@
   "devDependencies": {
     "gulp": "^3.*",
     "gulp-autoprefixer": "*",
-    "gulp-clean": "^0.3.2",
-    "gulp-concat": "^2.6.0",
+    "gulp-clean": "*",
+    "gulp-concat": "*",
     "gulp-cssnano": "*",
-    "gulp-imagemin": "^2.4.0",
+    "gulp-exec": "*",
+    "gulp-imagemin": "*",
     "gulp-rename": "*",
     "gulp-ruby-sass": "*",
-    "gulp-run-sequence": "*",
-    "gulp-uglify": "^1.5.3",
+    "gulp-uglify": "*",
     "require-dir": "*"
   }
 }
