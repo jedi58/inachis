@@ -17,7 +17,7 @@ gulp.task('phpunit', function() {
 gulp.task('phplint', function() {
   return gulp.src('')
     .pipe(
-      exec('find -L . -name \'*.php\' -not -path \'*/vendor/*\' -not -path \'*/node_modules/*\' -print0 | xargs -0 -n 1 -P 4 php -l | grep \'Parse\'',
+      exec('find -L . -name \'*.php\' -not -path \'*/{vendor,node_modules}/*\' -print0 | xargs -0 -n 1 -P 4 php -l | grep \'Parse\'',
         function(error, stdout) {
           console.log(stdout);
         }
