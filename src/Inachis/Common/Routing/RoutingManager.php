@@ -92,10 +92,21 @@ class RoutingManager
                     Application::getApplicationRoot() . 'resources/views/',
                     Application::getApplicationRoot() . 'src/Inachis/Common/views/'
                 ));
-                $options = array(); //ConfigManager::load('system');
-                //cache = true|false
+                $options = array();
+                $env = Application::getEnv();
+                if ($env === 'dev') {
+                    $options['debug'] = true;
+                } elseif (in_array($env, array('preprod', 'prod'))) {
+                    $options['cache'] = true;
+                }
+                // @todo load additional settings from config/system.json
+                //ConfigManager::load('system');
                 //auto_reload  = true|false
-                return new \Twig_Environment($loader, $options);
+                $twig = new \Twig_Environment($loader, $options);
+                if ($env === 'dev') {
+                    $twig->addExtension(new \Twig_Extension_Debug());
+                }
+                return $twig;
             });
         });
     }

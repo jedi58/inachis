@@ -21,7 +21,7 @@ class Application
     /**
      * @var string The mode for the current environment; limited to {@link Application::MODES}
      */
-    protected $env = 'dev';
+    protected static $env = 'dev';
     /**
      * @var ConfigManager Instance used for handling Application config
      */
@@ -59,9 +59,9 @@ class Application
      * Returns the current environment mode
      * @return string The current environment
      */
-    public function getEnv()
+    public static function getEnv()
     {
-        return $this->env;
+        return self::$env;
     }
     /**
      * Returns the {@link Application}'s {@link RoutingManager} object
@@ -89,7 +89,7 @@ class Application
         if (!in_array($value, self::MODES)) {
             throw new Exception\InvalidEnvironmentException('Mode ' . $value . ' not supported');
         }
-        $this->env = $value;
+        self::$env = $value;
     }
     /**
      * Returns the path to the root of where the application has been installed
