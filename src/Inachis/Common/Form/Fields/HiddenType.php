@@ -3,6 +3,7 @@
 namespace Inachis\Component\Common\Form\Fields;
 
 use Inachis\Component\Common\Form\FormComponent;
+
 /**
  * Object for handling `type="hidden"` buttons
  */
