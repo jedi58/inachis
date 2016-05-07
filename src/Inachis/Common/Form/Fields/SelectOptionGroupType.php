@@ -3,7 +3,6 @@
 namespace Inachis\Component\Common\Form\Fields;
 
 use Inachis\Component\Common\Form\FormComponent;
-
 /**
  * Object for handling select fields
  */
@@ -55,6 +54,6 @@ class SelectOptionGroupType extends AbstractSelectType
      */
     public function getLabelAsId()
     {
-        return preg_replace('/[^a-zA-Z0-9\-\_]/', '', lcfirst(ucwords(strtolower($this->label))));
+        return preg_replace('/[^a-zA-Z0-9\-\_]/','', lcfirst(ucwords(strtolower($this->label))));
     }
 }

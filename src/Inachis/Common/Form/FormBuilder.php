@@ -9,51 +9,51 @@ use Inachis\Component\Common\Exception\FormBuilderConfigurationException;
  */
 class FormBuilder extends AbstractFormType
 {
-    /**
-    * @var string[] The accepted HTTP/1.1 request methods
-    */
-    private $allowedMethods = array(
-        'DELETE',
-        'GET',
-        'POST',
-        'PUT'
-    );
-    /**
-     * @var string[] The allowed enctype values for the form
-     */
-    private $allowedEncTypes = array(
-        'application/x-www-form-urlencoded',
-        'multipart/form-data',
-        'text/plain'
-    );
-    /**
-     * @var string The method to use for the form
-     */
-    protected $method = 'POST';
-    /**
-     * @var string The action for the form
-     */
-    protected $action;
-    /**
-     * @var bool Flag indicating of the form
-     */
-    protected $autoComplete = true;
-    /**
-     * @var string The enctype for the form
-     */
-    protected $encType = 'text/plain';
-    /**
-     * @var bool Flag indicating of validation should be disabled
-     */
-    protected $noValidate = false;
-    /**
-     * @var FormComponent[] The array of components for the form
-     */
-    protected $components = array();
-    /**
-     * @var mixed[] The values for components in the form
-     */
-    protected $data = array();
+	/**
+	* @var string[] The accepted HTTP/1.1 request methods
+	*/
+	private $allowedMethods = array(
+		'DELETE',
+		'GET',
+		'POST',
+		'PUT'
+	);
+	/**
+	 * @var string[] The allowed enctype values for the form
+	 */
+	private $allowedEncTypes = array(
+		'application/x-www-form-urlencoded',
+		'multipart/form-data',
+		'text/plain'
+	);
+	/**
+	 * @var string The method to use for the form
+	 */
+	protected $method = 'POST';
+	/**
+	 * @var string The action for the form
+	 */
+	protected $action;
+	/**
+	 * @var bool Flag indicating of the form
+	 */
+	protected $autoComplete = true;
+	/**
+	 * @var string The enctype for the form
+	 */
+	protected $encType = 'text/plain';
+	/**
+	 * @var bool Flag indicating of validation should be disabled
+	 */
+	protected $noValidate = false;
+	/**
+	 * @var FormComponent[] The array of components for the form
+	 */
+	protected $components = array();
+	/**
+	 * @var mixed[] The values for components in the form
+	 */
+	protected $data = array();
     /**
      * Default constructor for {@link FormBuilder}
      * @param string $action The URL to submit the form to
@@ -62,9 +62,9 @@ class FormBuilder extends AbstractFormType
      */
     public function __construct($action, $method = 'POST', $name = '')
     {
-        $this->setAction($action);
-        $this->setMethod($method);
-        $this->setName($name);
+    	$this->setAction($action);
+    	$this->setMethod($method);
+    	$this->setName($name);
     }
     /**
      * Returns the type of the form element - in this case it will always be "form"
@@ -72,7 +72,7 @@ class FormBuilder extends AbstractFormType
      */
     public function getType()
     {
-        return 'form';
+    	return 'form';
     }
     /**
      * Sets the method the form should use
@@ -81,14 +81,14 @@ class FormBuilder extends AbstractFormType
      */
     public function setMethod($value)
     {
-        $value = strtoupper($value);
-        if (!in_array($value, $this->allowedMethods)) {
-            throw new FormBuilderConfigurationException(
-                sprintf('Invalid method %s - allowed methods are: %s', $value, implode(', ', $this->allowedMethods))
-            );
-        }
-        $this->method = $value;
-        return $this;
+    	$value = strtoupper($value);
+    	if (!in_array($value, $this->allowedMethods)) {
+    		throw new FormBuilderConfigurationException(
+    			sprintf('Invalid method %s - allowed methods are: %s', $value, implode(', ', $this->allowedMethods))
+			);
+    	}
+    	$this->method = $value;
+    	return $this;
     }
     /**
      * Sets the action the form should use
@@ -97,11 +97,11 @@ class FormBuilder extends AbstractFormType
      */
     public function setAction($value)
     {
-        if (!is_string($value)) {
-            throw new FormBuilderConfigurationException(sprintf('Invalid action provided: %s', $value));
-        }
-        $this->action = $value;
-        return $this;
+    	if (!is_string($value)) {
+    		throw new FormBuilderConfigurationException(sprintf('Invalid action provided: %s', $value));
+    	}
+    	$this->action = $value;
+    	return $this;
     }
     /**
      * Specifies if teh form should allow autocompletion of fields
@@ -110,8 +110,8 @@ class FormBuilder extends AbstractFormType
      */
     public function setAutoComplete($autocomplete)
     {
-        $this->autoComplete = (bool) $autocomplete;
-        return $this;
+    	$this->autoComplete = (bool) $autocomplete;
+    	return $this;
     }
     /**
      * Sets the enctype the form should use
@@ -120,12 +120,12 @@ class FormBuilder extends AbstractFormType
      */
     public function setEncType($enctype)
     {
-        $enctype = strtolower($enctype);
-        if (!in_array($enctype, $this->allowedEncTypes)) {
-            throw new FormBuilderConfigurationException(sprintf('%s is not a valid enctype', $enctype));
-        }
-        $this->encType = $enctype;
-        return $this;
+    	$enctype = strtolower($enctype);
+    	if (!in_array($enctype, $this->allowedEncTypes)) {
+    		throw new FormBuilderConfigurationException(sprintf('%s is not a valid enctype', $enctype));
+    	}
+    	$this->encType = $enctype;
+    	return $this;
     }
     /**
      * Specifies whether the form should use valdiation
@@ -134,11 +134,11 @@ class FormBuilder extends AbstractFormType
      */
     public function setNoValidate($value)
     {
-        if (!is_bool($value)) {
-            throw new FormBuilderConfigurationException('novalidate MUST be boolean true or false');
-        }
-        $this->noValidate = (bool) $value;
-        return $this;
+    	if (!is_bool($value)) {
+    		throw new FormBuilderConfigurationException('novalidate MUST be boolean true or false');
+    	}
+    	$this->noValidate = (bool) $value;
+    	return $this;
     }
     /**
      * Returns the method for the form
@@ -146,7 +146,7 @@ class FormBuilder extends AbstractFormType
      */
     public function getMethod()
     {
-        return $this->method;
+    	return $this->method;
     }
     /**
      * Returns the action for the form
@@ -154,7 +154,7 @@ class FormBuilder extends AbstractFormType
      */
     public function getAction()
     {
-        return $this->action;
+    	return $this->action;
     }
     /**
      * Returns the value of the flag indicating of autocomplete is enabled
@@ -162,7 +162,7 @@ class FormBuilder extends AbstractFormType
      */
     public function getAutoComplete()
     {
-        return $this->autoComplete;
+    	return $this->autoComplete;
     }
     /**
      * Returns the enctype the form will use
@@ -170,7 +170,7 @@ class FormBuilder extends AbstractFormType
      */
     public function getEncType()
     {
-        return $this->encType;
+    	return $this->encType;
     }
     /**
      * Returns the value of the flag indicating of validation is disabled
@@ -178,7 +178,7 @@ class FormBuilder extends AbstractFormType
      */
     public function getNoValidate()
     {
-        return $this->noValidate;
+    	return $this->noValidate;
     }
     /**
      * Returns the array of components for the form
@@ -186,7 +186,7 @@ class FormBuilder extends AbstractFormType
      */
     public function getComponents()
     {
-        return $this->components;
+    	return $this->components;
     }
     /**
      * Adds a new component to the form
@@ -195,7 +195,7 @@ class FormBuilder extends AbstractFormType
      */
     public function addComponent(FormComponent $component)
     {
-        $this->components[$component->getName()] = $component;
-        return $this;
+    	$this->components[$component->getName()] = $component;
+    	return $this;
     }
 }
