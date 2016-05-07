@@ -1,7 +1,7 @@
 Inachis Framework
 =======
 
-![alt text](https://travis-ci.org/jedi58/inachis.svg?branch=master "Build status")
+[![TravisCI](https://travis-ci.org/jedi58/inachis.svg?branch=master)](https://travis-ci.org/jedi58/inachis)
 [![StyleCI](https://styleci.io/repos/12222371/shield)](https://styleci.io/repos/12222371)
 [![Code Climate](https://codeclimate.com/github/jedi58/inachis/badges/gpa.svg)](https://codeclimate.com/github/jedi58/inachis)
 [![Coverage Status](https://coveralls.io/repos/github/jedi58/inachis/badge.svg?branch=master)](https://coveralls.io/github/jedi58/inachis?branch=master)
@@ -14,6 +14,9 @@ This is currently an experimental framework - more details will be provided as a
 $  composer require jedi58/inachis
 ```
 - Run `composer install`
+ 
+If you would like to use the default templates then you will need `npm` and `gulp` so that you can then run `npm install` followed by `gulp` to build prepare the assets.
+
 
 ##Deployment and configuration using Ansible
 Environments deployed using Ansible hav etheir configuration stored in the usual YAML files. For the default passwords used by each service (MySQL, RabbitMQ, etc.) please refer to https://github.com/jedi58/inachis/blob/master/dev/ansible/vars/all.yml
