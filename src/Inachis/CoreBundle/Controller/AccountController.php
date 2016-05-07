@@ -2,6 +2,9 @@
 
 namespace Inachis\Component\CoreBundle\Controller;
 
+use Inachis\Component\Common\Form\FormBuilder;
+use Inachis\Component\Common\Form\Fields\TextType;
+
 class AccountController
 {
     public static function getSignin($request, $response, $service, $app)
