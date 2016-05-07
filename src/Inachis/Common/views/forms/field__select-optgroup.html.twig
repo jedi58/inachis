@@ -1,0 +1,5 @@
+<optgroup label="{{ optgroup.label }}">
+	{% for option in optgroup.options %}
+		{{ include('forms/field__select-option.html.twig', { 'option': option }) }}
+	{% endfor %}
+</optgroup>
