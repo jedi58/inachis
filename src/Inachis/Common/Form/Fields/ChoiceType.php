@@ -4,6 +4,7 @@ namespace Inachis\Component\Common\Form\Fields;
 
 use Inachis\Component\Common\Form\FormComponent;
 use Inachis\Component\Common\Exception\FormBuilderConfigurationException;
+
 /**
  * Object for handling `type="checkbox"` fields
  */
