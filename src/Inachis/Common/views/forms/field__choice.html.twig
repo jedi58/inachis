@@ -1,11 +1,16 @@
 {% if field.wrapperElement is not empty %}
 <{{ field.wrapperElement }}{% if field.wrapperClasses is not empty %} class="{{ field.wrapperClasses|join(' ') }}"{% endif %}>
 {% endif %}
-	<label for="{{ field.id }}">
+	<label for="{{ field.id }}"
+		{%- if field.labelId is not empty %} id="{{ field.labelId }}"{% endif -%}
+	>
 		<input id="{{ field.id }}" name="{{ field.name }}" type="{{ field.type }}" value="{{ field.value }}"
-			{%- if field.cssClasses is not empty %} class="{{ field.cssClasses|join(' ') }}"{% endif %}
+			{%- for ariaKey,ariaValue in field.ariaAttributes -%}
+				aria-{{ ariaKey }}="{{ ariaValue }}"
+			{%- endfor -%}
 			{%- if field.autoFocus %} autofocus{% endif %}
 			{%- if field.checked or value == field.value %} checked{% endif %}
+			{%- if field.cssClasses is not empty %} class="{{ field.cssClasses|join(' ') }}"{% endif %}
 			{%- if field.disabled %} required{% endif %}
 			{%- if field.readOnly %} readonly{% endif %}
 			{%- if field.required %} required{% endif -%}
