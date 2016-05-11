@@ -14,6 +14,10 @@ abstract class FormComponent extends AbstractFormType
      */
     protected $label;
     /**
+     * @var string An ID to assign to the label for use by aria, etc.
+     */
+    protected $labelId;
+    /**
      * @var string The value for the element
      */
     protected $value;
@@ -37,6 +41,10 @@ abstract class FormComponent extends AbstractFormType
      * @var string[] The CSS classes to apply to the wrapping elements if applicable
      */
     protected $wrapperClasses = array();
+    /**
+     * @var string[] An array of aria attributes for the form elements (exclusing aria- prefix)
+     */
+    protected $ariaAttributes = array();
     /**
      * Default constructor for {@link FormComponent}
      * @param string $name The name of the form component
@@ -68,6 +76,24 @@ abstract class FormComponent extends AbstractFormType
     public function getLabel()
     {
         return $this->label;
+    }
+    /**
+     * Sets the value of {@link $labelId}
+     * @param string $value The ID to use for the label
+     * @return FormComponent Returns a reference to itself
+     */
+    public function setLabelId($value)
+    {
+        $this->labelId = $value;
+        return $this;
+    }
+    /**
+     * Returns the value of {@link labelId}
+     * @return string The value of the property
+     */
+    public function getLabelId()
+    {
+        return $this->labelId;
     }
     /**
      * Sets the value of {@link $value}
@@ -190,6 +216,37 @@ abstract class FormComponent extends AbstractFormType
             throw new FormBuilderConfigurationException('Cannot apply wrapping CSS with no wrapper element');
         }
         $this->wrapperClasses[] = $value;
+        return $this;
+    }
+    /**
+     * Sets the contents of the {@link ariaAttributes} array
+     * @param string[] $value The value to set the property to
+     * @return FormComponent Returns a reference to itself
+     */
+    public function setAriaAttributes($value)
+    {
+        if (!is_array($value)) {
+            throw new FormBuilderConfigurationException('Aria atttributes must be an array');
+        }
+        $this->ariaAttributes = $value;
+        return $this;
+    }
+    /**
+     * Returns the array of Aria attributes
+     * @return string[] The array of Aria attributes
+     */
+    public function getAriaAttributes()
+    {
+        return $this->ariaAttributes;
+    }
+    /**
+     * Adds a new aria attribute to {@link ariaAttributes}
+     * @param string $value The aria attribute to add
+     * @return FormComponent Returns a reference to itself
+     */
+    public function addAriaAttribute($value)
+    {
+        $this->ariaAttributes[] = $value;
         return $this;
     }
 }
