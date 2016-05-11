@@ -42,7 +42,7 @@ class ConfigManager
      */
     public static function load($filename, $type = 'json', $path = '')
     {
-        return FileHandler::loadAndProcessFile($this->configLocation . $path, $filename . '.' . $type, $type);
+        return FileHandler::loadAndProcessFile(self::$configLocation . $path, $filename . '.' . $type, $type);
     }
     /**
      * Loads all config files within the config folder
