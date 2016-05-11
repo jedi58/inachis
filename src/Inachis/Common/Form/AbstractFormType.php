@@ -2,7 +2,7 @@
 
 namespace Inachis\Component\Common\Form;
 
-use Inachis\Component\Common\Exceptions\FormBuilderConfigurationException;
+use Inachis\Component\Common\Exception\FormBuilderConfigurationException;
 
 /**
  * Abstract class that provides attributes and functions that are common to both
@@ -88,7 +88,7 @@ abstract class AbstractFormType
     public function setCssClasses($value)
     {
         if (!is_array($value)) {
-            throw new FormBuilderConfigurationException(sprintf('Array required, %s provided', gettype($value)));
+            return $this->setCssClassesFromString($value);
         }
         $this->cssClasses = $value;
         return $this;
