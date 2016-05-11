@@ -25,37 +25,10 @@ gulp.task('phplint', function() {
     );
 });
 
-gulp.task('psr-2', [
-  'psr-2-app',
-  'psr-2-src',
-  'psr-2-tests',
-  'psr-2-web'
-]);
-
-gulp.task('psr-2-app', function() {
+gulp.task('psr-2', function() {
   return gulp.src('')
-    .pipe(exec('phpcs --standard=PSR2 app', function (error, stdout) {
+    .pipe(exec('phpcs --standard=PSR2 {app,src,tests,web}', function (error, stdout) {
       console.log(stdout);
     }));
 });
 
-gulp.task('psr-2-src', function() {
-  return gulp.src('')
-    .pipe(exec('phpcs --standard=PSR2 src', function (error, stdout) {
-      console.log(stdout);
-    }));
-});
-
-gulp.task('psr-2-tests', function() {
-  return gulp.src('')
-    .pipe(exec('phpcs --standard=PSR2 tests', function (error, stdout) {
-      console.log(stdout);
-    }));
-});
-
-gulp.task('psr-2-web', function() {
-  return gulp.src('')
-    .pipe(exec('phpcs --standard=PSR2 web', function (error, stdout) {
-      console.log(stdout);
-    }));
-});
