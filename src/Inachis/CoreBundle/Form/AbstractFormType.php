@@ -24,7 +24,7 @@ abstract class AbstractFormType
     protected $cssClasses = array();
     /**
      * @var string[] Array of attributes for the element; e.g. 'item' => 'test'
-     * 				 would be output as `data-item="test"` by the view
+     *               would be output as `data-item="test"` by the view
      */
     protected $dataAttributes = array();
     /**

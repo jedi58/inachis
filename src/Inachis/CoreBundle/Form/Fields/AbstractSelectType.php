@@ -69,7 +69,7 @@ abstract class AbstractSelectType extends FormComponent
         if (!is_array($optionArray)) {
             throw new FormBuilderConfigurationException('Options must be an array');
         }
-        foreach ($optionArray as $key=>$option) {
+        foreach ($optionArray as $key => $option) {
             $this->addOption(new SelectOptionType(
                 $option,
                 is_string($key) ? $key : $option
