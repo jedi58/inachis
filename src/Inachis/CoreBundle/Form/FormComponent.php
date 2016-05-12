@@ -47,17 +47,24 @@ abstract class FormComponent extends AbstractFormType
     protected $ariaAttributes = array();
     /**
      * Default constructor for {@link FormComponent}
-     * @param string $name The name of the form component
-     * @param string $label The label for the form component
-     * @param string $value The value for the form component
-     * @param string $id The ID of the form component
+     * @param string[] $properties The properties to apply to the form component
+     * @throws FormBuilderConfigurationException
      */
-    public function __construct($name = '', $label = '', $value = '', $id = '')
+    public function __construct($properties = array())
     {
-        $this->setName($name);
-        $this->setLabel($label);
-        $this->setValue($value);
-        $this->setId(!empty($id) ? $id : $name);
+        if (!is_array($properties)) {
+            throw new FormBuilderConfigurationException('Properties of component must be an array');
+        }
+        foreach ($properties as $key => $value) {
+            $setterFunction = 'set'.ucfirst($key);
+            if (!method_exists($this, $setterFunction)) {
+                throw new FormBuilderConfigurationException('Setter function does not exist for ' . $setterFunction);
+            }
+            $this->$setterFunction($value);
+        }
+        if (!empty($this->name) && empty($this->id)) {
+            $this->setId($this->name);
+        }
     }
     /**
      * Sets the value of {@link $label}

@@ -1,10 +1,12 @@
 {% if field.wrapperElement is not empty %}
 	<{{ field.wrapperElement }}{% if field.wrapperClasses is not empty %} class="{{ field.wrapperClasses|join(' ') }}"{% endif %}>
 {% endif %}
-	<button id="{{ field.id }}" name="{{ field.name }}" type="{{ field.type }}"
+	<button type="{{ field.type }}"
+		{%- if field.id is not empty %} id="{{ field.id }}"{% endif %}
+		{%- if field.name is not empty %} name="{{ field.name }}"{% endif %}
 		{%- if field.cssClasses is not empty %} class="{{ field.cssClasses|join(' ') }}"{% endif %}
 		{%- if field.autoFocus %} autofocus{% endif %}
-		{%- if field.disabled %} required{% endif %}
+		{%- if field.disabled %} required{% endif -%}
 	>{{ field.label }}</button>
 {% if field.wrapperElement is not empty %}
 </{{ field.wrapperElement }}>
