@@ -1,6 +1,6 @@
 <?php
 
-use Inachis\Component\Common\Application;
+use Inachis\Component\CoreBundle\Application;
 
 error_reporting(-1);
 

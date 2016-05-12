@@ -1,8 +1,8 @@
 <?php
 
-namespace Inachis\Component\Common\Form;
+namespace Inachis\Component\CoreBundle\Form;
 
-use Inachis\Component\Common\Exception\FormBuilderConfigurationException;
+use Inachis\Component\CoreBundle\Exception\FormBuilderConfigurationException;
 
 /**
  * Abstract class that provides attributes and functions that are common to both
@@ -24,7 +24,7 @@ abstract class AbstractFormType
     protected $cssClasses = array();
     /**
      * @var string[] Array of attributes for the element; e.g. 'item' => 'test'
-     * 				 would be output as `data-item="test"` by the view
+     *               would be output as `data-item="test"` by the view
      */
     protected $dataAttributes = array();
     /**

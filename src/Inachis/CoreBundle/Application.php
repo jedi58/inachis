@@ -1,9 +1,9 @@
 <?php
 
-namespace Inachis\Component\Common;
+namespace Inachis\Component\CoreBundle;
 
-use Inachis\Component\Common\Configuration\ConfigManager;
-use Inachis\Component\Common\Routing\RoutingManager;
+use Inachis\Component\CoreBundle\Configuration\ConfigManager;
+use Inachis\Component\CoreBundle\Routing\RoutingManager;
 
 /**
  * Class used to control the application
@@ -97,6 +97,6 @@ class Application
      */
     public static function getApplicationRoot()
     {
-        return str_replace('src/Inachis/Common', '', __DIR__);
+        return str_replace('src/Inachis/CoreBundle', '', __DIR__);
     }
 }

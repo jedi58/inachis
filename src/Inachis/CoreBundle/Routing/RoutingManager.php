@@ -1,10 +1,10 @@
 <?php
-namespace Inachis\Component\Common\Routing;
+namespace Inachis\Component\CoreBundle\Routing;
 
 use Klein\Klein;
-use Inachis\Component\Common\Application;
-use Inachis\Component\Common\Routing\Route;
-use Inachis\Component\Common\Configuration\ConfigManager;
+use Inachis\Component\CoreBundle\Application;
+use Inachis\Component\CoreBundle\Routing\Route;
+use Inachis\Component\CoreBundle\Configuration\ConfigManager;
 
 class RoutingManager
 {
@@ -42,7 +42,7 @@ class RoutingManager
      */
     public function load()
     {
-        $routes = ConfigManager::loadAllFromLocation('routing', 'json');
+        $routes = ConfigManager::getInstance()->loadAllFromLocation('routing', 'json');
         foreach ($routes as $routeNamespace) {
             if (empty($routeNamespace)) {
                 throw new \Exception('No route namespaces defined; please check the application config.');
@@ -89,20 +89,27 @@ class RoutingManager
         $this->klein->respond(function ($request, $response, $service, $app) use ($router) {
             $app->register('twig', function () {
                 $loader = new \Twig_Loader_Filesystem(array(
-                    Application::getApplicationRoot() . 'resources/views/',
-                    Application::getApplicationRoot() . 'src/Inachis/Common/views/'
+                    Application::getInstance()->getApplicationRoot() . 'resources/views/',
+                    Application::getInstance()->getApplicationRoot() . 'src/Inachis/CoreBundle/views/'
                 ));
+                $env = Application::getInstance()->getEnv();
                 $options = array();
-                $env = Application::getEnv();
                 if ($env === 'dev') {
                     $options['debug'] = true;
                 } elseif (in_array($env, array('preprod', 'prod'))) {
                     $options['cache'] = true;
+                };
+                if (!empty(Application::getInstance()->getConfig()['twig.json']->twig->options)) {
+                    foreach (Application::getInstance()->getConfig()['twig.json']->twig->options as $optionName => $optionValue) {
+                        $options[$optionName] = $optionValue;
+                    }
                 }
-                // @todo load additional settings from config/system.json
-                //ConfigManager::load('system');
-                //auto_reload  = true|false
                 $twig = new \Twig_Environment($loader, $options);
+                if (!empty(Application::getInstance()->getConfig()['twig.json']->twig->extensions)) {
+                    foreach (Application::getInstance()->getConfig()['twig.json']->twig->extensions as $extension) {
+                        $twig->addExtension(new $extension());
+                    }
+                }
                 if ($env === 'dev') {
                     $twig->addExtension(new \Twig_Extension_Debug());
                 }

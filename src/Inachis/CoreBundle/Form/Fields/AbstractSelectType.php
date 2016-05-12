@@ -1,9 +1,9 @@
 <?php
 
-namespace Inachis\Component\Common\Form\Fields;
+namespace Inachis\Component\CoreBundle\Form\Fields;
 
-use Inachis\Component\Common\Form\FormComponent;
-use Inachis\Component\Common\Exception\FormBuilderConfigurationException;
+use Inachis\Component\CoreBundle\Form\FormComponent;
+use Inachis\Component\CoreBundle\Exception\FormBuilderConfigurationException;
 
 /**
  * Object for handling select fields
@@ -69,7 +69,7 @@ abstract class AbstractSelectType extends FormComponent
         if (!is_array($optionArray)) {
             throw new FormBuilderConfigurationException('Options must be an array');
         }
-        foreach ($optionArray as $key=>$option) {
+        foreach ($optionArray as $key => $option) {
             $this->addOption(new SelectOptionType(
                 $option,
                 is_string($key) ? $key : $option
