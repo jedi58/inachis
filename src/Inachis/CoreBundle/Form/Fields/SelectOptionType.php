@@ -1,8 +1,8 @@
 <?php
 
-namespace Inachis\Component\Common\Form\Fields;
+namespace Inachis\Component\CoreBundle\Form\Fields;
 
-use Inachis\Component\Common\Form\FormComponent;
+use Inachis\Component\CoreBundle\Form\FormComponent;
 
 /**
  * Object for handling select fields

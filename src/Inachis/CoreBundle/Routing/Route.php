@@ -1,7 +1,7 @@
 <?php
-namespace Inachis\Component\Common\Routing;
+namespace Inachis\Component\CoreBundle\Routing;
 
-use Inachis\Component\Common\Exception\RouteConfigException;
+use Inachis\Component\CoreBundle\Exception\RouteConfigException;
 
 /**
  * Class used for describing a route

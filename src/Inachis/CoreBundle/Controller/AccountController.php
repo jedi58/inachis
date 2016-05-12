@@ -2,8 +2,17 @@
 
 namespace Inachis\Component\CoreBundle\Controller;
 
-use Inachis\Component\Common\Form\FormBuilder;
-use Inachis\Component\Common\Form\Fields\TextType;
+use Inachis\Component\CoreBundle\Form\FormBuilder;
+use Inachis\Component\CoreBundle\Form\Fields\ButtonType;
+use Inachis\Component\CoreBundle\Form\Fields\ChoiceType;
+use Inachis\Component\CoreBundle\Form\Fields\FileUploadType;
+use Inachis\Component\CoreBundle\Form\Fields\HiddenType;
+use Inachis\Component\CoreBundle\Form\Fields\NumberType;
+use Inachis\Component\CoreBundle\Form\Fields\SelectType;
+use Inachis\Component\CoreBundle\Form\Fields\SelectOptionType;
+use Inachis\Component\CoreBundle\Form\Fields\SelectOptionGroupType;
+use Inachis\Component\CoreBundle\Form\Fields\TextType;
+use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
 
 class AccountController
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Inachis\Component\Common\Form;
+namespace Inachis\Component\CoreBundle\Form;
 
-use Inachis\Component\Common\Exception\FormBuilderConfigurationException;
+use Inachis\Component\CoreBundle\Exception\FormBuilderConfigurationException;
 
 /**
  * Abstract class that provides attributes and functions that are common to both

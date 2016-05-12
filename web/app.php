@@ -1,6 +1,6 @@
 <?php
 
-use Inachis\Component\Common\Application;
+use Inachis\Component\CoreBundle\Application;
 
 $loader = require __DIR__ . '/../vendor/autoload.php';
 

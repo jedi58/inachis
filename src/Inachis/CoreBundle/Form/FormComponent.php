@@ -1,8 +1,8 @@
 <?php
 
-namespace Inachis\Component\Common\Form;
+namespace Inachis\Component\CoreBundle\Form;
 
-use Inachis\Component\Common\Exception\FormBuilderConfigurationException;
+use Inachis\Component\CoreBundle\Exception\FormBuilderConfigurationException;
 
 /**
  *
@@ -188,6 +188,7 @@ abstract class FormComponent extends AbstractFormType
      * Sets the value of {@link $wrapperClasses}
      * @param string[] $value The value to set the property to
      * @return FormComponent Returns a reference to itself
+     * @throws FormBuilderConfigurationException
      */
     public function setWrapperClasses($value)
     {
@@ -209,6 +210,7 @@ abstract class FormComponent extends AbstractFormType
      * Adds a value to {@link $wrapperClasses}
      * @param string $value The CSS class to add
      * @return FormComponent Returns a reference to itself
+     * @throws FormBuilderConfigurationException
      */
     public function addWrapperClass($value)
     {
@@ -222,6 +224,7 @@ abstract class FormComponent extends AbstractFormType
      * Sets the contents of the {@link ariaAttributes} array
      * @param string[] $value The value to set the property to
      * @return FormComponent Returns a reference to itself
+     * @throws FormBuilderConfigurationException
      */
     public function setAriaAttributes($value)
     {

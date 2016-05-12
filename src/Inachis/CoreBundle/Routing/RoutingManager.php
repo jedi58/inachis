@@ -1,10 +1,10 @@
 <?php
-namespace Inachis\Component\Common\Routing;
+namespace Inachis\Component\CoreBundle\Routing;
 
 use Klein\Klein;
-use Inachis\Component\Common\Application;
-use Inachis\Component\Common\Routing\Route;
-use Inachis\Component\Common\Configuration\ConfigManager;
+use Inachis\Component\CoreBundle\Application;
+use Inachis\Component\CoreBundle\Routing\Route;
+use Inachis\Component\CoreBundle\Configuration\ConfigManager;
 
 class RoutingManager
 {

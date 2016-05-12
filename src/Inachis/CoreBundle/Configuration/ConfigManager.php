@@ -1,8 +1,8 @@
 <?php
-namespace Inachis\Component\Common\Configuration;
+namespace Inachis\Component\CoreBundle\Configuration;
 
-use Inachis\Component\Common\Application;
-use Inachis\Component\Common\File\FileHandler;
+use Inachis\Component\CoreBundle\Application;
+use Inachis\Component\CoreBundle\File\FileHandler;
 
 class ConfigManager
 {

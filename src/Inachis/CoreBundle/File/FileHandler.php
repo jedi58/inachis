@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Component\Common\File;
+namespace Inachis\Component\CoreBundle\File;
 
 class FileHandler
 {

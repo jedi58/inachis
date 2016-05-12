@@ -1,9 +1,9 @@
 <?php
 
-namespace Inachis\Component\Common\Form\Fields;
+namespace Inachis\Component\CoreBundle\Form\Fields;
 
-use Inachis\Component\Common\Form\FormComponent;
-use Inachis\Component\Common\Exception\FormBuilderConfigurationException;
+use Inachis\Component\CoreBundle\Form\FormComponent;
+use Inachis\Component\CoreBundle\Exception\FormBuilderConfigurationException;
 
 /**
  * Object for handling `type="text"` fields

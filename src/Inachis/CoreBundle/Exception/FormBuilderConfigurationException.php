@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Component\Common\Exception;
+namespace Inachis\Component\CoreBundle\Exception;
 
 class FormBuilderConfigurationException extends \Exception
 {
