@@ -65,7 +65,11 @@ class ConfigManager
         $files = FileHandler::getAllFilesInFolderOfType(self::$configLocation . $path, $type);
         foreach ($files as $filename) {
             $filename = basename($filename);
-            $config[$filename] = FileHandler::loadAndProcessFile(self::$configLocation . $path, $filename, $type);
+            $config[basename($filename, '.' . $type)] = FileHandler::loadAndProcessFile(
+                self::$configLocation . $path,
+                $filename,
+                $type
+            );
         }
         return $config;
     }
