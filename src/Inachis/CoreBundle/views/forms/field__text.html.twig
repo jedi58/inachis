@@ -7,9 +7,7 @@
 	>{{ field.label }}</label>
 	{% endif %}
 	<input id="{{ field.id }}" name="{{ field.name }}" type="{{ field.type }}"
-		{%- for ariaKey,ariaValue in field.ariaAttributes -%}
-			aria-{{ ariaKey }}="{{ ariaValue }}"
-		{%- endfor -%}
+		{%- for ariaKey,ariaValue in field.ariaAttributes %} aria-{{ ariaKey }}="{{ ariaValue }}"{%- endfor -%}
 		{%- if field.accept is not empty %} accept="{{ field.accept|join(',') }}"{% endif %}
 		{%- if not field.autoComplete %} autocomplete="off"{% endif %}
 		{%- if field.autoFocus %} autofocus{% endif %}

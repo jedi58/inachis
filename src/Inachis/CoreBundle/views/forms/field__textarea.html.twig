@@ -5,9 +5,7 @@
 		{%- if field.labelId is not empty %} id="{{ field.labelId }}"{% endif -%}
 	>{{ field.label }}</label>
 	<textarea
-		{%- for ariaKey,ariaValue in field.ariaAttributes -%}
-			aria-{{ ariaKey }}="{{ ariaValue }}"
-		{%- endfor -%}
+		{%- for ariaKey,ariaValue in field.ariaAttributes %} aria-{{ ariaKey }}="{{ ariaValue }}"{% endfor -%}
 		{%- if field.autoFocus %} autofocus{% endif %}
 		{%- if field.cssClasses is not empty %} class="{{ field.cssClasses|join(' ') }}"{% endif %}
 		{%- if field.cols > 0 %} cols="{{ field.cols }}"{% endif %}

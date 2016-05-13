@@ -65,9 +65,6 @@ abstract class AbstractFormType
         if (!$this->isValidName($value)) {
             throw new FormBuilderConfigurationException(sprintf('Invalid name attribute \'%s\'.', $value));
         }
-        if (in_array($this->getType(), array('checkbox', 'radio')) && !mb_strpos($value, '[]')) {
-            $value .= '[]';
-        }
         $this->name = $value;
         return $this;
     }
@@ -87,7 +84,7 @@ abstract class AbstractFormType
      */
     public function setCssClasses($value)
     {
-        if (!is_array($value)) {
+        if (!is_array($value) && !empty($value)) {
             return $this->setCssClassesFromString($value);
         }
         $this->cssClasses = $value;

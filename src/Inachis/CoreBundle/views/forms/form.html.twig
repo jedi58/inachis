@@ -1,28 +1,11 @@
-<form action="{{ form.action }}"
+<form action="{{ form.action }}" method="{{ form.method|lower }}"
 	{%- if not form.autoComplete %} autocomplete="off"{% endif %}
 	{%- if form.cssClasses is not empty %} class="{{ form.cssClasses|join(' ') }}"{% endif %}
 	{%- if form.encType != 'text/plain' %} enctype="{{ form.enctype }}"{% endif %}
-	method="{{ form.method|lower }}"
-	{%- if form.noValidate %} novalidate="true"{% endif %}
+	{%- if form.noValidate %} novalidate="true"{% endif -%}
 >
-
 {% for component in form.components %}
-	{% if component.type in [
-		'email', 'password', 'search', 'text', 'url',
-		'date', 'datetime', 'datetime-local', 'month', 'number', 'range', 'time',
-		'hidden',
-		'file'
-	 ] %}
-		{{ include('forms/field__text.html.twig', { 'field':component, value: attribute(data, component.name)|default('') }) }}
-	{% elseif component.type == 'select' %}
-		{{ include('forms/field__select.html.twig', { 'field':component, 'options':component.options, value: attribute(data, component.name)|default('') }) }}
-	{% elseif component.type in [ 'button', 'submit' ] %}
-		{{ include('forms/field__button.html.twig', { 'field':component, value: attribute(data, component.name)|default('') }) }}
-	{% elseif component.type in [ 'checkbox', 'radio' ] %}
-		{{ include('forms/field__choice.html.twig', { 'field':component, value: attribute(data, component.name|replace({'[]': ''}))|default('') }) }}
-	{% elseif component.type == 'textarea' %}
-		{{ include('forms/field__textarea.html.twig', { 'field':component, value: attribute(data, component.name)|default('') }) }}
-	{% endif %}
+	{{ include('forms/field__abstract.html.twig') }}
 {% endfor %}
 
 </form>

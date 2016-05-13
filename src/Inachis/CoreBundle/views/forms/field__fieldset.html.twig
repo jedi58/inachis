@@ -1,0 +1,12 @@
+<fieldset
+	{%- if component.cssClasses is not empty %} class="{{ component.cssClasses|join(' ') }}"{% endif %}
+	{%- if component.id is not empty %} id="{{ component.id }}"{% endif %}
+	{%- if component.name is not empty %} name="{{ component.name }}"{% endif -%}
+>
+	{%- if component.legend is not empty %}<legend>{{ component.legend }}</legend>{% endif %}
+
+	{% for fieldsetComponent in component.fieldsetComponents %}
+		{{ include('forms/field__abstract.html.twig', { component: fieldsetComponent }) }}
+	{% endfor %}
+
+</fieldset>

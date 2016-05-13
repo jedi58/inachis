@@ -56,15 +56,21 @@ class FormBuilder extends AbstractFormType
     protected $data = array();
     /**
      * Default constructor for {@link FormBuilder}
-     * @param string $action The URL to submit the form to
-     * @param string $method The HTTP/1.1 method to submit through. Default: POST
-     * @param string $name The HTML-valid name of the form
+     * @param string[] $properties The properties to apply to the form
+     * @throws FormBuilderConfigurationException
      */
-    public function __construct($action, $method = 'POST', $name = '')
+    public function __construct($properties = array())
     {
-        $this->setAction($action);
-        $this->setMethod($method);
-        $this->setName($name);
+        if (!is_array($properties)) {
+            throw new FormBuilderConfigurationException('Properties of Form must be an array');
+        }
+        foreach ($properties as $key => $value) {
+            $setterFunction = 'set'.ucfirst($key);
+            if (!method_exists($this, $setterFunction)) {
+                throw new FormBuilderConfigurationException('Setter function does not exist for ' . $setterFunction);
+            }
+            $this->$setterFunction($value);
+        }
     }
     /**
      * Returns the type of the form element - in this case it will always be "form"
@@ -195,7 +201,11 @@ class FormBuilder extends AbstractFormType
      */
     public function addComponent(FormComponent $component)
     {
-        $this->components[$component->getName()] = $component;
+        if (!empty($this->components) && end($this->components)->getType() === 'fieldset') {
+            end($this->components)->addFieldsetComponent($component);
+        } else {
+            $this->components[] = $component;
+        }
         return $this;
     }
 }

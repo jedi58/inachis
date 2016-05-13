@@ -21,15 +21,19 @@ class Application
     /**
      * @var string The mode for the current environment; limited to {@link Application::MODES}
      */
-    protected static $env = 'dev';
-    /**
-     * @var ConfigManager Instance used for handling Application config
-     */
-    protected $config;
+    protected $env = 'dev';
     /**
      * @var RoutingManager Instance used for handling Application routing
      */
     protected $router;
+    /**
+     * @var string[] Array of configurations for the application
+     */
+    protected $config = array();
+    /**
+     * @var mixed[] Array of services for the application to access
+     */
+    protected $services = array();
     /**
      * Default constructor for {@link Application} which will instantiate required
      * services.
@@ -38,8 +42,8 @@ class Application
     public function __construct($env = 'dev')
     {
         $this->setEnv($env);
-        $this->config = ConfigManager::getInstance();
-        $this->config->loadAll();
+        $this->services['configManager'] = ConfigManager::getInstance();
+        $this->config = $this->services['configManager']->loadAll();
         $this->router = RoutingManager::getInstance();
         $this->router->load();
     }
@@ -59,9 +63,9 @@ class Application
      * Returns the current environment mode
      * @return string The current environment
      */
-    public static function getEnv()
+    public function getEnv()
     {
-        return self::$env;
+        return $this->env;
     }
     /**
      * Returns the {@link Application}'s {@link RoutingManager} object
@@ -89,7 +93,41 @@ class Application
         if (!in_array($value, self::MODES)) {
             throw new Exception\InvalidEnvironmentException('Mode ' . $value . ' not supported');
         }
-        self::$env = $value;
+        $this->env = $value;
+    }
+    /**
+     * Adds a service to the application
+     * @param mixed $service The service to add
+     */
+    public function addService($service)
+    {
+        $this->services[] = $service;
+    }
+    /**
+     * Returns the array of registered services
+     * @return mixed[] The array of services
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+    /**
+     * Returns a specific service
+     * @param string $service The service to return
+     * @return mixed The requested service
+     */
+    public function getService($service)
+    {
+        return $this->hasService($service) ? $this->services[(string) $service] : null;
+    }
+    /**
+     * Determines if a service has been registered
+     * @param string $service The name of the service to check for
+     * @return bool The result of checking for the service
+     */
+    public function hasService($service)
+    {
+        return array_key_exists((string) $service, $this->services);
     }
     /**
      * Returns the path to the root of where the application has been installed

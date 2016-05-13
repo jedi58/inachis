@@ -2,15 +2,18 @@
 
 namespace Inachis\Component\CoreBundle\Controller;
 
+use Inachis\Component\CoreBundle\Application;
 use Inachis\Component\CoreBundle\Form\FormBuilder;
 use Inachis\Component\CoreBundle\Form\Fields\ButtonType;
 use Inachis\Component\CoreBundle\Form\Fields\ChoiceType;
+use Inachis\Component\CoreBundle\Form\Fields\FieldsetType;
 use Inachis\Component\CoreBundle\Form\Fields\FileUploadType;
 use Inachis\Component\CoreBundle\Form\Fields\HiddenType;
 use Inachis\Component\CoreBundle\Form\Fields\NumberType;
 use Inachis\Component\CoreBundle\Form\Fields\SelectType;
 use Inachis\Component\CoreBundle\Form\Fields\SelectOptionType;
 use Inachis\Component\CoreBundle\Form\Fields\SelectOptionGroupType;
+//use Inachis\Component\CoreBundle\Form\Fields\TableType;
 use Inachis\Component\CoreBundle\Form\Fields\TextType;
 use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
 
@@ -18,10 +21,61 @@ class AccountController
 {
     public static function getSignin($request, $response, $service, $app)
     {
+        // @todo get form structure from somewhere else
+        // add authenticated user check
+        // pass CSRF token into form
+        //Application::getInstance()->getService('session'))->hasKey()
+
         $data = array(
+            'form' => (new FormBuilder(array(
+                'action' => '/inadmin/signin',
+                'autocomplete' => false,
+                'cssClasses' => 'form form__login'
+            )))
+            ->addComponent(new FieldsetType(array(
+                'legend' => 'Sign in using email address'
+            )))
+            ->addComponent(new TextType(array(
+                'name' => 'loginUsername',
+                'label' => 'Username',
+                'id' => 'form-login__username',
+                'labelId' => 'form-login__username-label',
+                'cssClasses' => 'text',
+                'placeholder' => 'Username',
+                'ariaAttributes' => array(
+                    'required' => true,
+                    'labelledby' => 'form-login__username-label'
+                )
+            )))
+            ->addComponent(new TextType(array(
+                'name' => 'loginPassword',
+                'type' => 'password',
+                'label' => 'Password',
+                'id' => 'form-login__password',
+                'labelId' => 'form-login__password-label',
+                'cssClasses' => 'text',
+                'placeholder' => 'Password',
+                'ariaAttributes' => array(
+                    'required' => true,
+                    'labelledby' => 'form-login__password-label'
+                )
+            )))
+            ->addComponent(new ButtonType(array(
+                'type' => 'submit',
+                'cssClasses' => 'button button--info',
+                'label' => 'Login'
+            )))
+            ->addComponent(new ChoiceType(array(
+                'name' => 'rememberMe',
+                'label' => 'Keep me logged in',
+                'cssClasses' => '',
+                'value' => '1'
+            ))),
             'data' => array(
                 'loginUsername' => $request->paramsPost()->get('loginUsername'),
-                'rememberMe' => $request->cookies()->get('rememberMe')
+                'rememberMe' => !empty($request->paramsPost()->get('rememberMe')) ?
+                    $request->paramsPost()->get('rememberMe') :
+                    $request->cookies()->get('rememberMe')
             )
         );
         $response->body($app->twig->render('admin__signin.html.twig', $data));

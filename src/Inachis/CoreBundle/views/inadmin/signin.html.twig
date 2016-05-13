@@ -1,31 +1,17 @@
 {% extends "admin__structure__main.html.twig" %}
 {% block content %}
 
+<div class="col span_2_of_8"></div>
+<div class="col span_4_of_8">
+
 {% block form_login_pre %}{% endblock form_login_pre %}
 {% block form_login %}
-<form action="/inadmin/signin" method="post" class="form form_login" autocomplete="off">
-	<fieldset>
-		<legend>Sign in using email address</legend>
-		<p>
-			<label id="form-login__username-label" for="form-login__username">Username</label>
-			<input aria-required="true" aria-labelledby="form-login__username-label" class="text" id="form-login__username" name="loginUsername" type="text" value="{{ data.loginUsername }}" placeholder="Username" />
-		</p>
+	{{ include('forms/form.html.twig', { 'form':form }) }}
 
-		<p>
-			<label id="form-login__username-label" for="form-login__password">Password</label>
-			<input aria-required="true" aria-labelledby="form-login__username-label" class="text"  id="form-login__username" name="loginPassword" placeholder="Password" type="password" value="" />
-		</p>
-		<p>
-			<button class="button button--info" type="submit">Login</button>
-			<label for="form-login__remember" class="form-login__remember-label">
-				<input id="form-login__remember" name="rememberMe" type="checkbox" value="1"{% if data.rememberMe is defined and data.rememberMe == '1' %} checked="checked"{% endif %} /> 
-				{{ lang.adminRememberMe }} Keep me logged in
-			</label>
-		</p>
-	</fieldset>
 	<p><a href="/inadmin/forgot-password" title="Reset your password"><span>{{ lang.adminForgotPassword }}Forgot password?</span></a></p>
-</form>
 {% endblock form_login %}
 {% block form_login_post %}{% endblock form_login_post %}
+</div>
+<div class="col span_2_of_8"></div>
 
 {% endblock content %}
