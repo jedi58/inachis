@@ -34,7 +34,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
     public function testGetConfig()
     {
-        //$this->assertArrayHasKey('system.json', Application::getInstance()->getConfig());
+        $this->assertEquals(true, is_array(Application::getInstance()->getConfig()));
     }
     public function testGetApplicationRoot()
     {
