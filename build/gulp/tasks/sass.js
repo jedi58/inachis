@@ -25,6 +25,8 @@ gulp.task('sass:compile-admin', function() {
 });
 
 gulp.task('sass:watch', function() {
-    gulp.watch(config.paths.src.sass.admin + '**/*.scss', ['sass:compile-admin']);
-    gulp.watch(config.paths.src.sass.web + '**/*.scss', ['sass:compile-web']);
+    gulp.watch(config.paths.src.sass.all + '**/*.scss', [
+        'sass:compile-web',
+        'sass:compile-admin'
+    ]);
 });

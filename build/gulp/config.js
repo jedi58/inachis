@@ -3,7 +3,7 @@ module.exports = {
 		dist: {
 			images: {
 				admin: 'web/inadmin/assets/images/',
-				web: 'web/assets/images/'
+				web: 'web/assets/images/',
 			},
 			js: {
 				admin: 'web/inadmin/assets/js/',
@@ -25,7 +25,8 @@ module.exports = {
 			},
 			sass: { 
 				admin: 'resources/assets/scss/inadmin/',
-				web: 'resources/assets/scss/web/'
+				web: 'resources/assets/scss/web/',
+				all: 'resources/assets/scss/'
 			}
 		}
 	}
