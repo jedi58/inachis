@@ -2,8 +2,12 @@
 
 namespace Inachis\Component\CoreBundle\File;
 
+//use Inachis\Component\CoreBundle\Application;
+
 class FileHandler
 {
+    const FILE_OPTIONAL = 0;
+    const FILE_REQUIRED = 1;
     /**
      *
      */
@@ -24,13 +28,13 @@ class FileHandler
     /**
      *
      */
-    public static function loadFile($path, $filename)
+    public static function loadFile($path, $filename, $required = self::FILE_REQUIRED)
     {
         $path = rtrim($path, '/') . '/';
         if (strpos($path, '..') || strpos($filename, '..')) {
             throw new \Exception('Directory traversal not allowed for ' . $path . $filename . PHP_EOL);
         }
-        if (!is_file($path . $filename) || !is_readable($path . $filename)) {
+        if ($required === self::FILE_REQUIRED && (!is_file($path . $filename) || !is_readable($path . $filename))) {
             throw new \Exception('Failed to load file: ' . $path . $filename);
         }
         return file_get_contents($path . $filename);
@@ -51,11 +55,11 @@ class FileHandler
     public static function loadFromJsonFile($path, $filename)
     {
         $file = null;
-        $key = $path . $filename;// . filemtime($path . $filename);
+        $key = $path . $filename;
         if (!function_exists('apc_fetch') || false == ($file = apc_fetch($key))) {
             $file = json_decode(self::loadFile($path, $filename));
             if (function_exists('apc_store')) {
-                apc_store($key, $file);
+                apc_store($key, $file, 10);
             }
         }
         return $file;

@@ -68,7 +68,7 @@ class FieldsetType extends FormComponent
      */
     public function getFieldsetComponents()
     {
-    	return $this->fieldsetComponents;
+        return $this->fieldsetComponents;
     }
     /**
      * Adds a new component to the form
