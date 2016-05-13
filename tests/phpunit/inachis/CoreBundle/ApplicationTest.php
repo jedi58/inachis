@@ -25,6 +25,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             Application::getInstance()->getEnv()
         );
     }
+    public function testSetEnvIncorrect()
+    {
+        $this->setExpectedException('Inachis\Component\CoreBundle\Exception\InvalidEnvironmentException');
+        Application::getInstance()->setEnv('mars');
+    }
     public function testGetRouter()
     {
         $this->assertInstanceOf(
@@ -48,8 +53,17 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         Application::getInstance()->addService('test', 'a test function');
         $this->assertEquals('a test function', Application::getInstance()->getService('test'));
     }
+    public function testAddServiceAlreadyAdded()
+    {
+        $this->setExpectedException('Exception');
+        Application::getInstance()->addService('test', 'a test function');
+    }
     public function testGetServiceDoesNotExist()
     {
         $this->assertEquals(null, Application::getInstance()->getService('test2'));
+    }
+    public function testGetServices()
+    {
+        $this->assertEquals(true, is_array(Application::getInstance()->getServices()));
     }
 }
