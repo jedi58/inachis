@@ -37,7 +37,7 @@ class AccountController
             )))
             ->addComponent(new TextType(array(
                 'name' => 'loginUsername',
-                'label' => 'Username', 
+                'label' => 'Username',
                 'id' => 'form-login__username',
                 'labelId' => 'form-login__username-label',
                 'cssClasses' => 'text',
