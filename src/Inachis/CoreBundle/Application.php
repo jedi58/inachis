@@ -13,7 +13,7 @@ class Application
     /**
      * @const string[] The allowed mode types for the environment
      */
-    const MODES = array('dev', 'test', 'preprod', 'prod');
+    public static $MODES = array('dev', 'test', 'preprod', 'prod');
     /**
      * @var Application reference to instance of self
      */
@@ -90,18 +90,23 @@ class Application
      */
     public function setEnv($value)
     {
-        if (!in_array($value, self::MODES)) {
+        if (!in_array($value, self::$MODES)) {
             throw new Exception\InvalidEnvironmentException('Mode ' . $value . ' not supported');
         }
         $this->env = $value;
     }
     /**
      * Adds a service to the application
+     * @param string $name The name of the service to add
      * @param mixed $service The service to add
+     * @throws Exception
      */
-    public function addService($service)
+    public function addService($name, $service)
     {
-        $this->services[] = $service;
+        if (array_key_exists($name, $this->services)) {
+            throw new \Exception(sprintf('Service %s already added', $name));
+        }
+        $this->services[$name] = $service;
     }
     /**
      * Returns the array of registered services
