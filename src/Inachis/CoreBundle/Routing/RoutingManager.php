@@ -99,14 +99,14 @@ class RoutingManager
                 } elseif (in_array($env, array('preprod', 'prod'))) {
                     $options['cache'] = true;
                 };
-                if (!empty(Application::getInstance()->getConfig()['twig.json']->twig->options)) {
-                    foreach (Application::getInstance()->getConfig()['twig.json']->twig->options as $optionName => $optionValue) {
+                if (!empty(Application::getInstance()->getConfig()['twig']->twig->options)) {
+                    foreach (Application::getInstance()->getConfig()['twig']->twig->options as $optionName => $optionValue) {
                         $options[$optionName] = $optionValue;
                     }
                 }
                 $twig = new \Twig_Environment($loader, $options);
-                if (!empty(Application::getInstance()->getConfig()['twig.json']->twig->extensions)) {
-                    foreach (Application::getInstance()->getConfig()['twig.json']->twig->extensions as $extension) {
+                if (!empty(Application::getInstance()->getConfig()['twig']->twig->extensions)) {
+                    foreach (Application::getInstance()->getConfig()['twig']->twig->extensions as $extension) {
                         $twig->addExtension(new $extension());
                     }
                 }

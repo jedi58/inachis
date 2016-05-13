@@ -60,16 +60,16 @@ class AccountController
                     'labelledby' => 'form-login__password-label'
                 )
             )))
+            ->addComponent(new ChoiceType(array(
+                'name' => 'rememberMe',
+                'label' => 'Keep me logged in',
+                'cssClasses' => 'checkbox',
+                'value' => '1'
+            )))
             ->addComponent(new ButtonType(array(
                 'type' => 'submit',
                 'cssClasses' => 'button button--info',
                 'label' => 'Login'
-            )))
-            ->addComponent(new ChoiceType(array(
-                'name' => 'rememberMe',
-                'label' => 'Keep me logged in',
-                'cssClasses' => '',
-                'value' => '1'
             ))),
             'data' => array(
                 'loginUsername' => $request->paramsPost()->get('loginUsername'),
