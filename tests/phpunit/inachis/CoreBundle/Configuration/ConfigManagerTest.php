@@ -19,12 +19,12 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
     public function testLoadAll()
     {
         $config = ConfigManager::getInstance()->loadAll();
-        $this->assertEquals(true, is_array($config));        
+        $this->assertEquals(true, is_array($config));
     }
 
     public function testLoadAllFromLocation()
     {
         $config = ConfigManager::getInstance()->loadAllFromLocation('');
-        $this->assertEquals(true, is_array($config));        
+        $this->assertEquals(true, is_array($config));
     }
 }
