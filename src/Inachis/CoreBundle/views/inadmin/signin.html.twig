@@ -1,13 +1,17 @@
 {% extends "admin__structure__main.html.twig" %}
 {% block content %}
 
+<div class="col span_2_of_8"></div>
+<div class="col span_4_of_8">
+
 {% block form_login_pre %}{% endblock form_login_pre %}
 {% block form_login %}
+	{{ include('forms/form.html.twig', { 'form':form }) }}
 
-{{ include('forms/form.html.twig', { 'form':form }) }}
-<p><a href="/inadmin/forgot-password" title="Reset your password"><span>{{ lang.adminForgotPassword }}Forgot password?</span></a></p>
-
+	<p><a href="/inadmin/forgot-password" title="Reset your password"><span>{{ lang.adminForgotPassword }}Forgot password?</span></a></p>
 {% endblock form_login %}
 {% block form_login_post %}{% endblock form_login_post %}
+</div>
+<div class="col span_2_of_8"></div>
 
 {% endblock content %}

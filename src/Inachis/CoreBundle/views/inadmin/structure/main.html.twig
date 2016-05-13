@@ -20,6 +20,7 @@
 	{% block content %}{% endblock content %}
 </section>
 
+{% if session.user is not empty %}
 <section class="admin__container admin__container--collapsed">
 	<section class="admin__identity">
 		<h2><span>Inachis</span></h2>
@@ -27,7 +28,7 @@
 	<section class="admin__nav-main">
 		<ul>
 			<li>
-				<a class="button admin__add-content" href="#" title="Add new content"><i class="material-icons md-48 md-light">edit</i><span> Add Content</span></a>
+				<a class="button admin__add-content" href="#" title="Add new content"><i class="material-icons">edit</i><span> Add</span></a>
 				<ul>
 					<li><a href="{{ settings.domain }}/inadmin/post/new" title="Add a new post"><i class="material-icons">post</i><span> Post</span></a></li>
 					<li><a href="{{ settings.domain }}/inadmin/page/new" title="Add a new page"><i class="material-icons">page</i><span> Page</span></a></li>
@@ -50,5 +51,7 @@
 			<li class="admin__nav-collapse"><a href="#collapse"><i class="material-icons">keyboard_arrow_left</i><span> Collapse</span></a></li>
 		</ul>
 	</section>
+</section>
+{% endif %}
 </body> 
 </html>
