@@ -69,7 +69,7 @@ class AccountController
             )))
             ->addComponent(new ButtonType(array(
                 'type' => 'submit',
-                'cssClasses' => 'button button--info',
+                'cssClasses' => 'button button--positive',
                 'label' => 'Login'
             ))),
             'data' => array(
@@ -107,8 +107,13 @@ class AccountController
             //->addComponent(new ReCaptchaType(array()))
             ->addComponent(new ButtonType(array(
                 'type' => 'submit',
-                'cssClasses' => 'button button--info',
+                'cssClasses' => 'button button--positive',
                 'label' => 'Reset password'
+            )))
+            ->addComponent(new ButtonType(array(
+                'type' => 'button',
+                'cssClasses' => 'button button--negative',
+                'label' => 'Cancel'
             ))),
             'data' => array(
                 "resetEmailAddress" => $request->paramsPost()->get('resetEmailAddress')
