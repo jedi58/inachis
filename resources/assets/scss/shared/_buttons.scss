@@ -3,7 +3,7 @@ $button--positive--hover-color: lighten($button--positive--active-color, 10);
 $button--negative--active-color: #900;
 $button--negative--hover-color: lighten($button--negative--active-color, 10);
 $button--info--active-color: #999;
-$button--info--hover-color: lighten($button--info--active-color, 10);
+$button--info--hover-color: darken($button--info--active-color, 10);
 
 
 .button {
