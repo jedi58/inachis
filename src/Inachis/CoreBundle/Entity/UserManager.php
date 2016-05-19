@@ -23,7 +23,7 @@ class UserManager extends AbstractManager
     
     public function save(User $user)
     {
-        $user->setModDateFromDateTime(new \DateTime('now'));
+        $user->setModDate(new \DateTime('now'));
         $this->em->persist($user);
         $this->em->flush();
     }

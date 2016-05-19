@@ -36,9 +36,9 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             'avatar' => 'UUID',
             'isActive' => true,
             'isRemoved' => false,
-            'createDate' => $testDate->format('Y-m-d H:i:s'),
-            'modDate' => $testDate->format('Y-m-d H:i:s'),
-            'passwordModDate' => $testDate->format('Y-m-d H:i:s'),
+            'createDate' => $testDate,
+            'modDate' => $testDate,
+            'passwordModDate' => $testDate,
             'salt' => 'thisWouldBeSomeSalt'
         );
         $this->manager = new UserManager($this->em);
