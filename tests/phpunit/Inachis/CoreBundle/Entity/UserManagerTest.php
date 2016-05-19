@@ -2,8 +2,8 @@
 
 namespace Inachis\Tests\CoreBundle\Entity;
 
-use Inachis\Component\AdminBundle\Entity\User;
-use Inachis\Component\AdminBundle\Entity\UserManager;
+use Inachis\Component\CoreBundle\Entity\User;
+use Inachis\Component\CoreBundle\Entity\UserManager;
 use Mockery;
 
 /**
