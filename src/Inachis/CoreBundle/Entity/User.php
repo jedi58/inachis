@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Component\AdminBundle\Entity;
+namespace Inachis\Component\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 
@@ -265,13 +265,14 @@ class User
      */
     public function setCreateDateFromDateTime(\DateTime $value)
     {
-        $this->setCreateDate($value->format('Y-m-d H:i:s'));
+        //$this->setCreateDate($value->format('Y-m-d H:i:s'));
+        $this->createDate = $value;
     }
     /**
      * Sets the value of {@link modDate}
      * @param string $value Specifies the mod date for the {@link User}
      */
-    public function setModDate($value)
+    public function setModDateFromString($value)
     {
         $this->modDate = $value;
     }
@@ -281,7 +282,8 @@ class User
      */
     public function setModDateFromDateTime(\DateTime $value)
     {
-        $this->setModDate($value->format('Y-m-d H:i:s'));
+        //$this->setModDate($value->format('Y-m-d H:i:s'));
+        $this->modDate = $value;
     }
     /**
      * Sets the value of {@link modDate}
@@ -297,7 +299,8 @@ class User
      */
     public function setPasswordModDateFromDateTime(\DateTime $value)
     {
-        $this->setPasswordModDate($value->format('Y-m-d H:i:s'));
+        //$this->setPasswordModDate($value->format('Y-m-d H:i:s'));
+        $this->passwordModDate = $value;
     }
     /**
      * Removes the credentials for the current {@link User} along
