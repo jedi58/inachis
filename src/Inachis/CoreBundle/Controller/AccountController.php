@@ -10,6 +10,7 @@ use Inachis\Component\CoreBundle\Form\Fields\FieldsetType;
 use Inachis\Component\CoreBundle\Form\Fields\FileUploadType;
 use Inachis\Component\CoreBundle\Form\Fields\HiddenType;
 use Inachis\Component\CoreBundle\Form\Fields\NumberType;
+//use Inachis\Component\CoreBundle\Form\Fields\ReCaptchaType;
 use Inachis\Component\CoreBundle\Form\Fields\SelectType;
 use Inachis\Component\CoreBundle\Form\Fields\SelectOptionType;
 use Inachis\Component\CoreBundle\Form\Fields\SelectOptionGroupType;
@@ -68,7 +69,7 @@ class AccountController
             )))
             ->addComponent(new ButtonType(array(
                 'type' => 'submit',
-                'cssClasses' => 'button button--info',
+                'cssClasses' => 'button button--positive',
                 'label' => 'Login'
             ))),
             'data' => array(
@@ -88,6 +89,32 @@ class AccountController
     public static function getForgotPassword($request, $response, $service, $app)
     {
         $data = array(
+            'form' => (new FormBuilder(array(
+                'action' => '/inadmin/forgot-password',
+                'autocomplete' => false,
+                'cssClasses' => 'form form__login form__forgot'
+            )))
+            ->addComponent(new FieldsetType(array(
+                'legend' => 'Enter your Email address / Username'
+            )))
+            ->addComponent(new TextType(array(
+                'name' => 'forgot_email',
+                'cssClasses' => 'text',
+                'label' => 'Enter your email address to reset login',
+                'placeholder' => 'user@example.com',
+                'ariaAttributes' => array( 'required' => true ),
+            )))
+            //->addComponent(new ReCaptchaType(array()))
+            ->addComponent(new ButtonType(array(
+                'type' => 'submit',
+                'cssClasses' => 'button button--positive',
+                'label' => 'Reset password'
+            )))
+            ->addComponent(new ButtonType(array(
+                'type' => 'button',
+                'cssClasses' => 'button button--negative',
+                'label' => 'Cancel'
+            ))),
             'data' => array(
                 "resetEmailAddress" => $request->paramsPost()->get('resetEmailAddress')
             ),

@@ -1,9 +1,9 @@
 <?php
 
-namespace Inachis\Tests\AdminBundle\Entity;
+namespace Inachis\Tests\CoreBundle\Entity;
 
-use Inachis\Component\AdminBundle\Entity\User;
-use Inachis\Component\AdminBundle\Entity\UserManager;
+use Inachis\Component\CoreBundle\Entity\User;
+use Inachis\Component\CoreBundle\Entity\UserManager;
 use Mockery;
 
 /**
@@ -35,9 +35,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'avatar' => 'UUID',
             'isActive' => true,
             'isRemoved' => false,
-            'createDate' => $testDate->format('Y-m-d H:i:s'),
-            'modDate' => $testDate->format('Y-m-d H:i:s'),
-            'passwordModDate' => $testDate->format('Y-m-d H:i:s'),
+            'createDate' => $testDate,
+            'modDate' => $testDate,
+            'passwordModDate' => $testDate,
             'salt' => 'thisWouldBeSomeSalt'
         );
     }
@@ -104,14 +104,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testCredentialsExpired()
     {
         $this->user = $this->manager->create($this->properties);
-        $this->user->setPasswordModDateFromDateTime(new \DateTime('31 days ago'));
+        $this->user->setPasswordModDate(new \DateTime('31 days ago'));
         $this->assertEquals(true, $this->user->hasCredentialsExpired(30));
     }
 
     public function testCredentialsNotExpired()
     {
         $this->user = $this->manager->create($this->properties);
-        $this->user->setPasswordModDateFromDateTime(new \DateTime('20 days ago'));
+        $this->user->setPasswordModDate(new \DateTime('20 days ago'));
         $this->assertEquals(false, $this->user->hasCredentialsExpired(30));
     }
 

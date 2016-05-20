@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\Component\AdminBundle\Entity;
+namespace Inachis\Component\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 
@@ -82,9 +82,9 @@ class User
         $this->setPasswordHash($password);
         $this->setEmail($email);
         $currentTime = new \DateTime('now');
-        $this->setCreateDateFromDateTime($currentTime);
-        $this->setModDateFromDateTime($currentTime);
-        $this->setPasswordModDateFromDateTime($currentTime);
+        $this->setCreateDate($currentTime);
+        $this->setModDate($currentTime);
+        $this->setPasswordModDate($currentTime);
     }
     /**
      * Returns the {@link id} of the {@link User}
@@ -252,52 +252,30 @@ class User
         $this->isRemoved = (bool) $value;
     }
     /**
-     * Sets the value of {@link createDate}
-     * @param string $value The date the post was created
-     */
-    public function setCreateDate($value)
-    {
-        $this->createDate = $value;
-    }
-    /**
      * Sets the {@link createDate} from a DateTime object
      * @param \DateTime $value The date to be set
      */
-    public function setCreateDateFromDateTime(\DateTime $value)
+    public function setCreateDate(\DateTime $value)
     {
-        $this->setCreateDate($value->format('Y-m-d H:i:s'));
-    }
-    /**
-     * Sets the value of {@link modDate}
-     * @param string $value Specifies the mod date for the {@link User}
-     */
-    public function setModDate($value)
-    {
-        $this->modDate = $value;
+        //$this->setCreateDate($value->format('Y-m-d H:i:s'));
+        $this->createDate = $value;
     }
     /**
      * Sets the {@link modDate} from a DateTime object
      * @param \DateTime $value The date to set
      */
-    public function setModDateFromDateTime(\DateTime $value)
+    public function setModDate(\DateTime $value)
     {
-        $this->setModDate($value->format('Y-m-d H:i:s'));
-    }
-    /**
-     * Sets the value of {@link modDate}
-     * @param string $value Specifies the mod date for the {@link User}
-     */
-    public function setPasswordModDate($value)
-    {
-        $this->passwordModDate = $value;
+        //$this->setModDate($value->format('Y-m-d H:i:s'));
+        $this->modDate = $value;
     }
     /**
      * Sets the {@link passwordModDate} from a DateTime object
      * @param \DateTime $value The date to set
      */
-    public function setPasswordModDateFromDateTime(\DateTime $value)
+    public function setPasswordModDate(\DateTime $value)
     {
-        $this->setPasswordModDate($value->format('Y-m-d H:i:s'));
+        $this->passwordModDate = $value;
     }
     /**
      * Removes the credentials for the current {@link User} along
@@ -324,7 +302,7 @@ class User
     {
         return time() >= strtotime(
             '+' . (int) $expiryDays . ' days',
-            strtotime($this->getPasswordModDate())
+            $this->getPasswordModDate()->getTimestamp()
         );
     }
     /**

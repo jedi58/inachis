@@ -2,8 +2,8 @@
 
 namespace Inachis\Tests\CoreBundle\Entity;
 
-use Inachis\Component\AdminBundle\Entity\User;
-use Inachis\Component\AdminBundle\Entity\UserManager;
+use Inachis\Component\CoreBundle\Entity\User;
+use Inachis\Component\CoreBundle\Entity\UserManager;
 use Mockery;
 
 /**
@@ -36,9 +36,9 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             'avatar' => 'UUID',
             'isActive' => true,
             'isRemoved' => false,
-            'createDate' => $testDate->format('Y-m-d H:i:s'),
-            'modDate' => $testDate->format('Y-m-d H:i:s'),
-            'passwordModDate' => $testDate->format('Y-m-d H:i:s'),
+            'createDate' => $testDate,
+            'modDate' => $testDate,
+            'passwordModDate' => $testDate,
             'salt' => 'thisWouldBeSomeSalt'
         );
         $this->manager = new UserManager($this->em);
