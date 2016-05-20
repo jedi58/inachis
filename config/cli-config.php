@@ -8,4 +8,3 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = Application::getInstance('dev');
 return ConsoleRunner::createHelperSet($app->getService('em'));
-
