@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 
 /**
  * Object for handling custom URLs that are mapped to content
- * @Entity @Table
+ * @Entity @Table(indexes={@Index(name="search_idx", columns={"contentType", "contentId", "link"})})
  */
 class Url
 {

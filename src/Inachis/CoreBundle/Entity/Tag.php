@@ -3,7 +3,8 @@
 namespace Inachis\Component\CoreBundle\Entity;
 
 /**
- * @Entity @Table
+ * Object for handling tags that are mapped to content
+ * @Entity @Table(indexes={@Index(name="search_idx", columns={"title"})})
  */
 class Tag
 {

@@ -4,7 +4,7 @@ namespace Inachis\Component\CoreBundle\Entity;
 
 /**
  * Object for handling pages of a site
- * @Entity @Table
+ * @Entity @Table(indexes={@Index(name="search_idx", columns={"title", "author_id"})})
  */
 class Page
 {

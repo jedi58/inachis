@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 
 /**
  * Object for handling User entity
- * @Entity @Table
+ * @Entity @Table(indexes={@Index(name="search_idx", columns={"username", "email"})})
  */
 class User
 {
