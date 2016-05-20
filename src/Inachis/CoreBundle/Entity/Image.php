@@ -4,7 +4,7 @@ namespace Inachis\Component\CoreBundle\Entity;
 
 /**
  * Object for handling images on a site
- * @Entity @Table
+ * @Entity @Table(indexes={@Index(name="search_idx", columns={"title", "filename", "filetype"})})
  */
 class Image extends AbstractFile
 {
