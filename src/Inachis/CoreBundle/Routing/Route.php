@@ -33,17 +33,6 @@ class Route
         $this->action = $action;
     }
     /**
-     * Returns an instance of {@link Route}
-     * @return Route The current or a new instance of {@link Route}
-     */
-    public static function getInstance()
-    {
-        if (null === static::$instance) {
-            static::$instance = new static();
-        }
-        return static::$instance;
-    }
-    /**
      * Hydrates the current object with values from a {@link stdClass} and also returns itself
      * @param stdClass $values The simple object containing values to assign to current {@link Route}
      * @return Route The hyrdated route
