@@ -117,8 +117,8 @@ class Route
     public function setAction($value)
     {
         $action = explode('::', $value);
-        if (!method_exists($action[0], $action[1])) {
-            throw new RouteConfigException('Invalid function name for route. ' . $this->formatRoute());
+        if (empty($action[1]) || !method_exists($action[0], $action[1])) {
+            throw new RouteConfigException('Invalid function name for route. ' . PHP_EOL . $this->formatRoute());
         }
         $this->action = $value;
     }
