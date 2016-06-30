@@ -30,7 +30,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethodsDefault()
     {
-        $this->setUp();
+        $this->route = new Route(array());
         $this->assertEquals(array('GET'), $this->route->getMethods());
     }
 
@@ -39,6 +39,16 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $this->setUp();
         $this->route->setDefaultMethods();
         $this->assertEquals(array('GET'), $this->route->getMethods());
+    }
+
+    public function testSetMethodsEmpty()
+    {
+        $this->setUp();
+        try {
+            $this->route->setMethods(array());
+        } catch (RouteConfigException $exception) {
+            $this->assertContains('HTTP/1.1', $exception->getMessage());
+        }
     }
 
     public function testSetActionEmpty()
