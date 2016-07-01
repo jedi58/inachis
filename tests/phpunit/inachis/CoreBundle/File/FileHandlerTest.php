@@ -48,8 +48,8 @@ class FileHandlerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testLoadFile()
+    public function testLoadAndProcessFile()
     {
-        $this->assertTrue(!empty($this->fileHandler->loadFile('.', 'README.md')));
+        $this->assertTrue(!empty($this->fileHandler->loadAndProcessFile('.', 'README.md')));
     }
 }
