@@ -1,5 +1,8 @@
 module.exports = {
 	paths: {
+		config: {
+			system: 'config/system.json'
+		},
 		dist: {
 			images: {
 				admin: 'web/inadmin/assets/images/',

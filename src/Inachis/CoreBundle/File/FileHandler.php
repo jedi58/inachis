@@ -13,7 +13,7 @@ class FileHandler
      */
     public static function getAllFilesInFolder($path)
     {
-        return $this->getAllFilesInFolderOfType($path, '*');
+        return self::getAllFilesInFolderOfType($path, '*');
     }
     /**
      * Returns an array of files of a given type in the specified folder

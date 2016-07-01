@@ -1,0 +1,16 @@
+{
+	"repository": {
+		"dbms": "mysqli",
+		"host": "",
+		"port": "",
+		"database": "",
+		"username": "",
+		"password": ""
+	},
+    "twig": {
+    	"options": {
+    		"auto_reload": true
+		},
+        "extensions": [ ]
+    }
+}

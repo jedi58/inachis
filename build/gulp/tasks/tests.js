@@ -1,10 +1,13 @@
 var gulp = require('gulp');
+var config = require('../config');
 var exec = require('gulp-exec');
+var jshint = require('gulp-jshint');
  
 gulp.task('test', [
 	'phplint',
 	'psr-2',
-	'phpunit'
+	'phpunit',
+  'jslint'
 ]);
 
 gulp.task('phpunit', function() {
@@ -23,6 +26,12 @@ gulp.task('phplint', function() {
         }
       )
     );
+});
+
+gulp.task('jslint', function() {
+  return gulp.src(config.paths.src.js.web + '../{web,admin}/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
 });
 
 gulp.task('psr-2', function() {

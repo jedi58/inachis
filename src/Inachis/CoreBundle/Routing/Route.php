@@ -33,17 +33,6 @@ class Route
         $this->action = $action;
     }
     /**
-     * Returns an instance of {@link Route}
-     * @return Route The current or a new instance of {@link Route}
-     */
-    public static function getInstance()
-    {
-        if (null === static::$instance) {
-            static::$instance = new static();
-        }
-        return static::$instance;
-    }
-    /**
      * Hydrates the current object with values from a {@link stdClass} and also returns itself
      * @param stdClass $values The simple object containing values to assign to current {@link Route}
      * @return Route The hyrdated route
@@ -117,8 +106,8 @@ class Route
     public function setAction($value)
     {
         $action = explode('::', $value);
-        if (!method_exists($action[0], $action[1])) {
-            throw new RouteConfigException('Invalid function name for route. ' . $this->formatRoute());
+        if (empty($action[1]) || !method_exists($action[0], $action[1])) {
+            throw new RouteConfigException('Invalid function name for route. ' . PHP_EOL . $this->formatRoute());
         }
         $this->action = $value;
     }

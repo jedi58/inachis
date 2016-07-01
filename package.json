@@ -7,9 +7,12 @@
     "gulp-cssnano": "*",
     "gulp-exec": "*",
     "gulp-imagemin": "*",
+    "gulp-jshint": "*",
+    "gulp-json-editor": "*",
     "gulp-rename": "*",
     "gulp-ruby-sass": "*",
     "gulp-uglify": "*",
+    "jshint": "*",
     "require-dir": "*"
   }
 }
