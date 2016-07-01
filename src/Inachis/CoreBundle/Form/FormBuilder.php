@@ -201,7 +201,8 @@ class FormBuilder extends AbstractFormType
      */
     public function addComponent(FormComponent $component)
     {
-        if (!empty($this->components) && end($this->components)->getType() === 'fieldset') {
+        if (!empty($this->components) && end($this->components)->getType() === 'fieldset'
+                && $component->getType() !== 'fieldset') {
             end($this->components)->addFieldsetComponent($component);
         } else {
             $this->components[] = $component;
