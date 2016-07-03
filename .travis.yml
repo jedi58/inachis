@@ -6,9 +6,7 @@ php:
   - nightly
   
 before_script:
-  - git clone https://github.com/jedisct1/libsodium.git
-  - cd libsodium
-  - ./autogen.sh && ./configure && make && make install
+  - php5enmod libsodium
   - wget http://getcomposer.org/composer.phar
   - composer require satooshi/php-coveralls:dev-master
   - php composer.phar install --no-interaction
