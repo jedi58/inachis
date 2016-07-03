@@ -7,6 +7,7 @@ php:
   
 before_script:
   - pecl install libsodium
+  - echo 'extension=libsodium.so' >> /etc/php5/php.ini
   - wget http://getcomposer.org/composer.phar
   - composer require satooshi/php-coveralls:dev-master
   - php composer.phar install --no-interaction
