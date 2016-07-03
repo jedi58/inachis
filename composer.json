@@ -38,6 +38,7 @@
         "klein/klein": "^2.1",
         "michelf/php-markdown": "1.*",
         "monolog/monolog": "1.*",
+        "paragonie/halite": "1.*",
         "twig/twig": "1.*"
     },
     "require-dev": {
