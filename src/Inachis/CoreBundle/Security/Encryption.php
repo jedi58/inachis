@@ -45,7 +45,7 @@ class Encryption
      */
     public function encrypt($value, $method = self::SYMMETRIC)
     {
-        if (!in_array($method, array(self::SYMMETRIC, self:ASYMMETRIC))) {
+        if (!in_array($method, array(self::SYMMETRIC, self::ASYMMETRIC))) {
             throw \Exception(sprintf('Encryption method `%s` not recognised', $method));
         }
         return $method::encrypt($value, self::$key, self::$isRaw);
@@ -59,7 +59,7 @@ class Encryption
      */
     public function decrypt($value, $method = self::SYMMETRIC)
     {
-        if (!in_array($method, array(self::SYMMETRIC, self:ASYMMETRIC))) {
+        if (!in_array($method, array(self::SYMMETRIC, self::ASYMMETRIC))) {
             throw \Exception(sprintf('Decryption method `%s` not recognised', $method));
         }
         return $method::decrypt($value, self::$key, self::$isRaw);
