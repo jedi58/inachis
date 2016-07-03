@@ -6,7 +6,7 @@ php:
   - nightly
   
 before_script:
-  - apt-get install libsodium-dev
+  - sudo apt-get install libsodium-dev
   - wget http://getcomposer.org/composer.phar
   - composer require satooshi/php-coveralls:dev-master
   - php composer.phar install --no-interaction
