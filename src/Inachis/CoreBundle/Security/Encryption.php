@@ -30,9 +30,9 @@ class Encryption
     /**
      * Default constructor for {@link Encryption} depends on an {@link EncryptionKey}
      * being passed in
-     * @param EncryptionKey $key The {@link EncryptionKey} to use for encryption/decryption
+     * @param string $key The {@link EncryptionKey} to use for encryption/decryption
      */
-    public function __construct(EncryptionKey $key)
+    public function __construct($key)
     {
         self::$key = new EncryptionKey($key);
     }
