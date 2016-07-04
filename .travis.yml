@@ -6,6 +6,11 @@ php:
   - nightly
   
 before_script:
+  - sudo add-apt-repository ppa:chris-lea/libsodium -y
+  - sudo apt-get update
+  - sudo apt-get install libsodium-dev
+  - pecl install libsodium
+  - echo 'extension=libsodium.so' >> $(php -r "echo php_ini_loaded_file();")
   - wget http://getcomposer.org/composer.phar
   - composer require satooshi/php-coveralls:dev-master
   - php composer.phar install --no-interaction
