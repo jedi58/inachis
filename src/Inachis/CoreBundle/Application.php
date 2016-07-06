@@ -144,7 +144,11 @@ class Application
     public function requireEncryptionService()
     {
         if (!$this->hasService('encryption')) {
-            $key = Application::getInstance()->getConfig()['system']->security->encryptionKey;
+            if (empty($key = Application::getInstance()->getConfig()['system']->security->encryptionKey)) {
+                throw new \Exception(
+                    'Config error - encryption key not found. Generate one using `gulp encryption:generate-key`'
+                );
+            }
             $this->addService('encryption', new Encryption($key));
         }
         return $this->getService('encryption');
