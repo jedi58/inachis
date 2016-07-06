@@ -79,7 +79,7 @@ class Encryption
      */
     public function getRaw()
     {
-        return self::$key;
+        return self::$isRaw;
     }
     /**
      * Returns the current {@link EncryptionKey} object

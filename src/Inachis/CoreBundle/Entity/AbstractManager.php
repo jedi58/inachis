@@ -16,12 +16,17 @@ abstract class AbstractManager extends EntityRepository
      */
     protected $em;
     /**
+     * @var Reference to an encryption object
+     */
+    protected $encryptor;
+    /**
      * Default consutrctor for AbstractManager
      * @param EntityManager Used for repository interactions
      */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+        $this->encryptor = null;
     }
     /**
      * Implementations of AbstractManager must implement getClass
@@ -56,6 +61,38 @@ abstract class AbstractManager extends EntityRepository
     protected function getRepository()
     {
         return $this->em->getRepository($this->getClass());
+    }
+    /**
+     * Encrypts the specified fields for the provided object
+     * @param mixed $object The object to encrypt values in
+     */
+    protected function encryptFields($object)
+    {
+        if (method_exists($this, 'getEncryptedFields') && $object !== null) {
+            $fields = $this->getEncryptedFields();
+            foreach ($fields as $field) {
+                $field = ucfirst($field);
+                $getField = 'get' . $field;
+                $setField = 'set' . $field;
+                $object->$setField($this->encryptor->encrypt($object->$getField()));
+            }
+        }
+    }
+    /**
+     * Decrypts the specified fields for the provided object
+     * @param mixed $object The object to decrypt values in
+     */
+    protected function decryptFields($object)
+    {
+        if (method_exists($this, 'getEncryptedFields') && $object !== null) {
+            $fields = $this->getEncryptedFields();
+            foreach ($fields as $field) {
+                $field = ucfirst($field);
+                $getField = 'get' . $field;
+                $setField = 'set' . $field;
+                $object->$setField($this->encryptor->decrypt($object->$getField()));
+            }
+        }
     }
     /**
      * Fetches a specific entity from the repository by the given Id
