@@ -57,7 +57,7 @@ class UserManager extends AbstractManager
     /**
      * Removes the {@link User} object from the repository
      * @param User $user The user to remove
-     */    
+     */
     public function remove(User $user)
     {
         $this->em->remove($user);
@@ -76,7 +76,7 @@ class UserManager extends AbstractManager
     }
     /**
      *
-     */    
+     */
     public function qbByUsernameOrEmail($usernameOrEmail)
     {
         $qb = $this->getRepository()->createQueryBuilder('u')
