@@ -15,10 +15,10 @@ before_script:
   - composer require satooshi/php-coveralls:dev-master
   - php composer.phar install --no-interaction
   - php composer.phar dump-autoload --optimize
+  - cp config/system.json.example config/system.json
 
 script:
   - mkdir ./tests/logs/
-  - cp config/system.json.example config/system.json
   - ./vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
  
 after_script:
