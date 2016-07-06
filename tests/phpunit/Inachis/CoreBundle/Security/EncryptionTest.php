@@ -38,4 +38,17 @@ class EncryptionTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    public function testSetRaw()
+    {
+        $this->encryptor->setRaw(true);
+        $this->assertEquals(true, $this->encryptor->getRaw());
+        $this->encryptor->setRaw(false);
+        $this->assertEquals(false, $this->encryptor->getRaw());
+    }
+
+    public function testGetKey()
+    {
+        $this->assertInstanceOf('ParagonIE\Halite\Symmetric\EncryptionKey', $this->encryptor->getKey());
+    }
 }
