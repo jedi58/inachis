@@ -4,6 +4,9 @@ namespace Inachis\Component\CoreBundle;
 
 use Inachis\Component\CoreBundle\Configuration\ConfigManager;
 use Inachis\Component\CoreBundle\Routing\RoutingManager;
+use Inachis\Component\CoreBundle\Security\Encryption;
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class used to control the application
@@ -133,6 +136,18 @@ class Application
     public function hasService($service)
     {
         return array_key_exists((string) $service, $this->services);
+    }
+    /**
+     * Automatically adds a new encryption service if one has not already been registered
+     * @return Encryption The registered encryption service
+     */
+    public function requireEncryptionService()
+    {
+        if (!$this->hasService('encryption')) {
+            $key = Application::getInstance()->getConfig()['system']->security->encryptionKey;
+            $this->addService('encryption', new Encryption($key));
+        }
+        return $this->getService('encryption');
     }
     /**
      * Returns the path to the root of where the application has been installed

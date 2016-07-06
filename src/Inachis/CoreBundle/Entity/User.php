@@ -17,22 +17,22 @@ class User
      */
     protected $id;
     /**
-     * @Column(type="string", length=30, unique=true, nullable=false)
+     * @Column(type="string", length=512, unique=true, nullable=false)
      * @var Username of the user
      */
     protected $username;
     /**
-     * @Column(type="string", length=64, nullable=false)
+     * @Column(type="string", length=512, nullable=false)
      * @var Password for the user
      */
     protected $password;
     /**
-     * @Column(type="string", length=256, nullable=false)
+     * @Column(type="string", length=512, nullable=false)
      * @var Email address of the user
      */
     protected $email;
     /**
-     * @Column(type="string", length=128)
+     * @Column(type="string", length=512)
      * @var The display name for the user
      */
     protected $displayName;
