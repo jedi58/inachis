@@ -67,8 +67,8 @@ class AccountController extends AbstractController
                 'label' => 'URL',
                 'required' => true,
                 'type' => 'url',
-                'value' => 'http' . ($request->isSecure() ? 's' : '') . '://' . 
-                    $request->server()->get('HTTP_HOST') . 
+                'value' => 'http' . ($request->isSecure() ? 's' : '') . '://' .
+                    $request->server()->get('HTTP_HOST') .
                     str_replace('/setup', '', $request->server()->get('REQUEST_URI'))
             )))
 
@@ -258,7 +258,7 @@ class AccountController extends AbstractController
         if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
             $response->redirect('/inadmin/dashboard')->send();
         }
-        if (false) { // @todo if request contains errors then use 
+        if (false) { // @todo if request contains errors then use
             return self::getForgotPassword($request, $response, $service, $app);
         }
         $response->body($app->twig->render('admin__forgot-password-sent.html.twig', array()));

@@ -22,33 +22,33 @@ use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
  */
 abstract class AbstractController
 {
-	/**
-	 *
-	 */
+    /**
+     *
+     */
     protected static $errors = array();
-	/**
-	 *
-	 */
+    /**
+     *
+     */
     protected static $formBuilder;
-	/**
-	 *
-	 */
-	public function __construct()
+    /**
+     *
+     */
+    public function __construct()
     {
         $this->formBuilder = new FormBuilder();
     }
-	/**
-	 *
-	 */
+    /**
+     *
+     */
     public static function getErrors()
     {
-    	return $this->errors;
+        return $this->errors;
     }
-	/**
-	 *
-	 */
+    /**
+     *
+     */
     public static function addError($error, $message)
     {
-    	$this->errors[$error] = (string) $message;
+        $this->errors[$error] = (string) $message;
     }
 }
