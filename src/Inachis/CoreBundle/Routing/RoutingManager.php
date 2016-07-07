@@ -37,6 +37,14 @@ class RoutingManager
         return static::$instance;
     }
     /**
+     * Returns the object containing the current request
+     * @return Request The current request object
+     */
+    public function getRequest()
+    {
+        return $this->klein->request();
+    }
+    /**
      * Load additional routing configuration using {@link ConfigManager} from the
      * config/routing/ folder. All JSON files in this folder will be parsed
      */
@@ -73,7 +81,7 @@ class RoutingManager
         $this->klein->dispatch();
     }
     /**
-     *
+     * Adds view handler and error handlers to routing
      */
     public function addDefaultRoutes()
     {
@@ -81,7 +89,8 @@ class RoutingManager
         $this->registerErrorHandlers();
     }
     /**
-     *
+     * Registers the Twig view handlers
+     * @return Twig_Environment The twif view handler
      */
     public function registerViewHandler()
     {

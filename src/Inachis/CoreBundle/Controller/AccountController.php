@@ -18,15 +18,128 @@ use Inachis\Component\CoreBundle\Form\Fields\SelectOptionGroupType;
 use Inachis\Component\CoreBundle\Form\Fields\TextType;
 use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
 
-class AccountController
+class AccountController extends AbstractController
 {
+    /**
+     * @Route("/setup")
+     * @Method({"GET", "POST"})
+     */
+    public static function getSetup($request, $response, $service, $app)
+    {
+        if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            $response->redirect('/inadmin/dashboard')->send();
+        }
+        if (Application::getInstance()->getService('auth')->getUserManager()->getAllCount() > 0) {
+            $response->redirect('/inadmin/signin')->send();
+        }
+        if ($request->method('post') && !empty($request->paramsPost()->get('username')) && !empty($request->paramsPost()->get('password'))) {
+            // @todo add code for saving site title and URL
+            if (Application::getInstance()->getService('auth')->create(
+                $request->paramsPost()->get('username'),
+                $request->paramsPost()->get('password'),
+                array(
+                    'displayName' => $request->paramsPost()->get('name'),
+                    'email' => $request->paramsPost()->get('email')
+                )
+            )) {
+                $response->redirect('/inadmin/signin')->send();
+            }
+        }
+        $data = array(
+            'form' => (new FormBuilder(array(
+                'action' => '/setup',
+                'autocomplete' => false,
+                'cssClasses' => 'form form__login form__setup'
+            )))
+            ->addComponent(new FieldsetType(array(
+                'legend' => 'Setup your web application'
+            )))
+            ->addComponent(new TextType(array(
+                'name' => 'siteName',
+                'cssClasses' => 'field__wide',
+                'label' => 'Site name',
+                'placeholder' => 'e.g. My awesome site',
+                'required' => true
+            )))
+            ->addComponent(new TextType(array(
+                'name' => 'siteUrl',
+                'cssClasses' => 'field__wide',
+                'label' => 'URL',
+                'required' => true,
+                'type' => 'url',
+                'value' => 'http' . ($request->isSecure() ? 's' : '') . '://' .
+                    $request->server()->get('HTTP_HOST') .
+                    str_replace('/setup', '', $request->server()->get('REQUEST_URI'))
+            )))
+
+            ->addComponent(new FieldsetType(array(
+                'legend' => 'Administrator'
+            )))
+            ->addComponent(new TextType(array(
+                'name' => 'username',
+                'label' => 'Username',
+                'required' => true,
+                'value' => 'admin'
+            )))
+            ->addComponent(new TextType(array(
+                'name' => 'password',
+                'label' => 'Password',
+                'required' => true,
+                'type' => 'password'
+            )))
+            ->addComponent(new TextType(array(
+                'name' => 'name',
+                'label' => 'Name',
+                'placeholder' => 'e.g. John Smith',
+                'required' => true
+            )))
+            ->addComponent(new TextType(array(
+                'name' => 'email',
+                'label' => 'Email Address',
+                'placeholder' => 'e.g. somebody@example.com',
+                'required' => true,
+                'type' => 'email'
+            )))
+            ->addComponent(new FieldsetType(array(
+                'legend' => 'Actions'
+            )))
+            ->addComponent(new ButtonType(array(
+                'type' => 'submit',
+                'cssClasses' => 'button button--positive',
+                'label' => 'Continue…'
+            ))),
+            'errors' => self::$errors
+        );
+        $response->body($app->twig->render('setup__stage-1.html.twig', $data));
+    }
+    /**
+     * @Route("/inadmin/signin")
+     * @Method({"GET", "POST"})
+     */
     public static function getSignin($request, $response, $service, $app)
     {
         // @todo get form structure from somewhere else
-        // add authenticated user check
         // pass CSRF token into form
-        //Application::getInstance()->getService('session'))->hasKey()
-
+        if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            if (Application::getInstance()->getService('session')->get('user')->hasCredentialsExpired()) {
+                $response->redirect('/inadmin/change-password')->send();
+            }
+            $response->redirect('/inadmin/dashboard')->send();
+        }
+        if (Application::getInstance()->getService('auth')->getUserManager()->getAllCount() === 0) {
+            $response->redirect('/setup')->send();
+        }
+        if ($request->method('post') && !empty($request->paramsPost()->get('loginUsername'))
+                && !empty($request->paramsPost()->get('loginPassword'))) {
+            if (Application::getInstance()->getService('auth')->login(
+                $request->paramsPost()->get('loginUsername'),
+                $request->paramsPost()->get('loginPassword')
+            )) {
+                $response->redirect('/inadmin/dashboard')->send();
+            } else {
+                self::$errors['username'] = 'Authentication Failed.';
+            }
+        }
         $data = array(
             'form' => (new FormBuilder(array(
                 'action' => '/inadmin/signin',
@@ -77,17 +190,29 @@ class AccountController
                 'rememberMe' => !empty($request->paramsPost()->get('rememberMe')) ?
                     $request->paramsPost()->get('rememberMe') :
                     $request->cookies()->get('rememberMe')
-            )
+            ),
+            'errors' => self::$errors
         );
         $response->body($app->twig->render('admin__signin.html.twig', $data));
     }
+    /**
+     * @Route("/inadmin/signout")
+     * @Method({"POST"})
+     */
     public static function getSignout($request, $response, $service, $app)
     {
-        // need to perform actual signout
-        $response->body($app->twig->render('admin__signed-out.html.twig'));
+        Application::getInstance()->getService('auth')->logout();
+        $response->redirect('/inadmin/signin')->send();
     }
+    /**
+     * @Route("/inadmin/forgot-password")
+     * @Method({"GET"})
+     */
     public static function getForgotPassword($request, $response, $service, $app)
     {
+        if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            $response->redirect('/inadmin/dashboard')->send();
+        }
         $data = array(
             'form' => (new FormBuilder(array(
                 'action' => '/inadmin/forgot-password',
@@ -124,27 +249,65 @@ class AccountController
         );
         $response->body($app->twig->render('admin__forgot-password.html.twig', $data));
     }
+    /**
+     * @Route("/inadmin/forgot-password")
+     * @Method({"POST"})
+     */
     public static function getForgotPasswordSent($request, $response, $service, $app)
     {
-        if (false) {
-            // if request contains errors then use self::getForgotPassword($request, $response, $service, $app) instead
+        if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            $response->redirect('/inadmin/dashboard')->send();
+        }
+        if (false) { // @todo if request contains errors then use
+            return self::getForgotPassword($request, $response, $service, $app);
         }
         $response->body($app->twig->render('admin__forgot-password-sent.html.twig', array()));
     }
+    /**
+     * @Route("/inadmin/user-management")
+     * @Method({"GET", "POST"})
+     */
     public static function getAdminList($request, $response, $service, $app)
     {
+        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            $response->redirect('/inadmin/signin')->send();
+        }
         $response->body('Show all admins');
     }
+    /**
+     * @Route("/inadmin/user/{id}")
+     * @Method({"GET", "POST"})
+     */
     public static function getAdminDetails($request, $response, $service, $app)
     {
+        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            $response->redirect('/inadmin/signin')->send();
+        }
         $response->body('Show details of specific admin');
     }
+    /**
+     * @Route("/inadmin/dashboard")
+     * @Method({"GET"})
+     */
     public static function getAdminDashboard($request, $response, $service, $app)
     {
-        $response->body('Show dashboard for signed in admin');
+        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            $response->redirect('/inadmin/signin')->send();
+        }
+        $data = array(
+            'session' => $_SESSION
+        );
+        $response->body($app->twig->render('admin__dashboard.html.twig', $data));
     }
+    /**
+     * @Route("/inadmin/settings")
+     * @Method({"GET", "POST"})
+     */
     public static function getAdminSettingsMain($request, $response, $service, $app)
     {
+        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            $response->redirect('/inadmin/signin')->send();
+        }
         $response->body('Show settings page for signed in admin');
     }
 }
