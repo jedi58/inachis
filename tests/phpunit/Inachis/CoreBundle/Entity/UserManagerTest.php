@@ -91,6 +91,14 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
         $this->repository->shouldReceive('findOneBy')->with(array(
             'username' => 'test'
         ))->andReturn($this->user);
+        $this->user->setPassword(
+            '314201007310708e9c4f4bff4b5ca9a6f8ffb59e49971cd4503cd22d2eebf6ac8b00eb0eef' .
+            '6614b5daeb08143b86d9b855e20a7bcca60d1193e871a9af87072d5cdc1cadd495898c7bc8' .
+            'b0052233220832801fd81d04a1bf647a0815c483af6c5661e7e6854515b3cbf0b975bb9bdb7550');
+        $this->user->setDisplayName(
+            '314201002e25077e3c2c8dc4d7eae38f2e8d0c8ec985ad4bd6e05bad0968447161055123d7b' .
+            'd136e72589380c03738caa14b1c471cb6572464214fbb9b1df4e15722d18b8443f84e1040a3' .
+            '8c56567b93f4183dca478c46aeb114b1c0c1efde4fd32da44ac1');
         $this->assertSame($this->user, $this->manager->getByUsername('test'));
     }
 }
