@@ -51,4 +51,22 @@ class EncryptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('ParagonIE\Halite\Symmetric\EncryptionKey', $this->encryptor->getKey());
     }
+
+    public function testEncryptMethodFail()
+    {
+        try {
+            $this->encryptor->encrypt('test', 'badMethod');
+        } catch (\Exception $exception) {
+            $this->assertContains('Encryption method', $exception->getMessage());
+        }
+    }
+
+    public function testDecryptMethodFail()
+    {
+        try {
+            $this->encryptor->decrypt('test', 'badMethod');
+        } catch (\Exception $exception) {
+            $this->assertContains('Decryption method', $exception->getMessage());
+        }
+    }
 }
