@@ -44,7 +44,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testGetApplicationRoot()
     {
         $this->assertEquals(
-            str_replace('tests/phpunit/inachis/CoreBundle', '', __DIR__),
+            str_replace('tests/phpunit/Inachis/CoreBundle', '', __DIR__),
             Application::getInstance()->getApplicationRoot()
         );
     }

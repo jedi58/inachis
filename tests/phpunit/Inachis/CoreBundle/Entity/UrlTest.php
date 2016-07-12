@@ -101,6 +101,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('a-basic-title', $this->url->urlify('A Basic Title'));
     }
+
+    public function testConvertURLWithPartialPass()
+    {
+        $this->assertEquals('a-basic-title-2', $this->url->urlify('A-basic title 2'));
+    }
     
     public function testConvertURLWithPunctuation()
     {

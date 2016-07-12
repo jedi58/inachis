@@ -388,7 +388,7 @@ class Page
     {
         $today = new \DateTime('now', new \DateTimeZone($this->getTimezone()));
         $postDate = new \DateTime(
-            $this->getPostDate(),
+            $this->getPostDate()->format('Y-m-d H:i:s'),
             new \DateTimeZone($this->getTimezone())
         );
         return $postDate->format('YmdHis') > $today->format('YmdHis');

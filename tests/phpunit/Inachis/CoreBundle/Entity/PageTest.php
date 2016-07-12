@@ -46,9 +46,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->page->setStatus($this->properties['status']);
         $this->page->setVisibility($this->properties['visibility']);
         $this->page->setTimezone($this->properties['timezone']);
-        $this->page->setCreateDateFromDateTime($this->properties['create_date']);
-        $this->page->setPostDateFromDateTime($this->properties['post_date']);
-        $this->page->setModDateFromDateTime($this->properties['mod_date']);
+        $this->page->setCreateDate($this->properties['create_date']);
+        $this->page->setPostDate($this->properties['post_date']);
+        $this->page->setModDate($this->properties['mod_date']);
         $this->page->setPassword($this->properties['password']);
         $this->page->setAllowComments($this->properties['allow_comments']);
     }
@@ -98,15 +98,15 @@ class PageTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             $this->properties['create_date']->format('Y-m-d H:i:s'),
-            $this->page->getCreateDate()
+            $this->page->getCreateDate()->format('Y-m-d H:i:s')
         );
         $this->assertEquals(
             $this->properties['post_date']->format('Y-m-d H:i:s'),
-            $this->page->getPostDate()
+            $this->page->getPostDate()->format('Y-m-d H:i:s')
         );
         $this->assertEquals(
             $this->properties['mod_date']->format('Y-m-d H:i:s'),
-            $this->page->getModDate()
+            $this->page->getModDate()->format('Y-m-d H:i:s')
         );
         $this->assertEquals(
             $this->properties['password'],
@@ -141,7 +141,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function testIsScheduledPage()
     {
         $this->initialiseDefaultObject();
-        $this->page->setPostDateFromDateTime(new \DateTime('tomorrow noon'));
+        $this->page->setPostDate(new \DateTime('tomorrow noon'));
         $this->assertEquals(true, $this->page->isScheduledPage());
     }
     
