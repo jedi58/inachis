@@ -12,13 +12,16 @@
 		{%- if field.cssClasses is not empty %} class="{{ field.cssClasses|join(' ') }}"{% endif %}
 		{%- if field.cols > 0 %} cols="{{ field.cols }}"{% endif %}
 		{%- if field.disabled %} required{% endif %}
+		{%- if field.id is not empty %} name="{{ field.id }}"{% endif %}
 		{%- if field.maxLength > 0 %} maxlength="{{ field.maxlength }}"{% endif %}
+		{%- if field.name is not empty %} name="{{ field.name }}"{% endif %}
 		{%- if field.placeholder is not empty %} placeholder="{{ field.placeholder }}"{% endif %}
 		{%- if field.readOnly %} readonly{% endif %}
 		{%- if field.required %} required{% endif %}
 		{%- if field.rows > 0 %} rows="{{ field.rows }}"{% endif %}
 		{%- if field.wrap is not empty %} wrap="{{ field.wrap }}"{% endif -%}
-	>{{ value }}</textarea>
+	>{%- if value is not empty %}{{ value }}
+	{%- elseif field.value is not empty %}{{ field.value }}{% endif -%}</textarea>
 {% if field.wrapperElement is not empty %}
 </{{ field.wrapperElement }}>
 {% endif %}
