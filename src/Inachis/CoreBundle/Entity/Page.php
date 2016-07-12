@@ -46,18 +46,18 @@ class Page
      */
     protected $content;
     /**
-     * @OneToOne(targetEntity="Inachis\Component\CoreBundle\Entity\User")
+     * @ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\User")
      * @JoinColumn(name="author_id", referencedColumnName="id")
      * @var string The UUID of the author for the {@link Page}
      */
     protected $author;
     /**
-     * @Column(type="string", length=255)
+     * @Column(type="string", length=255, nullable=true)
      * @var string The featured image for the {@link Page}
      */
     protected $featureImage;
     /**
-     * @Column(type="text")
+     * @Column(type="text", nullable=true)
      * @var string A short excerpt describing the contents of the {@link Page}
      */
     protected $featureSnippet;
@@ -93,7 +93,7 @@ class Page
      */
     protected $timezone = 'UTC';
     /**
-     * @Column(type="string", length=255)
+     * @Column(type="string", length=255, nullable=true)
      * @var string A password to protect the {@link Page} with if required
      */
     protected $password;
@@ -109,9 +109,9 @@ class Page
         $this->setContent($content);
         $this->setAuthor($author);
         $currentTime = new \DateTime('now');
-        $this->setCreateDateFromDateTime($currentTime);
-        $this->setPostDateFromDateTime($currentTime);
-        $this->setModDateFromDateTime($currentTime);
+        $this->setCreateDate($currentTime);
+        $this->setPostDate($currentTime);
+        $this->setModDate($currentTime);
     }
     /**
      * Returns the value of {@link id}
@@ -307,51 +307,27 @@ class Page
     }
     /**
      * Sets the value of {@link createDate}
-     * @param string $value The date the post was created
+     * @param \DateTime $value The date to be set
      */
-    public function setCreateDate($value)
+    public function setCreateDate(\DateTime $value)
     {
         $this->createDate = $value;
     }
     /**
-     * Sets the {@link createDate} from a DateTime object
+     * Sets the value of {@link postDate}
      * @param \DateTime $value The date to be set
      */
-    public function setCreateDateFromDateTime(\DateTime $value)
-    {
-        $this->setCreateDate($value->format('Y-m-d H:i:s'));
-    }
-    /**
-     * Sets the value of {@link postDate}
-     * @param string $value The date the post was published
-     */
-    public function setPostDate($value)
+    public function setPostDate(\DateTime $value)
     {
         $this->postDate = $value;
     }
     /**
-     * Sets the {@link postDate} from a DateTime object
-     * @param \DateTime $value The date to be set
-     */
-    public function setPostDateFromDateTime(\DateTime $value)
-    {
-        $this->setPostDate($value->format('Y-m-d H:i:s'));
-    }
-    /**
      * Sets the value of {@link modDate}
-     * @param string $value Specifies the mod date for the {@link Page}
-     */
-    public function setModDate($value)
-    {
-        $this->modDate = $value;
-    }
-    /**
-     * Sets the {@link modDate} from a DateTime object
      * @param \DateTime $value The date to set
      */
-    public function setModDateFromDateTime(\DateTime $value)
+    public function setModDate(\DateTime $value)
     {
-        $this->setModDate($value->format('Y-m-d H:i:s'));
+        $this->modDate = $value;
     }
     /**
      * Sets the value of {@link timezone}
