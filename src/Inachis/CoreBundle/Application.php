@@ -4,7 +4,9 @@ namespace Inachis\Component\CoreBundle;
 
 use Inachis\Component\CoreBundle\Configuration\ConfigManager;
 use Inachis\Component\CoreBundle\Routing\RoutingManager;
+use Inachis\Component\CoreBundle\Security\Authentication;
 use Inachis\Component\CoreBundle\Security\Encryption;
+use Inachis\Component\CoreBundle\Security\SessionManager;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
@@ -136,6 +138,26 @@ class Application
     public function hasService($service)
     {
         return array_key_exists((string) $service, $this->services);
+    }
+    public function requireSessionService()
+    {
+        if (!$this->hasService('session')) {
+            $this->addService('session', new SessionManager());
+        }
+        return $this->getService('session');
+    }
+    /**
+     * Automatically adds a new authentication service if one has not already been registered
+     * @return Authentication The registered authentication service
+     */
+    public function requireAuthenticationService()
+    {
+        if (!$this->hasService('auth')) {
+            $this->requireSessionService();
+            $this->requireEncryptionService();
+            $this->addService('auth', new Authentication());
+        }
+        return $this->getService('auth');
     }
     /**
      * Automatically adds a new encryption service if one has not already been registered
