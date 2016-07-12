@@ -23,7 +23,8 @@
 		{%- if field.required %} required{% endif %}
 		{%- if field.size > 0 %} size="{{ field.size }}"{% endif -%}
 		{%- if field.step > 0 %} step="{{ field.step }}"{% endif -%}
-		{%- if value is not empty %} value="{{ value }}"{% endif -%}
+		{%- if value is not empty %} value="{{ value }}"
+		{%- elseif field.value is not empty %} value="{{ field.value }}"{% endif -%}
 	/>
 {% if field.wrapperElement is not empty %}
 </{{ field.wrapperElement }}>

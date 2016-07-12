@@ -10,6 +10,11 @@
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPageAdmin"
 	},
 	{
+		"methods": [ "GET", "POST" ],
+		"path": "/inadmin/page/new",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPageAdmin"
+	},
+	{
 		"methods": [ "GET" ],
 		"path": "/[i:year]/[i:month]/[i:day]/[*:postTitle]",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPost"
@@ -17,6 +22,11 @@
 	{
 		"methods": [ "GET", "POST" ],
 		"path": "/inadmin/[i:year]/[i:month]/[i:day]/[*:postTitle]",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
+	},
+	{
+		"methods": [ "GET", "POST" ],
+		"path": "/inadmin/post/new",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
 	},
 	{

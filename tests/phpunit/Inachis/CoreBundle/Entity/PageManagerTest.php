@@ -37,8 +37,8 @@ class PageManagerTest extends \PHPUnit_Framework_TestCase
             'status' => Page::DRAFT,
             'visibility' => Page::VIS_PUBLIC,
             'timezone' => 'UTC',
-            'postDate' => '',
-            'modDate' => '',
+            'postDate' => new \DateTime(),
+            'modDate' => new \DateTime(),
             'password' => '',
             'allowComments' => true
         );

@@ -74,4 +74,21 @@ class UrlManager extends AbstractManager
             )
         );
     }
+    /**
+     * Returns a Url entity for the given URI. If the admin part of the URL is
+     * present, this is stripped along with parameters and targets
+     * @param string $url The URL to get the {@link Url} entity for
+     * @return array[Url] The array of {@link Url}s to return
+     */
+    public function getByUrl($url)
+    {
+        $url = parse_url(
+            preg_replace('/^\/inadmin/', '', $url)
+        );
+        return $this->getRepository()->findOneBy(
+            array(
+                'link' => $url['path']
+            )
+        );
+    }
 }

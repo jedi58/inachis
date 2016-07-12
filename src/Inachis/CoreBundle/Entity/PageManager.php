@@ -24,8 +24,8 @@ class PageManager extends AbstractManager
     
     public function save(Page $page)
     {
-        $page->setModDateFromDateTime(new \DateTime('now'));
-        $this->em->persist($page);
+        $page->setModDate(new \DateTime('now'));
+        $this->em->merge($page);
         $this->em->flush();
     }
     
@@ -33,5 +33,27 @@ class PageManager extends AbstractManager
     {
         $this->em->remove($page);
         $this->em->flush();
+    }
+
+    public function getDraftCount()
+    {
+        $qb = $this->getRepository()->createQueryBuilder('q');
+        return (int) $qb
+            ->select('count(q.id)')
+            ->where('q.status = :status')
+            ->setParameter('status', Page::DRAFT)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getPublishedCount()
+    {
+        $qb = $this->getRepository()->createQueryBuilder('q');
+        return (int) $qb
+            ->select('count(q.id)')
+            ->where('q.status = :status')
+            ->setParameter('status', Page::PUBLISHED)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }
