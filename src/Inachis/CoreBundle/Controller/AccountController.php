@@ -3,6 +3,7 @@
 namespace Inachis\Component\CoreBundle\Controller;
 
 use Inachis\Component\CoreBundle\Application;
+use Inachis\Component\CoreBundle\Entity\PageManager;
 use Inachis\Component\CoreBundle\Form\FormBuilder;
 use Inachis\Component\CoreBundle\Form\Fields\ButtonType;
 use Inachis\Component\CoreBundle\Form\Fields\ChoiceType;
@@ -294,8 +295,13 @@ class AccountController extends AbstractController
         if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
             $response->redirect('/inadmin/signin')->send();
         }
+        $pageManager = new PageManager(Application::getInstance()->getService('em'));
         $data = array(
-            'session' => $_SESSION
+            'session' => $_SESSION,
+            'data' => array(
+                'draftCount' => $pageManager->getDraftCount(),
+                'publishCount' => $pageManager->getPublishedCount()
+            )
         );
         $response->body($app->twig->render('admin__dashboard.html.twig', $data));
     }
