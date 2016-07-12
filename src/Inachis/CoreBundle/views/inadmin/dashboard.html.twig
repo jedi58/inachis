@@ -4,7 +4,11 @@
 {% block dashboard_pre %}{% endblock dashboard_pre %}
 {% block dashboard %}
 
-Dashboard
+{% include "inadmin/admin__dashboard__activity.html.twig" %}
+
+Display today/this week's stats
+
+Display comments
 
 {% endblock dashboard %}
 {% block dashboard_post %}{% endblock dashboard_post %}
