@@ -24,8 +24,8 @@ class PageManager extends AbstractManager
     
     public function save(Page $page)
     {
-        $page->setModDateFromDateTime(new \DateTime('now'));
         $this->em->persist($page);
+        $page->setModDate(new \DateTime('now'));
         $this->em->flush();
     }
     
