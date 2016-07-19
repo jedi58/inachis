@@ -1,17 +1,16 @@
 {
-	"repository": {
-		"dbms": "mysqli",
-		"host": "",
-		"port": "",
-		"database": "",
-		"username": "",
-		"password": ""
-	},
+    "repository": {
+        "driver": "",
+        "host": "",
+        "user": "",
+        "password": "",
+        "dbname": ""
+    },
     "twig": {
-    	"options": {
-    		"auto_reload": true
-		},
-        "extensions": [ ]
+        "options": {
+            "auto_reload": true
+        },
+        "extensions": []
     },
     "security": {
         "encryptionKey": "8b0ffdf9f435daa396016ea99df4136a69309fe68d1d61a32d063ca8425739a56ba97d3dd563dc3eacf84084c31e57e7"
