@@ -10,6 +10,9 @@ use Inachis\Component\CoreBundle\Security\SessionManager;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
 /**
  * Class used to control the application
  */
@@ -51,6 +54,19 @@ class Application
         $this->config = $this->services['configManager']->loadAll();
         $this->router = RoutingManager::getInstance();
         $this->router->load();
+
+        $config = new \Doctrine\ORM\Configuration();
+        $config->setProxyDir(__DIR__ . '/app/persistent/proxies');
+        $config->setProxyNamespace('proxies');
+        $config->setAutoGenerateProxyClasses(($env === 'dev'));
+
+        AnnotationRegistry::registerFile(
+            __DIR__ . '/../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+        );
+        $reader = new AnnotationReader();
+        $driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array( __DIR__ . '/Entity/'));
+        $config->setMetadataDriverImpl($driverImpl);
+        $this->services['em'] = EntityManager::create((array) $this->config['system']->repository, $config);
     }
     /**
      * Returns an instance of {@link Application}
