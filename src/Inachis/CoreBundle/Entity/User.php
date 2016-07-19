@@ -3,67 +3,69 @@
 namespace Inachis\Component\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Object for handling User entity
- * @Entity @Table(indexes={@Index(name="search_idx", columns={"username", "email"})})
+ * @ORM\Entity
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"username", "email"})})
  */
 class User
 {
     /**
-     * @Id @Column(type="string", unique=true, nullable=false)
-     * @GeneratedValue(strategy="UUID")
+     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="UUID")
      * @var string The unique identifier for the {@link User}
      */
     protected $id;
     /**
-     * @Column(type="string", length=512, unique=true, nullable=false)
+     * @ORM\Column(type="string", length=512, unique=true, nullable=false)
      * @var Username of the user
      */
     protected $username;
     /**
-     * @Column(type="string", length=512, nullable=false)
+     * @ORM\Column(type="string", length=512, nullable=false)
      * @var Password for the user
      */
     protected $password;
     /**
-     * @Column(type="string", length=512, nullable=false)
+     * @ORM\Column(type="string", length=512, nullable=false)
      * @var Email address of the user
      */
     protected $email;
     /**
-     * @Column(type="string", length=512)
+     * @ORM\Column(type="string", length=512)
      * @var The display name for the user
      */
     protected $displayName;
     /**
-     * @OneToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Image")
-     * @JoinColumn(name="avatar", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Image")
+     * @ORM\JoinColumn(name="avatar", referencedColumnName="id")
      * @var string An image to use for the {@link User}
      */
     protected $avatar;
     /**
-     * @Column(type="boolean")
+     * @ORM\Column(type="boolean")
      * @var Flag indicating if the {@link User} can sign in
      */
     protected $isActive = true;
     /**
-     * @Column(type="boolean")
+     * @ORM\Column(type="boolean")
      * @var Flag indicating if the {@link User} has been "deleted"
      */
     protected $isRemoved = false;
     /**
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      * @var string The date the {@link User} was added
      */
     protected $createDate;
     /**
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      * @var string The date the {@link User} was last modified
      */
     protected $modDate;
     /**
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      * @var string The date the password was last modified
      */
     protected $passwordModDate;
