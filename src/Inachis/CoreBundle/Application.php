@@ -9,7 +9,6 @@ use Inachis\Component\CoreBundle\Security\Encryption;
 use Inachis\Component\CoreBundle\Security\SessionManager;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
-
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
@@ -56,12 +55,12 @@ class Application
         $this->router->load();
 
         $config = new \Doctrine\ORM\Configuration();
-        $config->setProxyDir(__DIR__ . '/app/persistent/proxies');
+        $config->setProxyDir($this->getApplicationRoot() . 'app/persistent/proxies');
         $config->setProxyNamespace('proxies');
         $config->setAutoGenerateProxyClasses(($env === 'dev'));
 
         AnnotationRegistry::registerFile(
-            __DIR__ . '/../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+            $this->getApplicationRoot() . 'vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
         );
         $reader = new AnnotationReader();
         $driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array( __DIR__ . '/Entity/'));
