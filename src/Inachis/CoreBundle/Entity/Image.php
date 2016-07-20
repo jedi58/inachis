@@ -2,9 +2,11 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Object for handling images on a site
- * @Entity @Table(indexes={@Index(name="search_idx", columns={"title", "filename", "filetype"})})
+ * @ORM\Entity @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title", "filename", "filetype"})})
  */
 class Image extends AbstractFile
 {
@@ -13,22 +15,22 @@ class Image extends AbstractFile
      */
     const ALLOWED_TYPES = 'image\/(png|p?jpeg|gif)';
     /**
-     * @Column(type="integer")
+     * @ORM\Column(type="integer")
      * @var int
      */
     protected $dimensionX;
     /**
-     * @Column(type="integer")
+     * @ORM\Column(type="integer")
      * @var int
      */
     protected $dimensionY;
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      * @var string
      */
     protected $caption;
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      * @var string
      */
     protected $altText;

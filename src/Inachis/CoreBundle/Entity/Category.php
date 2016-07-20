@@ -2,40 +2,43 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Object for handling categories on a site
- * @Entity @Table(indexes={@Index(name="search_idx", columns={"title", "parentId"})})
+ * @ORM\Entity
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title", "parentId"})})
  */
 class Category
 {
     /**
-     * @Id @Column(type="string", unique=true, nullable=false)
-     * @GeneratedValue(strategy="UUID")
+     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="UUID")
      * @var string
      */
     protected $id;
     /**
-     * @Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      * @var string The name of the category
      */
     protected $title;
     /**
-     * @Column(type="text")
+     * @ORM\Column(type="text")
      * @var string Description of the category
      */
     protected $description;
     /**
-     * @Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @var string The UUID of the image, or the image path
      */
     protected $image;
     /**
-     * @Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @var string The UUID of the image, or the image path
      */
     protected $icon;
     /**
-     * @Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @var string The UUID of the parent category if applicable
      */
     protected $parentId;

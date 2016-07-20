@@ -32,8 +32,8 @@
     "require": {
         "php": ">=5.5",
         
-        "doctrine/dbal": "2.5.*",
-        "doctrine/orm": "2.5.*",
+        "doctrine/dbal": "2.*",
+        "doctrine/orm": "2.*",
         "geta6/twig-markdown": "@dev",
         "klein/klein": "^2.1",
         "michelf/php-markdown": "1.*",

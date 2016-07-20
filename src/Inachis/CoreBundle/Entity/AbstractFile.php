@@ -2,6 +2,8 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * File entity properties common to different upload types
  * such as {@link Image}
@@ -9,48 +11,48 @@ namespace Inachis\Component\CoreBundle\Entity;
 abstract class AbstractFile
 {
     /**
-     * @Id @Column(type="string", unique=true, nullable=false)
-     * @GeneratedValue(strategy="UUID")
+     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="UUID")
      * @var string
      */
     protected $id;
     /**
-     * @Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      * @var string The title of the {@link Image}
      */
     protected $title;
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      * @var string
      */
     protected $description;
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      * @var string
      */
     protected $filename;
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      * @var string
      */
     protected $filetype;
     /**
-     * @Column(type="integer")
+     * @ORM\Column(type="integer")
      * @var int
      */
     protected $filesize;
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      * @var string
      */
     protected $checksum;
     /**
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      * @var string
      */
     protected $createDate;
     /**
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      * @var string
      */
     protected $modDate;

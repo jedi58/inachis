@@ -10,14 +10,14 @@ gulp.task('js:compile', [
     'js:compile-web'
 ]);
 gulp.task('js:compile-web', function() {
-  return gulp.src(config.paths.src.js.web + '**/*.js')
+  return gulp.src('{' + config.paths.src.js.web + ',' + config.paths.src.js.shared + '}**/*.js')
     .pipe(concat('scripts.js'))
     .pipe(uglify())
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(config.paths.dist.js.web));
 });
 gulp.task('js:compile-admin', function() {
-  return gulp.src(config.paths.src.js.admin + '**/*.js')
+  return gulp.src('{' + config.paths.src.js.admin + ',' + config.paths.src.js.shared + '}**/*.js')
     .pipe(concat('scripts.js'))
     .pipe(uglify())
     .pipe(rename({suffix: '.min'}))
@@ -25,6 +25,8 @@ gulp.task('js:compile-admin', function() {
 });
 
 gulp.task('js:watch', function() {
-    gulp.watch(config.paths.src.js.admin + '**/*.js', ['js:compile-admin']);
-    gulp.watch(config.paths.src.js.web + '**/*.js', ['js:compile-web']);
+    gulp.watch(config.paths.src.js.all + '**/*.js', [
+        'js:compile-admin',
+        'js:compile-web'
+    ]);
 });
