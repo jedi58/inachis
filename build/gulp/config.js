@@ -24,6 +24,8 @@ module.exports = {
 			},
 			js: {
 				admin: 'resources/assets/js/inadmin/',
+				all: 'resources/assets/js/',
+				shared: 'resources/assets/js/shared/',
 				web: 'resources/assets/js/web/'
 			},
 			sass: { 

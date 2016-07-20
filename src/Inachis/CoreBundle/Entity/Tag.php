@@ -2,20 +2,22 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Object for handling tags that are mapped to content
- * @Entity @Table(indexes={@Index(name="search_idx", columns={"title"})})
+ * @ORM\Entity @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title"})})
  */
 class Tag
 {
     /**
-     * @Id @Column(type="string", unique=true, nullable=false)
-     * @GeneratedValue(strategy="UUID")
+     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="UUID")
      * @var string The unique identifier for the tag
      */
     protected $id;
     /**
-     * @Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50)
      * @var string The text for the tag
      */
     protected $title;
