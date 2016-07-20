@@ -10,18 +10,10 @@ gulp.task('js:compile', [
     'js:compile-web'
 ]);
 gulp.task('js:compile-web', function() {
-  return gulp.src('{' + config.paths.src.js.web + ',' + config.paths.src.js.shared + '}**/*.js')
-    .pipe(concat('scripts.js'))
-    .pipe(uglify())
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(config.paths.dist.js.web));
+    return jsCompile(config.paths.src.js.web, config.paths.dist.js.web);
 });
 gulp.task('js:compile-admin', function() {
-  return gulp.src('{' + config.paths.src.js.admin + ',' + config.paths.src.js.shared + '}**/*.js')
-    .pipe(concat('scripts.js'))
-    .pipe(uglify())
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(config.paths.dist.js.admin));
+    return jsCompile(config.paths.src.js.admin, config.paths.dist.js.admin);
 });
 
 gulp.task('js:watch', function() {
@@ -30,3 +22,12 @@ gulp.task('js:watch', function() {
         'js:compile-web'
     ]);
 });
+
+function jsCompile(src, dest)
+{
+    return gulp.src('{' + src + ',' + config.paths.src.js.shared + '}**/*.js')
+        .pipe(concat('scripts.js'))
+        .pipe(uglify())
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest(dest));
+}
