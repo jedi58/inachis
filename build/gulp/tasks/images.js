@@ -7,17 +7,20 @@ gulp.task('images:min', [
     'images:min-web'
 ]);
 gulp.task('images:min-web', function() {
-    return gulp.src(config.paths.src.images.web)
-        .pipe(imagemin())
-        .pipe(gulp.dest(config.paths.dist.images.web));
+    return imgMin(config.paths.src.images.web, config.paths.dist.images.web);
 });
 gulp.task('images:min-admin', function() {
-    return gulp.src(config.paths.dist.images.admin)
-        .pipe(imagemin())
-        .pipe(gulp.dest(config.paths.dist.images.admin));
+    return imgMin(config.paths.dist.images.admin, config.paths.dist.images.admin);
 });
 
 gulp.task('images:watch', function() {
     gulp.watch(config.paths.src.images.admin + '**/*', ['images:min-admin']);
     gulp.watch(config.paths.src.images.web + '**/*', ['images:min-web']);
 });
+
+function imgMin(src, dest)
+{
+    return gulp.src(src)
+        .pipe(imagemin())
+        .pipe(gulp.dest(dest));
+}
