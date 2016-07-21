@@ -38,6 +38,14 @@ abstract class AbstractManager extends EntityRepository
      */
     abstract public function create();
     /**
+     * Return the repository
+     * @return The repsoitory to return
+     */
+    protected function getRepository()
+    {
+        return $this->em->getRepository($this->getClass());
+    }
+    /**
      * Uses the objects setters to populat the object
      * based on the provided values
      * @param mixed $object The object to hydrate
@@ -46,6 +54,9 @@ abstract class AbstractManager extends EntityRepository
      */
     protected function hydrate($object, array $values)
     {
+        if (!is_object($object)) {
+            return $object;
+        }
         foreach ($values as $key => $value) {
             $methodName = 'set' . ucfirst($key);
             if (method_exists($object, $methodName)) {
@@ -53,14 +64,6 @@ abstract class AbstractManager extends EntityRepository
             }
         }
         return $object;
-    }
-    /**
-     * Return the repository
-     * @return The repsoitory to return
-     */
-    protected function getRepository()
-    {
-        return $this->em->getRepository($this->getClass());
     }
     /**
      * Encrypts the specified fields for the provided object
