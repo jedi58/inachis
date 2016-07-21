@@ -3,6 +3,7 @@
 namespace Inachis\Component\CoreBundle\Controller;
 
 use Inachis\Component\CoreBundle\Application;
+use Inachis\Component\CoreBundle\Entity\Page;
 use Inachis\Component\CoreBundle\Entity\PageManager;
 use Inachis\Component\CoreBundle\Form\FormBuilder;
 use Inachis\Component\CoreBundle\Form\Fields\ButtonType;
@@ -184,7 +185,7 @@ class AccountController extends AbstractController
             ->addComponent(new ButtonType(array(
                 'type' => 'submit',
                 'cssClasses' => 'button button--positive',
-                'label' => 'Login'
+                'label' => 'Log In'
             ))),
             'data' => array(
                 'loginUsername' => $request->paramsPost()->get('loginUsername'),
@@ -299,8 +300,57 @@ class AccountController extends AbstractController
         $data = array(
             'session' => $_SESSION,
             'data' => array(
-                'draftCount' => $pageManager->getDraftCount(),
-                'publishCount' => $pageManager->getPublishedCount()
+                'draftCount' => $pageManager->getAllCount(array(
+                    'q.status = :status',
+                    array('status' => Page::DRAFT)
+                )),
+                'publishCount' => $pageManager->getAllCount(array(
+                    'q.status = :status AND q.postDate <= :postDate',
+                    array(
+                        'status' => Page::PUBLISHED,
+                        'postDate' => new \DateTime()
+                    )
+                )),
+                'upcomingCount' => $pageManager->getAllCount(array(
+                    'q.status = :status AND q.postDate > :postDate',
+                    array(
+                        'status' => Page::PUBLISHED,
+                        'postDate' => new \DateTime()
+                    )
+                )),
+                'drafts' => $pageManager->getAll(
+                    0,
+                    5,
+                    array(
+                        'q.status = :status',
+                        array('status' => Page::DRAFT)
+                    ),
+                    'q.postDate, q.modDate'
+                ),
+                'upcoming' => $pageManager->getAll(
+                    0,
+                    5,
+                   array(
+                        'q.status = :status AND q.postDate > :postDate',
+                        array(
+                            'status' => Page::PUBLISHED,
+                            'postDate' => new \DateTime()
+                        )
+                    ),
+                    'q.postDate, q.modDate'
+                ),
+                'posts' => $pageManager->getAll(
+                    0,
+                    5,
+                    array(
+                        'q.status = :status AND q.postDate <= :postDate',
+                        array(
+                            'status' => Page::PUBLISHED,
+                            'postDate' => new \DateTime()
+                        )
+                    ),
+                    'q.postDate, q.modDate'
+                ),
             )
         );
         $response->body($app->twig->render('admin__dashboard.html.twig', $data));
