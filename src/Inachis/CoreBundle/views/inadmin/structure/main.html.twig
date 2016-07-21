@@ -13,6 +13,7 @@
 	<link rel="P3Pv1" href="{{ settings.domain }}/w3c/p3p.xml" /> 
 	<link rel="index" title="Fauna.me" href="{{ settings.domain }}" /> 
 	{% include "admin__stylesheets.html.twig" %}
+	{% include "admin__javascript__top.html.twig" %}
 </head> 
 <body>
 
@@ -53,5 +54,7 @@
 	</section>
 </section>
 {% endif %}
+
+{% include "admin__javascript__bottom.html.twig" %}
 </body> 
 </html>
