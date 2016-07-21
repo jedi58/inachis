@@ -18,37 +18,49 @@ use Inachis\Component\CoreBundle\Form\Fields\TextType;
 use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
 
 /**
- *
+ * Abstract class used by all controller
  */
 abstract class AbstractController
 {
     /**
-     *
+     * @var string[] Array of any error messages for the current view
      */
     protected static $errors = array();
     /**
-     *
+     * @var FormBuilder A FormBuilder object for use in contructing forms for the current view
      */
     protected static $formBuilder;
     /**
-     *
+     * Default constructor initialises the {@link FormBuilder}
      */
     public function __construct()
     {
-        $this->formBuilder = new FormBuilder();
+        self::$formBuilder = new FormBuilder();
     }
     /**
-     *
+     * Returns all current errors on the page
+     * @return string[] The array of errors
      */
     public static function getErrors()
     {
-        return $this->errors;
+        return self::$errors;
     }
     /**
-     *
+     * Returns a specific error message given by it's unique name
+     * @return string The requested error message if set
+     */
+    public static function getError($error)
+    {
+    	return isset(self::$errors[$error]) ? self::$errors[$error] : null;
+    }
+    /**
+     * Adds an error to the current controller to be displayed/handled on
+     * by the view
+     * @param string $error Unique identifier for the error
+     * @param string $message The friendly message for the error
      */
     public static function addError($error, $message)
     {
-        $this->errors[$error] = (string) $message;
+        self::$errors[$error] = (string) $message;
     }
 }
