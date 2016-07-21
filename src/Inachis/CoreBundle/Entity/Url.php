@@ -3,10 +3,12 @@
 namespace Inachis\Component\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Object for handling custom URLs that are mapped to content
- * @Entity @Table(indexes={@Index(name="search_idx", columns={"contentType", "contentId", "link"})})
+ * @ORM\Entity
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"link"})})
  */
 class Url
 {
@@ -15,38 +17,34 @@ class Url
      */
     const DEFAULT_URL_SIZE_LIMIT = 255;
     /**
-     * @Id @Column(type="string", unique=true, nullable=false)
-     * @GeneratedValue(strategy="UUID")
+     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="UUID")
      * @var string The unique identifier for the Url
      */
     protected $id;
     /**
-     * @Column(type="string", length=75)
-     * @var string The content type the short link refers to
-     */
-    protected $contentType;
-    /**
-     * @Column(type="string")
+     * @ORM\ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Page", inversedBy="urls", cascade={"persist", "merge"})
+     * @ORM\JoinColumn(name="content_id", referencedColumnName="id")
      * @var int The UUID of the content of the type specified by @see $contentType
      */
-    protected $contentId;
+    protected $content;
     /**
-     * @Column(type="string", length=512)
+     * @ORM\Column(type="string", length=512, unique=true)
      * @var string The SEO-friendly short link
      */
     protected $link;
     /**
-     * @Column(type="boolean")
+     * @ORM\Column(type="boolean", name="defaultLink")
      * @var bool Flag specifying if the URL is the canonical one to use
      */
     protected $default;
     /**
-     * @Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime", nullable=false)
      * @var string The date the Url was added
      */
     protected $createDate;
     /**
-     * @Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime", nullable=false)
      * @var string The date the Url was last modified
      */
     protected $modDate;
@@ -54,18 +52,18 @@ class Url
      * Default constructor for Inachis\Core\URL entity - by default the
      * URL will be specified as canonical. This can be overridden using
      * {@link Url::setDefault}.
-     * @param string $type The content type the URL is for
+     * @param Page $content The {@link Page} object the link is for
      * @param int $id The ID of the content record
      * @param string $link The short link for the content
      */
-    public function __construct($type = '', $id = '', $link = '')
+    public function __construct(Page $content, $link = '')
     {
-        $this->setContentType($type);
-        $this->setContentId($id);
-        $this->setLink($this->urlify($link));
+        //$this->setLink(UrlManager::getInstance()->urlify($link));
+        $this->setContent($content);
         $this->setDefault(true);
-        $this->setCreateDateFromDateTime(new \DateTime('now'));
-        $this->setModDateFromDateTime(new \DateTime('now'));
+        $this->setCreateDate(new \DateTime('now'));
+        $this->setModDate(new \DateTime('now'));
+        $this->associateContent();
     }
     /**
      * Returns the UUID of the Url
@@ -75,26 +73,15 @@ class Url
     {
         return $this->id;
     }
-    /**
-     * The Entity name of the content being returned
-     * @return string
-     */
-    public function getContentType()
-    {
-        return $this->contentType;
-    }
-    /**
-     * Returns the UUID of the Content being linked to
-     * @return string The UUID of the content being linked to
-     */
-    public function getContentId()
-    {
-        return $this->contentId;
-    }
 
     public function getLink()
     {
         return $this->link;
+    }
+
+    public function getContent()
+    {
+        return $this->content;
     }
     
     public function getDefault()
@@ -117,19 +104,14 @@ class Url
         $this->id = $value;
     }
 
-    public function setContentType($value)
-    {
-        $this->contentType = $value;
-    }
-
-    public function setContentId($value)
-    {
-        $this->contentId = $value;
-    }
-
     public function setLink($value)
     {
         $this->link = $value;
+    }
+
+    public function setContent($value)
+    {
+        $this->content = $value;
     }
     
     public function setDefault($value)
@@ -137,34 +119,21 @@ class Url
         $this->default = (bool) $value;
     }
     
-    public function setCreateDate($value)
+    public function setCreateDate(\DateTime $value)
     {
         $this->createDate = $value;
     }
     
-    public function setCreateDateFromDateTime(\DateTime $value)
-    {
-        $this->createDate = $value->format('Y-m-d H:i:s');
-    }
-    
-    public function setModDate($value)
+    public function setModDate(\DateTime $value)
     {
         $this->modDate = $value;
-    }
-    /**
-     * Sets the mod date to the date/time specified
-     * @param \DateTime $value
-     */
-    public function setModDateFromDateTime(\DateTime $value)
-    {
-        $this->modDate = $value->format('Y-m-d H:i:s');
     }
     /**
      * Sets the mod date for the {@link Url} to the current date
      */
     public function setModDateToNow()
     {
-        $this->setModDateFromDateTime(new \DateTime('now'));
+        $this->setModDate(new \DateTime('now'));
     }
     /**
      * Test if the current link is a valid SEO-friendly URL
@@ -175,44 +144,9 @@ class Url
     {
         return preg_match('/^[a-z0-9\-]+$/i', $this->link);
     }
-    /**
-     * Turns a given string into an SEO-friendly URL
-     * @param string $title The string to turn into an SEO friendly short URL
-     * @param int    $limit The maximum number of characters to allow;
-     *                   the default is defined by URL::DEFAULT_URL_SIZE_LIMIT
-     *                   is defined by URL::DEFAULT_URL_SIZE_LIMIT
-     * @return string The generated SEO-friendly URL
-     */
-    public function urlify($title, $limit = URL::DEFAULT_URL_SIZE_LIMIT)
+
+    public function associateContent()
     {
-        $title = preg_replace(
-            array(
-                '/[\_\s]/',
-                '/[^a-z0-9\-]/i'
-            ),
-            array(
-                '-',
-                ''
-            ),
-            mb_strtolower($title)
-        );
-        if (mb_strlen($title) > $limit) {
-            $title = mb_substr($title, 0, $limit);
-        }
-        return $title;
-    }
-    /**
-     * Returns a string containing a "short URL" from the given URI
-     * @param string $uri The URL to parse and obtain the short URL for
-     * @return string
-     */
-    public function fromUri($uri)
-    {
-        $uri = parse_url($uri, PHP_URL_PATH);
-        if (substr($uri, -1) == '/') {
-            $uri = substr($uri, 0, -1);
-        }
-        $uri = explode('/', $uri);
-        return end($uri);
+        $this->content->addUrl($this);
     }
 }
