@@ -39,15 +39,15 @@
 	<section class="admin__nav-main">
 		<ul>
 			<li>
-				<a class="button admin__add-content" href="#" title="Add new content"><i class="material-icons">edit</i><span> Add</span></a>
-				<ul>
-					<li><a href="{{ settings.domain }}/inadmin/post/new" title="Add a new post"><i class="material-icons">post</i><span> Post</span></a></li>
-					<li><a href="{{ settings.domain }}/inadmin/page/new" title="Add a new page"><i class="material-icons">page</i><span> Page</span></a></li>
+				<a class="button admin__add-content" href="#new" title="Add new content"><i class="material-icons">edit</i><span> Add</span></a>
+				<ul class="admin__nav-new">
+					<li><a href="{{ settings.domain }}/inadmin/post/new" title="Add a new post"><i class="material-icons">short_text</i><span> New Post</span></a></li>
+					<li><a href="{{ settings.domain }}/inadmin/page/new" title="Add a new page"><i class="material-icons">content_copy</i><span> New Page</span></a></li>
 				</ul>
 			</li>
-			<li><a href="{{ settings.domain }}/inadmin/dashboard" title="View dashboard"><i class="material-icons">dashboard</i><span> Dashboard</span></a></li>
-			<li><a href="{{ settings.domain }}/inadmin/post/list" title="View list of posts"><i class="material-icons">insert_drive_file</i><span> Posts</span></a></li>
-			<li><a href="{{ settings.domain }}/inadmin/page/list" title="View list of pages"><i class="material-icons">note</i><span> Pages</span></a></li>
+			<!-- li><a href="{{ settings.domain }}/inadmin/dashboard" title="View dashboard"><i class="material-icons">dashboard</i><span> Dashboard</span></a></li -->
+			<li><a href="{{ settings.domain }}/inadmin/post/list" title="View list of posts"><i class="material-icons">short_text</i><span> Posts</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/page/list" title="View list of pages"><i class="material-icons">content_copy</i><span> Pages</span></a></li>
 			<li><a href="{{ settings.domain }}/inadmin/url/list" title="View list of defined URLs"><i class="material-icons">insert_link</i><span> URLs</span></a></li>
 			<li>
 				<a href="{{ settings.domain }}/inadmin/settings" title="Change settings"><i class="material-icons">settings</i><span> Settings</span></a>

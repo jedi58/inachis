@@ -22,6 +22,10 @@ use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
  */
 abstract class AbstractController
 {
+	/**
+	 * @var mixed[] Variables to be accessible to Twig templates
+	 */
+	protected static $data = array();
     /**
      * @var string[] Array of any error messages for the current view
      */
@@ -36,6 +40,7 @@ abstract class AbstractController
     public function __construct()
     {
         self::$formBuilder = new FormBuilder();
+        self::$data['session'] = $_SESSION;
     }
     /**
      * Returns all current errors on the page
