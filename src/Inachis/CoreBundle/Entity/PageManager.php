@@ -44,7 +44,7 @@ class PageManager extends AbstractManager
     /**
      * Removes the current entity from the repository
      * @param Page $page The page to remove
-     */    
+     */
     public function remove(Page $page)
     {
         $this->em->remove($page);
