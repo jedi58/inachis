@@ -1,24 +1,36 @@
+$form-background__light: #dde8ed;
+$form-label__light: #666;
+$form-input__complete: #090;
+
 .form__login {
-	background-color: #069;
-	border: 1px solid #ccc;
-	color: #fff;
-	margin: 0;
-	padding: 0;
+	background: $form-background__light;
 
 	fieldset {
 		border: none;
-		margin: 50px;
+		margin: 15px 50px;
 		padding: 0;
+	}
+
+	input {
+		border: 2px solid transparent;
+		margin-bottom: 10px;
+	}
+	input[value^=""], input__complete {
+		border-color: $form-input__complete;
+	}
+
+	label {
+		color: $form-label__light;
+		display: block;
+		font-size: 0.85em;
+		margin-bottom: 5px;
+		text-transform: uppercase;
 	}
 
 	legend {
 		display: none;
 	}
-
-	input {
-		margin: 10px 0;
-		width: 98%;
-	}
+	
 	p:has(button) {
 		margin: 0;
 	}
