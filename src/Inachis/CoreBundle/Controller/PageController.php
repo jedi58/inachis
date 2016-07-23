@@ -22,7 +22,6 @@ use Inachis\Component\CoreBundle\Form\Fields\SelectOptionGroupType;
 use Inachis\Component\CoreBundle\Form\Fields\TextType;
 use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
 
-
 class PageController extends AbstractController
 {
     /**
