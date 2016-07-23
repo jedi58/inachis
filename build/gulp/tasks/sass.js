@@ -25,9 +25,9 @@ gulp.task('sass:watch', function() {
 
 function sassCompile(src, dest)
 {
-    return sass(config.paths.src.sass.web + '**/*.scss', { style: 'expanded' })
+    return sass(src + '**/*.scss', { style: 'expanded' })
         .pipe(autoprefixer('last 2 version'))
         .pipe(cssnano())
         .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest(config.paths.dist.sass.web));
+        .pipe(gulp.dest(dest));
 }
