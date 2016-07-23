@@ -18,6 +18,16 @@
 <body>
 
 <section class="admin__body-container">
+	{% if session.user is not empty %}
+	<section class="admin__search">
+		<form method="post">
+			<label for="q" class="material-icons">search</label>
+			<input type="search" name="q" id="q" placeholder="search…" />
+			<button class="hidden" type="submit">search</button>
+		</form>
+	</section>
+	{% endif %}
+
 	{% block content %}{% endblock content %}
 </section>
 

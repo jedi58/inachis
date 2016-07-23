@@ -1,17 +1,19 @@
 @import '../shared/_reset';
 
-body { font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif; }
-
-@import '../shared/_col';
-@import '../shared/_8cols';
-
 
 // Admin Container Variables
 $admin__container--collapsed-width: 40px;
 $admin__container--expanded-width: 130px;
 $admin__container-button--hover: #0cf;
 $admin__container-add-button: #069;
+$admin__search_color: #ccc;
 
+body {
+	font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+@import '../shared/_col';
+@import '../shared/_8cols';
 
 .admin__container {
 	background-color: #333;
@@ -139,6 +141,26 @@ $admin__container-add-button: #069;
 
 .admin__body-container {
 	margin-left: $admin__container--collapsed-width;
+}
+
+.admin__search {
+	color: $admin__search_color;
+	padding: 10px 10px 20px 0;
+	text-align: right;
+
+	button {
+		display: none;
+	}
+
+	input {
+		border: 1px solid $admin__search_color;
+		color: darken($admin__search_color, 30%);
+		padding: 5px;
+	}
+
+	label {
+		vertical-align: middle;
+	}
 }
 
 @import '../shared/_forms';
