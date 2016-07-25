@@ -58,7 +58,7 @@ class PageController extends AbstractController
         $pageManager = new PageManager(Application::getInstance()->getService('em'));
         $properties = $request->paramsPost()->all();
         if (!empty($url) & !empty($properties)) {
-//            $post = $pageManager->hydrate($pageManager->getById($url->getContentId()), $properties);
+            //            $post = $pageManager->hydrate($pageManager->getById($url->getContentId()), $properties);
         }
         if (empty($post) || empty($post->getId())) {
             $post = $pageManager->create($properties);
@@ -84,8 +84,8 @@ class PageController extends AbstractController
                 $urlManager->save($url);
                 $pageManager->save($post);
                 Application::getInstance()->getService('em')->flush();
-var_dump($post);
-exit;
+                var_dump($post);
+                exit;
 
                 //$pageManager->save($post);
                 //$respone->redirect();
