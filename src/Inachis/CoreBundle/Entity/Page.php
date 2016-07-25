@@ -288,7 +288,7 @@ class Page
     public function getUrl($key)
     {
         if (!isset($this->urls[$key])) {
-           throw new \InvalidArgumentException(sprintf('Url `%s` does not exist', $key));
+            throw new \InvalidArgumentException(sprintf('Url `%s` does not exist', $key));
         }
         return $this->urls[$key];
     }

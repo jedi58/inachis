@@ -56,7 +56,7 @@ abstract class AbstractController
      */
     public static function getError($error)
     {
-    	return isset(self::$errors[$error]) ? self::$errors[$error] : null;
+        return isset(self::$errors[$error]) ? self::$errors[$error] : null;
     }
     /**
      * Adds an error to the current controller to be displayed/handled on
