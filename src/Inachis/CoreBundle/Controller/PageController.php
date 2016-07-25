@@ -16,12 +16,13 @@ use Inachis\Component\CoreBundle\Form\Fields\FieldsetType;
 use Inachis\Component\CoreBundle\Form\Fields\FileUploadType;
 use Inachis\Component\CoreBundle\Form\Fields\HiddenType;
 use Inachis\Component\CoreBundle\Form\Fields\NumberType;
+//use Inachis\Component\CoreBundle\Form\Fields\ReCaptchaType;
 use Inachis\Component\CoreBundle\Form\Fields\SelectType;
 use Inachis\Component\CoreBundle\Form\Fields\SelectOptionType;
 use Inachis\Component\CoreBundle\Form\Fields\SelectOptionGroupType;
+//use Inachis\Component\CoreBundle\Form\Fields\TableType;
 use Inachis\Component\CoreBundle\Form\Fields\TextType;
 use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
-
 
 class PageController extends AbstractController
 {
