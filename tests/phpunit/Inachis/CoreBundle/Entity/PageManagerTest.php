@@ -4,6 +4,7 @@ namespace Inachis\Tests\CoreBundle\Entity;
 
 use Inachis\Component\CoreBundle\Entity\Page;
 use Inachis\Component\CoreBundle\Entity\PageManager;
+use Inachis\Component\CoreBundle\Entity\User;
 use Mockery;
 
 /**
@@ -31,7 +32,7 @@ class PageManagerTest extends \PHPUnit_Framework_TestCase
             'title' => 'My awesome test page',
             'subTitle' => 'The first page',
             'content' => '<p>This is a test page.</p>',
-            'author' => 'UUID',
+            'author' => new User(),
             'featureImage' => 'UUID',
             'featureSnippet' => 'This is a short excerpt of the page',
             'status' => Page::DRAFT,
