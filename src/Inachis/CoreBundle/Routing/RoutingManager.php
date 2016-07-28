@@ -1,6 +1,8 @@
 <?php
 namespace Inachis\Component\CoreBundle\Routing;
 
+use Aptoma\Twig\Extension\MarkdownExtension;
+use Aptoma\Twig\Extension\MarkdownEngine;
 use Klein\Klein;
 use Inachis\Component\CoreBundle\Application;
 use Inachis\Component\CoreBundle\Routing\Route;
@@ -122,6 +124,8 @@ class RoutingManager
                 if ($env === 'dev') {
                     $twig->addExtension(new \Twig_Extension_Debug());
                 }
+                $engine = new MarkdownEngine\MichelfMarkdownEngine();
+                $twig->addExtension(new MarkdownExtension($engine));
                 return $twig;
             });
         });
