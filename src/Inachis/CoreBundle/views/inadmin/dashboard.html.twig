@@ -2,14 +2,14 @@
 {% block content %}
 
 {% block dashboard_pre %}{% endblock dashboard_pre %}
+
 {% block dashboard %}
 
 {% include "inadmin/admin__dashboard__activity.html.twig" %}
-
-Display today/this week's stats
-
-Display comments
+{% include "inadmin/admin__dashboard__stats.html.twig" %}
 
 {% endblock dashboard %}
+
+
 {% block dashboard_post %}{% endblock dashboard_post %}
 {% endblock content %}
