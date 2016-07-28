@@ -4,6 +4,7 @@ $form-input__complete: #090;
 
 .form__login {
 	background: $form-background__light;
+	max-width: 450px;
 
 	fieldset {
 		border: none;
@@ -14,6 +15,7 @@ $form-input__complete: #090;
 	input {
 		border: 2px solid transparent;
 		margin-bottom: 10px;
+		width: 90%;
 	}
 	input[value^=""], input__complete {
 		border-color: $form-input__complete;
