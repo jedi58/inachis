@@ -22,10 +22,10 @@ use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
  */
 abstract class AbstractController
 {
-	/**
-	 * @var mixed[] Variables to be accessible to Twig templates
-	 */
-	protected static $data = array();
+    /**
+     * @var mixed[] Variables to be accessible to Twig templates
+     */
+    protected static $data = array();
     /**
      * @var string[] Array of any error messages for the current view
      */
