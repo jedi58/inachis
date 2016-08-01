@@ -23,7 +23,7 @@ class Url
      */
     protected $id;
     /**
-     * @ORM\ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Page", inversedBy="urls", cascade={"persist", "merge"})
+     * @ORM\ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Page", inversedBy="urls", fetch="EAGER")
      * @ORM\JoinColumn(name="content_id", referencedColumnName="id")
      * @var int The UUID of the content of the type specified by @see $contentType
      */
