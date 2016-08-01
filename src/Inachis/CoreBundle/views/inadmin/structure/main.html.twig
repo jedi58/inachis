@@ -18,7 +18,17 @@
 <body>
 
 <section class="admin__body-container">
-	{% if session.user is not empty %}
+{% if session.user is not empty %}
+	<section class="admin__user">
+		<a href="#admin__user__options">
+			<img height="40" src="{% if session.user.avatar is not empty %}{{ session.user.avatar }}{% else %}{{ settings.domain }}/inadmin/assets/images/defaultAvatar.png{% endif %}" width="40" />
+		</a>
+		<ul id="admin__user__options">
+			<li>Signed in as <span>{{ session.user.displayName }}</span></li>
+			<li><a href="/settings">Settings</a></li>
+			<li><form action="/inadmin/signout" method="post"><button>Log out</button></form></li>
+		</ul>
+	</section>
 	<section class="admin__search">
 		<form method="post">
 			<label for="q" class="material-icons">search</label>
@@ -26,7 +36,7 @@
 			<button class="hidden" type="submit">search</button>
 		</form>
 	</section>
-	{% endif %}
+{% endif %}
 
 	{% block content %}{% endblock content %}
 </section>

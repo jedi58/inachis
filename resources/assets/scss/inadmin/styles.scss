@@ -164,6 +164,34 @@ body {
 	}
 }
 
+
+.admin__user {
+	float: right;
+	margin: 8px 20px;
+
+	a, a:visited {
+		color: #666;
+		text-decoration: none;
+	}
+
+	img {
+		background-color: #fff;
+		border: 1px solid #aaa;
+		border-radius: 50%;
+		padding: 1px;
+	}
+
+	ul {
+		background-color: #eee;
+		border:1px solid #ccc;
+		display: none;
+		list-style-type: none;
+		position: absolute;
+		right: 5px;
+	}
+}
+
+
 @import '../shared/_forms';
 @import '_form__signin';
 @import '../shared/_buttons';
