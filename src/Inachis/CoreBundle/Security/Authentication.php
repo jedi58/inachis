@@ -60,7 +60,7 @@ class Authentication
      */
     public function logout()
     {
-        Application::getInstance()->getService('session')->removeKey('user');
+        Application::getInstance()->getService('session')->remove('user');
         Application::getInstance()->getService('session')->regenerate();
         //Application::getInstance()->getService('log')->add('logout', $user->getUsername(), $user->getId());
     }
