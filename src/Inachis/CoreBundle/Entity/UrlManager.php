@@ -103,12 +103,11 @@ class UrlManager extends AbstractManager
      * @param string $contentId The UUID of the content to get the Url(s) for
      * @return array[Url] The array of {@link Url}s to return
      */
-    public function getDefaultUrlByContentTypeAndId($contentType, $contentId)
+    public function getDefaultUrl($content)
     {
         return $this->getRepository()->findOneBy(
             array(
-                'contentType' => $contentType,
-                'contentId' => $contentId,
+                'content' => $content,
                 'default' => true
             )
         );
