@@ -153,6 +153,7 @@ class AccountController extends AbstractController
             )))
             ->addComponent(new TextType(array(
                 'name' => 'loginUsername',
+                'autofocus' => true,
                 'label' => 'Username',
                 'id' => 'form-login__username',
                 'labelId' => 'form-login__username-label',
