@@ -483,4 +483,12 @@ class Page
         );
         return $postDate->format('YmdHis') > $today->format('YmdHis');
     }
+    /**
+     * Determines if the current page/post is not yet published
+     * @return bool The result of testing if the page is a draft
+     */
+    public function isDraft()
+    {
+        return $this->status === self::DRAFT;
+    }
 }
