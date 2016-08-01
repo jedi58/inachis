@@ -204,7 +204,7 @@ class AccountController extends AbstractController
      */
     public static function getSignout($request, $response, $service, $app)
     {
-        Application::getInstance()->getService('auth')->logout();
+        Application::getInstance()->requireAuthenticationService()->logout();
         $response->redirect('/inadmin/signin')->send();
     }
     /**
