@@ -39,8 +39,6 @@ class User
      */
     protected $displayName;
     /**
-     * @ORM\OneToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Image")
-     * @ORM\JoinColumn(name="avatar", referencedColumnName="id")
      * @var string An image to use for the {@link User}
      */
     protected $avatar;
