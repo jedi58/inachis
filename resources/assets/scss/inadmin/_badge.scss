@@ -1,14 +1,14 @@
 .badge {
-	background-color: #069;
+	background-color: #ddd;
 	color: #fff;
-	border: 1px solid #069;
+	border: 1px solid #ddd;
 	border-radius: 40px;
 	font-size: 0.7em;
 	padding: 5px 10px;
 
 
-	&.badge__empty {
-		background-color: #ddd;
-		border-color: #ddd;
+	.ui-state-active & {
+		background-color: #069;
+		border-color: #069;
 	}
 }
