@@ -51,14 +51,17 @@ class PersistentLoginManager extends AbstractManager
 		return false;
 	}
 	/**
-	 *
+     * Creates and returns a new instance of {@link PersistentLogin}
+     * @return Url The new entity
 	 */
 	public function create($values = array())
 	{
 		return $this->hyrate(new PersistentLogin(), $values);
 	}
 	/**
-	 *
+     * Saves the current entity (assuming it is attached)
+     * @param PersistentLogin $object The {@link PersistentLogin} object to save
+	 * @return PersistentLoginManager Returns itself
 	 */
 	public function save(PersistentLogin $object)
 	{
@@ -66,12 +69,12 @@ class PersistentLoginManager extends AbstractManager
 		return $this;
 	}
 	/**
-	 *
+     * Removes the current entity (assuming it is attached) from the repository
+     * @param PersistentLogin $object The {@link PersistentLogin} object to remove
 	 */
 	public function remove(PersistentLogin $object)
 	{
 		$this->em->remove($object);
 		$this->em->flush();
-		return $this;
 	}
 }
