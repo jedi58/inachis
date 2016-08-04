@@ -47,6 +47,7 @@ class Authentication
     public function login($username, $password)
     {
         $user = $this->userManager->getByUsername($username);
+        Application::getInstance()->getService('em')->detach($user);
         $ok = !empty($user) && !empty($user->getId()) && $user->validatePasswordHash($password);
         if ($ok) {
             Application::getInstance()->getService('session')->set('user', $user);
