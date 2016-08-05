@@ -17,7 +17,8 @@
         "paragonie/halite": "1.*",
         "twig/twig": "1.*",
         "aptoma/twig-markdown": "^2.0",
-        "michelf/php-markdown": "^1.6"
+        "michelf/php-markdown": "^1.6",
+        "paragonie/random_compat": "^2.0"
     },
     "require-dev": {
         "behat/behat": "2.*",
