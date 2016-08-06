@@ -59,11 +59,11 @@
 		"path": "/inadmin/user/[a:userId]",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDetails"
 	},
-	{
-		"methods": [ "GET", "POST" ],
-		"path": "/inadmin/[dashboard]",
-		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDashboard"
-	},
+        {
+                "methods": [ "GET" ],
+                "path": "@^/inadmin/?$",
+                "action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDashboard"
+        },
 	{
 		"methods": [ "GET", "POST" ],
 		"path": "/inadmin/settings",
