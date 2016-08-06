@@ -31,32 +31,12 @@ class PersistentLoginManager extends AbstractManager
         return 'Inachis\\Component\\CoreBundle\\Entity\\Security\\PersistentLogin';
     }
 	/**
-	 * Checks if the provided token hash for a give userID is valid
-	 * @param string $userId The UUID for the user
-	 * @param string $hash The hash of the auth token
-	 * @return bool The result of valdiating the user's hashed token
-	 */
-	public function validateTokenForUser($userId, $hash)
-	{
-		$userTokens = $this->qb()->where(
-			$this->qb->expr()->eq('userId', $userId)
-		)->getQuery()->getResult();
-		if (!empty($users)) {
-			foreach ($userTokens as $token) {
-				if ($token->isHashValid($hash)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	/**
      * Creates and returns a new instance of {@link PersistentLogin}
      * @return Url The new entity
 	 */
 	public function create($values = array())
 	{
-		return $this->hyrate(new PersistentLogin(), $values);
+		return $this->hydrate(new PersistentLogin(), $values);
 	}
 	/**
      * Saves the current entity (assuming it is attached)
@@ -76,5 +56,27 @@ class PersistentLoginManager extends AbstractManager
 	{
 		$this->em->remove($object);
 		$this->em->flush();
+	}
+	/**
+	 * Checks if the provided token hash for a give userID is valid
+	 * @param string $userHash The UUID for the user
+	 * @param string $hash The hash of the auth token
+	 * @return bool|PersistentLogin The result of valdiating the user's hashed token
+	 */
+	public function validateTokenForUser($userHash, $hash)
+	{
+		$userTokens = $this->qb
+			->where($this->qb->expr()->eq('u.userHash', ':userHash'))
+			->setParameter('userHash', $userHash)
+			->getQuery()
+			->getResult();
+		if (!empty($userTokens)) {
+			foreach ($userTokens as $token) {
+				if ($token->isTokenHashValid($hash)) {
+					return $token;
+				}
+			}
+		}
+		return false;
 	}
 }

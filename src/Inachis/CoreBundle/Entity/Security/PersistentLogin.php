@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Object for handling persistent login tokens
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"userId"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"userId", "userHash"})})
  */
 class PersistentLogin
 {
@@ -24,10 +24,15 @@ class PersistentLogin
      */
 	protected $userId;
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=512, nullable=false)
+     * @var string The hash of the user's Id and user-agent
+     */
+    protected $userHash;
+    /**
+     * @ORM\Column(type="string", length=512, nullable=false)
      * @var string The hash of the user's token
      */
-	protected $hash;
+	protected $tokenHash;
     /**
      * @ORM\Column(type="datetime")
      * @var string The expiry date of the current token
@@ -36,13 +41,15 @@ class PersistentLogin
 	/**
 	 * Default constructor for {@link PersistentLogin}
      * @param int $userId The ID of the user the token is for
-     * @param string $hash The hashed token
+     * @param string $userHash The hashed userId and user-agent
+     * @param string $tokenHash The hashed token
      * @param DateTime $expires The expiry date for the token
 	 */
-	public function __construct($userId = -1, $hash = null, \DateTime $expires = null)
+	public function __construct($userId = -1, $userHash = null, $tokenHash = null, $expires = null)
 	{
 		$this->setUserId($userId);
-		$this->setHash($hash);
+		$this->setUserHash($userHash);
+        $this->setTokenHash($tokenHash);
 		$this->setExpires($expires);
 	}
     /**
@@ -58,7 +65,7 @@ class PersistentLogin
      * @param string $id The UUID of the {@link PersistentLogin}
      * @return PersistentLogin Returns itself
      */
-    protected function setId($id)
+    public function setId($id)
     {
         $this->id = $id;
         return $this;
@@ -77,30 +84,48 @@ class PersistentLogin
      * @param string $userId The UUID of the {@link User} the token is for
      * @return PersistentLogin Returns itself
      */
-    protected function setUserId($userId)
+    public function setUserId($userId)
     {
         $this->userId = $userId;
+        return $this;
+    }
+    /**
+     * Gets the value of userHash.
+     * @return string The hashed userId and user-agent
+     */
+    public function getUserHash()
+    {
+        return $this->userHash;
+    }
+    /**
+     * Sets the value of userHash.
+     * @param string $hash The hashed userId and user-agent
+     * @return PersistentLogin Returns itself
+     */
+    public function setUserHash($hash)
+    {
+        $this->userHash = $hash;
         return $this;
     }
     /**
      * Gets the value of hash.
      * @return string The hashed token
      */
-    public function getHash()
+    public function getTokenHash()
     {
-        return $this->hash;
+        return $this->tokenHash;
     }
     /**
      * Sets the value of hash.
      * @param string $hash The hashed token
      * @return PersistentLogin Returns itself
      */
-    protected function setHash($hash)
+    public function setTokenHash($hash)
     {
-        if (mb_strlen($hash) < 8) {
+        if ($hash !== null && mb_strlen($hash) < 8) {
             throw new \InvalidArgumentException('hash must be at least 8 characters in length and should be random');
         }
-        $this->hash = $hash;
+        $this->tokenHash = $hash;
         return $this;
     }
     /**
@@ -116,17 +141,20 @@ class PersistentLogin
      * @param \DateTime $expires Sets the expiry date for the token
      * @return PersistentLogin Returns itself
      */
-    protected function setExpires(\DateTime $expires)
+    public function setExpires($expires)
     {
-        $this->expires = $expires-format('Y-m-d H:i:s');
+        if (!$expires instanceof \DateTime) {
+            return;
+        }
+        $this->expires = $expires;
         return $this;
     }
     /**
-     * Checks if the hash passed in matches the one returned from the repository
+     * Checks if the tokenHash passed in matches the one returned from the repository
      * @return bool The result of testing the hash
      */
-    public function isHashValid($hash)
+    public function isTokenHashValid($hash)
     {
-    	return $this->expires > new DateTime() && hash_equals($this->hash, $hash);
+    	return $this->expires > new \DateTime() && hash_equals($this->tokenHash, $hash);
     }
 }

@@ -19,6 +19,7 @@ use Inachis\Component\CoreBundle\Form\Fields\SelectOptionGroupType;
 //use Inachis\Component\CoreBundle\Form\Fields\TableType;
 use Inachis\Component\CoreBundle\Form\Fields\TextType;
 use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
+use Inachis\Component\CoreBundle\Storage\Cookie;
 
 class AccountController extends AbstractController
 {
@@ -28,9 +29,7 @@ class AccountController extends AbstractController
      */
     public static function getSetup($request, $response, $service, $app)
     {
-        if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $response->redirect('/inadmin/dashboard')->send();
-        }
+        self::redirectIfAuthenticated($response);
         if (Application::getInstance()->getService('auth')->getUserManager()->getAllCount() > 0) {
             $response->redirect('/inadmin/signin')->send();
         }
@@ -120,24 +119,29 @@ class AccountController extends AbstractController
      */
     public static function getSignin($request, $response, $service, $app)
     {
-        // @todo get form structure from somewhere else
-        // pass CSRF token into form
-        if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            if (Application::getInstance()->getService('session')->get('user')->hasCredentialsExpired()) {
-                $response->redirect('/inadmin/change-password')->send();
-            }
-            $response->redirect('/inadmin/dashboard')->send();
-        }
+        self::redirectIfAuthenticated($response);
         if (Application::getInstance()->getService('auth')->getUserManager()->getAllCount() === 0) {
             $response->redirect('/setup')->send();
         }
+        // Check if user has cookies to indicate persistent sign-in
+        if (Application::getInstance()->getService('auth')->getSessionPersist($request->server()->get('HTTP_USER_AGENT'))) {
+            // move into function that will also allow redirect to same-domain referer
+            $response->redirect('/inadmin/')->send();
+        }
+        // Handle sign-in
         if ($request->method('post') && !empty($request->paramsPost()->get('loginUsername'))
                 && !empty($request->paramsPost()->get('loginPassword'))) {
             if (Application::getInstance()->getService('auth')->login(
                 $request->paramsPost()->get('loginUsername'),
                 $request->paramsPost()->get('loginPassword')
             )) {
-                $response->redirect('/inadmin/dashboard')->send();
+                if (!empty($request->paramsPost()->get('rememberMe')) && (bool) $request->paramsPost()->get('rememberMe')) {
+                    Application::getInstance()->getService('auth')->setSessionPersist(
+                        $request->server()->get('HTTP_USER_AGENT'),
+                        $request->server()->get('HTTP_HOST')
+                    );
+                }
+                $response->redirect('/inadmin/')->send();
             } else {
                 self::$errors['username'] = 'Authentication Failed.';
             }
@@ -213,9 +217,7 @@ class AccountController extends AbstractController
      */
     public static function getForgotPassword($request, $response, $service, $app)
     {
-        if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $response->redirect('/inadmin/dashboard')->send();
-        }
+        self::redirectIfNotAuthenticated($request, $response);
         $data = array(
             'form' => (new FormBuilder(array(
                 'action' => '/inadmin/forgot-password',
@@ -259,7 +261,7 @@ class AccountController extends AbstractController
     public static function getForgotPasswordSent($request, $response, $service, $app)
     {
         if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $response->redirect('/inadmin/dashboard')->send();
+            $response->redirect('/inadmin/')->send();
         }
         if (false) { // @todo if request contains errors then use
             return self::getForgotPassword($request, $response, $service, $app);
@@ -272,9 +274,7 @@ class AccountController extends AbstractController
      */
     public static function getAdminList($request, $response, $service, $app)
     {
-        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $response->redirect('/inadmin/signin')->send();
-        }
+        self::redirectIfNotAuthenticated($request, $response);
         $response->body('Show all admins');
     }
     /**
@@ -283,20 +283,16 @@ class AccountController extends AbstractController
      */
     public static function getAdminDetails($request, $response, $service, $app)
     {
-        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $response->redirect('/inadmin/signin')->send();
-        }
+        self::redirectIfNotAuthenticated($request, $response);
         $response->body('Show details of specific admin');
     }
     /**
-     * @Route("/inadmin/dashboard")
+     * @Route("@^/inadmin/?$")
      * @Method({"GET"})
      */
     public static function getAdminDashboard($request, $response, $service, $app)
     {
-        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $response->redirect('/inadmin/signin')->send();
-        }
+        self::redirectIfNotAuthenticated($request, $response);
         $pageManager = new PageManager(Application::getInstance()->getService('em'));
         $data = array(
             'session' => $_SESSION,
@@ -362,9 +358,7 @@ class AccountController extends AbstractController
      */
     public static function getAdminSettingsMain($request, $response, $service, $app)
     {
-        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $response->redirect('/inadmin/signin')->send();
-        }
+        self::redirectIfNotAuthenticated($request, $response);
         $response->body('Show settings page for signed in admin');
     }
 }
