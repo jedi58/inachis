@@ -17,12 +17,12 @@ class PersistentLogin
      * @ORM\GeneratedValue(strategy="UUID")
      * @var string
      */
-	protected $id;
+    protected $id;
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      * @var string The id of the {@link User}
      */
-	protected $userId;
+    protected $userId;
     /**
      * @ORM\Column(type="string", length=512, nullable=false)
      * @var string The hash of the user's Id and user-agent
@@ -32,26 +32,26 @@ class PersistentLogin
      * @ORM\Column(type="string", length=512, nullable=false)
      * @var string The hash of the user's token
      */
-	protected $tokenHash;
+    protected $tokenHash;
     /**
      * @ORM\Column(type="datetime")
      * @var string The expiry date of the current token
      */
-	protected $expires;
-	/**
-	 * Default constructor for {@link PersistentLogin}
+    protected $expires;
+    /**
+     * Default constructor for {@link PersistentLogin}
      * @param int $userId The ID of the user the token is for
      * @param string $userHash The hashed userId and user-agent
      * @param string $tokenHash The hashed token
      * @param DateTime $expires The expiry date for the token
-	 */
-	public function __construct($userId = -1, $userHash = null, $tokenHash = null, $expires = null)
-	{
-		$this->setUserId($userId);
-		$this->setUserHash($userHash);
+     */
+    public function __construct($userId = -1, $userHash = null, $tokenHash = null, $expires = null)
+    {
+        $this->setUserId($userId);
+        $this->setUserHash($userHash);
         $this->setTokenHash($tokenHash);
-		$this->setExpires($expires);
-	}
+        $this->setExpires($expires);
+    }
     /**
      * Gets the value of id.
      * @return int The ID of the {@link PersistentLogin}
@@ -155,6 +155,6 @@ class PersistentLogin
      */
     public function isTokenHashValid($hash)
     {
-    	return $this->expires > new \DateTime() && hash_equals($this->tokenHash, $hash);
+        return $this->expires > new \DateTime() && hash_equals($this->tokenHash, $hash);
     }
 }

@@ -65,30 +65,30 @@ class Authentication
      */
     public function getSessionPersist($userAgent)
     {
-    	if (empty(Cookie::get('NX03')) || empty(Cookie::get('NX06'))) {
-    		return false;
-    	}
-    	$persistentLoginManager = new PersistentLoginManager(Application::getInstance()->getService('em'));
-    	$persistentLogin = $persistentLoginManager->validateTokenForUser(Cookie::get('NX03'), Cookie::get('NX06'));
-    	if (!empty($persistentLogin) && !empty($persistentLogin->getUserId())) {
-    		$userHash = hash(
-    			'sha512',
-				$persistentLogin->getUserId() . $userAgent
-			);
-			if ($persistentLogin->getUserHash() === $userHash) {
-				$user = $this->userManager->getById($persistentLogin->getUserId());
+        if (empty(Cookie::get('NX03')) || empty(Cookie::get('NX06'))) {
+            return false;
+        }
+        $persistentLoginManager = new PersistentLoginManager(Application::getInstance()->getService('em'));
+        $persistentLogin = $persistentLoginManager->validateTokenForUser(Cookie::get('NX03'), Cookie::get('NX06'));
+        if (!empty($persistentLogin) && !empty($persistentLogin->getUserId())) {
+            $userHash = hash(
+                'sha512',
+                $persistentLogin->getUserId() . $userAgent
+            );
+            if ($persistentLogin->getUserHash() === $userHash) {
+                $user = $this->userManager->getById($persistentLogin->getUserId());
                 Application::getInstance()->getService('em')->detach($user);
-				if (!empty($user) && !empty($user->getId())) {
-					Application::getInstance()->getService('session')->set('user', $user);
-					Application::getInstance()->getService('session')->regenerate();
+                if (!empty($user) && !empty($user->getId())) {
+                    Application::getInstance()->getService('session')->set('user', $user);
+                    Application::getInstance()->getService('session')->regenerate();
 
-					return true;
-				}
-			}
-    	}
-    	Cookie::delete('NX03');
-    	Cookie::delete('NX06');
-    	return false;
+                    return true;
+                }
+            }
+        }
+        Cookie::delete('NX03');
+        Cookie::delete('NX06');
+        return false;
     }
     /**
      * Sets a cookie on the user's machine to indicate their session should persist
@@ -97,24 +97,24 @@ class Authentication
      */
     public function setSessionPersist($userAgent, $domain)
     {
-    	$userHash = hash(
-			'sha512',
-			Application::getInstance()->getService('session')->get('user')->getId() . $userAgent
-		);
-		$tokenHash = hash(
-			'sha512',
-			random_bytes(32)
-		);
-		$persistentLoginManager = new PersistentLoginManager(Application::getInstance()->getService('em'));
-		$persistentLogin = $persistentLoginManager->create(array(
-			'userId' => (string) Application::getInstance()->getService('session')->get('user')->getId(),
-			'userHash' => $userHash,
-			'tokenHash' => $tokenHash,
-			'expires' => new \DateTime('+1 year')
-		));
-		$persistentLoginManager->save($persistentLogin)->flush();
-    	Cookie::set('NX03', $userHash, Cookie::ONE_YEAR);
-		Cookie::set('NX06', $tokenHash, Cookie::ONE_YEAR);
+        $userHash = hash(
+            'sha512',
+            Application::getInstance()->getService('session')->get('user')->getId() . $userAgent
+        );
+        $tokenHash = hash(
+            'sha512',
+            random_bytes(32)
+        );
+        $persistentLoginManager = new PersistentLoginManager(Application::getInstance()->getService('em'));
+        $persistentLogin = $persistentLoginManager->create(array(
+            'userId' => (string) Application::getInstance()->getService('session')->get('user')->getId(),
+            'userHash' => $userHash,
+            'tokenHash' => $tokenHash,
+            'expires' => new \DateTime('+1 year')
+        ));
+        $persistentLoginManager->save($persistentLogin)->flush();
+        Cookie::set('NX03', $userHash, Cookie::ONE_YEAR);
+        Cookie::set('NX06', $tokenHash, Cookie::ONE_YEAR);
     }
     /**
      * Terminates the current user session
