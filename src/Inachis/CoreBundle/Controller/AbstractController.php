@@ -2,6 +2,7 @@
 
 namespace Inachis\Component\CoreBundle\Controller;
 
+use Inachis\Component\CoreBundle\Application;
 use Inachis\Component\CoreBundle\Form\FormBuilder;
 use Inachis\Component\CoreBundle\Form\Fields\ButtonType;
 use Inachis\Component\CoreBundle\Form\Fields\ChoiceType;
@@ -22,10 +23,10 @@ use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
  */
 abstract class AbstractController
 {
-	/**
-	 * @var mixed[] Variables to be accessible to Twig templates
-	 */
-	protected static $data = array();
+    /**
+     * @var mixed[] Variables to be accessible to Twig templates
+     */
+    protected static $data = array();
     /**
      * @var string[] Array of any error messages for the current view
      */
