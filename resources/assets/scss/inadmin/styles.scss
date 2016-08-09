@@ -1,14 +1,20 @@
 @import '../shared/_reset';
 
+$information-small: "screen and (min-width: 320px)";
+$information-medium: "screen and (min-width: 480px)";
+$information-large: "screen and (min-width: 480px)";
 
-// Admin Container Variables
 $admin__container--collapsed-width: 40px;
 $admin__container--expanded-width: 130px;
 $admin__container-button--hover: #0cf;
 $admin__container-add-button: #069;
 $admin__search_color: #ccc;
 
+$admin__tabs__highlighted-color: #069;
+$admin__tabs-background: #fff;
+
 body {
+	//background: #eee;
 	font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
 }
 
@@ -16,182 +22,247 @@ body {
 @import '../shared/_8cols';
 @import '../shared/_3cols';
 
+@import '../shared/_forms';
+	@import '_form__signin';
+	@import '_form__setup';
+	@import '../shared/_buttons';
+@import '_tabs';
+@import '_badge';
+
+@import '_user-menu';
+
+@import '_editor';
+
+
 .admin__container {
-	background-color: #333;
-	color: #fff;
-	height: 100%;
-	left: 0;
-	position: fixed;
-	overflow: hidden;
-	top: 0;
+	left: 5px;
+	position: absolute;
+	top: 5px;
 
-	&.admin__container--collapsed {
-		width: $admin__container--collapsed-width;
-
-		ul {
-			li {
-				margin: 5px auto;
-				padding: 5px;
-			}
-			span {
-				display: none;
-			}
-			ul {
-				display: none;
-			}
-		}
-
-		.admin__nav-collapse {
-			display: none;
-		}
-		li.admin__nav-expand {
-			margin-top: 50px;
+	.admin__nav-main__link {
+		a, a:visited {
+			border: 1px solid #999;
+			border-radius: 5px;
+			color: #999;
+			padding: 5px;
+			text-decoration: none;
+			text-transform: uppercase;
 		}
 	}
 
-	&.admin__container--expanded {
-		width: $admin__container--expanded-width;
-
-		ul {
-			li {
-				margin: 10px 5px;
-				text-align: left;
-
-				span {
-    				display: inline-block;
-    				height: 1.8em;
-    				padding-left: 5px;
-					vertical-align: middle;
-    			}
-			}
-
-			ul {
-				display: none;
-			}
-		}
-
-		.admin__nav-expand {
-			display: none;
-		}
-		li.admin__nav-collapse {
-			margin-top: 50px;
-		}
-
-		.button.admin__add-content {
-			padding: 10px;
-			vertical-align: middle;
-			width: 5em;
-
-			span {
-				display: inline-block;
-			}
-		}
+	.admin__nav-main__list, .admin__identity {
+		display: none;
 	}
 
-	.admin__identity {
-		height: 35px;
-		margin:0 auto 20px auto;
-		width: 50px;
-
-		span {
-			display: none;
-		}
-	}
-
-	a, a:visited {
-		color: #fff;
-		text-decoration: none;
-	}
-
-	a:hover {
-		color: $admin__container-button--hover;
-	}
-
-	li {
-		text-align: center;
-		vertical-align: middle;
-	}
-
-	ul, li {
+	.admin__nav-main__list {
 		list-style-type: none;
 		margin: 0;
 		padding: 0;
+
+		li {
+			margin: 0;
+			padding: 0;
+
+			a, a:visited {
+				background: #eee;
+				display: block;
+				padding: 3px 5px;
+			}
+
+			ul {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+		}
 	}
 
-	.button.admin__add-content {
-		background-color: $admin__container-add-button;
-		border: 1px solid darken($admin__container-add-button, 10%);
-		display: block;
-		margin:5px auto 50px auto;
-		padding: 0;
+	@media #{$information-medium} {
+		background-color: #333;
+		color: #fff;
+		height: 100%;
+		left: 0;
+		position: fixed;
+		//overflow: hidden;
+		top: 0;
+	
+		.admin__nav-main__list, .admin__identity {
+			display: block;
+		}
 
-		&:hover {
-			background-color: $admin__container-button--hover;
-			border: 1px solid $admin__container-add-button;
+		&.admin__container--collapsed {
+			width: $admin__container--collapsed-width;
+
+			ul {
+				li {
+					margin: 5px auto;
+					padding: 5px;
+				}
+				span {
+					display: none;
+				}
+				ul {
+					display: none;
+				}
+			}
+
+			.admin__identity {
+				height: 35px;
+				width: $admin__container--collapsed-width - 5;
+			}
+
+			.admin__nav-collapse {
+				display: none;
+			}
+			li.admin__nav-expand {
+				margin-top: 50px;
+			}
+
+			ul.admin__nav-new {
+				left: 40px;
+				top: 85px;
+			}
+		}
+
+		&.admin__container--expanded {
+			width: $admin__container--expanded-width;
+
+			ul {
+				li {
+					margin: 10px 5px;
+					text-align: left;
+					vertical-align: middle;
+
+					span {
+	    				display: inline-block;
+	    				height: 1.8em;
+	    				padding-left: 5px;
+						vertical-align: middle;
+	    			}
+				}
+
+				ul {
+					display: none;
+				}
+			}
+
+			.admin__identity {
+				height: 75px;
+				width: $admin__container--expanded-width - 5;
+			}
+
+			.admin__nav-expand {
+				display: none;
+			}
+			li.admin__nav-collapse {
+				margin-top: 50px;
+			}
+
+			.button.admin__add-content {
+				padding: 10px;
+				vertical-align: middle;
+				width: 5em;
+
+				span {
+					display: inline-block;
+				}
+			}
+
+			ul.admin__nav-new {
+				left: 130px;
+				top: 130px;
+			}
+		}
+	}
+}
+
+@import "_search";
+@import "_widget__posts";
+
+
+@media #{$information-medium} {
+	.mobile-only, .material-icons.mobile-only {
+		display: none;
+	}
+
+	.admin__container {
+		.admin__identity {
+			background: transparent url(../images/inachis.png) no-repeat 50% 50%;
+			background-size: contain;
+			display: block;
+			margin:0 auto 40px auto;
+
+			span {
+				display: none;
+			}
+		}
+
+		a, a:visited {
 			color: #fff;
+			text-decoration: none;
 		}
 
-		& span {
-			display: none;
-			height: auto;
-			margin-top: -10px;
-			padding: 0 0 0 10px;
+		a:hover {
+			color: $admin__container-button--hover;
+		}
+
+		li {
+			text-align: center;
+			vertical-align: middle;
+		}
+
+		ul, li {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		.button.admin__add-content {
+			background-color: $admin__container-add-button;
+			border: 1px solid darken($admin__container-add-button, 10%);
+			display: block;
+			margin:5px auto 50px auto;
+			padding: 0;
+
+			&:hover {
+				background-color: $admin__container-button--hover;
+				border: 1px solid $admin__container-add-button;
+				color: #fff;
+			}
+
+			& span {
+				display: none;
+				height: auto;
+				margin-top: -10px;
+				padding: 0 0 0 10px;
+			}
+		}
+
+		ul.admin__nav-new {
+			background-color: #333;
+			color: #fff;
+			position: absolute;
+			width: 10em;
+			z-index: 5;
+
+			li {
+				padding: 0 5px;
+
+				span {
+					display: inline-block;
+					height: 1.8em;
+					padding-left: 5px;
+					vertical-align: middle;
+					width: 5em;
+				}
+			}
 		}
 	}
+
+	.admin__body-container {
+		margin-left: $admin__container--collapsed-width + 15;
+		//padding-top:20px;
+	}
+
+	
 }
-
-.admin__body-container {
-	margin-left: $admin__container--collapsed-width;
-}
-
-.admin__search {
-	color: $admin__search_color;
-	padding: 10px 10px 20px 0;
-	text-align: right;
-
-	button {
-		display: none;
-	}
-
-	input {
-		border: 1px solid $admin__search_color;
-		color: darken($admin__search_color, 30%);
-		padding: 5px;
-	}
-
-	label {
-		vertical-align: middle;
-	}
-}
-
-
-.admin__user {
-	float: right;
-	margin: 8px 20px;
-
-	a, a:visited {
-		color: #666;
-		text-decoration: none;
-	}
-
-	img {
-		background-color: #fff;
-		border: 1px solid #aaa;
-		border-radius: 50%;
-		padding: 1px;
-	}
-
-	ul {
-		background-color: #eee;
-		border:1px solid #ccc;
-		display: none;
-		list-style-type: none;
-		position: absolute;
-		right: 5px;
-	}
-}
-
-
-@import '../shared/_forms';
-@import '_form__signin';
-@import '../shared/_buttons';

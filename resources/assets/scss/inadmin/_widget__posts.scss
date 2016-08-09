@@ -1,0 +1,35 @@
+.widget-posts {
+	div.ui-tabs-panel {
+		padding: 30px 20px 60px 20px;
+	}
+
+	ol.ui-widget-content {
+		list-style-type: none;
+
+		a, a:visited {
+			color: #069;
+			text-decoration: none;
+		}
+		li {
+			margin:25px 0 40px 0;
+		}
+		h2 {
+			font-size: 1.2em;
+			margin: 0;
+			padding: 0;
+		}
+		p {
+			color: #333;
+			line-height: 1.7em;
+			margin: 0;
+
+			&.date {
+				margin-top: 10px;
+				font-size: 0.85em;
+			}
+		}
+		span {
+			vertical-align: middle;
+		}
+	}
+}

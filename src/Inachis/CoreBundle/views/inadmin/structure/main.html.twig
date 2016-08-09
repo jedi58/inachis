@@ -33,7 +33,7 @@
 		<form method="post">
 			<label for="q" class="material-icons">search</label>
 			<input type="search" name="q" id="q" placeholder="search…" />
-			<button class="hidden" type="submit">search</button>
+			<button class="material-icons mobile-only" type="submit">search</button>
 		</form>
 	</section>
 {% endif %}
@@ -47,7 +47,8 @@
 		<h2><span>Inachis</span></h2>
 	</section>
 	<section class="admin__nav-main">
-		<ul>
+		<p class="admin__nav-main__link mobile-only"><a href="#admin__nav-list"><span>menu</span></a></p>
+		<ul class="admin__nav-main__list">
 			<li>
 				<a class="button admin__add-content" href="#new" title="Add new content"><i class="material-icons">edit</i><span> Add</span></a>
 				<ul class="admin__nav-new">

@@ -14,6 +14,9 @@ var InachisNavMenu = {
 		$('.admin__nav-expand a, .admin__nav-collapse a').click(function () {
 			$('.admin__container').toggleClass('admin__container--collapsed admin__container--expanded');
 		});
+		$('.admin__nav-main__link a').click(function() {
+			$('.admin__nav-main__list').toggle();
+		});
 	},
 
 	newNavMouseOut: function(e)
