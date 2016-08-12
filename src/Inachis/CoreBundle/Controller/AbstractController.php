@@ -69,4 +69,66 @@ abstract class AbstractController
     {
         self::$errors[$error] = (string) $message;
     }
+    /**
+     * TUsed when the request requires authentication; if the not authenticated
+     * then the user's requested page URL is stored in the session and then
+     * redirected to the sign-in page. Otherwise, it also tests if their password
+     * has expired
+     * @param Request $request The request object from the router
+     * @param Response $response The response object from the router
+     */
+    public static function redirectIfNotAuthenticated($request, $response)
+    {
+        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            $referer = parse_url($request->server()->get('HTTP_REFERER'));
+            if (!empty($referer) && (empty($referer['host']) || $referer['host'] == $request->server()->get('HTTP_HOST'))) {
+                Application::getInstance()->requireSessionService()->set('referer', $request->server()->get('HTTP_REFERER'));
+            }
+            $response->redirect('/inadmin/signin')->send();
+        }
+        self::redirectIfPasswordExpired($request, $response);
+    }
+    /**
+     * If the user is trying to access a page such as sign-in but is already authenticated
+     * they will be redirected to the dashboard
+     * @param Response $response The response object from the router
+     */
+    public static function redirectIfAuthenticated($response)
+    {
+        if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+            $response->redirect('/inadmin/')->send();
+        }
+    }
+    /**
+     * If the user's password has expired their current request URL will be stored in the session
+     * and will then be redirected to change-password
+     * @param Request $request The request object from the router
+     * @param Response $response The response object from the router
+     */
+    public static function redirectIfPasswordExpired($request, $response)
+    {
+        if (Application::getInstance()->getService('session')->get('user')->hasCredentialsExpired()) {
+            $referer = parse_url($request->server()->get('HTTP_REFERER'));
+            if (!empty($referer) &&
+                (empty($referer['host']) || $referer['host'] == $request->server()->get('HTTP_HOST')) &&
+                strpos($referer, 'change-password') === false
+            ) {
+                Application::getInstance()->requireSessionService()->set('referer', $request->server()->get('HTTP_REFERER'));
+            }
+            $response->redirect('/inadmin/change-password')->send();
+        }
+    }
+    /**
+     * If the user has a referer set they will be redirected to it otherwise they will be redirected to
+     * the dashboard
+     * @param Response $response The response object from the router
+     */
+    public static function redirectToRefererOrDashboard($response)
+    {
+        $referer = Application::getInstance()->requireSessionService()->get('referer');
+        if (!empty($referer)) {
+            $response->redirect($referer)->send();
+        }
+        $response->redirect('/inadmin/')->send();
+    }
 }

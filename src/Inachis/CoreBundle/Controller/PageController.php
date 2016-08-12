@@ -37,9 +37,7 @@ class PageController extends AbstractController
 
     public static function getPostAdmin($request, $response, $service, $app)
     {
-        if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $response->redirect('/inadmin/signin')->send();
-        }
+        self::redirectIfNotAuthenticated($request, $response);
         $urlManager = new UrlManager(Application::getInstance()->getService('em'));
         // Confirm URL is for existing content otherwise redirect
         $url = $urlManager->getByUrl($request->server()->get('REQUEST_URI'));
@@ -160,9 +158,12 @@ exit;
         $response->body('Page controller');
         //throw \Klein\Exceptions\HttpException::createFromCode(404);
     }
-
+    /**
+     * @Route("/inadmin/page/[:pageTitle]")
+     * @Method({"GET", "POST"})
+     */
     public static function getPageAdmin($request, $response, $service, $app)
     {
-        $response->body('Page admin controller');
+        self::redirectIfNotAuthenticated($request, $response);
     }
 }
