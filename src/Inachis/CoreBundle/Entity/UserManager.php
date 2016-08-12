@@ -64,6 +64,17 @@ class UserManager extends AbstractManager
         $this->em->flush();
     }
     /**
+     * Fetches a specific entity from the repository by the given Id
+     * @param string The Id of the entity to be returned
+     * @return mixed The returned entity
+     */
+    public function getById($id)
+    {
+        $user = $this->getRepository()->find($id);
+        $this->decryptFields($user);
+        return $user;
+    }
+    /**
      * Returns a {@link User} based on the specified username
      * @param string $username The username of the {@link User} to return
      * @return User The retrieved user object
