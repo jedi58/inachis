@@ -166,4 +166,13 @@ exit;
     {
         self::redirectIfNotAuthenticated($request, $response);
     }
+    /**
+     * @Route("/inadmin/search/results")
+     * @Method({"POST"})
+     */
+    public static function getSearchResults($request, $response, $service, $app)
+    {
+        self::redirectIfNotAuthenticated($request, $response);
+        $response->body('Show settings page for signed in admin');
+    }
 }
