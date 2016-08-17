@@ -30,6 +30,11 @@
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
 	},
 	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/search/results",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getSearchResults"
+	},
+	{
 		"methods": [ "GET", "POST" ],
 		"path": "/inadmin/signin",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getSignin"
@@ -59,11 +64,11 @@
 		"path": "/inadmin/user/[a:userId]",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDetails"
 	},
-        {
-                "methods": [ "GET" ],
-                "path": "@^/inadmin/?$",
-                "action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDashboard"
-        },
+    {
+        "methods": [ "GET" ],
+        "path": "@^/inadmin/?$",
+        "action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDashboard"
+    },
 	{
 		"methods": [ "GET", "POST" ],
 		"path": "/inadmin/settings",
