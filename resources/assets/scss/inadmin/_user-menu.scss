@@ -2,8 +2,11 @@
 	float: right;
 	margin: 8px 20px;
 
-	a, a:visited {
+	a, a:visited, button {
+		background-color: transparent;
+		border: none;
 		color: #666;
+		cursor: pointer;
 		text-decoration: none;
 	}
 
@@ -15,14 +18,17 @@
 	}
 
 	ul {
-		background-color: #eee;
-		border:1px solid #ccc;
+		@include box-shadow(10px, 10px, 39px, -12px, rgba(0,0,0,0.61));
+
+		background-color: #fff;
+		border: 1px solid #ccc;
 		display: none;
+		font-size: 0.85em;
 		list-style-type: none;
 		padding: 0;
 		position: absolute;
-		right: 5px;
-		top: 40px;
+		right: 10px;
+		top: 45px;
 
 		li {
 			padding: 5px;
@@ -32,5 +38,16 @@
 				border-top: 1px solid #ccc;
 			}
 		}
+	}
+
+	.admin__user__notifications {
+	    background-color: red;
+	    border-radius: 50%;
+	    color: #fff;
+	    font-size: 0.7em;
+	    right: 50px;
+	    padding: 2px 5px;
+	    position: absolute;
+	    top: 35px;
 	}
 }

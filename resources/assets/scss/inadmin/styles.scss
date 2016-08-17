@@ -5,18 +5,20 @@ $information-medium: "screen and (min-width: 480px)";
 $information-large: "screen and (min-width: 480px)";
 
 $admin__container--collapsed-width: 40px;
-$admin__container--expanded-width: 130px;
+$admin__container--expanded-width: 150px;
 $admin__container-button--hover: #0cf;
 $admin__container-add-button: #069;
-$admin__search_color: #ccc;
+$admin__search_color: gray;
 
 $admin__tabs__highlighted-color: #069;
 $admin__tabs-background: #fff;
 
 body {
-	//background: #eee;
 	font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
+	overflow-x: hidden;
 }
+
+@import 'mixins.scss';
 
 @import '../shared/_col';
 @import '../shared/_8cols';
@@ -26,20 +28,38 @@ body {
 	@import '_form__signin';
 	@import '_form__setup';
 	@import '../shared/_buttons';
+
 @import '_tabs';
 @import '_badge';
-
-@import '_user-menu';
-
 @import '_editor';
+
+@import "_widget__posts";
+
+
+.admin__header {
+	border-bottom: 1px solid #eee;
+
+	@import '_user-menu';
+	@import "_search";
+}
 
 
 .admin__container {
-	left: 5px;
 	position: absolute;
 	top: 5px;
 
+	.admin__nav-main {
+		height: 100%;
+	}
+
+	&.admin__container--expanded {
+		height: 100%;
+		width: 80%;
+	}
+
 	.admin__nav-main__link {
+		margin-left: 10px;
+
 		a, a:visited {
 			border: 1px solid #999;
 			border-radius: 5px;
@@ -55,25 +75,64 @@ body {
 	}
 
 	.admin__nav-main__list {
+		background: #333;
+		height: 100%;
 		list-style-type: none;
+		font-size: 0.8em;
 		margin: 0;
 		padding: 0;
+		text-transform: uppercase;
+		
+		a, a:visited {
+			color: #fff;
+			display: block;
+			padding: 5px;
+			text-decoration: none;
+		}
+		a:hover {
+			color: $admin__container-button--hover;
+		}
 
-		li {
-			margin: 0;
-			padding: 0;
+		i {
+			vertical-align: middle;
+		}
 
-			a, a:visited {
-				background: #eee;
-				display: block;
-				padding: 3px 5px;
+		span {
+			margin-left: 10px;
+			vertical-aign: middle;
+		}
+
+		ul {
+			background: #222;
+			list-style-type: none;
+			display: none;
+		}
+
+		.button.admin__add-content {
+			display: block;
+			margin-bottom: 20px;
+
+			@media #{$information-medium} {
+				background-color: $admin__container-add-button;
+				border: 1px solid darken($admin__container-add-button, 10%);
+				margin:5px auto 50px auto;
+
+				&:hover {
+					background-color: $admin__container-button--hover;
+					border: 1px solid $admin__container-add-button;
+					color: #fff;
+				}
+
+				& span {
+					display: none;
+					height: auto;
+					margin-top: -10px;
+					padding: 0 0 0 10px;
+				}
 			}
-
-			ul {
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
+		}
+		.admin__nav-expand, .admin__nav-collapse {
+			display: none;
 		}
 	}
 
@@ -111,8 +170,8 @@ body {
 				width: $admin__container--collapsed-width - 5;
 			}
 
-			.admin__nav-collapse {
-				display: none;
+			.admin__nav-expand {
+				display: block;
 			}
 			li.admin__nav-expand {
 				margin-top: 50px;
@@ -151,8 +210,8 @@ body {
 				width: $admin__container--expanded-width - 5;
 			}
 
-			.admin__nav-expand {
-				display: none;
+			.admin__nav-collapse {
+				display: block;
 			}
 			li.admin__nav-collapse {
 				margin-top: 50px;
@@ -161,10 +220,11 @@ body {
 			.button.admin__add-content {
 				padding: 10px;
 				vertical-align: middle;
-				width: 5em;
+				width: 7em;
 
 				span {
 					display: inline-block;
+					vertical-align: middle;
 				}
 			}
 
@@ -175,9 +235,6 @@ body {
 		}
 	}
 }
-
-@import "_search";
-@import "_widget__posts";
 
 
 @media #{$information-medium} {
@@ -197,46 +254,25 @@ body {
 			}
 		}
 
-		a, a:visited {
-			color: #fff;
-			text-decoration: none;
-		}
+		.admin__nav-main__list {
+			li {
+				text-align: center;
+				vertical-align: middle;
 
-		a:hover {
-			color: $admin__container-button--hover;
-		}
-
-		li {
-			text-align: center;
-			vertical-align: middle;
-		}
-
-		ul, li {
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
-		}
-
-		.button.admin__add-content {
-			background-color: $admin__container-add-button;
-			border: 1px solid darken($admin__container-add-button, 10%);
-			display: block;
-			margin:5px auto 50px auto;
-			padding: 0;
-
-			&:hover {
-				background-color: $admin__container-button--hover;
-				border: 1px solid $admin__container-add-button;
-				color: #fff;
+				a, a:visited {
+					color: #fff;
+					text-decoration: none;
+				}
 			}
 
-			& span {
-				display: none;
-				height: auto;
-				margin-top: -10px;
-				padding: 0 0 0 10px;
+			ul, li {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
 			}
 		}
+
+		
 
 		ul.admin__nav-new {
 			background-color: #333;
@@ -263,6 +299,4 @@ body {
 		margin-left: $admin__container--collapsed-width + 15;
 		//padding-top:20px;
 	}
-
-	
 }
