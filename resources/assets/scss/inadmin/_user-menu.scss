@@ -21,7 +21,7 @@
 		@include box-shadow(10px, 10px, 39px, -12px, rgba(0,0,0,0.61));
 
 		background-color: #fff;
-		border: 1px solid #ccc;
+		border: 1px solid #eee;
 		display: none;
 		font-size: 0.85em;
 		list-style-type: none;
@@ -35,7 +35,7 @@
 			text-align: right;
 
 			&.divider {
-				border-top: 1px solid #ccc;
+				border-top: 1px solid #eee;
 			}
 		}
 	}
