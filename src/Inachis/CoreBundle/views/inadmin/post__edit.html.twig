@@ -1,0 +1,92 @@
+{% extends "admin__structure__main.html.twig" %}
+{% block content %}
+
+<form action="/inadmin/post/new" method="post" class="form form__post">
+	<div class="col span_8_of_8 ui-tabbed">
+		<ul>
+			<li>
+				<a href="#post__edit">Content</a>
+			</li>
+			<li>
+				<a href="#post__properties">Properties</a>
+			</li>
+		</ul>
+		<fieldset id="post__edit">
+			<legend>Edit Post</legend>
+			<p>
+				<a class="material-icons" href="#post-link__edit">link</a> 
+				<label for="title">Title</label>
+				<input id="title" name="title" type="text" autofocus class="" placeholder="e.g. My First Blog Post" required/>
+			</p>
+			<p class="post__link__edit">
+				<label for="url">URL</label>
+				{{ settings.domain }}/<input id="url" name="url" type="url" />
+			</p>
+			<p>
+				<label for="subTitle">Sub-title</label>
+				<input id="subTitle" name="subTitle" placeholder="(optional)" type="text" class=""/>
+			</p>
+			<p>
+				<textarea name="content" name="content"></textarea>
+			</p>
+		</fieldset>
+
+		<fieldset id="post__properties">
+			<legend>Properties</legend>
+			<p>
+				<label for="visibility">Visibility</label>
+				<span class="switch-wrapper">
+					<input class="ui-switch" data-label-off="private" data-label-on="public" id="visibility" name="visibility" type="checkbox" />
+				</span>
+			</p>
+			<p>
+				<label for="publishDate">Publish{% if post.publishDate is not empty and date(post.publishDate) <= date() %}ed{% endif %}</label>
+
+				<span>immediately</span>
+				<span id="post__schedule__timed">
+					<span> on </span>
+					<input id="publishDate" name="publishDate__date" value="{{ post.publishDate }}" type="text" />
+					<span> at </span>
+					<input id="publishDate__time" name="publishDate__time" value="{{ post.publishDate }}" type="time" />
+				</span>
+
+				<a class="material-icons" href="#post__schedule__timed">schedule</a>
+			</p>
+			<p>
+				<label for="tags">Tags</label>
+				<select class="js-select" id="tags" name="tags" multiple>
+				</select>
+			</p>
+			<p>Categories</p>
+			<p>Featured image</p>
+			<p>Location</p>
+			<p>Sharing</p>
+		</fieldset>
+	</div>
+	<div class="fixed-bottom-bar">
+		<p>
+			<button type="submit" class="button button--positive">Save</button>
+			<button type="submit" class="button button--info">Publish</button>
+			<button type="submit" class="button button--negative">Delete</button>
+		</p>
+	</div>
+</form>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<link rel="stylesheet" href="/inadmin/assets/css/jquery.switchButton.css">
+<link rel="stylesheet" href="/inadmin/assets/css/jquery.datetimepicker.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script src="/inadmin/assets/js/jquery.switchButton.js"></script>
+<script src="/inadmin/assets/js/jquery.datetimepicker.full.min.js"></script>
+<script>
+var simplemde = new SimpleMDE({
+	element: $("#content")[0],
+	autosave: {
+		enabled: true,
+		uniqueId: '{% if post.id is not empty %}{{ post.id }}{% else %}new-content-{{ session.user.id }}-{{ date()|date('Ymd') }}{% endif %}'
+	},
+	forceSync: true
+});
+</script>
+
+{% endblock content %}
