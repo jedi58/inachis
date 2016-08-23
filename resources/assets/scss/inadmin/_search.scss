@@ -15,6 +15,7 @@
 		padding: 7px;
 		text-align: right;
 		vertical-align: middle;
+		width: 10em;
 
 		&:focus, &:active {
 			border-bottom-color: $admin__search_color;

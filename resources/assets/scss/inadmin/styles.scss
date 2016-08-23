@@ -33,20 +33,33 @@ body {
 @import '_badge';
 @import '_editor';
 
-@import "_widget__posts";
+@import '_widget__posts';
 
 
 .admin__header {
 	border-bottom: 1px solid #eee;
 
 	@import '_user-menu';
-	@import "_search";
+	@import '_search';
 }
 
+@import '_post__edit';
+
+
+.switch-wrapper {
+	display: inline-block;
+	position: relative;
+	top: 3px;
+
+	div {
+		clear: none;
+	}
+}
 
 .admin__container {
 	position: absolute;
 	top: 5px;
+	z-index: 1000;
 
 	.admin__nav-main {
 		height: 100%;
@@ -298,5 +311,21 @@ body {
 	.admin__body-container {
 		margin-left: $admin__container--collapsed-width + 15;
 		//padding-top:20px;
+	}
+}
+
+
+
+.fixed-bottom-bar {
+	background: #eee;
+	border-top: 1px solid #ddd;
+	bottom: 0;
+	padding-left: 20px;
+	position: fixed;
+	width: 100%;
+	z-index: 999;
+
+	@media #{$information-medium} {
+		left: $admin__container--collapsed-width;
 	}
 }

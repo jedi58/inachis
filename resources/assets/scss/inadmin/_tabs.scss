@@ -2,6 +2,10 @@
 	background-color: $admin__tabs-background;
 	clear: both;
 
+	fieldset {
+		clear: both;
+	}
+
 	ol, div {
 		clear: left;
 	}

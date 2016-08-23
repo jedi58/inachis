@@ -2,6 +2,18 @@
 	float: right;
 	margin: 8px 20px;
 
+	a[href="#admin__user__options"] {
+		&:after {
+		    content: "";
+		    border-style: solid;
+		    border-width: 5px 5px 0 5px;
+		    border-color: #aaa transparent transparent transparent;
+		    left: 3em;
+		    position: relative;
+		    top: -1.25em;
+		}
+	}
+
 	a, a:visited, button {
 		background-color: transparent;
 		border: none;
