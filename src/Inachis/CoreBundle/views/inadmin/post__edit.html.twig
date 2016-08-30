@@ -40,33 +40,31 @@
 				</span>
 			</p>
 			<p>
-				<label for="publishDate">Publish{% if post.publishDate is not empty and date(post.publishDate) <= date() %}ed{% endif %}</label>
-
-				<span>immediately</span>
+				<label for="publishDate">
+					Publish{% if post.publishDate is not empty and date(post.publishDate) <= date() %}ed{% endif %} on
+				</label>
 				<span id="post__schedule__timed">
-					<span> on </span>
-					<input id="publishDate" name="publishDate__date" value="{{ post.publishDate }}" type="text" />
-					<span> at </span>
-					<input id="publishDate__time" name="publishDate__time" value="{{ post.publishDate }}" type="time" />
+					<input id="publishDate" name="publishDate__date" value="{{ post.publishDate|date('Y/m/d H:i') }}" type="text" />
 				</span>
-
-				<a class="material-icons" href="#post__schedule__timed">schedule</a>
 			</p>
 			<p>
 				<label for="tags">Tags</label>
-				<select class="js-select" id="tags" name="tags" multiple>
+				<select class="js-select" data-tags="true" id="tags" name="tags" multiple>
 				</select>
 			</p>
 			<p>Categories</p>
 			<p>Featured image</p>
-			<p>Location</p>
+			<p>
+				<label for="latlong">Location</label>
+				<input class="ui-map" data-google-key="{{ settings.googleMaps }}" id="latlong" name="latlong" type="hidden" value="{{ post.latlong }}" />
+			</p>
 			<p>Sharing</p>
 		</fieldset>
 	</div>
 	<div class="fixed-bottom-bar">
 		<p>
 			<button type="submit" class="button button--positive">Save</button>
-			<button type="submit" class="button button--info">Publish</button>
+			<button type="submit" class="button button--info">{% if post.publishDate > date() %}Schedule{% else %}Publish{% endif %}</button>
 			<button type="submit" class="button button--negative">Delete</button>
 		</p>
 	</div>
@@ -88,5 +86,4 @@ var simplemde = new SimpleMDE({
 	forceSync: true
 });
 </script>
-
 {% endblock content %}
