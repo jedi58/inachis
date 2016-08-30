@@ -79,12 +79,15 @@ abstract class AbstractController
      */
     public static function redirectIfNotAuthenticated($request, $response)
     {
+        if ($response->isLocked()) {
+            return;
+        }
         if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $referer = parse_url($request->server()->get('HTTP_REFERER'));
+            $referer = parse_url($request->server()->get('REQUEST_URI'));
             if (!empty($referer) && (empty($referer['host']) || $referer['host'] == $request->server()->get('HTTP_HOST'))) {
-                Application::getInstance()->requireSessionService()->set('referer', $request->server()->get('HTTP_REFERER'));
+                Application::getInstance()->requireSessionService()->set('referer', $request->server()->get('REQUEST_URI'));
             }
-            $response->redirect('/inadmin/signin')->send();
+            return $response->redirect('/inadmin/signin')->send();
         }
         self::redirectIfPasswordExpired($request, $response);
     }
@@ -95,6 +98,9 @@ abstract class AbstractController
      */
     public static function redirectIfAuthenticated($response)
     {
+        if ($response->isLocked()) {
+            return;
+        }
         if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
             $response->redirect('/inadmin/')->send();
         }
@@ -107,6 +113,9 @@ abstract class AbstractController
      */
     public static function redirectIfPasswordExpired($request, $response)
     {
+        if ($response->isLocked()) {
+            return;
+        }
         if (Application::getInstance()->getService('session')->get('user')->hasCredentialsExpired()) {
             $referer = parse_url($request->server()->get('HTTP_REFERER'));
             if (!empty($referer) &&
@@ -125,9 +134,12 @@ abstract class AbstractController
      */
     public static function redirectToRefererOrDashboard($response)
     {
+        if ($response->isLocked()) {
+            return;
+        }
         $referer = Application::getInstance()->requireSessionService()->get('referer');
         if (!empty($referer)) {
-            $response->redirect($referer)->send();
+            return $response->redirect($referer)->send();
         }
         $response->redirect('/inadmin/')->send();
     }

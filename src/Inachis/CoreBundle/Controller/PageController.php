@@ -45,7 +45,7 @@ class PageController extends AbstractController
             '/\/?inadmin\/(post|page)\/new\/?/',
             $request->server()->get('REQUEST_URI')
         )) {
-            $response->redirect(sprintf(
+            return $response->redirect(sprintf(
                 '/inadmin/%s/new',
                 1 === preg_match(
                     '/\/?[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*/',

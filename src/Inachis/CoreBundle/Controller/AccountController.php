@@ -31,7 +31,7 @@ class AccountController extends AbstractController
     {
         self::redirectIfAuthenticated($response);
         if (Application::getInstance()->getService('auth')->getUserManager()->getAllCount() > 0) {
-            $response->redirect('/inadmin/signin')->send();
+            return $response->redirect('/inadmin/signin')->send();
         }
         if ($request->method('post') && !empty($request->paramsPost()->get('username')) && !empty($request->paramsPost()->get('password'))) {
             // @todo add code for saving site title and URL
@@ -43,8 +43,11 @@ class AccountController extends AbstractController
                     'email' => $request->paramsPost()->get('email')
                 )
             )) {
-                $response->redirect('/inadmin/signin')->send();
+                return $response->redirect('/inadmin/signin')->send();
             }
+        }
+        if ($response->isLocked()) {
+            return;
         }
         $data = array(
             'form' => (new FormBuilder(array(
@@ -121,12 +124,14 @@ class AccountController extends AbstractController
     {
         self::redirectIfAuthenticated($response);
         if (Application::getInstance()->getService('auth')->getUserManager()->getAllCount() === 0) {
-            $response->redirect('/setup')->send();
+            return $response->redirect('/setup')->send();
         }
         // Check if user has cookies to indicate persistent sign-in
         if (Application::getInstance()->getService('auth')->getSessionPersist($request->server()->get('HTTP_USER_AGENT'))) {
-            // move into function that will also allow redirect to same-domain referer
-            $response->redirect('/inadmin/')->send();
+            return self::redirectToRefererOrDashboard($response);
+        }
+        if ($response->isLocked()) {
+            return;
         }
         // Handle sign-in
         if ($request->method('post') && !empty($request->paramsPost()->get('loginUsername'))
@@ -141,7 +146,7 @@ class AccountController extends AbstractController
                         $request->server()->get('HTTP_HOST')
                     );
                 }
-                $response->redirect('/inadmin/')->send();
+                return $response->redirect('/inadmin/')->send();
             } else {
                 self::$errors['username'] = 'Authentication Failed.';
             }
@@ -218,6 +223,9 @@ class AccountController extends AbstractController
     public static function getForgotPassword($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
+        if ($response->isLocked()) {
+            return;
+        }
         $data = array(
             'form' => (new FormBuilder(array(
                 'action' => '/inadmin/forgot-password',
@@ -266,6 +274,9 @@ class AccountController extends AbstractController
         if (false) { // @todo if request contains errors then use
             return self::getForgotPassword($request, $response, $service, $app);
         }
+        if ($response->isLocked()) {
+            return;
+        }
         $response->body($app->twig->render('admin__forgot-password-sent.html.twig', array()));
     }
     /**
@@ -275,6 +286,9 @@ class AccountController extends AbstractController
     public static function getAdminList($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
+        if ($response->isLocked()) {
+            return;
+        }
         $response->body('Show all admins');
     }
     /**
@@ -284,6 +298,9 @@ class AccountController extends AbstractController
     public static function getAdminDetails($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
+        if ($response->isLocked()) {
+            return;
+        }
         $response->body('Show details of specific admin');
     }
     /**
@@ -293,6 +310,9 @@ class AccountController extends AbstractController
     public static function getAdminDashboard($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
+        if ($response->isLocked()) {
+            return;
+        }
         $pageManager = new PageManager(Application::getInstance()->getService('em'));
         $data = array(
             'session' => $_SESSION,
@@ -359,6 +379,9 @@ class AccountController extends AbstractController
     public static function getAdminSettingsMain($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
+        if ($response->isLocked()) {
+            return;
+        }
         $response->body('Show settings page for signed in admin');
     }
 }
