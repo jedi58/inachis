@@ -65,11 +65,11 @@ $(document).ready(function() {
 			checked: this.checked,
 			clear: true
 		};
-		if ($(this).attr('data-labelOn')) {
-			$properties.on_label = $(this).attr('data-labelOn');
+		if ($(this).attr('data-label-on')) {
+			$properties.on_label = $(this).attr('data-label-on');
 		}
-		if ($(this).attr('data-labelOff')) {
-			$properties.off_label = $(this).attr('data-labelOff');
+		if ($(this).attr('data-label-off')) {
+			$properties.off_label = $(this).attr('data-label-off');
 		}
 		$(this).switchButton($properties);
 	});
