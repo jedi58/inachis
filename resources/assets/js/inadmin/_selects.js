@@ -1,4 +1,17 @@
 $(document).ready(function() {
+	$('.ui-toggle').each(function()
+	{
+		var targetElement = $(this).attr('data-target'),
+			targetDefaultState = $(this).attr('data-target-state');
+		if (targetDefaultState === 'hidden') {
+			$(targetElement).hide();
+		}
+	});
+	$('.ui-toggle').on('click', function(event)
+	{
+		$($(this).attr('data-target')).toggle();
+	});
+
 	// https://select2.github.io/examples.html
 	$('.js-select').each(function ()
 	{
