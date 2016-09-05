@@ -1,3 +1,5 @@
+$admin__user__notification__colour: #b01c3f;
+
 .admin__user {
 	float: right;
 	margin: 8px 20px;
@@ -43,21 +45,36 @@
 		top: 45px;
 
 		li {
-			padding: 5px;
 			text-align: right;
 
 			&.divider {
 				border-top: 1px solid #eee;
 			}
+
+			a, a:visited, button, p {
+				padding: 5px;
+			}
+
+			a, a:visited{
+				display: block;
+			}
+
+			a:hover, button:hover {
+				background-color: #eee;
+			}
+
+			span.material-icons {
+				vertical-align: middle;
+			}
 		}
 	}
 
 	.admin__user__notifications {
-	    background-color: red;
+	    background-color: $admin__user__notification__colour;
 	    border-radius: 50%;
 	    color: #fff;
 	    font-size: 0.7em;
-	    right: 50px;
+	    right: 65px;
 	    padding: 2px 5px;
 	    position: absolute;
 	    top: 35px;
