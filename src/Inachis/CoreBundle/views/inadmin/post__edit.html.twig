@@ -14,20 +14,20 @@
 		<fieldset id="post__edit">
 			<legend>Edit Post</legend>
 			<p>
-				<a class="material-icons" href="#post-link__edit">link</a> 
+				<a class="material-icons ui-toggle" href="#" data-target=".post__link__edit" data-target-state="hidden">link</a> 
 				<label for="title">Title</label>
-				<input id="title" name="title" type="text" autofocus class="" placeholder="e.g. My First Blog Post" required/>
-			</p>
-			<p class="post__link__edit">
-				<label for="url">URL</label>
-				{{ settings.domain }}/<input id="url" name="url" type="url" />
+				<input id="title" name="title" type="text" autofocus placeholder="e.g. My First Blog Post" required value="{{ post.title }}" />
 			</p>
 			<p>
 				<label for="subTitle">Sub-title</label>
-				<input id="subTitle" name="subTitle" placeholder="(optional)" type="text" class=""/>
+				<input id="subTitle" name="subTitle" placeholder="(optional)" type="text" value="{{ post.subTitle }}" />
+			</p>
+			<p class="post__link__edit">
+				<label for="url">URL</label>
+				{{ settings.domain }}/<input class="" id="url" name="url" type="url" value="" />
 			</p>
 			<p>
-				<textarea name="content" name="content"></textarea>
+				<textarea name="content" name="content">{{ post.content }}</textarea>
 			</p>
 		</fieldset>
 
@@ -47,18 +47,32 @@
 					<input id="publishDate" name="publishDate__date" value="{{ post.publishDate|date('Y/m/d H:i') }}" type="text" />
 				</span>
 			</p>
+			<h3>Categories</h3>
+			<ul id="category-list" data-name="categories">
+			</ul>
 			<p>
 				<label for="tags">Tags</label>
 				<select class="js-select" data-tags="true" id="tags" name="tags" multiple>
 				</select>
 			</p>
-			<p>Categories</p>
-			<p>Featured image</p>
 			<p>
 				<label for="latlong">Location</label>
-				<input class="ui-map" data-google-key="{{ settings.googleMaps }}" id="latlong" name="latlong" type="hidden" value="{{ post.latlong }}" />
+				<input class="ui-map" data-google-key="{{ settings.google.key }}" id="latlong" name="latlong" type="text" value="{{ post.latlong }}" />
 			</p>
-			<p>Sharing</p>
+			<h3>Feature Details</h3>
+			<p>
+				<label for="featureSnippet">Snippet</label>
+				<textarea id="featureSnippet" name="featureSnippet">{{ post.featureSnippet }}</textarea>
+
+				<label for="featureImage">Image</label>
+				<input id="featureImage" name="featureImage" type="text" value="{{ post.featureImage }}" />
+			</p>
+			<h3>Sharing</h3>
+			<!-- loop through services / accounts for checkboxes + add char counter below for ui-counter -->
+			<p>
+				<label for="sharingMessage">Message</label>
+				<textarea class="ui-counter" name="sharingMessage" id="sharingMessage"></textarea>
+			</p>
 		</fieldset>
 	</div>
 	<div class="fixed-bottom-bar">
