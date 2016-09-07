@@ -10,13 +10,16 @@
 			<li>
 				<a href="#post__properties">Properties</a>
 			</li>
+			<li>
+				<a href="#post__sharing">Sharing</a>
+			</li>
 		</ul>
 		<fieldset id="post__edit">
 			<legend>Edit Post</legend>
 			<p>
 				<a class="material-icons ui-toggle" href="#" data-target=".post__link__edit" data-target-state="hidden">link</a> 
 				<label for="title">Title</label>
-				<input id="title" name="title" type="text" autofocus placeholder="e.g. My First Blog Post" required value="{{ post.title }}" />
+				<input autofocus data-tip-content="<strong>Required.</strong> This will also be used in the URL for your content. You can click on the link icon to adjust the URL." id="title" name="title" placeholder="e.g. My First Blog Post" required type="text" value="{{ post.title }}" />
 			</p>
 			<p>
 				<label for="subTitle">Sub-title</label>
@@ -44,28 +47,33 @@
 					Publish{% if post.publishDate is not empty and date(post.publishDate) <= date() %}ed{% endif %} on
 				</label>
 				<span id="post__schedule__timed">
-					<input id="publishDate" name="publishDate__date" value="{{ post.publishDate|date('Y/m/d H:i') }}" type="text" />
+					<input data-tip-title="Publishing" data-tip-content="On publishing this content for the first time, if the date is in the past or the present it will publish immediately. If the date is in the future then it will be scheduled for publishing and will action any social media sharing options selected at the same time." id="publishDate" name="publishDate__date" value="{{ post.publishDate|date('Y/m/d H:i') }}" type="text" />
 				</span>
 			</p>
-			<h3>Categories</h3>
-			<ul id="category-list" data-name="categories">
-			</ul>
+			<p>
+				<label for="categories">Categories</label>
+				<select class="js-select" data-tip-content="Seperate existing categories with a comma or by pressing [Enter]. New categories should be created using the adjacent [+] icon." data-tags="true" id="categories" name="categories" multiple>
+				</select>
+				<a class="material-icons category-manager__link" href="#">add_box</a>
+			</p>
 			<p>
 				<label for="tags">Tags</label>
-				<select class="js-select" data-tags="true" id="tags" name="tags" multiple>
+				<select class="js-select" data-tip-content="Seperate tags with a comma or by pressing [Enter]" data-tags="true" id="tags" name="tags" multiple>
 				</select>
 			</p>
 			<p>
 				<label for="latlong">Location</label>
-				<input class="ui-map" data-google-key="{{ settings.google.key }}" id="latlong" name="latlong" type="text" value="{{ post.latlong }}" />
+				<input class="ui-map" data-google-key="{{ settings.google.key }}" data-tip-content="Please enter a location name, postcode, zip code, or longitude/latitude to search for the location." id="latlong" name="latlong" type="text" value="{{ post.latlong }}" />
 			</p>
-			<h3>Feature Details</h3>
+		</fieldset>
+		<fieldset id="post__sharing">
+			<h3>Teaser Details</h3>
 			<p>
 				<label for="featureSnippet">Snippet</label>
 				<textarea id="featureSnippet" name="featureSnippet">{{ post.featureSnippet }}</textarea>
 
 				<label for="featureImage">Image</label>
-				<input id="featureImage" name="featureImage" type="text" value="{{ post.featureImage }}" />
+				<input id="featureImage" name="featureImage" type="file" value="{{ post.featureImage }}" />
 			</p>
 			<h3>Sharing</h3>
 			<!-- loop through services / accounts for checkboxes + add char counter below for ui-counter -->
