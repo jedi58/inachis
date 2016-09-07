@@ -38,10 +38,11 @@ abstract class AbstractController
     /**
      * Default constructor initialises the {@link FormBuilder}
      */
-    public function __construct()
+    public static function init()
     {
         self::$formBuilder = new FormBuilder();
         self::$data['session'] = $_SESSION;
+        self::$data['settings']['google'] = Application::getInstance()->getConfig()['system']->google;
     }
     /**
      * Returns all current errors on the page

@@ -60,6 +60,7 @@ class PageController extends AbstractController
         }
         if (empty($post) || empty($post->getId())) {
             $post = $pageManager->create($properties);
+        self::init();
         }
 
         $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
@@ -160,6 +161,7 @@ exit;
         if ($response->isLocked()) {
             return;
         }
+        self::init();
         $response->body($app->twig->render('admin__post-list.html.twig', self::$data));
     }
 
