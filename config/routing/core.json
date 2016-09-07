@@ -30,6 +30,11 @@
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
 	},
 	{
+		"methods": [ "GET" ],
+		"path": "/inadmin/post/list",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostListAdmin"
+	},
+	{
 		"methods": [ "POST" ],
 		"path": "/inadmin/search/results",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getSearchResults"

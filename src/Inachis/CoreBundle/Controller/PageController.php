@@ -153,6 +153,16 @@ exit;
         );
         $response->body($app->twig->render('admin__post__edit.html.twig', $data));
     }
+
+    public static function getPostListAdmin($request, $response, $service, $app)
+    {
+        self::redirectIfNotAuthenticated($request, $response);
+        if ($response->isLocked()) {
+            return;
+        }
+        $response->body($app->twig->render('admin__post-list.html.twig', self::$data));
+    }
+
     public static function getPage($request, $response, $service, $app)
     {
         $response->body('Page controller');
