@@ -30,7 +30,7 @@ class Application
      */
     protected $env = 'dev';
     /**
-     * @var bool Flag indicating of admin actions should be logged
+     * @var bool Flag indicating if admin actions should be logged
      */
     protected $logActivities = false;
     /**
