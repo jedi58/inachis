@@ -30,6 +30,10 @@ class Application
      */
     protected $env = 'dev';
     /**
+     * @var bool Flag indicating of admin actions should be logged
+     */
+    protected $logActivities = false;
+    /**
      * @var RoutingManager Instance used for handling Application routing
      */
     protected $router;
@@ -58,6 +62,10 @@ class Application
         $config->setProxyDir($this->getApplicationRoot() . 'app/persistent/proxies');
         $config->setProxyNamespace('proxies');
         $config->setAutoGenerateProxyClasses(($env === 'dev'));
+
+        if (!empty($this->getConfig()['system']->general->activity_tracking)) {
+            $this->logActivities = (bool) $this->getConfig()['system']->general->activity_tracking;
+        }
 
         AnnotationRegistry::registerFile(
             $this->getApplicationRoot() . 'vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
@@ -189,6 +197,14 @@ class Application
             $this->addService('encryption', new Encryption($key));
         }
         return $this->getService('encryption');
+    }
+    /**
+     * Determines if admin interactions should be logged
+     * @return bool The value of {@link logActivities}
+     */
+    public function shouldLogActivities()
+    {
+        return $this->logActivities;
     }
     /**
      * Returns the path to the root of where the application has been installed

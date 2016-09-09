@@ -54,7 +54,9 @@ class Authentication
         if ($ok) {
             Application::getInstance()->getService('session')->set('user', $user);
             Application::getInstance()->getService('session')->regenerate();
-            //Application::getInstance()->getService('log')->add('login', $user->getUsername(), $user->getId());
+            if (Application::getInstance()->shouldLogActivities()) {
+                //Application::getInstance()->getService('log')->add('login', $user->getUsername(), $user->getId());
+            }
         }
         return $ok;
     }
@@ -81,7 +83,9 @@ class Authentication
                 if (!empty($user) && !empty($user->getId())) {
                     Application::getInstance()->getService('session')->set('user', $user);
                     Application::getInstance()->getService('session')->regenerate();
-
+                    if (Application::getInstance()->shouldLogActivities()) {
+                        //Application::getInstance()->getService('log')->add('login', $user->getUsername(), $user->getId());
+                    }
                     return true;
                 }
             }
@@ -123,7 +127,9 @@ class Authentication
     {
         Application::getInstance()->getService('session')->remove('user');
         Application::getInstance()->getService('session')->regenerate();
-        //Application::getInstance()->getService('log')->add('logout', $user->getUsername(), $user->getId());
+        if (Application::getInstance()->shouldLogActivities()) {
+            //Application::getInstance()->getService('log')->add('logout', $user->getUsername(), $user->getId());
+        }
     }
     /**
      * Creates a new user with the given properties
