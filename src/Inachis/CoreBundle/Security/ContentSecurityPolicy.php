@@ -63,8 +63,8 @@ class ContentSecurityPolicy
      */
     public static function getCSPEnforceHeader($policy = array())
     {
-        if (empty($policy)) {
-            $policy = Application::getInstance()->getConfig('security')->csp->enforce;
+        if (empty($policy) && !empty(Application::getInstance()->getConfig()['security']->csp->enforce)) {
+            $policy = Application::getInstance()->getConfig()['security']->csp->enforce;
         }
         return self::generateCSP($policy);
     }
@@ -74,8 +74,8 @@ class ContentSecurityPolicy
      */
     public static function getCSPReportHeader($policy = array())
     {
-        if (empty($policy)) {
-            $policy = Application::getInstance()->getConfig('security')->csp->report;
+        if (empty($policy) && !empty(Application::getInstance()->getConfig()['security']->csp->report)) {
+            $policy = Application::getInstance()->getConfig()['security']->csp->report;
         }
         return self::generateCSP($policy);
     }
