@@ -6,17 +6,19 @@ use Inachis\Component\CoreBundle\Application;
 use Inachis\Component\CoreBundle\Exception\InvalidContentSecurityPolicyException;
 
 /**
- * Object for managing CSP headers
+ * Object for managing CSP headers which should be valid
+ * https://cspvalidator.org
  */
 class ContentSecurityPolicy
 {
     /**
-     * @var SRC-based directives
+     * @var string[] SRC-based directives
      */
     public static $srcDirectives = array(
         'default-src',
         'connect-src',
         'font-src',
+        'form-action',
         'frame-ancestors',
         'frame-src',
         'img-src',
@@ -27,14 +29,14 @@ class ContentSecurityPolicy
         'xhr-src',
     );
     /**
-     * @var URI-based directives for reporting
+     * @var string[] URI-based directives for reporting
      */
     public static $uriDirectives = array(
         'report-uri',
         'policy-uri'
     );
     /**
-     * @var Directives used for toggling policy components
+     * @var string[] Directives used for toggling policy components
      */
     public static $otherDirectives = array(
         'upgrade-insecure-requests',
@@ -46,7 +48,6 @@ class ContentSecurityPolicy
     private static $instance;
     /**
      * Returns an instance of {@link Application}
-     * @param string $env The environment type being used
      * @return Application The current or a new instance of {@link Application}
      */
     public static function getInstance()
