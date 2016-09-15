@@ -100,8 +100,12 @@ class ContentSecurityPolicy
             if (!empty($directives) && is_object($directives)) {
                 foreach ($directives as $directive => $value) {
                     switch ($directive) {
-                        case 'self':
                         case 'data':
+                            if ($value === true) {
+                                $policies[$policy] .= ' data:';
+                            }
+                            break;
+                        case 'self':
                         case 'unsafe-inline':
                         case 'unsafe-eval':
                             if ($value === true) {
