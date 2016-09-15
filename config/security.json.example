@@ -1,0 +1,36 @@
+{
+    "encryptionKey": "your-key-goes-here",
+    "csp": {
+        "enforce": {
+            "default-src": {
+                "self": true
+            },
+            "connect-src": {
+                "self": true
+            },
+            "font-src": {
+                "self": true
+            },
+            "form-action": {
+                "self": true
+            },
+            "script-src": {
+                "self": true,
+                "sources": [
+                    "www-google-analytics.com"
+                ],
+                "unsafe-inline": true
+            },
+            "style-src": {
+                "self": true,
+                "data": true
+            },
+            "upgrade-insecure-requests": true,
+            "block-all-mixed-content": true
+        },
+        "report": {
+            "report-uri": "https://jedi58.report-uri.io/r/default/csp/reportOnly"
+        }
+    }
+}
+

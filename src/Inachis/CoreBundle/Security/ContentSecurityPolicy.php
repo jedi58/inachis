@@ -60,17 +60,23 @@ class ContentSecurityPolicy
      * Returns the CSP policy for enforcing
      * @return string The parsed policies
      */
-    public static function getCSPEnforceHeader()
+    public static function getCSPEnforceHeader($policy = array())
     {
-        return self::generateCSP(Application::getInstance()->getConfig('csp')->enforce);
+        if (empty($policy)) {
+            $policy = Application::getInstance()->getConfig('security')->csp->enforce;
+        }
+        return self::generateCSP($policy);
     }
     /**
      * Returns the CSP policy for reporting only
      * @return string The parsed policies
      */
-    public static function getCSPReportHeader()
+    public static function getCSPReportHeader($policy = array())
     {
-        return self::generateCSP(Application::getInstance()->getConfig('csp')->report);
+        if (empty($policy)) {
+            $policy = Application::getInstance()->getConfig('security')->csp->report;
+        }
+        return self::generateCSP($policy);
     }
     /**
      * Generates the CSP from the given policy JSON object
@@ -82,8 +88,13 @@ class ContentSecurityPolicy
     {
         $policies = array();
         foreach ($csp as $policy => $directives) {
-            if (!in_array($policy, self::$srcDirectives) && !in_array($policy, self::$uriDirectives)) {
-                throw new InvalidContentSecurityPolicyException();
+            if (!in_array($policy, self::$srcDirectives) &&
+                !in_array($policy, self::$uriDirectives) &&
+                !in_array($policy, self::$otherDirectives)
+            ) {
+                throw new InvalidContentSecurityPolicyException(
+                    sprintf('%s policy is not supported or is invalid', $policy)
+                );
             }
             $policies[$policy] = $policy;
             if (!empty($directives) && is_object($directives)) {
@@ -107,7 +118,9 @@ class ContentSecurityPolicy
                             break;
 
                         default:
-                            throw new InvalidContentSecurityPolicyException();
+                            throw new InvalidContentSecurityPolicyException(
+                                sprintf('Could not understand %s directive', $directive)
+                            );
                     }
                 }
             }
