@@ -46,7 +46,7 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
     public function testGenerateCSPReportHeader()
     {
         $this->assertEquals(
-            'style-src \'self\' \'data\'',
+            'style-src \'self\' data:',
             ContentSecurityPolicy::getInstance()->getCSPEnforceHeader($this->csp->report)
         );
     }

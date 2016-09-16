@@ -16,6 +16,7 @@ class ContentSecurityPolicy
      */
     public static $srcDirectives = array(
         'default-src',
+        'child-src',
         'connect-src',
         'font-src',
         'form-action',
@@ -24,6 +25,7 @@ class ContentSecurityPolicy
         'img-src',
         'media-src',
         'object-src',
+        'plugin-types',
         'script-src',
         'style-src',
         'xhr-src',
@@ -39,8 +41,9 @@ class ContentSecurityPolicy
      * @var string[] Directives used for toggling policy components
      */
     public static $otherDirectives = array(
-        'upgrade-insecure-requests',
-        'block-all-mixed-content'
+        'block-all-mixed-content',
+        'sandbox',
+        'upgrade-insecure-requests'
     );
     /**
      * @var Application reference to instance of self
@@ -59,6 +62,7 @@ class ContentSecurityPolicy
     }
     /**
      * Returns the CSP policy for enforcing
+     * @param string[] The policy to process for CSP enforce
      * @return string The parsed policies
      */
     public static function getCSPEnforceHeader($policy = array())
@@ -70,6 +74,7 @@ class ContentSecurityPolicy
     }
     /**
      * Returns the CSP policy for reporting only
+     * @param string[] The policy to process for CSP reporting
      * @return string The parsed policies
      */
     public static function getCSPReportHeader($policy = array())
