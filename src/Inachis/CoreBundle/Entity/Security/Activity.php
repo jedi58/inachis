@@ -70,8 +70,13 @@ class Activity
      * @var string The date and time of the action
      */
     protected $timestamp;
+
     /**
      * Default constructor for {@link Activity}
+     * @param null $userId
+     * @param null $type
+     * @param null $detail
+     * @param null $timestamp
      */
     public function __construct($userId = null, $type = null, $detail = null, $timestamp = null)
     {
@@ -163,10 +168,11 @@ class Activity
     {
         return $this->timestamp;
     }
+
     /**
      * Sets the value of timestamp.
-     * @param string The date and time of the action $timestamp the timestamp
-     * @return self
+     * @param \DateTime $timestamp
+     * @return Activity
      */
     protected function setTimestamp(\DateTime $timestamp)
     {

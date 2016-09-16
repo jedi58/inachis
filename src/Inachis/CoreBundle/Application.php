@@ -111,10 +111,11 @@ class Application
     {
         return $this->config;
     }
+
     /**
      * Sets the current environment mode to the specified mode
      * @param string $value The mode to use
-     * @throws InvalidEnvironmentException
+     * @throws Exception\InvalidEnvironmentException
      */
     public function setEnv($value)
     {
@@ -123,11 +124,12 @@ class Application
         }
         $this->env = $value;
     }
+
     /**
      * Adds a service to the application
      * @param string $name The name of the service to add
      * @param mixed $service The service to add
-     * @throws Exception
+     * @throws \Exception
      */
     public function addService($name, $service)
     {
@@ -182,9 +184,11 @@ class Application
         }
         return $this->getService('auth');
     }
+
     /**
      * Automatically adds a new encryption service if one has not already been registered
      * @return Encryption The registered encryption service
+     * @throws \Exception
      */
     public function requireEncryptionService()
     {

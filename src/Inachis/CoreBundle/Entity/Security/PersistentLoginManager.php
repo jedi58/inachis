@@ -30,8 +30,10 @@ class PersistentLoginManager extends AbstractManager
     {
         return 'Inachis\\Component\\CoreBundle\\Entity\\Security\\PersistentLogin';
     }
+
     /**
      * Creates and returns a new instance of {@link PersistentLogin}
+     * @param array $values
      * @return Url The new entity
      */
     public function create($values = array())

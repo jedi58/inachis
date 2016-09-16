@@ -26,6 +26,10 @@ class AccountController extends AbstractController
     /**
      * @Route("/setup")
      * @Method({"GET", "POST"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getSetup($request, $response, $service, $app)
     {
@@ -116,9 +120,14 @@ class AccountController extends AbstractController
         );
         $response->body($app->twig->render('setup__stage-1.html.twig', $data));
     }
+
     /**
      * @Route("/inadmin/signin")
      * @Method({"GET", "POST"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getSignin($request, $response, $service, $app)
     {
@@ -128,7 +137,7 @@ class AccountController extends AbstractController
         }
         // Check if user has cookies to indicate persistent sign-in
         if (Application::getInstance()->getService('auth')->getSessionPersist($request->server()->get('HTTP_USER_AGENT'))) {
-            return self::redirectToRefererOrDashboard($response);
+            return self::redirectToReferrerOrDashboard($response);
         }
         if ($response->isLocked()) {
             return;
@@ -207,18 +216,28 @@ class AccountController extends AbstractController
         );
         $response->body($app->twig->render('admin__signin.html.twig', $data));
     }
+
     /**
      * @Route("/inadmin/signout")
      * @Method({"POST"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getSignout($request, $response, $service, $app)
     {
         Application::getInstance()->requireAuthenticationService()->logout();
         $response->redirect('/inadmin/signin')->send();
     }
+
     /**
      * @Route("/inadmin/forgot-password")
      * @Method({"GET"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getForgotPassword($request, $response, $service, $app)
     {
@@ -262,9 +281,14 @@ class AccountController extends AbstractController
         );
         $response->body($app->twig->render('admin__forgot-password.html.twig', $data));
     }
+
     /**
      * @Route("/inadmin/forgot-password")
      * @Method({"POST"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getForgotPasswordSent($request, $response, $service, $app)
     {
@@ -279,9 +303,14 @@ class AccountController extends AbstractController
         }
         $response->body($app->twig->render('admin__forgot-password-sent.html.twig', array()));
     }
+
     /**
      * @Route("/inadmin/user-management")
      * @Method({"GET", "POST"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getAdminList($request, $response, $service, $app)
     {
@@ -291,9 +320,14 @@ class AccountController extends AbstractController
         }
         $response->body('Show all admins');
     }
+
     /**
      * @Route("/inadmin/user/{id}")
      * @Method({"GET", "POST"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getAdminDetails($request, $response, $service, $app)
     {
@@ -303,9 +337,14 @@ class AccountController extends AbstractController
         }
         $response->body('Show details of specific admin');
     }
+
     /**
      * @Route("@^/inadmin/?$")
      * @Method({"GET"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getAdminDashboard($request, $response, $service, $app)
     {
@@ -372,9 +411,14 @@ class AccountController extends AbstractController
         );
         $response->body($app->twig->render('admin__dashboard.html.twig', $data));
     }
+
     /**
      * @Route("/inadmin/settings")
      * @Method({"GET", "POST"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getAdminSettingsMain($request, $response, $service, $app)
     {

@@ -32,10 +32,12 @@ class Route
         $this->path = $path;
         $this->action = $action;
     }
+
     /**
      * Hydrates the current object with values from a {@link stdClass} and also returns itself
      * @param stdClass $values The simple object containing values to assign to current {@link Route}
      * @return Route The hyrdated route
+     * @throws RouteConfigException
      */
     public function hydrate($values)
     {

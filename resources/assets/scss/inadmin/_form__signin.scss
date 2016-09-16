@@ -17,7 +17,7 @@ $form-input__complete: #090;
 		margin-bottom: 10px;
 		width: 90%;
 	}
-	input[value^=""], input__complete {
+	input[value^=""], .input__complete {
 		border-color: $form-input__complete;
 	}
 

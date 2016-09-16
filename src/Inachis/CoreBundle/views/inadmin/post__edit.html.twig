@@ -30,7 +30,8 @@
 				{{ settings.domain }}/<input class="" id="url" name="url" type="url" value="" />
 			</p>
 			<p>
-				<textarea name="content" name="content">{{ post.content }}</textarea>
+				<label class="hidden" for="content">Content</label>
+				<textarea name="content" name="content" title="Content for the page or post">{{ post.content }}</textarea>
 			</p>
 		</fieldset>
 

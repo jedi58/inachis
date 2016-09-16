@@ -13,8 +13,10 @@ abstract class AbstractFileManager extends AbstractManager
     {
         return $this->getRepository()->findOneBy(array('filename' => $filename));
     }
+
     /**
-     *
+     * @param string[] $types
+     * @return
      */
     private function qbGetByFiletypes($types = array())
     {
@@ -23,15 +25,19 @@ abstract class AbstractFileManager extends AbstractManager
             $qb->expr()->in('f.filetype', $types)
         );
     }
+
     /**
-     *
+     * @param array $types
+     * @return
      */
     public function getByFiletypes($types = array())
     {
         return $this->qbGetByFiletypes($types)->getQuery()->getResult();
     }
+
     /**
-     *
+     * @param array $types
+     * @return int
      */
     public function getByFiletypesCount($types = array())
     {

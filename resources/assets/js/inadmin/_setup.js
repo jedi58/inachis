@@ -8,7 +8,7 @@ var Setup = {
 			}
 		});
 	}
-}
+};
 
 $(document).ready(function () {
 	if ($('.form__setup')) {

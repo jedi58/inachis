@@ -149,8 +149,10 @@ class PersistentLogin
         $this->expires = $expires;
         return $this;
     }
+
     /**
      * Checks if the tokenHash passed in matches the one returned from the repository
+     * @param $hash
      * @return bool The result of testing the hash
      */
     public function isTokenHashValid($hash)

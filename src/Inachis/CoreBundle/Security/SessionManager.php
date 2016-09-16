@@ -148,12 +148,13 @@ class SessionManager
     }
     /**
      * Generates a new ID for the current session if active
+     * @return bool The result of regenerating the session
      */
     public function regenerate()
     {
         if (\PHP_SESSION_ACTIVE !== session_status()) {
             return false;
         }
-        session_regenerate_id();
+        return session_regenerate_id();
     }
 }

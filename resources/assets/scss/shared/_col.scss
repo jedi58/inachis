@@ -3,8 +3,8 @@
 
 .section {
     clear: both;
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 /*  GROUPING  ============================================================================= */
@@ -36,6 +36,6 @@
 /*  REMOVE MARGINS AS ALL GO FULL WIDTH AT 480 PIXELS */
 @media only screen and (max-width: 480px) {
     .col { 
-        margin: 1% 0 1% 0%;
+        margin: 1% 0 1% 0;
     }
 }

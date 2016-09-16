@@ -17,6 +17,9 @@ use Inachis\Component\CoreBundle\Form\Fields\SelectOptionGroupType;
 //use Inachis\Component\CoreBundle\Form\Fields\TableType;
 use Inachis\Component\CoreBundle\Form\Fields\TextType;
 use Inachis\Component\CoreBundle\Form\Fields\TextAreaType;
+use Inachis\Component\CoreBundle\Security\ContentSecurityPolicy;
+use Klein\Request;
+use Klein\Response;
 
 /**
  * Abstract class used by all controller
@@ -32,7 +35,7 @@ abstract class AbstractController
      */
     protected static $errors = array();
     /**
-     * @var FormBuilder A FormBuilder object for use in contructing forms for the current view
+     * @var FormBuilder A FormBuilder object for use in constructing forms for the current view
      */
     protected static $formBuilder;
     /**
@@ -54,6 +57,7 @@ abstract class AbstractController
     }
     /**
      * Returns a specific error message given by it's unique name
+     * @param string $error The name of the error message to retrieve
      * @return string The requested error message if set
      */
     public static function getError($error)
@@ -71,26 +75,27 @@ abstract class AbstractController
         self::$errors[$error] = (string) $message;
     }
     /**
-     * TUsed when the request requires authentication; if the not authenticated
+     * Used when the request requires authentication; if the not authenticated
      * then the user's requested page URL is stored in the session and then
      * redirected to the sign-in page. Otherwise, it also tests if their password
      * has expired
      * @param Request $request The request object from the router
      * @param Response $response The response object from the router
+     * @return mixed
      */
     public static function redirectIfNotAuthenticated($request, $response)
     {
         if ($response->isLocked()) {
-            return;
+            return null;
         }
         if (!Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $referer = parse_url($request->server()->get('REQUEST_URI'));
-            if (!empty($referer) && (empty($referer['host']) || $referer['host'] == $request->server()->get('HTTP_HOST'))) {
-                Application::getInstance()->requireSessionService()->set('referer', $request->server()->get('REQUEST_URI'));
+            $referrer = parse_url($request->server()->get('REQUEST_URI'));
+            if (!empty($referrer) && (empty($referrer['host']) || $referrer['host'] == $request->server()->get('HTTP_HOST'))) {
+                Application::getInstance()->requireSessionService()->set('referrer', $request->server()->get('REQUEST_URI'));
             }
             return $response->redirect('/inadmin/signin')->send();
         }
-        self::redirectIfPasswordExpired($request, $response);
+        return self::redirectIfPasswordExpired($request, $response);
     }
     /**
      * If the user is trying to access a page such as sign-in but is already authenticated
@@ -118,30 +123,51 @@ abstract class AbstractController
             return;
         }
         if (Application::getInstance()->getService('session')->get('user')->hasCredentialsExpired()) {
-            $referer = parse_url($request->server()->get('HTTP_REFERER'));
-            if (!empty($referer) &&
-                (empty($referer['host']) || $referer['host'] == $request->server()->get('HTTP_HOST')) &&
-                strpos($referer, 'change-password') === false
+            $referrer = parse_url($request->server()->get('HTTP_REFERER'));
+            if (!empty($referrer) &&
+                (empty($referrer['host']) || $referrer['host'] == $request->server()->get('HTTP_HOST')) &&
+                strpos($referrer, 'change-password') === false
             ) {
-                Application::getInstance()->requireSessionService()->set('referer', $request->server()->get('HTTP_REFERER'));
+                Application::getInstance()->requireSessionService()->set('referrer', $request->server()->get('HTTP_REFERER'));
             }
             $response->redirect('/inadmin/change-password')->send();
         }
     }
     /**
-     * If the user has a referer set they will be redirected to it otherwise they will be redirected to
+     * If the user has a referrer set they will be redirected to it otherwise they will be redirected to
      * the dashboard
      * @param Response $response The response object from the router
+     * @return mixed
      */
-    public static function redirectToRefererOrDashboard($response)
+    public static function redirectToReferrerOrDashboard($response)
     {
         if ($response->isLocked()) {
-            return;
+            return null;
         }
-        $referer = Application::getInstance()->requireSessionService()->get('referer');
-        if (!empty($referer)) {
-            return $response->redirect($referer)->send();
+        $referrer = Application::getInstance()->requireSessionService()->get('referrer');
+        if (!empty($referrer)) {
+            return $response->redirect($referrer)->send();
         }
-        $response->redirect('/inadmin/')->send();
+        return $response->redirect('/inadmin/')->send();
+    }
+    /**
+     * Sends security related headers with the response
+     * @param Response $response The response object from the router
+     */
+    public static function sendSecurityHeaders($response)
+    {
+        if (!$response->isLocked()) {
+            $response->header('X-Frame-Options', 'SAMEORIGIN');
+            $response->header('X-XSS-Protection', '1; mode=block');
+            $response->header('X-Content-Type-Options', 'nosniff');
+            $cspHeader = ContentSecurityPolicy::getInstance()->getCSPEnforceHeader();
+            if (!empty($cspHeader)) {
+                $response->header('Content-Security-Policy', $cspHeader);
+            };
+            $cspReportHeader = ContentSecurityPolicy::getInstance()->getCSPReportHeader();
+            if (!empty($cspReportHeader)) {
+                $response->header('Content-Security-Policy-Report-Only', $cspReportHeader);
+            }
+        }
     }
 }

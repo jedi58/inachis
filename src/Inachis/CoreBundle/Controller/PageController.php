@@ -152,6 +152,7 @@ exit;
             'includeEditor' => true,
             'session' => $_SESSION
         );
+        self::sendSecurityHeaders($response);
         $response->body($app->twig->render('admin__post__edit.html.twig', $data));
     }
 
@@ -170,17 +171,27 @@ exit;
         $response->body('Page controller');
         //throw \Klein\Exceptions\HttpException::createFromCode(404);
     }
+
     /**
      * @Route("/inadmin/page/[:pageTitle]")
      * @Method({"GET", "POST"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getPageAdmin($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
     }
+
     /**
      * @Route("/inadmin/search/results")
      * @Method({"POST"})
+     * @param $request
+     * @param $response
+     * @param $service
+     * @param $app
      */
     public static function getSearchResults($request, $response, $service, $app)
     {

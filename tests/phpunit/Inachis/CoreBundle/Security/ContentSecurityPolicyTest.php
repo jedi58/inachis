@@ -2,8 +2,8 @@
 
 namespace Inachis\Tests\CoreBundle\Security;
 
-use Inachis\Component\CoreBundle\Security\ContentSecurityPolicy;
 use Inachis\Component\CoreBundle\Application;
+use Inachis\Component\CoreBundle\Security\ContentSecurityPolicy;
 
 /**
  * @Entity
@@ -11,7 +11,10 @@ use Inachis\Component\CoreBundle\Application;
  */
 class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
 {
-    protected $policies;
+    /**
+     * @var string[] Policies to use for CSP header tests
+     */
+    protected $csp;
 
     public function setUp()
     {
@@ -22,7 +25,10 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
                 },
                 "script-src": {
                     "unsafe-eval": true,
-                    "self": true
+                    "self": true,
+                    "sources": [
+                        "analytics.google.com"
+                    ]
                 },
                 "upgrade-insecure-requests": true
             },
@@ -34,15 +40,19 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
             }
         }');
     }
-
+    /**
+     * Test the enforce header
+     */
     public function testGenerateCSPEnforceHeader()
     {
         $this->assertEquals(
-            'default-src \'self\'; script-src \'unsafe-eval\' \'self\'; upgrade-insecure-requests',
+            'default-src \'self\'; script-src \'unsafe-eval\' \'self\' analytics.google.com; upgrade-insecure-requests',
             ContentSecurityPolicy::getInstance()->getCSPEnforceHeader($this->csp->enforce)
         );
     }
-
+    /**
+     * Test the enforce header
+     */
     public function testGenerateCSPReportHeader()
     {
         $this->assertEquals(

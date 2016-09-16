@@ -5,7 +5,10 @@ var InachisPostEdit = {
 
 	_init: function()
 	{
-		this._postOrPage = window.location.href.match(/(post|page)/gi)[0].toLowerCase();
+		this._postOrPage = window.location.href.match(/(post|page)/gi);
+		if (this._postOrPage) {
+			this._postOrPage = this._postOrPage[0].toLowerCase();
+		}
 		this.initTooltips();
 		this.initTitleChange();
 		this.initBonsai();

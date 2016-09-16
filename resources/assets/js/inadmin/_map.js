@@ -134,7 +134,7 @@ var InachisMap = {
 
 		navigator.geolocation.getCurrentPosition($.proxy(function (position)
 		{
-			var mapName = $(event.currentTarget).attr('data-map-element')
+			var mapName = $(event.currentTarget).attr('data-map-element');
 			var mapElement = $('#' + mapName);
 			mapName.val(position.coords.latitude + ',' + position.coords.longitude);
 			addUpdateMap(mapElement, mapName, $(mapname + '__map'));

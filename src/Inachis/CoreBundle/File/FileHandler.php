@@ -8,8 +8,10 @@ class FileHandler
 {
     const FILE_OPTIONAL = 0;
     const FILE_REQUIRED = 1;
+
     /**
-     *
+     * @param $path
+     * @return \string[]
      */
     public static function getAllFilesInFolder($path)
     {
@@ -25,8 +27,13 @@ class FileHandler
     {
         return glob($path . '/*.' . $type);
     }
+
     /**
-     *
+     * @param $path
+     * @param $filename
+     * @param int $required
+     * @return string
+     * @throws \Exception
      */
     public static function loadFile($path, $filename, $required = self::FILE_REQUIRED)
     {
@@ -39,8 +46,12 @@ class FileHandler
         }
         return file_get_contents($path . $filename);
     }
+
     /**
-     *
+     * @param $path
+     * @param $filename
+     * @param string $type
+     * @return bool|mixed|null|string
      */
     public static function loadAndProcessFile($path, $filename, $type = '')
     {
@@ -49,8 +60,11 @@ class FileHandler
         }
         return self::loadFile($path, $filename);
     }
+
     /**
-     *
+     * @param $path
+     * @param $filename
+     * @return bool|mixed|null
      */
     public static function loadFromJsonFile($path, $filename)
     {

@@ -127,9 +127,10 @@ class Page
     protected $urls;
     /**
      * Default constructor for {@link Page}
-     * @param string $title
-     * @param string $content
-     * @param string $author
+     * @param string $title The title for the {@link Page}
+     * @param string $content The content for the {@link Page}
+     * @param string $author The {@link User} that authored the {@link Page}
+     * @param string $type The type of {@link Page} - post or page
      */
     public function __construct($title = '', $content = '', $author = null, $type = self::TYPE_POST)
     {
@@ -326,7 +327,7 @@ class Page
     }
     /**
      * Sets the value of {@link author}
-     * @param string $value The UUID of the {@link Page} author
+     * @param User $value The UUID of the {@link Page} author
      */
     public function setAuthor(User $value = null)
     {

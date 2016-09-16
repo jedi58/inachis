@@ -207,7 +207,7 @@
         return this.nodeType == 3;
       }).first();
       checkbox.val(listItem.data('value'));
-      checkbox.prop('checked', listItem.data('checked'))
+      checkbox.prop('checked', listItem.data('checked'));
       children.detach();
       listItem.append(checkbox)
         .append(

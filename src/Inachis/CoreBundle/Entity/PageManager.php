@@ -9,7 +9,7 @@ namespace Inachis\Component\CoreBundle\Entity;
 class PageManager extends AbstractManager
 {
     /**
-     * Returns the full namespaced name of the class
+     * Returns the full namespace name of the class
      * @return string The class
      */
     protected function getClass()

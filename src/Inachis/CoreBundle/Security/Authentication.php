@@ -131,12 +131,14 @@ class Authentication
             //Application::getInstance()->getService('log')->add('logout', $user->getUsername(), $user->getId());
         }
     }
+
     /**
      * Creates a new user with the given properties
      * @param string $username The username for the user
      * @param string $password The password for the user
      * @param string[] $properties Additional properties to assign to the user
      * @return bool The result of attempting to create the new user
+     * @throws \Exception
      */
     public function create($username, $password, $properties = array())
     {

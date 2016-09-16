@@ -7,7 +7,7 @@ use Inachis\Component\CoreBundle\Exception\InvalidContentSecurityPolicyException
 
 /**
  * Object for managing CSP headers which should be valid
- * https://cspvalidator.org
+ * https://cspvalidator.org and https://content-security-policy.com/
  */
 class ContentSecurityPolicy
 {

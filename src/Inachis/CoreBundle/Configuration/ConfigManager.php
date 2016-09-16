@@ -11,7 +11,7 @@ class ConfigManager
      */
     private static $instance;
     /**
-     * @var string The filepath for where config files are located
+     * @var string The file path for where config files are located
      */
     private static $configLocation;
     /**
@@ -54,8 +54,8 @@ class ConfigManager
         return self::loadAllFromLocation('', $type);
     }
     /**
-     * Loads and returns all config files in a given subfolder
-     * @param string $path The name of the subfolder to load config files from
+     * Loads and returns all config files in a given sub-folder
+     * @param string $path The name of the sub-folder to load config files from
      * @param string $type The file extension for the config files
      * @return string[] The result of parsing the config files
      */
