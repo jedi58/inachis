@@ -51,13 +51,59 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
         );
     }
     /**
-     * Test the enforce header
+     * Test the report header
      */
     public function testGenerateCSPReportHeader()
     {
         $this->assertEquals(
             'style-src \'self\' data:',
-            ContentSecurityPolicy::getInstance()->getCSPEnforceHeader($this->csp->report)
+            ContentSecurityPolicy::getInstance()->getCSPReportHeader($this->csp->report)
         );
+    }
+    /**
+     * Test the enforce header default is not an empty string
+     */
+    public function testGenerateCSPEnforceHeaderDefault()
+    {
+        $this->assertNotEmpty(
+            ContentSecurityPolicy::getInstance()->getCSPEnforceHeader()
+        );
+    }
+    /**
+     * Test the report header default is not an empty string
+     */
+    public function testGenerateCSPReportHeaderDefault()
+    {
+        $this->assertNotEmpty(
+            ContentSecurityPolicy::getInstance()->getCSPReportHeader()
+        );
+    }
+
+    public function testGenerateCSPPolicyFail()
+    {
+        try {
+            $csp = json_decode('{
+                "foo-src": {
+                    "bar": true
+                }
+            }');
+            ContentSecurityPolicy::getInstance()->generateCSP($csp);
+        } catch (\Exception $exception) {
+            $this->assertContains('policy is not supported', $exception->getMessage());
+        }
+    }
+
+    public function testGenerateCSPDirectiveFail()
+    {
+        try {
+            $csp = json_decode('{
+                "default-src": {
+                    "bar": true
+                }
+            }');
+            ContentSecurityPolicy::getInstance()->generateCSP($csp);
+        } catch (\Exception $exception) {
+            $this->assertContains('Could not understand', $exception->getMessage());
+        }
     }
 }
