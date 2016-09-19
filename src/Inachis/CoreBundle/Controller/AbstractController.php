@@ -27,6 +27,10 @@ use Klein\Response;
 abstract class AbstractController
 {
     /**
+     * $var AbstractController The instance of self
+     */
+    private static $instance;
+    /**
      * @var mixed[] Variables to be accessible to Twig templates
      */
     protected static $data = array();
@@ -39,13 +43,33 @@ abstract class AbstractController
      */
     protected static $formBuilder;
     /**
-     * Default constructor initialises the {@link FormBuilder}
+     * Returns an instance of {@link AbstractController}
+     * @return Application The current or a new instance of {@link Application}
      */
-    public static function init()
+    public static function getInstance()
+    {
+        if (null === static::$instance) {
+            static::$instance = new static();
+        }
+        return static::$instance;
+    }
+    /**
+     * Default constructor initialises the {@link FormBuilder}
+     * @param \Klein\Request $request The request being made
+     * @param \Klein\Response $response The response to be sent
+     */
+    public static function adminInit($request, $response)
     {
         self::$formBuilder = new FormBuilder();
         self::$data['session'] = $_SESSION;
-        self::$data['settings']['google'] = Application::getInstance()->getConfig()['system']->google;
+        self::$data['settings'] = array(
+            'domain' => 'http://' . $request->server()->get('HTTP_HOST'),
+            'title' => !empty(Application::getInstance()->getConfig()['system']->title) ?
+                Application::getInstance()->getConfig()['system']->title :
+                null,
+            'google' => Application::getInstance()->getConfig()['system']->google
+        );
+        self::sendSecurityHeaders($response);
     }
     /**
      * Returns all current errors on the page
