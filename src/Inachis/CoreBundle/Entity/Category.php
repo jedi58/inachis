@@ -180,7 +180,7 @@ class Category
      */
     public function isRootCategory()
     {
-        return empty($this->getParentId());
+        return empty($this->getParent());
     }
     /**
      * Returns the result of testing if the current category is a child category
@@ -188,7 +188,7 @@ class Category
      */
     public function isChildCategory()
     {
-        return !empty($this->getParentId());
+        return !empty($this->getParent());
     }
     /**
      * Returns the result of testing if the category has an image to use
