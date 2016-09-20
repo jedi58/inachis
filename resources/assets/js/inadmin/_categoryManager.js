@@ -21,6 +21,7 @@ var InachisCategoryManager = {
                 {
                     text: 'Create Category',
                     class: 'button button--positive',
+                    disabled: true,
                     click: $.proxy(this.saveNewCategory, this)
                 },
                 {
@@ -61,12 +62,22 @@ var InachisCategoryManager = {
             '</p>' +
             '<p>' +
                 '<label for="dialog__categoryManager__existing">' +
-                    '<input class="checkbox" id="dialog__categoryManager__existing" name="catParent[]" type="radio" value="-1" /> ' +
+                    '<input checked class="checkbox" id="dialog__categoryManager__existing" name="catParent[]" type="radio" value="-1" /> ' +
                     'As top-level category</label>' +
             '</p>' +
             '<p>As a sub-category of:</p>' +
             '<ol data-name="catParent[]"></ol>'
         );
+        $(document).on('keyup', '#dialog__categoryManager__new', function(event)
+        {
+            var $targetElement = $(event.currentTarget),
+                $createButton = $('.ui-dialog-buttonset').find('.button--positive').first();
+            if ($targetElement.val() === '' || /[^a-z0-9\-\_\'\"]/i.test($targetElement.val())) {
+                $createButton.prop('disabled', true);
+                return;
+            }
+            $createButton.removeAttr('disabled');
+        });
     },
 
     saveNewCategory: function()
@@ -115,7 +126,6 @@ var InachisCategoryManager = {
             if (responseText.trim() === '') {
                 var $dialogParas = $('#dialog__categoryManager').find('p');
                 $dialogParas.last().toggle();
-                $dialogParas.find('input').last().prop("checked", true);
             }
             if (status === 'success') {
                 if (this.alreadyInitialised) {
