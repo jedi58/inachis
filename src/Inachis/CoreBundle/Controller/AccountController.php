@@ -26,10 +26,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/setup")
      * @Method({"GET", "POST"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getSetup($request, $response, $service, $app)
     {
@@ -124,10 +125,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/inadmin/signin")
      * @Method({"GET", "POST"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getSignin($request, $response, $service, $app)
     {
@@ -220,10 +222,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/inadmin/signout")
      * @Method({"POST"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getSignout($request, $response, $service, $app)
     {
@@ -234,10 +237,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/inadmin/forgot-password")
      * @Method({"GET"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getForgotPassword($request, $response, $service, $app)
     {
@@ -285,10 +289,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/inadmin/forgot-password")
      * @Method({"POST"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getForgotPasswordSent($request, $response, $service, $app)
     {
@@ -307,10 +312,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/inadmin/user-management")
      * @Method({"GET", "POST"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getAdminList($request, $response, $service, $app)
     {
@@ -324,10 +330,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/inadmin/user/{id}")
      * @Method({"GET", "POST"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getAdminDetails($request, $response, $service, $app)
     {
@@ -341,10 +348,11 @@ class AccountController extends AbstractController
     /**
      * @Route("@^/inadmin/?$")
      * @Method({"GET"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getAdminDashboard($request, $response, $service, $app)
     {
@@ -415,10 +423,11 @@ class AccountController extends AbstractController
     /**
      * @Route("/inadmin/settings")
      * @Method({"GET", "POST"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getAdminSettingsMain($request, $response, $service, $app)
     {
