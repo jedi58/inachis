@@ -116,7 +116,7 @@ class Activity
     }
     /**
      * Sets the value of userId.
-     * @param string The id of the {@link User} $userId the user id
+     * @param string $userId The id of the {@link User} $userId the user id
      * @return self
      */
     protected function setUserId($userId)
@@ -134,7 +134,7 @@ class Activity
     }
     /**
      * Sets the value of type.
-     * @param string The hash of the user's Id and user-agent $type the type
+     * @param string $type The hash of the user's Id and user-agent $type the type
      * @return self
      */
     protected function setType($type)
@@ -152,7 +152,7 @@ class Activity
     }
     /**
      * Sets the value of detail.
-     * @param string The hash of the user's token $detail the detail
+     * @param string $detail The hash of the user's token $detail the detail
      * @return self
      */
     protected function setDetail($detail)
