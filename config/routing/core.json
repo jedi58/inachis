@@ -78,5 +78,15 @@
 		"methods": [ "GET", "POST" ],
 		"path": "/inadmin/settings",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminSettingsMain"
+	},
+	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/ax/categoryManager/get",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AdminDialogController::getCategoryManagerContent"
+	},
+	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/ax/categoryManager/save",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AdminDialogController::saveCategoryManagerContent"
 	}
 ]

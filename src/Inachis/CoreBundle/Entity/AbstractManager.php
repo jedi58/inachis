@@ -20,8 +20,8 @@ abstract class AbstractManager extends EntityRepository
      */
     protected $encryptor;
     /**
-     * Default consutrctor for AbstractManager
-     * @param EntityManager Used for repository interactions
+     * Default constructor for AbstractManager
+     * @param EntityManager $em Used for repository interactions
      */
     public function __construct(EntityManager $em)
     {
@@ -106,23 +106,66 @@ abstract class AbstractManager extends EntityRepository
     {
         return $this->getRepository()->find($id);
     }
+
     /**
      * Returns all entries for the current repository
-     * @param int $limit The maximum number of results to return
      * @param int $offset The offset from which to return results from
-     * @return array[mixed] The result of fetching the objects
+     * @param int $limit The maximum number of results to return
+     * @param array $where
+     * @param array $order
+     * @return array [mixed] The result of fetching the objects
      */
     public function getAll(
-        $limit = -1,
-        $offset = -1,
+        $offset = 0,
+        $limit = 25,
         $where = array(),
         $order = array()
     ) {
-        return $this->getRepository()->findBy(
-            $where,
-            $order,
-            $limit,
-            $offset
-        );
+        $qb = $this->getRepository()->createQueryBuilder('q');
+        if (!empty($where)) {
+            $qb = $qb->where($where[0]);
+        }
+        if (!empty($order)) {
+            $qb = $qb->orderBy($order);
+        }
+        if (!empty($where)) {
+            $qb = $qb->setParameters($where[1]);
+        }
+        $qb = $qb->getQuery();
+        if ($offset > 0) {
+            $qb = $qb->setFirstResult($offset);
+        }
+        if ($limit > 0) {
+            $qb = $qb->setMaxResults($limit);
+        }
+        return $qb->getResult();
+    }
+
+    /**
+     * Returns the count for entries in the current repository match any
+     * provided constraints
+     * @param string[] Array of elements and string replacements
+     * @return int The number of entities located
+     */
+    public function getAllCount($where = array())
+    {
+        $qb = $this->getRepository()->createQueryBuilder('q')
+            ->select('count(q.id)');
+        if (!empty($where)) {
+            $qb->where($where[0]);
+            if (isset($where[1])) {
+                $qb->setParameters($where[1]);
+            }
+        }
+        return (int) $qb
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    /**
+     * Flushes the entity manager
+     */
+    public function flush()
+    {
+        $this->em->flush();
     }
 }

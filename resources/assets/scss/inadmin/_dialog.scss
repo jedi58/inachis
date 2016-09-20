@@ -1,0 +1,48 @@
+.ui-dialog {
+  background: #fff;
+  position: absolute;
+  z-index: 110 !important;
+
+  .ui-dialog-titlebar {
+    button {
+      background-color: #fff;
+      border: none;
+      float: right;
+      margin: 5px;
+      padding: 0;
+    }
+
+    span {
+      display: inline-block;
+      font-size: 1.3em;
+      font-weight: bold;
+      padding: 10px;
+    }
+  }
+
+  .ui-dialog-content {
+    max-height: 400px !important;
+    padding: 10px;
+    overflow-y: auto;
+  }
+
+  .ui-dialog-buttonpane {
+    background-color: $admin__button-bar-background-color;
+    padding: 5px;
+    text-align: right;
+
+    button {
+      margin: 3px;
+    }
+  }
+}
+
+.ui-widget-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 100 !important;
+}

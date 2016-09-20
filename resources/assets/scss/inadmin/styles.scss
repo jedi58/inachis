@@ -13,6 +13,8 @@ $admin__search_color: gray;
 $admin__tabs__highlighted-color: #069;
 $admin__tabs-background: #fff;
 
+$admin__button-bar-background-color: #eee;
+
 body {
 	font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
 	overflow-x: hidden;
@@ -30,6 +32,7 @@ body {
 	@import '../shared/_buttons';
 
 @import '_tabs';
+@import '_dialog';
 @import '_badge';
 @import '_editor';
 
@@ -318,7 +321,7 @@ body {
 
 
 .fixed-bottom-bar {
-	background: #eee;
+	background: $admin__button-bar-background-color;
 	border-top: 1px solid #ddd;
 	bottom: 0;
 	padding-left: 20px;
