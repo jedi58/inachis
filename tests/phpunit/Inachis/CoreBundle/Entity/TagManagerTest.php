@@ -33,19 +33,19 @@ class TagManagerTest extends \PHPUnit_Framework_TestCase
         $this->tag = $this->manager->create($this->properties);
     }
     
-    public function testGetAll()
-    {
-        $tags = array();
-        $this->tag = $this->manager->create($this->properties);
-        $tags[] = $this->tag;
-        $this->tag = $this->manager->create($this->properties);
-        $this->tag->setTitle('test');
-        $tags[] = $this->tag;
-        
-        $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
-            ->andReturn($tags);
-        $this->assertSame($tags, $this->manager->getAll(10, 0));
-    }
+//    public function testGetAll()
+//    {
+//        $tags = array();
+//        $this->tag = $this->manager->create($this->properties);
+//        $tags[] = $this->tag;
+//        $this->tag = $this->manager->create($this->properties);
+//        $this->tag->setTitle('test');
+//        $tags[] = $this->tag;
+//
+//        $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
+//            ->andReturn($tags);
+//        $this->assertSame($tags, $this->manager->getAll(10, 0));
+//    }
     
     public function testGetById()
     {

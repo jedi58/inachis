@@ -43,22 +43,22 @@ class ImageManagerTest extends \PHPUnit_Framework_TestCase
         $this->url = $this->manager->create($this->properties);
     }
     
-    public function testGetAll()
-    {
-        $images = array();
-        $image = $this->manager->create($this->properties);
-        $image->setId(1);
-        $image->setFilename('test-1.jpg');
-        $images[] = $image;
-        $image = $this->manager->create($this->properties);
-        $image->setId(2);
-        $image->setFilename('test-2.png');
-        $images[] = $image;
-        
-        $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
-            ->andReturn($images);
-        $this->assertSame($images, $this->manager->getAll(10, 0));
-    }
+//    public function testGetAll()
+//    {
+//        $images = array();
+//        $image = $this->manager->create($this->properties);
+//        $image->setId(1);
+//        $image->setFilename('test-1.jpg');
+//        $images[] = $image;
+//        $image = $this->manager->create($this->properties);
+//        $image->setId(2);
+//        $image->setFilename('test-2.png');
+//        $images[] = $image;
+//
+//        $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
+//            ->andReturn($images);
+//        $this->assertSame($images, $this->manager->getAll(10, 0));
+//    }
     
     public function testGetById()
     {

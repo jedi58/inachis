@@ -47,22 +47,22 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
         $this->url->setDefault($this->properties['default']);
     }
     
-    public function testGetAll()
-    {
-        $urls = array();
-        $url = $this->manager->create($this->properties);
-        $url->setId(1);
-        $url->setLink('test-1');
-        $urls[] = $url;
-        $url = $this->manager->create($this->properties);
-        $url->setId(2);
-        $url->setLink('test-2');
-        $urls[] = $url;
-        
-        $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
-            ->andReturn($urls);
-        $this->assertSame($urls, $this->manager->getAll(10, 0));
-    }
+//    public function testGetAll()
+//    {
+//        $urls = array();
+//        $url = $this->manager->create($this->properties);
+//        $url->setId(1);
+//        $url->setLink('test-1');
+//        $urls[] = $url;
+//        $url = $this->manager->create($this->properties);
+//        $url->setId(2);
+//        $url->setLink('test-2');
+//        $urls[] = $url;
+//
+//        $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
+//            ->andReturn($urls);
+//        $this->assertSame($urls, $this->manager->getAll(10, 0));
+//    }
     
     public function testGetById()
     {

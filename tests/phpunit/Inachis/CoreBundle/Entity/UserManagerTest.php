@@ -45,19 +45,19 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
         $this->user = $this->manager->create($this->properties);
     }
     
-    public function testGetAll()
-    {
-        $users = array();
-        $this->user = $this->manager->create($this->properties);
-        $users[] = $this->user;
-        $this->user = $this->manager->create($this->properties);
-        $this->user->setUsername('test2');
-        $users[] = $this->user;
-        
-        $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
-            ->andReturn($users);
-        $this->assertSame($users, $this->manager->getAll(10, 0));
-    }
+//    public function testGetAll()
+//    {
+//        $users = array();
+//        $this->user = $this->manager->create($this->properties);
+//        $users[] = $this->user;
+//        $this->user = $this->manager->create($this->properties);
+//        $this->user->setUsername('test2');
+//        $users[] = $this->user;
+//
+//        $this->repository->shouldReceive('findBy')->with(array(), array(), 10, 0)
+//            ->andReturn($users);
+//        $this->assertSame($users, $this->manager->getAll(10, 0));
+//    }
 
     public function testSave()
     {
