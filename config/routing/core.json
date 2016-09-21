@@ -88,5 +88,10 @@
 		"methods": [ "POST" ],
 		"path": "/inadmin/ax/categoryManager/save",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AdminDialogController::saveCategoryManagerContent"
+	},
+	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/ax/categoryList/get",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AdminDialogController::getCategoryListContent"
 	}
 ]

@@ -11,7 +11,6 @@ var InachisPostEdit = {
 		}
 		this.initTooltips();
 		this.initTitleChange();
-		this.initBonsai();
 	},
 
 	initTooltips: function()
@@ -85,20 +84,11 @@ var InachisPostEdit = {
 		}, this));
 	},
 
-	initBonsai: function()
-	{
-		this.categoryList = $('#category-list').bonsai({
-			expandAll: true,
-			checkboxes: true,
-			createInputs: 'checkbox'
-		});
-		// checked = $('#category-list input:checked')
-	},
-
 	getUrlFromTitle: function()
 	{
-		var title = this.urlify($('#post__edit #title').val()),
-			subTitle = this.urlify($('#post__edit #subTitle').val());
+		var $postContainer = $('#post__edit'),
+			title = this.urlify($postContainer.find('#title').val()),
+			subTitle = this.urlify($postContainer.find('#subTitle').val());
 		if (title.length > 0 && subTitle.length > 0) {
 			title += '-';
 		}
@@ -114,7 +104,7 @@ var InachisPostEdit = {
 		if (typeof value === 'undefined') {
 			return;
 		}
-		return value.toLowerCase().replace(/[\_\s]/g, '-').replace(/[^a-z0-9\-]/gi, '')
+		return value.toLowerCase().replace(/[_\s]/g, '-').replace(/[^a-z0-9\-]/gi, '')
 	}
 };
 

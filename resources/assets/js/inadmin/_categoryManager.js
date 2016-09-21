@@ -72,7 +72,7 @@ var InachisCategoryManager = {
         {
             var $targetElement = $(event.currentTarget),
                 $createButton = $('.ui-dialog-buttonset').find('.button--positive').first();
-            if ($targetElement.val() === '' || /[^a-z0-9\-\_\'\"]/i.test($targetElement.val())) {
+            if ($targetElement.val() === '' || /[^a-z0-9\s\-_'"]/i.test($targetElement.val())) {
                 $createButton.prop('disabled', true);
                 return;
             }

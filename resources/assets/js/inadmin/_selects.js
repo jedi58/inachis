@@ -1,5 +1,6 @@
 $(document).ready(function() {
-	$('.ui-toggle').each(function()
+	var $uiToggle = $('.ui-toggle');
+	$uiToggle.each(function()
 	{
 		var targetElement = $(this).attr('data-target'),
 			targetDefaultState = $(this).attr('data-target-state');
@@ -7,7 +8,7 @@ $(document).ready(function() {
 			$(targetElement).hide();
 		}
 	});
-	$('.ui-toggle').on('click', function(event)
+	$uiToggle.on('click', function(event)
 	{
 		$($(this).attr('data-target')).toggle();
 	});
@@ -16,7 +17,8 @@ $(document).ready(function() {
 	$('.js-select').each(function ()
 	{
 		$properties = {
-
+			allowClear: true,
+			maximumInputLength: 20
 		};
 		if ($(this).attr('data-tags')) {
 			$properties.tags = 'true';
@@ -29,22 +31,19 @@ $(document).ready(function() {
 				data: function (params)
 				{
 					return {
-						q: params.term, // search term
+						q: params.term,
 						page: params.page
 					};
 				},
+				delay: 250,
+				method: 'POST',
 				processResults: function (data, params)
 				{
-					// parse the results into the format expected by Select2
-					// since we are using custom formatting functions we do not need to
-					// alter the remote JSON data, except to indicate that infinite
-					// scrolling can be used
 					params.page = params.page || 1;
-
 					return {
 						results: data.items,
 						pagination: {
-							more: (params.page * 30) < data.total_count
+							more: (params.page * 25) < data.totalCount
 						}
 					};
 				},

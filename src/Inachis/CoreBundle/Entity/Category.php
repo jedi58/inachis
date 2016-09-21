@@ -206,4 +206,15 @@ class Category
     {
         return !empty($this->getIcon());
     }
+    /**
+     * Returns the full path for the category
+     * @return string The path of the category
+     */
+    public  function getFullPath()
+    {
+        if (!$this->isChildCategory()) {
+            return $this->getTitle();
+        }
+        return $this->getParent()->getFullPath() . '/' . $this->getTitle();
+    }
 }
