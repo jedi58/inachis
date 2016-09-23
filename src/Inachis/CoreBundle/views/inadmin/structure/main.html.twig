@@ -26,6 +26,7 @@
 			</a>
 			<ul id="admin__user__options">
 				<li><p>Signed in as <span>{{ session.user.displayName }}</span></p></li>
+				<li><a href="/inadmin/user/{{ session.user.username }}">Edit profile <span class="material-icons">perm_identity</span></a></li>
 				<li><a href="/inadmin/settings/releases">Update available <span class="material-icons">new_releases</span></a></li>
 				<li><form action="/inadmin/signout" method="post"><button>Log out <span class="material-icons">exit_to_app</span></button></form></li>
 			</ul>
