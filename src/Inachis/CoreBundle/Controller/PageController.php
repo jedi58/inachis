@@ -29,12 +29,25 @@ class PageController extends AbstractController
     /**
      * @Route("/setup")
      * @Method({"GET", "POST"})
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getPost($request, $response, $service, $app)
     {
         $response->body('Blog post controller');
     }
 
+    /**
+     * Renders the view for managing the {@link Page model}
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
+     */
     public static function getPostAdmin($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
@@ -156,6 +169,13 @@ exit;
         $response->body($app->twig->render('admin__post__edit.html.twig', $data));
     }
 
+    /**
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
+     */
     public static function getPostListAdmin($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
@@ -166,6 +186,13 @@ exit;
         $response->body($app->twig->render('admin__post-list.html.twig', self::$data));
     }
 
+    /**
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
+     */
     public static function getPage($request, $response, $service, $app)
     {
         $response->body('Page controller');
@@ -175,10 +202,11 @@ exit;
     /**
      * @Route("/inadmin/page/[:pageTitle]")
      * @Method({"GET", "POST"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getPageAdmin($request, $response, $service, $app)
     {
@@ -188,10 +216,11 @@ exit;
     /**
      * @Route("/inadmin/search/results")
      * @Method({"POST"})
-     * @param $request
-     * @param $response
-     * @param $service
-     * @param $app
+     * @param \Klein\Request $request
+     * @param \Klein\Response $response
+     * @param \Klein\ServiceProvider $service
+     * @param \Klein\App $app
+     * @return mixed
      */
     public static function getSearchResults($request, $response, $service, $app)
     {
