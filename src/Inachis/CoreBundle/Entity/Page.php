@@ -120,7 +120,17 @@ class Page
      */
     protected $type = self::TYPE_POST;
     /**
-     * @ORM\OneToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Url", mappedBy="content")
+     * @ORM\Column(type="string", nullable=true)
+     * @var string A location for geo-context aware content
+     */
+    protected $latlong;
+    /**
+     * @ORM\Column(type="string", length=140, nullable=true)
+     * @var string A short 140 character message to use when sharing content
+     */
+    protected $sharingMessage;
+    /**
+     * @ORM\OneToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Url", mappedBy="content", cascade={"persist"})
      * @ORM\OrderBy({"default" = "DESC"})
      * @var Url[]
      */
@@ -271,6 +281,22 @@ class Page
     public function getType()
     {
         return $this->type;
+    }
+    /**
+     * Returns the latlong for the current {@link Page} entity
+     * @return string The latitude and longitude of the content
+     */
+    public function getLatlong()
+    {
+        return $this->latlong;
+    }
+    /**
+     * Returns the sharingMessage for the current {@link Page} entity
+     * @return string The latitude and longitude of the content
+     */
+    public function getSharingMessage()
+    {
+        return $this->sharingMessage;
     }
     /**
      * Returns an array of URLs assigned to the page. The default URL will
@@ -424,6 +450,22 @@ class Page
             throw new \Exception(sprintf('`%s` is not a valid page type', $type));
         }
         $this->type = $type;
+    }
+    /**
+     * Sets the current latitude and longitude of {@link Page} entity
+     * @param string $value The latitude and longitude of the content
+     */
+    public function setLatlong($value)
+    {
+        $this->latlong = $value;
+    }
+    /**
+     * Sets the current sharingMessage of {@link Page} entity
+     * @param string $value The sharingMessage of the content
+     */
+    public function setSharingMessage($value)
+    {
+        $this->sharingMessage = $value;
     }
     /**
      * Adds a {@link Url} to the {@link Page}
