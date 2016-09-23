@@ -66,107 +66,65 @@ class PageController extends AbstractController
                 ) ? 'post' : 'page'
             ))->send();
         }
+        if ($response->isLocked()) {
+            return null;
+        }
+        self::adminInit($request, $response);
         $pageManager = new PageManager(Application::getInstance()->getService('em'));
-        $properties = $request->paramsPost()->all();
-        if (!empty($url) & !empty($properties)) {
-//            $post = $pageManager->hydrate($pageManager->getById($url->getContentId()), $properties);
-        }
-        if (empty($post) || empty($post->getId())) {
-            $post = $pageManager->create($properties);
-        self::init();
-        }
-
-        $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
-        $tagManager = new TagManager(Application::getInstance()->getService('em'));
-        // Get default URL as this is the "live" one
-        //$url = $urlManager->getDefaultUrlByContentTypeAndId('Page', $post->getId());
-        // get all categories and tags
-        if ($request->method() == 'POST') {
+        $post = !empty($url) ? $url->getContent() : $post = $pageManager->create();
+        if ($request->method('post')) {
+            $post = $pageManager->hydrate($post, $request->paramsPost()->all());
             $post->setAuthor(
                 Application::getInstance()->getService('auth')->getUserManager()->getById(
                     Application::getInstance()->getService('session')->get('user')->getId()
                 )
             );
-            if (empty(self::$errors)) {
-                // save URL, tags and category
-                $url = $urlManager->create(array(
-                    'content' => $post,
-                    'link' => $post->getPostDateAsLink() . $urlManager->urlify($post->getTitle())
-                ));
-                $urlManager->save($url);
-                $pageManager->save($post);
-                Application::getInstance()->getService('em')->flush();
-var_dump($post);
-exit;
-
-                //$pageManager->save($post);
-                //$respone->redirect();
+            $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
+            $tagManager = new TagManager(Application::getInstance()->getService('em'));
+            $categories = $request->paramsPost()->get('categories');
+            foreach ($categories as $categoryId) {
+                $category = $categoryManager->getById($categoryId);
+                $post->addCategory($category);
             }
+            $tags = $request->paramsPost()->get('tags');
+            foreach ($tags as $tagTitle) {
+                $tag = $tagManager->getByTitle($tagTitle);
+                if (null === $tag) {
+                    $tag = $tagManager->create(array('title' => $tagTitle));
+                }
+                $post->addTag($tag);
+            }
+            $newUrl = $request->paramsPost()->get('url');
+            $urlFound = false;
+            $urls = $post->getUrls();
+            foreach ($urls as $url) {
+                if ($url->getLink() !== $newUrl) {
+                    $url->setDefault(false);
+                } else {
+                    $urlFound = true;
+                }
+            }
+            if (!$urlFound) {
+                $post->addUrl($urlManager->create(array(
+                    'content' => $post,
+                    'default' => true,
+                    'link' => $newUrl
+                )));
+            }
+            var_dump($request->paramsPost()->all());
+            // @todo if publish button clicked then change from draft
+            // @todo validate post
+            if (empty(self::$errors)) {
+                //$pageManager->save($post);
+                //$response->redirect('/inadmin/' . $post->getUrls()[0]);
+            }
+            // @todo save post
+            // @todo if post has an ID check if the URL has changed, if so change the default flag to 0 for the old one
+            // @todo header redirect to view current post (need to add view post link to template)
         }
-        $data = array(
-            'post' => $post,
-            'form' => (new FormBuilder(array(
-                'action' => $request->server()->get('REQUEST_URI'),
-                'cssClasses' => 'form form__post'
-            )))
-            ->addComponent(new FieldsetType(array(
-                'legend' => 'Edit Post'
-            )))
-            ->addComponent(new TextType(array(
-                'name' => 'title',
-                'autofocus' => true,
-                'cssClasses' => 'field__wide',
-                'label' => 'Post Title',
-                'placeholder' => 'e.g. My first blog post',
-                'required' => true,
-                'value' => $post->getTitle()
-            )))
-            ->addComponent(new TextType(array(
-                'name' => 'subTitle',
-                'cssClasses' => 'field__wide',
-                'label' => 'Sub-title',
-                'value' => $post->getSubTitle()
-            )))
-            ->addComponent(new TextAreaType(array(
-                'name' => 'content',
-                'value' => $post->getContent()
-            )))
-            ->addComponent(new TextType(array(
-                'name' => 'link',
-                'cssClasses' => 'field__wide',
-                'label' => 'URL',
-                'required' => true,
-                'value' => $post->getUrls()
-            )))
-            ->addComponent(new SelectType(array(
-                'name' => 'tags',
-                'cssClasses' => 'field__wide js-select',
-                'label' => 'Tags',
-                //'value' => $post->getTags()
-            )))
-            ->addComponent(new NumberType(array(
-                'name' => 'postDate',
-                'cssClasses' => '',
-                'label' =>'Publication Date',
-                'type' => 'datetime'
-            )))
-            ->addComponent(new ButtonType(array(
-                'label' => !empty($post->getId()) ? 'Update' : 'Save',
-                'cssClasses' => 'button button--positive',
-                'type' => 'submit'
-            ))),
-            //featureImage
-            //featureSnippet
-            //status
-            //visibility
-            //postDate
-            //password
-            //allowComments
-            'includeEditor' => true,
-            'session' => $_SESSION
-        );
-        self::sendSecurityHeaders($response);
-        $response->body($app->twig->render('admin__post__edit.html.twig', $data));
+        self::$data['includeEditor'] = true;
+        self::$data['post'] = $post;
+        return $response->body($app->twig->render('admin__post__edit.html.twig', self::$data));
     }
 
     /**
@@ -182,7 +140,7 @@ exit;
         if ($response->isLocked()) {
             return;
         }
-        self::init();
+        self::adminInit($request, $response);
         $response->body($app->twig->render('admin__post-list.html.twig', self::$data));
     }
 
