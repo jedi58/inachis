@@ -136,6 +136,18 @@ class Page
      */
     protected $urls;
     /**
+     * @ORM\ManyToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Category", mappedBy="id")
+     * @ORM\OrderBy({"title" = "ASC"})
+     * @var Category[]
+     */
+    protected $categories;
+    /**
+     * @ORM\ManyToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Tag", mappedBy="id", cascade={"persist"})
+     * @ORM\OrderBy({"title" = "ASC"})
+     * @var Tag[] The array of tags assigned to the post
+     */
+    protected $tags;
+    /**
      * Default constructor for {@link Page}
      * @param string $title The title for the {@link Page}
      * @param string $content The content for the {@link Page}
@@ -153,6 +165,8 @@ class Page
         $this->setModDate($currentTime);
         $this->type = $type;
         $this->urls = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
     /**
      * Returns the value of {@link id}
@@ -306,6 +320,22 @@ class Page
     public function getUrls()
     {
         return $this->urls->toArray();
+    }
+    /**
+     * Returns an array of {@link Category)s assigned to the page.
+     * @return Category[] The array of {$link Category} entities for the {@link Page}
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+    /**
+     * Returns an array of {@link Tag)s assigned to the page.
+     * @return Tag[] The array of {$link Category} entities for the {@link Page}
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
     /**
      * Returns the Url with a specific index within the array
@@ -474,6 +504,22 @@ class Page
     public function addUrl(Url $url)
     {
         $this->urls[] = $url;
+    }
+    /**
+     * Adds a {@link Category} to the {@link Page}
+     * @param Category $category The new {@link Category} to add to the {@link Page}
+     */
+    public function addCategory(Category $category)
+    {
+        $this->categories[] = $category;
+    }
+    /**
+     * Adds a {@link Tag} to the {@link Page}
+     * @param Tag $tag The new {@link Tag} to add to the {@link Page}
+     */
+    public function addTag(Tag $tag)
+    {
+        $this->tags[] = $tag;
     }
     /**
      * Returns the current posts date as a YYYY/mm/dd URL
