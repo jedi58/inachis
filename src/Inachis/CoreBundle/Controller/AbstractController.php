@@ -64,7 +64,7 @@ abstract class AbstractController
         self::$data['session'] = $_SESSION;
         self::$data['settings'] = array(
             'domain' => 'http://' . $request->server()->get('HTTP_HOST'),
-            'title' => !empty(Application::getInstance()->getConfig()['system']->title) ?
+            'siteTitle' => !empty(Application::getInstance()->getConfig()['system']->title) ?
                 Application::getInstance()->getConfig()['system']->title :
                 null,
             'google' => Application::getInstance()->getConfig()['system']->google
