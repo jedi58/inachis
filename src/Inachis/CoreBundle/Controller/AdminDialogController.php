@@ -68,8 +68,11 @@ class AdminDialogController extends AbstractController
                     unset($result['items'][$title]);
                     $title = $category->getFullPath();
                 }
-                $result['items'][$title] = (object) array('id' => $category->getId(), 'text' => $title, 'path' => $category->getFullPath());
-
+                $result['items'][$title] = (object) array(
+                    'id' => $category->getId(),
+                    'text' => $title,
+                    'path' => $category->getFullPath()
+                );
             }
             $result['items'] = array_values($result['items']);
         }
