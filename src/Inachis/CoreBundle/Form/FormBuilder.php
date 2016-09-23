@@ -80,10 +80,12 @@ class FormBuilder extends AbstractFormType
     {
         return 'form';
     }
+
     /**
      * Sets the method the form should use
      * @param string $value The method to use
      * @return FormBuilder Returns itself
+     * @throws FormBuilderConfigurationException
      */
     public function setMethod($value)
     {
@@ -96,10 +98,12 @@ class FormBuilder extends AbstractFormType
         $this->method = $value;
         return $this;
     }
+
     /**
      * Sets the action the form should use
      * @param string $value The action to use
      * @return FormBuilder Returns itself
+     * @throws FormBuilderConfigurationException
      */
     public function setAction($value)
     {
@@ -119,10 +123,12 @@ class FormBuilder extends AbstractFormType
         $this->autoComplete = (bool) $autocomplete;
         return $this;
     }
+
     /**
      * Sets the enctype the form should use
      * @param string $enctype The enctype to use
      * @return FormBuilder Returns itself
+     * @throws FormBuilderConfigurationException
      */
     public function setEncType($enctype)
     {
@@ -133,10 +139,12 @@ class FormBuilder extends AbstractFormType
         $this->encType = $enctype;
         return $this;
     }
+
     /**
      * Specifies whether the form should use valdiation
      * @param bool $value Flag indicating of validation is used
      * @return FormBuilder Returns itself
+     * @throws FormBuilderConfigurationException
      */
     public function setNoValidate($value)
     {

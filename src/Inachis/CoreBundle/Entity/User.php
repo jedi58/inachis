@@ -39,8 +39,6 @@ class User
      */
     protected $displayName;
     /**
-     * @ORM\OneToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Image")
-     * @ORM\JoinColumn(name="avatar", referencedColumnName="id")
      * @var string An image to use for the {@link User}
      */
     protected $avatar;
@@ -300,7 +298,7 @@ class User
      * @param int $expiryDays The number of days the password expires after
      * @return bool The result of testing the {@link passwordModDate}
      */
-    public function hasCredentialsExpired($expiryDays)
+    public function hasCredentialsExpired($expiryDays = 90)
     {
         return time() >= strtotime(
             '+' . (int) $expiryDays . ' days',

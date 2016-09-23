@@ -1,12 +1,12 @@
 [
 	{
 		"methods": [ "GET" ],
-		"path": "/[*:pageTitle]",
+		"path": "/[:pageTitle]",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPage"
 	},
 	{
 		"methods": [ "GET", "POST" ],
-		"path": "/inadmin/[*:pageTitle]",
+		"path": "/inadmin/[page:type]/[:pageTitle]",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPageAdmin"
 	},
 	{
@@ -16,18 +16,28 @@
 	},
 	{
 		"methods": [ "GET" ],
-		"path": "/[i:year]/[i:month]/[i:day]/[*:postTitle]",
+		"path": "/[i:year]/[i:month]/[i:day]/[:postTitle]",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPost"
 	},
 	{
 		"methods": [ "GET", "POST" ],
-		"path": "/inadmin/[i:year]/[i:month]/[i:day]/[*:postTitle]",
+		"path": "/inadmin/[i:year]/[i:month]/[i:day]/[:postTitle]",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
 	},
 	{
 		"methods": [ "GET", "POST" ],
 		"path": "/inadmin/post/new",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
+	},
+	{
+		"methods": [ "GET" ],
+		"path": "/inadmin/post/list",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostListAdmin"
+	},
+	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/search/results",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getSearchResults"
 	},
 	{
 		"methods": [ "GET", "POST" ],
@@ -59,14 +69,29 @@
 		"path": "/inadmin/user/[a:userId]",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDetails"
 	},
-	{
-		"methods": [ "GET", "POST" ],
-		"path": "/inadmin/dashboard",
-		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDashboard"
-	},
+    {
+        "methods": [ "GET" ],
+        "path": "@^/inadmin/?$",
+        "action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminDashboard"
+    },
 	{
 		"methods": [ "GET", "POST" ],
 		"path": "/inadmin/settings",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AccountController::getAdminSettingsMain"
+	},
+	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/ax/categoryManager/get",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AdminDialogController::getCategoryManagerContent"
+	},
+	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/ax/categoryManager/save",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AdminDialogController::saveCategoryManagerContent"
+	},
+	{
+		"methods": [ "POST" ],
+		"path": "/inadmin/ax/categoryList/get",
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\AdminDialogController::getCategoryListContent"
 	}
 ]

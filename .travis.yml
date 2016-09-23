@@ -16,6 +16,7 @@ before_script:
   - php composer.phar install --no-interaction
   - php composer.phar dump-autoload --optimize
   - cp config/system.json.example config/system.json
+  - cp config/security.json.example config/security.json
 
 script:
   - mkdir ./tests/logs/

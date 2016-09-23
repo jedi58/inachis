@@ -1,1 +1,30 @@
-Sign-in template stuff goes here
+{% extends "fe_structure__main.html.twig" %}
+{% block content %}
+
+<article class="{{ post.type }} status-{{ post.status }} hentry">
+	<header class="entry-header">
+		<h1 class="entry-title">{{ post.title }}</h1>
+{%- if post.subTitle is not empty %}
+		<h2>{{ post.subTitle }}</h2>
+{% endif %}
+		<div class="entry-meta">
+			Posted on 
+			<a href="{{ url }}" title="{{ post.postDate|date('H:i') }}" rel="bookmark">
+				<time class="entry-date" datetime="{{ post.postDate|date('c') }}" pubdate>{{ post.postDate|date('F j, Y') }}</time></a>
+			<span class="byline"> by <span class="author vcard">{{ post.author.displayName }}</span></span>
+			<span class="cats-links"> under 
+{% if posts.tags is not empty %}
+	{% for tag in posts.tags %}
+				<a href="/category/{{ tag.title|url_encode }}/" rel="category tag">{{ tag.title }}</a>
+	{% endfor %}
+{% endif %}
+			</span>
+		</div>
+	</header>
+
+	<div class="entry-content">
+		{{ post.content|markdown }}
+	</div>
+</article>
+
+{% endblock content %}

@@ -2,9 +2,13 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Object for handling pages of a site
- * @Entity @Table(indexes={@Index(name="search_idx", columns={"title", "author_id"})})
+ * @ORM\Entity
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title", "author_id"})})
  */
 class Page
 {
@@ -25,85 +29,132 @@ class Page
      */
     const VIS_PRIVATE = 'private';
     /**
-     * @Id @Column(type="string", unique=true, nullable=false)
-     * @GeneratedValue(strategy="UUID")
+     * @const string Indicates a Page is standalone
+     */
+    const TYPE_PAGE = 'page';
+    /**
+     * @const string Indicates a Page is a blog post
+     */
+    const TYPE_POST = 'post';
+    /**
+     * @ORM\Column(type="string", unique=true, nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="UUID")
      * @var string
      */
     protected $id;
     /**
-     * @Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      * @var string The title of the {@link Page}
      */
     protected $title;
     /**
-     * @Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      * @var string An optional sub-title for the {@link Page}
      */
     protected $subTitle;
     /**
-     * @Column(type="text")
+     * @ORM\Column(type="text")
      * @var string The contents of the {@link Page}
      */
     protected $content;
     /**
-     * @ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\User")
-     * @JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\User")
      * @var string The UUID of the author for the {@link Page}
      */
     protected $author;
     /**
-     * @Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string The featured image for the {@link Page}
      */
     protected $featureImage;
     /**
-     * @Column(type="text", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      * @var string A short excerpt describing the contents of the {@link Page}
      */
     protected $featureSnippet;
     /**
-     * @Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20)
      * @var string Current status of the {@link Page}, defaults to @{link DRAFT}
      */
     protected $status = self::DRAFT;
     /**
-     * @Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20)
      * @var string Determining if a @{link Page} is visible to the public
      */
     protected $visibility = self::VIS_PUBLIC;
     /**
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      * @var string The date the {@link Page} was created
      */
     protected $createDate;
     /**
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      * @var string The date the {@link Page} was published; a future date
      *             indicates the content is scheduled
      */
     protected $postDate;
     /**
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      * @var string The date the {@link Page} was last modified
      */
     protected $modDate;
     /**
-     * @Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50)
      * @var string The timezone for the publication date; defaults to UTC
      */
     protected $timezone = 'UTC';
     /**
-     * @Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string A password to protect the {@link Page} with if required
      */
     protected $password;
     /**
-     * @Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", nullable=false)
      * @var bool Flag determining if the {@link Page} allows comments
      */
     protected $allowComments = false;
-    
-    public function __construct($title = '', $content = '', $author = '')
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     * @var string The type of page. Default: {@link self::TYPE_POST}
+     */
+    protected $type = self::TYPE_POST;
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string A location for geo-context aware content
+     */
+    protected $latlong;
+    /**
+     * @ORM\Column(type="string", length=140, nullable=true)
+     * @var string A short 140 character message to use when sharing content
+     */
+    protected $sharingMessage;
+    /**
+     * @ORM\OneToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Url", mappedBy="content", cascade={"persist"})
+     * @ORM\OrderBy({"default" = "DESC"})
+     * @var Url[]
+     */
+    protected $urls;
+    /**
+     * @ORM\ManyToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Category", mappedBy="id")
+     * @ORM\OrderBy({"title" = "ASC"})
+     * @var Category[]
+     */
+    protected $categories;
+    /**
+     * @ORM\ManyToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Tag", mappedBy="id", cascade={"persist"})
+     * @ORM\OrderBy({"title" = "ASC"})
+     * @var Tag[] The array of tags assigned to the post
+     */
+    protected $tags;
+    /**
+     * Default constructor for {@link Page}
+     * @param string $title The title for the {@link Page}
+     * @param string $content The content for the {@link Page}
+     * @param string $author The {@link User} that authored the {@link Page}
+     * @param string $type The type of {@link Page} - post or page
+     */
+    public function __construct($title = '', $content = '', $author = null, $type = self::TYPE_POST)
     {
         $this->setTitle($title);
         $this->setContent($content);
@@ -112,6 +163,10 @@ class Page
         $this->setCreateDate($currentTime);
         $this->setPostDate($currentTime);
         $this->setModDate($currentTime);
+        $this->type = $type;
+        $this->urls = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
     /**
      * Returns the value of {@link id}
@@ -234,6 +289,67 @@ class Page
         return $this->allowComments;
     }
     /**
+     * Returns the type of the current {@link Page} entity
+     * @return string The current type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+    /**
+     * Returns the latlong for the current {@link Page} entity
+     * @return string The latitude and longitude of the content
+     */
+    public function getLatlong()
+    {
+        return $this->latlong;
+    }
+    /**
+     * Returns the sharingMessage for the current {@link Page} entity
+     * @return string The latitude and longitude of the content
+     */
+    public function getSharingMessage()
+    {
+        return $this->sharingMessage;
+    }
+    /**
+     * Returns an array of URLs assigned to the page. The default URL will
+     * always be first.
+     * @return Url[] The array of {$link Url} entities for the {@link Page}
+     */
+    public function getUrls()
+    {
+        return $this->urls->toArray();
+    }
+    /**
+     * Returns an array of {@link Category)s assigned to the page.
+     * @return Category[] The array of {$link Category} entities for the {@link Page}
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+    /**
+     * Returns an array of {@link Tag)s assigned to the page.
+     * @return Tag[] The array of {$link Category} entities for the {@link Page}
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+    /**
+     * Returns the Url with a specific index within the array
+     * @param mixed $key The index of the item to return
+     * @return Url The requested {@link Url} entry
+     */
+    public function getUrl($key)
+    {
+        if (!isset($this->urls[$key])) {
+            throw new \InvalidArgumentException(sprintf('Url `%s` does not exist', $key));
+        }
+        return $this->urls[$key];
+    }
+    /**
      * Sets the value of {@link id}
      * @param string $value The UUID of the {@link Page}
      */
@@ -267,9 +383,9 @@ class Page
     }
     /**
      * Sets the value of {@link author}
-     * @param string $value The UUID of the {@link Page} author
+     * @param User $value The UUID of the {@link Page} author
      */
-    public function setAuthor($value)
+    public function setAuthor(User $value = null)
     {
         $this->author = $value;
     }
@@ -354,6 +470,69 @@ class Page
         $this->allowComments = (bool) $value;
     }
     /**
+     * Sets the current type of {@link Page} entity
+     * @param string $type The type of page
+     * @throws \Exception
+     */
+    public function setType($type)
+    {
+        if (!in_array($type, array(self::TYPE_POST, self::TYPE_PAGE))) {
+            throw new \Exception(sprintf('`%s` is not a valid page type', $type));
+        }
+        $this->type = $type;
+    }
+    /**
+     * Sets the current latitude and longitude of {@link Page} entity
+     * @param string $value The latitude and longitude of the content
+     */
+    public function setLatlong($value)
+    {
+        $this->latlong = $value;
+    }
+    /**
+     * Sets the current sharingMessage of {@link Page} entity
+     * @param string $value The sharingMessage of the content
+     */
+    public function setSharingMessage($value)
+    {
+        $this->sharingMessage = $value;
+    }
+    /**
+     * Adds a {@link Url} to the {@link Page}
+     * @param Url $url The new {@link Url} to add to the {@link Page}
+     */
+    public function addUrl(Url $url)
+    {
+        $this->urls[] = $url;
+    }
+    /**
+     * Adds a {@link Category} to the {@link Page}
+     * @param Category $category The new {@link Category} to add to the {@link Page}
+     */
+    public function addCategory(Category $category)
+    {
+        $this->categories[] = $category;
+    }
+    /**
+     * Adds a {@link Tag} to the {@link Page}
+     * @param Tag $tag The new {@link Tag} to add to the {@link Page}
+     */
+    public function addTag(Tag $tag)
+    {
+        $this->tags[] = $tag;
+    }
+    /**
+     * Returns the current posts date as a YYYY/mm/dd URL
+     * @return string The date part of the post's URL
+     */
+    public function getPostDateAsLink()
+    {
+        return $this->postDate->format('Y') .
+            '/' . $this->postDate->format('m') .
+            '/' . $this->postDate->format('d') .
+            '/';
+    }
+    /**
      * Confirms the status being set to the {@link Page} is valid
      * @param string $value The string to test as being a valid status
      * @return bool Result of testing if string is draft or published
@@ -392,5 +571,13 @@ class Page
             new \DateTimeZone($this->getTimezone())
         );
         return $postDate->format('YmdHis') > $today->format('YmdHis');
+    }
+    /**
+     * Determines if the current page/post is not yet published
+     * @return bool The result of testing if the page is a draft
+     */
+    public function isDraft()
+    {
+        return $this->status === self::DRAFT;
     }
 }

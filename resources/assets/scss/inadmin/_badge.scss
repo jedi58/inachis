@@ -1,0 +1,14 @@
+.badge {
+	background-color: #ddd;
+	color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 40px;
+	font-size: 0.7em;
+	padding: 5px 10px;
+
+
+	.ui-state-active & {
+		background-color: #069;
+		border-color: #069;
+	}
+}

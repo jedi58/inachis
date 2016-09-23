@@ -1,41 +1,75 @@
-<section class="widget-posts">
+<section class="widget-posts ui-tabbed">
 	<ul class="widget-posts__tabs">
-		<li class="widget-posts__tabs__active">
-			<a href="#" data-target="widget-posts__published">Recently Published</a>
-			<em class="badge">{{ data.publishCount }}</em>
-		</li>
 		<li>
-			<a href="#" data-target="widget-posts__drafts">Drafts</a>
-			<em class="badge badge__empty">{{ data.draftCount }}</em>
+			<a href="#widget-posts__drafts">Drafts</a>
+			<em class="badge{% if data.draftCount == 0 %} badge__empty{% endif %}">{{ data.draftCount }}</em>
 		</li>
+{% if data.upcomingCount > 0 %}
+		<li>
+			<a href="#widget-posts__upcoming">Upcoming</a>
+			<em class="badge">{{ data.upcomingCount }}</em>
+		</li>
+{% endif %}		
+		<li>
+			<a href="#widget-posts__published">Recently Published</a>
+			<em class="badge{% if data.publishCount == 0 %} badge__empty{% endif %}">{{ data.publishCount }}</em>
+		</li>
+{% if data.comments is not empty %}
+		<li>
+			<a href="#widget-posts__comments">Comments</a>	
+		</li>
+{% endif %}
 	</ul>
 
-{% if data.posts is not empty %}
-	<ol class="widget-posts__published widget-posts__active">
-	{% for post in data.posts %}
+{% if data.drafts is not empty %}
+	<ol id="widget-posts__drafts">
+	{% for post in data.drafts %}
 		<li>
-			<span>Jun 19th, 00:00</span>
-			<a aria-label="Edit {{ post.title }}" href="{{ post.url }}">{{ post.title }}</a>
+			<a aria-label="Edit {{ post.title }}" href="/inadmin{{ post.urls[0].link }}"><h2>{{ post.title }}</h2>
+			<p>{{ post.content|markdown|striptags|length > 300 ? post.content|markdown|striptags|slice(0, 300) ~ '…' : post.content|markdown|striptags  }}</p></a>
+			<p class="date"><span class="material-icons">schedule</span> Last modified: <em>{{ post.modDate|date('l jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
 		</li>
 	{% endfor %}
 	</ol>
 {% else %}
-	<div class="widget-posts__published widget-posts__active">
+	<div id="widget-posts__drafts">
+		<p>There are currently no draft posts available</p>
+	</div>
+{% endif %}
+
+{% if data.upcoming is not empty %}
+	<ol id="widget-posts__upcoming">
+	{% for post in data.upcoming %}
+		<li>
+			<h2><a aria-label="Edit {{ post.title }}" href="/inadmin{{ post.urls[0].link }}">{{ post.title }}</a></h2>
+			<p>{{ post.content|length > 250 ? post.content|slice(0, 250) ~ '…' : post.content  }}</p>
+			<p class="date"><span class="material-icons">schedule</span> Schedule for <em>{{ post.modDate|date('l jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
+		</li>
+	{% endfor %}
+	</ol>
+{% endif %}
+
+{% if data.posts is not empty %}
+	<ol id="widget-posts__published">
+	{% for post in data.posts %}
+		<li>
+			<h2><a aria-label="Edit {{ post.title }}" href="/inadmin{{ post.urls[0].link }}">{{ post.title }}</a></h2>
+			<p>{{ post.content|length > 250 ? post.content|slice(0, 250) ~ '…' : post.content  }}</p>
+			<p class="date"><span class="material-icons">schedule</span> Published on <em>{{ post.modDate|date('l jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
+		</li>
+	{% endfor %}
+	</ol>
+{% else %}
+	<div id="widget-posts__published">
 		<p>There are currently no published posts available</p>
 	</div>
 {% endif %}
 
-{% if data.drafts is not empty %}
-	<ol class="widget-posts__drafts">
-	{% for post in data.drafts %}
-		<li>
-			<a aria-label="Edit {{ post.title }}" href="{{ post.url }}">{{ post.title }}</a>
-		</li>
+{% if data.comments is not empty %}
+	<ol id="widget-posts__comments">
+	{% for comment in data.comments %}
+		<li>{{ comment.message }}</li>
 	{% endfor %}
 	</ol>
-{% else %}
-	<div class="widget-posts__drafts">
-		<p>There are currently no draft posts available</p>
-	</div>
 {% endif %}
 </section>

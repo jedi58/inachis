@@ -3,18 +3,43 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width" />
-	<title>{{ data.page.title }}{% if data.page.title != '' %} / {% endif %}{{ settings.siteTitle }}</title> 
+	<title>{{ page.title }}{% if page.title != '' and settings.siteTitle != '' %} / {% endif %}{{ settings.siteTitle }}</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> 
 	<meta http-equiv="Content-Style-Type" content="text/css" /> 
 	<meta name="robots" content="noindex,nofollow" /> 
 	<link rel="Shortcut Icon" type="image/x-icon" href="{{ settings.domain }}/favicon.ico" /> 
-	<link rel="icon" type="image/x-icon" href="{{ settings.domain }}/favicon.ico" /> 
+	<link rel="icon" type="image/x-icon" href="{{ settings.domain }}/inadmin/assets/images/inachis.png" /> 
 	<link rel="apple-touch-icon" href="{{ settings.domain }}/images/apple-touch.png" /> 
 	<link rel="P3Pv1" href="{{ settings.domain }}/w3c/p3p.xml" /> 
-	<link rel="index" title="Fauna.me" href="{{ settings.domain }}" /> 
+	<link rel="index" title="Inachis Admin" href="{{ settings.domain }}" /> 
 	{% include "admin__stylesheets.html.twig" %}
+	{% include "admin__javascript__top.html.twig" %}
 </head> 
 <body>
+
+{% if session.user is not empty %}
+	<header class="admin__header">
+		<section class="admin__user">
+			<a href="#admin__user__options">
+				<img height="40" src="{% if session.user.avatar is not empty %}{{ session.user.avatar }}{% else %}{{ settings.domain }}/inadmin/assets/images/defaultAvatar.png{% endif %}" width="40" />
+				{%- if data.notifications|length > 0 %}<span class="admin__user__notifications">{{ data.notifications|length }}</span>{% endif %}
+			</a>
+			<ul id="admin__user__options">
+				<li><p>Signed in as <span>{{ session.user.displayName }}</span></p></li>
+				<li><a href="/inadmin/user/{{ session.user.username }}">Edit profile <span class="material-icons">perm_identity</span></a></li>
+				<li><a href="/inadmin/settings/releases">Update available <span class="material-icons">new_releases</span></a></li>
+				<li><form action="/inadmin/signout" method="post"><button>Log out <span class="material-icons">exit_to_app</span></button></form></li>
+			</ul>
+		</section>
+		<section class="admin__search">
+			<form action="/search/results" method="post">
+				<input type="search" name="q" id="q" placeholder="search…" />
+				<label for="q" class="material-icons">search</label>
+				<button class="material-icons mobile-only" type="submit">search</button>
+			</form>
+		</section>
+	</header>
+{% endif %}
 
 <section class="admin__body-container">
 	{% block content %}{% endblock content %}
@@ -26,24 +51,30 @@
 		<h2><span>Inachis</span></h2>
 	</section>
 	<section class="admin__nav-main">
-		<ul>
+		<p class="admin__nav-main__link mobile-only"><a href="#admin__nav-list"><span>menu</span></a></p>
+		<ul class="admin__nav-main__list">
 			<li>
-				<a class="button admin__add-content" href="#" title="Add new content"><i class="material-icons">edit</i><span> Add</span></a>
-				<ul>
-					<li><a href="{{ settings.domain }}/inadmin/post/new" title="Add a new post"><i class="material-icons">post</i><span> Post</span></a></li>
-					<li><a href="{{ settings.domain }}/inadmin/page/new" title="Add a new page"><i class="material-icons">page</i><span> Page</span></a></li>
+				<a class="button admin__add-content" href="#new" title="Add new content"><i class="material-icons">edit</i><span> Add</span></a>
+				<ul class="admin__nav-new">
+					<li><a href="{{ settings.domain }}/inadmin/post/new" title="Add a new post"><i class="material-icons">short_text</i><span> New Post</span></a></li>
+					<li><a href="{{ settings.domain }}/inadmin/page/new" title="Add a new page"><i class="material-icons">content_copy</i><span> New Page</span></a></li>
 				</ul>
 			</li>
-			<li><a href="{{ settings.domain }}/inadmin/dashboard" title="View dashboard"><i class="material-icons">dashboard</i><span> Dashboard</span></a></li>
-			<li><a href="{{ settings.domain }}/inadmin/post/list" title="View list of posts"><i class="material-icons">insert_drive_file</i><span> Posts</span></a></li>
-			<li><a href="{{ settings.domain }}/inadmin/page/list" title="View list of pages"><i class="material-icons">note</i><span> Pages</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/" title="View dashboard"><i class="material-icons">dashboard</i><span> Dashboard</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/post/list" title="View list of posts"><i class="material-icons">short_text</i><span> Posts</span></a></li>
+			<li><a href="{{ settings.domain }}/inadmin/page/list" title="View list of pages"><i class="material-icons">content_copy</i><span> Pages</span></a></li>
 			<li><a href="{{ settings.domain }}/inadmin/url/list" title="View list of defined URLs"><i class="material-icons">insert_link</i><span> URLs</span></a></li>
 			<li>
-				<a href="{{ settings.domain }}/inadmin/settings" title="Change settings"><i class="material-icons">settings</i><span> Settings</span></a>
-				<ul>
-					<li><a href="{{ settings.domain }}/inadmin/user-management" title="Manage users"><i class="material-icons">users</i><span> Users</span></a></li>
+				<a href="#admin__nav-settings" title="Change settings"><i class="material-icons">settings</i><span> Settings</span></a>
+				<ul id="admin__nav-settings">
+					<li><a href="{{ settings.domain }}/inadmin/resources" title="Manage resources">
+						<i class="material-icons">wallpaper</i><span> Resources</span></a>
+					</li>
+					<li><a href="{{ settings.domain }}/inadmin/user-management" title="Manage users">
+						<i class="material-icons">people</i><span> Users</span></a>
+					</li>
 					<li><a href="{{ settings.domain }}/inadmin/settings/advanced" title="Change advanced settings">
-						<i class="material-icons">advanced</i><span> Advanced</span></a>
+						<i class="material-icons">lock</i><span> Advanced</span></a>
 					</li>
 				</ul>
 			</li>
@@ -53,5 +84,7 @@
 	</section>
 </section>
 {% endif %}
+
+{% include "admin__javascript__bottom.html.twig" %}
 </body> 
 </html>

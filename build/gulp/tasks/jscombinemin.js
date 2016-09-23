@@ -25,7 +25,7 @@ gulp.task('js:watch', function() {
 
 function jsCompile(src, dest)
 {
-    return gulp.src('{' + src + ',' + config.paths.src.js.shared + '}**/*.js')
+    return gulp.src('{' + config.paths.src.js.shared + ',' + src + '}**/*.js')
         .pipe(concat('scripts.js'))
         .pipe(uglify())
         .pipe(rename({suffix: '.min'}))

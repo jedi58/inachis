@@ -2,12 +2,13 @@
 
 namespace Inachis\Component\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Object for handling categories on a site
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title", "parentId"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title"})})
  */
 class Category
 {
@@ -28,31 +29,36 @@ class Category
      */
     protected $description;
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string The UUID of the image, or the image path
      */
     protected $image;
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string The UUID of the image, or the image path
      */
     protected $icon;
     /**
-     * @ORM\Column(type="string", length=255)
-     * @var string The UUID of the parent category if applicable
+     * @ORM\ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Category")
+     * @var Category The parent category, if self is not a top-level category
      */
-    protected $parentId;
+    protected $parent;
+    /**
+     * @ORM\OneToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Category", mappedBy="parent")
+     * @ORM\OrderBy({"title" = "ASC"})
+     * @var Category[] The array of child categories if applicable
+     */
+    protected $children;
     /**
      * Default constructor for {@link Category}
      * @param string $title The title of the category
      * @param string $description The description for the category
-     * @param string $parentId The {@link id} of the parent category
      */
-    public function __construct($title = '', $description = '', $parentId = '')
+    public function __construct($title = '', $description = '')
     {
         $this->setTitle($title);
         $this->setDescription($description);
-        $this->setParentId($parentId);
+        $this->children = new ArrayCollection();
     }
     /**
      * Returns the value of {@link id}
@@ -95,60 +101,78 @@ class Category
         return $this->icon;
     }
     /**
-     * Returns the value of {@link parentId}
-     * @return string The UUID of the {@link Category} parent if applicable
+     * Returns the value of {@link parent}
+     * @return Category The parent {@link Category} if applicable
      */
-    public function getParentId()
+    public function getParent()
     {
-        return $this->parentId;
+        return $this->parent;
+    }
+    /**
+     * Returns all child categories for the current {@link Category}
+     * @return ArrayCollection|Category[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
     /**
      * Sets the value of {@link id}
      * @param string $value The UUID of the {@link Category}
+     * @return Category
      */
     public function setId($value)
     {
         $this->id = $value;
+        return $this;
     }
     /**
      * Sets the value of {@link title}
      * @param string $value The title of the {@link Category}
+     * @return Category
      */
     public function setTitle($value)
     {
         $this->title = $value;
+        return $this;
     }
     /**
      * Sets the value of {@link description}
      * @param string $value The description of the {@link Category}
+     * @return Category
      */
     public function setDescription($value)
     {
         $this->description = $value;
+        return $this;
     }
     /**
      * Sets the value of {@link image}
      * @param string $value The UUID or URL of the image for {@link Category}
+     * @return Category
      */
     public function setImage($value)
     {
         $this->image = $value;
+        return $this;
     }
     /**
      * Sets the value of {@link icon}
      * @param string $value The UUID or URL of the image for {@link Category}
+     * @return Category
      */
     public function setIcon($value)
     {
         $this->icon = $value;
+        return $this;
     }
     /**
-     * Sets the value of {@link parentId}
-     * @param string $value The UUID of the {@link Category} parent if applicable
+     * Sets the value of {@link parent}
+     * @param Category $parent The parent of the current category
      */
-    public function setParentId($value)
+    public function setParent(Category $parent = null)
     {
-        $this->parentId = $value;
+        $this->parent = $parent;
     }
     /**
      * Returns the result of testing if current category is a root category
@@ -156,7 +180,7 @@ class Category
      */
     public function isRootCategory()
     {
-        return empty($this->getParentId());
+        return empty($this->getParent());
     }
     /**
      * Returns the result of testing if the current category is a child category
@@ -164,7 +188,7 @@ class Category
      */
     public function isChildCategory()
     {
-        return !empty($this->getParentId());
+        return !empty($this->getParent());
     }
     /**
      * Returns the result of testing if the category has an image to use
@@ -181,5 +205,16 @@ class Category
     public function hasIcon()
     {
         return !empty($this->getIcon());
+    }
+    /**
+     * Returns the full path for the category
+     * @return string The path of the category
+     */
+    public function getFullPath()
+    {
+        if (!$this->isChildCategory()) {
+            return $this->getTitle();
+        }
+        return $this->getParent()->getFullPath() . '/' . $this->getTitle();
     }
 }

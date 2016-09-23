@@ -1,0 +1,35 @@
+.admin__search {
+	padding: 15px 10px 10px 0;
+	text-align: right;
+
+	button {
+		background: none;
+		border: none;
+		color: $admin__search_color;
+		vertical-align: top;
+	}
+
+	input {
+		border: 1px solid transparent;
+		color: $admin__search_color;
+		padding: 7px;
+		text-align: right;
+		vertical-align: middle;
+		width: 10em;
+
+		&:focus, &:active {
+			border-bottom-color: $admin__search_color;
+			outline: none;
+		}
+	}
+
+	label {
+		color: $admin__search_color;
+		display: none;
+
+		@media #{$information-medium} {
+			display: inline;
+			vertical-align: middle;
+		}
+	}
+}

@@ -30,6 +30,10 @@ class Application
      */
     protected $env = 'dev';
     /**
+     * @var bool Flag indicating if admin actions should be logged
+     */
+    protected $logActivities = false;
+    /**
      * @var RoutingManager Instance used for handling Application routing
      */
     protected $router;
@@ -58,6 +62,10 @@ class Application
         $config->setProxyDir($this->getApplicationRoot() . 'app/persistent/proxies');
         $config->setProxyNamespace('proxies');
         $config->setAutoGenerateProxyClasses(($env === 'dev'));
+
+        if (!empty($this->getConfig()['system']->general->activity_tracking)) {
+            $this->logActivities = (bool) $this->getConfig()['system']->general->activity_tracking;
+        }
 
         AnnotationRegistry::registerFile(
             $this->getApplicationRoot() . 'vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
@@ -103,10 +111,11 @@ class Application
     {
         return $this->config;
     }
+
     /**
      * Sets the current environment mode to the specified mode
      * @param string $value The mode to use
-     * @throws InvalidEnvironmentException
+     * @throws Exception\InvalidEnvironmentException
      */
     public function setEnv($value)
     {
@@ -115,11 +124,12 @@ class Application
         }
         $this->env = $value;
     }
+
     /**
      * Adds a service to the application
      * @param string $name The name of the service to add
      * @param mixed $service The service to add
-     * @throws Exception
+     * @throws \Exception
      */
     public function addService($name, $service)
     {
@@ -174,9 +184,11 @@ class Application
         }
         return $this->getService('auth');
     }
+
     /**
      * Automatically adds a new encryption service if one has not already been registered
      * @return Encryption The registered encryption service
+     * @throws \Exception
      */
     public function requireEncryptionService()
     {
@@ -189,6 +201,14 @@ class Application
             $this->addService('encryption', new Encryption($key));
         }
         return $this->getService('encryption');
+    }
+    /**
+     * Determines if admin interactions should be logged
+     * @return bool The value of {@link logActivities}
+     */
+    public function shouldLogActivities()
+    {
+        return $this->logActivities;
     }
     /**
      * Returns the path to the root of where the application has been installed

@@ -2,14 +2,19 @@
 {% block content %}
 
 {% block dashboard_pre %}{% endblock dashboard_pre %}
+
 {% block dashboard %}
 
+<div class="col span_4_of_8">
 {% include "inadmin/admin__dashboard__activity.html.twig" %}
+</div>
 
-Display today/this week's stats
-
-Display comments
+<div class="col span_3_of_8">
+{% include "inadmin/admin__dashboard__stats.html.twig" %}
+</div>
 
 {% endblock dashboard %}
+
+
 {% block dashboard_post %}{% endblock dashboard_post %}
 {% endblock content %}
