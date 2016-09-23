@@ -52,7 +52,7 @@ abstract class AbstractManager extends EntityRepository
      * @param array[mixed] The values to apply to the obect
      * @return mixed The hydrated object
      */
-    protected function hydrate($object, array $values)
+    public function hydrate($object, array $values)
     {
         if (!is_object($object)) {
             return $object;
