@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width" />
-	<title>{{ data.page.title }}{% if data.page.title != '' %} / {% endif %}{{ settings.siteTitle }}</title> 
+	<title>{{ page.title }}{% if page.title != '' and settings.siteTitle != '' %} / {% endif %}{{ settings.siteTitle }}</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> 
 	<meta http-equiv="Content-Style-Type" content="text/css" /> 
 	<meta name="robots" content="noindex,nofollow" /> 
