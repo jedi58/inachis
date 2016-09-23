@@ -59,7 +59,7 @@ class AdminDialogController extends AbstractController
             'items' => array(),
             'totalCount' => self::$data['totalResults']
         );
-        if(!empty(self::$data['categories'])) {
+        if (!empty(self::$data['categories'])) {
             foreach (self::$data['categories'] as $category) {
                 $title = $category->getTitle();
                 if (isset($result['items'][$title])) {

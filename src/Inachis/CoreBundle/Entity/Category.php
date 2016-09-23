@@ -210,7 +210,7 @@ class Category
      * Returns the full path for the category
      * @return string The path of the category
      */
-    public  function getFullPath()
+    public function getFullPath()
     {
         if (!$this->isChildCategory()) {
             return $this->getTitle();
