@@ -59,7 +59,8 @@ class Page
      */
     protected $content;
     /**
-     * @ORM\ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\User", cascade={"detach"})
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      * @var string The UUID of the author for the {@link Page}
      */
     protected $author;
