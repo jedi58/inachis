@@ -44,11 +44,11 @@
 				</span>
 			</p>
 			<p>
-				<label for="publishDate">
-					Publish{% if post.publishDate is not empty and date(post.publishDate) <= date() %}ed{% endif %} on
+				<label for="postDate">
+					Publish{% if post.postDate is not empty and date(post.postDate) <= date() %}ed{% endif %} on
 				</label>
 				<span id="post__schedule__timed">
-					<input data-tip-title="Publishing" data-tip-content="On publishing this content for the first time, if the date is in the past or the present it will publish immediately. If the date is in the future then it will be scheduled for publishing and will action any social media sharing options selected at the same time." id="publishDate" name="publishDate__date" value="{{ post.publishDate|date('Y/m/d H:i') }}" type="text" />
+					<input data-tip-title="Publishing" data-tip-content="On publishing this content for the first time, if the date is in the past or the present it will publish immediately. If the date is in the future then it will be scheduled for publishing and will action any social media sharing options selected at the same time." id="postDate" name="postDate" value="{{ post.postDate|date('Y/m/d H:i') }}" type="text" />
 				</span>
 			</p>
 			<p>
