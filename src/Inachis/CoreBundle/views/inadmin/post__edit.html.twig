@@ -27,7 +27,7 @@
 			</p>
 			<p class="post__link__edit">
 				<label for="url">URL</label>
-				{{ settings.domain }}/<input class="" id="url" name="url" type="text" value="" />
+				{{ settings.domain }}/<input class="" id="url" name="url" type="text" value="{{  post.urls|first.link }}" />
 			</p>
 			<p>
 				<label class="hidden" for="content">Content</label>

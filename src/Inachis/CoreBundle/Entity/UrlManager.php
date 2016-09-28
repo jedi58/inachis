@@ -123,9 +123,13 @@ class UrlManager extends AbstractManager
         $url = parse_url(
             preg_replace('/^\/inadmin/', '', $url)
         );
+        $url = $url['path'];
+        if (strpos($url, '/') === 0) {
+            $url = substr($url, 1);
+        }
         return $this->getRepository()->findOneBy(
             array(
-                'link' => $url['path']
+                'link' => $url
             )
         );
     }
