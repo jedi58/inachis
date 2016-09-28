@@ -4,6 +4,7 @@ namespace Inachis\Component\CoreBundle\Controller;
 
 use Inachis\Component\CoreBundle\Application;
 use Inachis\Component\CoreBundle\Entity\CategoryManager;
+use Inachis\Component\CoreBundle\Entity\Page;
 use Inachis\Component\CoreBundle\Entity\PageManager;
 use Inachis\Component\CoreBundle\Entity\TagManager;
 use Inachis\Component\CoreBundle\Entity\UrlManager;
@@ -37,7 +38,29 @@ class PageController extends AbstractController
      */
     public static function getPost($request, $response, $service, $app)
     {
-        $response->body('Blog post controller');
+/** Move this block into a function **/
+        $urlManager = new UrlManager(Application::getInstance()->getService('em'));
+        $url = $urlManager->getByUrl($request->server()->get('REQUEST_URI'));
+        if (empty($url)) {
+            return $response->code(404);
+        }
+        if ($url->getContent()->isScheduledPage() || $url->getContent()->isDraft()) {
+            return $response->redirect('/');
+        }
+        if (!$url->getDefault()) {
+            $url = $urlManager->getDefaultUrl($url->getContent());
+            if (!empty($url)) {
+                return $response->redirect($url->getLink(), 301);
+            }
+        }
+/** end block **/
+        $userManager = new UserManager(Application::getInstance()->getService('em'));
+        $userManager->getByUsername($url->getContent()->getAuthor()->getUsername());
+        $data = array(
+            'post' => $url->getContent(),
+            'url' => $url->getLink()
+        );
+        return $response->body($app->twig->render('post.html.twig', $data));
     }
 
     /**
