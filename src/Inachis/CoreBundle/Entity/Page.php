@@ -136,13 +136,31 @@ class Page
      */
     protected $urls;
     /**
-     * @ORM\ManyToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Category", mappedBy="id")
+     * @ORM\ManyToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Category")
+     * @ORM\JoinTable(
+     *     name="Page_categories",
+     *     joinColumns={
+     *      @ORM\JoinColumn(name="page_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *      @ORM\JoinColumn(name="category_id", referencedColumnName="id", unique=true)
+     *     }
+     * )
      * @ORM\OrderBy({"title" = "ASC"})
      * @var Category[]
      */
     protected $categories;
     /**
-     * @ORM\ManyToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Tag", mappedBy="id", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Tag", cascade={"persist"})
+     * @ORM\JoinTable(
+     *     name="Page_tags",
+     *     joinColumns={
+     *      @ORM\JoinColumn(name="page_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *      @ORM\JoinColumn(name="tag_id", referencedColumnName="id", unique=true)
+     *     }
+     * )
      * @ORM\OrderBy({"title" = "ASC"})
      * @var Tag[] The array of tags assigned to the post
      */
