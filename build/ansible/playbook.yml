@@ -8,8 +8,6 @@
     - vagrant_local
     - apache
     - mysql
-    - rabbitmq
-    - solr
     - php
     - xdebug
     - composer
