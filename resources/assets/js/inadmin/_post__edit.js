@@ -94,8 +94,9 @@ var InachisPostEdit = {
 		}
 		title += subTitle;
 		if (this._postOrPage === 'post') {
-			title = $('#publishDate').val().substring(0,10) + '/' + title.substring(0, 255);
+			title = $('#postDate').val().substring(0,10) + '/' + title.substring(0, 255);
 		}
+		// @todo XHR to check if URL is already in use
 		return title;
 	},
 
