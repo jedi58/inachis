@@ -20,36 +20,36 @@ class User
     protected $id;
     /**
      * @ORM\Column(type="string", length=512, unique=true, nullable=false)
-     * @var Username of the user
+     * @var string Username of the user
      */
     protected $username;
     /**
      * @ORM\Column(type="string", length=512, nullable=false)
-     * @var Password for the user
+     * @var string Password for the user
      */
     protected $password;
     /**
      * @ORM\Column(type="string", length=512, nullable=false)
-     * @var Email address of the user
+     * @var string Email address of the user
      */
     protected $email;
     /**
      * @ORM\Column(type="string", length=512)
-     * @var The display name for the user
+     * @var string The display name for the user
      */
     protected $displayName;
     /**
-     * @var string An image to use for the {@link User}
+     * @var Image string An image to use for the {@link User}
      */
     protected $avatar;
     /**
      * @ORM\Column(type="boolean")
-     * @var Flag indicating if the {@link User} can sign in
+     * @var bool Flag indicating if the {@link User} can sign in
      */
     protected $isActive = true;
     /**
      * @ORM\Column(type="boolean")
-     * @var Flag indicating if the {@link User} has been "deleted"
+     * @var bool Flag indicating if the {@link User} has been "deleted"
      */
     protected $isRemoved = false;
     /**
