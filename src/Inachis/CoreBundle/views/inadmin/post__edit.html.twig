@@ -103,8 +103,11 @@
 	<div class="fixed-bottom-bar">
 		<p>
 			<button type="submit" class="button button--positive">Save</button>
-			<button type="submit" class="button button--info">{% if post.publishDate > date() %}Schedule{% else %}Publish{% endif %}</button>
+			<button type="submit" class="button button--info" name="publish">{% if post.postDate > date() %}Schedule{% else %}Publish{% endif %}</button>
 			<button type="submit" class="button button--negative">Delete</button>
+            {%  if post.id is not empty and not post.isDraft %}
+            <a class="button" href="/{{ post.urls|first.link }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span></a>
+            {%  endif %}
 		</p>
 	</div>
 </form>
