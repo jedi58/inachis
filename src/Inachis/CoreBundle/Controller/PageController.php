@@ -75,8 +75,11 @@ class PageController extends AbstractController
     {
         self::redirectIfNotAuthenticated($request, $response);
         $urlManager = new UrlManager(Application::getInstance()->getService('em'));
-        // Confirm URL is for existing content otherwise redirect
-        $url = $urlManager->getByUrl(str_replace('/inadmin/', '', $request->server()->get('REQUEST_URI')));
+        $requestUri = preg_replace('/\/inadmin\/(page\/)?/', '', $request->server()->get('REQUEST_URI'));
+        if ($requestUri === 'list') {
+            return null;
+        }
+        $url = $urlManager->getByUrl($requestUri);
         if (empty($url) && 0 === preg_match(
             '/\/?inadmin\/(post|page)\/new\/?/',
             $request->server()->get('REQUEST_URI')
