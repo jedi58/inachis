@@ -63,7 +63,7 @@ abstract class AbstractController
         self::$formBuilder = new FormBuilder();
         self::$data['session'] = $_SESSION;
         self::$data['settings'] = array(
-            'domain' => 'http://' . $request->server()->get('HTTP_HOST'),
+            'domain' => ($request->isSecure() ? 'https://' : 'http://') . $request->server()->get('HTTP_HOST'),
             'siteTitle' => !empty(Application::getInstance()->getConfig()['system']->title) ?
                 Application::getInstance()->getConfig()['system']->title :
                 null,
