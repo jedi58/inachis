@@ -21,12 +21,12 @@
 	},
 	{
 		"methods": [ "GET", "POST" ],
-		"path": "/inadmin/post/new",
+		"path": "/inadmin/[page|post:type]/new",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
 	},
 	{
 		"methods": [ "GET" ],
-		"path": "/inadmin/post/list",
+		"path": "/inadmin/[page|post:type]/list",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostListAdmin"
 	},
 	{
