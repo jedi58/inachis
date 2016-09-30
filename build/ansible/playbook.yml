@@ -1,12 +1,15 @@
 ---
 - hosts: all
-  sudo: true
+  become: yes
+  become_user: root
   vars_files:
     - vars/all.yml
   roles:
     - server
     - vagrant_local
     - apache
+    - ssl_self-signed
+    #- letsencrypt
     - mysql
     - php
     - xdebug
