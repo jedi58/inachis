@@ -1,7 +1,13 @@
 {% extends "admin__structure__main.html.twig" %}
 {% block content %}
 
-<form action="/inadmin/{% if post.urls|first.link is not empty %}{{  post.urls|first.link }}{%  else %}{{ post.type }}/new{% endif %}" method="post" class="form form__post">
+<form action="/inadmin/
+    {%- if post.urls|first.link is not empty -%}
+        {%- if post.type == 'page' %}page/{% endif -%}
+        {{  post.urls|first.link }}
+    {%-  else -%}
+        {{ post.type }}/new
+    {%- endif -%}" method="post" class="form form__post">
 	<div class="col span_8_of_8 ui-tabbed">
 		<ul>
 			<li>
