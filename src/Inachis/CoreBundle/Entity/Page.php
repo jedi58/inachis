@@ -144,7 +144,7 @@ class Page
      *      @ORM\JoinColumn(name="page_id", referencedColumnName="id")
      *     },
      *     inverseJoinColumns={
-     *      @ORM\JoinColumn(name="category_id", referencedColumnName="id", unique=true)
+     *      @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      *     }
      * )
      * @ORM\OrderBy({"title" = "ASC"})
@@ -159,7 +159,7 @@ class Page
      *      @ORM\JoinColumn(name="page_id", referencedColumnName="id")
      *     },
      *     inverseJoinColumns={
-     *      @ORM\JoinColumn(name="tag_id", referencedColumnName="id", unique=true)
+     *      @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
      *     }
      * )
      * @ORM\OrderBy({"title" = "ASC"})
