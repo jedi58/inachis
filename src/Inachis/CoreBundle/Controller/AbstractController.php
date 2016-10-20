@@ -29,7 +29,7 @@ abstract class AbstractController
     /**
      * $var AbstractController The instance of self
      */
-    private static $instance;
+    protected static $instance;
     /**
      * @var mixed[] Variables to be accessible to Twig templates
      */
@@ -82,7 +82,7 @@ abstract class AbstractController
     /**
      * Returns a specific error message given by it's unique name
      * @param string $error The name of the error message to retrieve
-     * @return string The requested error message if set
+     * @return string|null The requested error message if set
      */
     public static function getError($error)
     {

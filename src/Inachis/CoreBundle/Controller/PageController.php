@@ -52,7 +52,6 @@ class PageController extends AbstractController
                 return $response->redirect($url->getLink(), 301);
             }
         }
-/** end block **/
         $userManager = new UserManager(Application::getInstance()->getService('em'));
         $userManager->getByUsername($url->getContent()->getAuthor()->getUsername());
         $data = array(

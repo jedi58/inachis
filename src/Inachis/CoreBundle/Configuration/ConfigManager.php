@@ -9,7 +9,7 @@ class ConfigManager
     /**
      * @var ConfigManager A {@link ConfigManager} reference to instance of self
      */
-    private static $instance;
+    protected static $instance;
     /**
      * @var string The file path for where config files are located
      */

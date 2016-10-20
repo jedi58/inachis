@@ -39,7 +39,6 @@ class AccountController extends AbstractController
             return $response->redirect('/inadmin/signin')->send();
         }
         if ($request->method('post') && !empty($request->paramsPost()->get('username')) && !empty($request->paramsPost()->get('password'))) {
-            // @todo add code for saving site title and URL
             if (Application::getInstance()->getService('auth')->create(
                 $request->paramsPost()->get('username'),
                 $request->paramsPost()->get('password'),
@@ -116,7 +115,7 @@ class AccountController extends AbstractController
                 'cssClasses' => 'button button--positive',
                 'label' => 'Continue…'
             )));
-        $response->body($app->twig->render('setup__stage-1.html.twig', self::$data));
+        return $response->body($app->twig->render('setup__stage-1.html.twig', self::$data));
     }
 
     /**
@@ -212,6 +211,7 @@ class AccountController extends AbstractController
                 $request->paramsPost()->get('rememberMe') :
                 $request->cookies()->get('rememberMe')
         );
+        //self::$data['errors'] = self::$errors;
         return $response->body($app->twig->render('admin__signin.html.twig', self::$data));
     }
 
@@ -220,14 +220,12 @@ class AccountController extends AbstractController
      * @Method({"POST"})
      * @param \Klein\Request $request
      * @param \Klein\Response $response
-     * @param \Klein\ServiceProvider $service
-     * @param \Klein\App $app
      * @return mixed
      */
-    public static function getSignout($request, $response, $service, $app)
+    public static function getSignout($request, $response)
     {
         Application::getInstance()->requireAuthenticationService()->logout();
-        $response->redirect('/inadmin/signin')->send();
+        return $response->redirect('/inadmin/signin')->send();
     }
 
     /**
@@ -279,7 +277,7 @@ class AccountController extends AbstractController
                 //validate email address format
             )
         );
-        $response->body($app->twig->render('admin__forgot-password.html.twig', $data));
+        return $response->body($app->twig->render('admin__forgot-password.html.twig', $data));
     }
 
     /**
@@ -302,7 +300,7 @@ class AccountController extends AbstractController
         if ($response->isLocked()) {
             return;
         }
-        $response->body($app->twig->render('admin__forgot-password-sent.html.twig', array()));
+        return $response->body($app->twig->render('admin__forgot-password-sent.html.twig', array()));
     }
 
     /**
@@ -310,17 +308,15 @@ class AccountController extends AbstractController
      * @Method({"GET", "POST"})
      * @param \Klein\Request $request
      * @param \Klein\Response $response
-     * @param \Klein\ServiceProvider $service
-     * @param \Klein\App $app
      * @return mixed
      */
-    public static function getAdminList($request, $response, $service, $app)
+    public static function getAdminList($request, $response)
     {
         self::redirectIfNotAuthenticated($request, $response);
         if ($response->isLocked()) {
             return;
         }
-        $response->body('Show all admins');
+        return $response->body('Show all admins');
     }
 
     /**
@@ -328,17 +324,15 @@ class AccountController extends AbstractController
      * @Method({"GET", "POST"})
      * @param \Klein\Request $request
      * @param \Klein\Response $response
-     * @param \Klein\ServiceProvider $service
-     * @param \Klein\App $app
      * @return mixed
      */
-    public static function getAdminDetails($request, $response, $service, $app)
+    public static function getAdminDetails($request, $response)
     {
         self::redirectIfNotAuthenticated($request, $response);
         if ($response->isLocked()) {
             return;
         }
-        $response->body('Show details of specific admin');
+        return $response->body('Show details of specific admin');
     }
 
     /**
@@ -420,16 +414,14 @@ class AccountController extends AbstractController
      * @Method({"GET", "POST"})
      * @param \Klein\Request $request
      * @param \Klein\Response $response
-     * @param \Klein\ServiceProvider $service
-     * @param \Klein\App $app
      * @return mixed
      */
-    public static function getAdminSettingsMain($request, $response, $service, $app)
+    public static function getAdminSettingsMain($request, $response)
     {
         self::redirectIfNotAuthenticated($request, $response);
         if ($response->isLocked()) {
             return;
         }
-        $response->body('Show settings page for signed in admin');
+        return $response->body('Show settings page for signed in admin');
     }
 }

@@ -133,7 +133,7 @@ class Page
     /**
      * @ORM\OneToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Url", mappedBy="content", cascade={"persist"})
      * @ORM\OrderBy({"default" = "DESC"})
-     * @var Url[]
+     * @var ArrayCollection|Url[] The array of URLs for the content
      */
     protected $urls;
     /**
@@ -148,7 +148,7 @@ class Page
      *     }
      * )
      * @ORM\OrderBy({"title" = "ASC"})
-     * @var Category[] The array of categories assigned to the post/page
+     * @var ArrayCollection|Category[] The array of categories assigned to the post/page
      */
     protected $categories;
     /**
@@ -163,14 +163,14 @@ class Page
      *     }
      * )
      * @ORM\OrderBy({"title" = "ASC"})
-     * @var Tag[] The array of tags assigned to the post/page
+     * @var ArrayCollection|Tag[] The array of tags assigned to the post/page
      */
     protected $tags;
     /**
      * Default constructor for {@link Page}
      * @param string $title The title for the {@link Page}
      * @param string $content The content for the {@link Page}
-     * @param string $author The {@link User} that authored the {@link Page}
+     * @param User|null $author The {@link User} that authored the {@link Page}
      * @param string $type The type of {@link Page} - post or page
      */
     public function __construct($title = '', $content = '', $author = null, $type = self::TYPE_POST)
