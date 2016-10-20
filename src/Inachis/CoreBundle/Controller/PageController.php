@@ -38,7 +38,6 @@ class PageController extends AbstractController
      */
     public static function getPost($request, $response, $service, $app)
     {
-/** Move this block into a function **/
         $urlManager = new UrlManager(Application::getInstance()->getService('em'));
         $url = $urlManager->getByUrl($request->server()->get('REQUEST_URI'));
         if (empty($url)) {
@@ -86,10 +85,7 @@ class PageController extends AbstractController
         )) {
             return $response->redirect(sprintf(
                 '/inadmin/%s/new',
-                1 === preg_match(
-                    '/\/?[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*/',
-                    $request->server()->get('REQUEST_URI')
-                ) ? 'post' : 'page'
+                self::getContentType($request)
             ))->send();
         }
         if ($response->isLocked()) {
@@ -197,7 +193,7 @@ class PageController extends AbstractController
             return;
         }
         self::adminInit($request, $response);
-        $response->body($app->twig->render('admin__post-list.html.twig', self::$data));
+        return $response->body($app->twig->render('admin__post-list.html.twig', self::$data));
     }
 
     /**
@@ -214,20 +210,6 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/inadmin/page/[:pageTitle]")
-     * @Method({"GET", "POST"})
-     * @param \Klein\Request $request
-     * @param \Klein\Response $response
-     * @param \Klein\ServiceProvider $service
-     * @param \Klein\App $app
-     * @return mixed
-     */
-    public static function getPageAdmin($request, $response, $service, $app)
-    {
-        self::redirectIfNotAuthenticated($request, $response);
-    }
-
-    /**
      * @Route("/inadmin/search/results")
      * @Method({"POST"})
      * @param \Klein\Request $request
@@ -239,6 +221,19 @@ class PageController extends AbstractController
     public static function getSearchResults($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
-        $response->body('Show settings page for signed in admin');
+        return $response->body('Show settings page for signed in admin');
+    }
+
+    /**
+     * Returns `page` or `post` depending on the current URL
+     * @param \Klein\Request $request
+     * @return string The result of testing the current URL
+     */
+    public static function getContentType($request)
+    {
+        return 1 === preg_match(
+            '/\/inadmin\/([0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*|post)/',
+            $request->server()->get('REQUEST_URI')
+        ) ? Page::TYPE_POST : Page::TYPE_PAGE;
     }
 }

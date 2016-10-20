@@ -36,7 +36,7 @@ class PageManager extends AbstractManager
     {
         $page->setModDate(new \DateTime('now'));
         if (!empty($page->getId())) {
-           $this->em->merge($page);
+            $this->em->merge($page);
         }
         $this->em->persist($page);
         $this->em->flush();
