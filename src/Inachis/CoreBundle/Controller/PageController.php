@@ -97,37 +97,58 @@ class PageController extends AbstractController
         }
         self::adminInit($request, $response);
         $pageManager = new PageManager(Application::getInstance()->getService('em'));
-        $post = !empty($url) ? $url->getContent() : $post = $pageManager->create();
+        $post = !empty($url) ? $pageManager->getById($url->getContent()->getId()) : $post = $pageManager->create();
+        if ($post->getId() === null) {
+            $post->setType(self::getContentType($request));
+        }
         if ($request->method('post')) {
-            $post = $pageManager->hydrate($post, $request->paramsPost()->all());
+            $properties = $request->paramsPost()->all();
+            $properties['postDate'] = new \DateTime(
+                $properties['postDate'],
+                new \DateTimeZone($post->getTimezone())
+            );
+            $post = $pageManager->hydrate($post, $properties);
             $post->setAuthor(
-                Application::getInstance()->getService('auth')->getUserManager()->getById(
-                    Application::getInstance()->getService('session')->get('user')->getId()
-                )
+                Application::getInstance()->getService('auth')->getUserManager()->getByIdRaw(
+                    Application::getInstance()->getService('session')->get('user'))
             );
             $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
             $tagManager = new TagManager(Application::getInstance()->getService('em'));
             $categories = $request->paramsPost()->get('categories');
-            foreach ($categories as $categoryId) {
-                $category = $categoryManager->getById($categoryId);
-                $post->addCategory($category);
+            $assignedCategories = $post->getCategories()->getValues();
+            if (!empty($categories)) {
+                foreach ($categories as $categoryId) {
+                    $category = $categoryManager->getById($categoryId);
+                    if (in_array($category, $assignedCategories)) {
+                        continue;
+                    }
+                    $post->addCategory($category);
+                }
             }
             $tags = $request->paramsPost()->get('tags');
-            foreach ($tags as $tagTitle) {
-                $tag = $tagManager->getByTitle($tagTitle);
-                if (null === $tag) {
-                    $tag = $tagManager->create(array('title' => $tagTitle));
+            $assignedTags = $post->getTags()->getValues();
+            if (!empty($tags)) {
+                foreach ($tags as $tagTitle) {
+                    $tag = $tagManager->getByTitle($tagTitle);
+                    if (in_array($tag, $assignedTags)) {
+                        continue;
+                    }
+                    if (null === $tag) {
+                        $tag = $tagManager->create(array('title' => $tagTitle));
+                    }
+                    $post->addTag($tag);
                 }
-                $post->addTag($tag);
             }
             $newUrl = $request->paramsPost()->get('url');
             $urlFound = false;
             $urls = $post->getUrls();
-            foreach ($urls as $url) {
-                if ($url->getLink() !== $newUrl) {
-                    $url->setDefault(false);
-                } else {
-                    $urlFound = true;
+            if (!empty($urls)) {
+                foreach ($urls as $url) {
+                    if ($url->getLink() !== $newUrl) {
+                        $url->setDefault(false);
+                    } else {
+                        $urlFound = true;
+                    }
                 }
             }
             if (!$urlFound) {
@@ -137,17 +158,26 @@ class PageController extends AbstractController
                     'link' => $newUrl
                 )));
             }
-            var_dump($request->paramsPost()->all());
-            // @todo if publish button clicked then change from draft
+            if (null !== $request->paramsPost()->get('publish')) {
+                $post->setStatus(Page::PUBLISHED);
+            }
+            $post->setVisibility(Page::VIS_PRIVATE);
+            if ($request->paramsPost()->get('visibility') === 'on') {
+                $post->setVisibility(Page::VIS_PUBLIC);
+            }
             // @todo validate post
             if (empty(self::$errors)) {
-                //$pageManager->save($post);
-                //$response->redirect('/inadmin/' . $post->getUrls()[0]);
+                $pageManager->save($post);
+                return $response->redirect(
+                    '/inadmin/' .
+                    ($post->getType() == Page::TYPE_PAGE ? 'page/' : '') .
+                    $post->getUrls()[0]->getLink()
+                );
             }
-            // @todo save post
-            // @todo if post has an ID check if the URL has changed, if so change the default flag to 0 for the old one
-            // @todo header redirect to view current post (need to add view post link to template)
         }
+        self::$data['page']['title'] = $post->getId() !== null ?
+            'Editing "' . $post->getTitle() . '"' :
+            'New ' . $post->getType();
         self::$data['includeEditor'] = true;
         self::$data['post'] = $post;
         return $response->body($app->twig->render('admin__post__edit.html.twig', self::$data));

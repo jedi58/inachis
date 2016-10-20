@@ -36,10 +36,10 @@ class PageManager extends AbstractManager
     {
         $page->setModDate(new \DateTime('now'));
         if (!empty($page->getId())) {
-            $this->em->merge($page);
-        } else {
-            $this->em->persist($page);
+           $this->em->merge($page);
         }
+        $this->em->persist($page);
+        $this->em->flush();
     }
     /**
      * Removes the current entity from the repository

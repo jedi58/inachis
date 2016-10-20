@@ -148,7 +148,7 @@ class Page
      *     }
      * )
      * @ORM\OrderBy({"title" = "ASC"})
-     * @var Category[]
+     * @var Category[] The array of categories assigned to the post/page
      */
     protected $categories;
     /**
@@ -163,7 +163,7 @@ class Page
      *     }
      * )
      * @ORM\OrderBy({"title" = "ASC"})
-     * @var Tag[] The array of tags assigned to the post
+     * @var Tag[] The array of tags assigned to the post/page
      */
     protected $tags;
     /**
