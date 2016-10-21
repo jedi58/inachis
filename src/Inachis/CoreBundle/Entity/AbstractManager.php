@@ -16,16 +16,16 @@ abstract class AbstractManager extends EntityRepository
      */
     protected $em;
     /**
-     * @var Reference to an encryption object
+     * @var \Inachis\Component\CoreBundle\Security\Encryption Reference to an encryption object
      */
     protected $encryptor;
     /**
      * Default constructor for AbstractManager
-     * @param EntityManager $em Used for repository interactions
+     * @param EntityManager $entityManager Used for repository interactions
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->em = $em;
+        $this->em = $entityManager;
         $this->encryptor = null;
     }
     /**
@@ -39,7 +39,7 @@ abstract class AbstractManager extends EntityRepository
     abstract public function create();
     /**
      * Return the repository
-     * @return The repsoitory to return
+     * @return \Doctrine\ORM\EntityRepository The repository to return
      */
     protected function getRepository()
     {
@@ -71,15 +71,7 @@ abstract class AbstractManager extends EntityRepository
      */
     protected function encryptFields($object)
     {
-        if (method_exists($this, 'getEncryptedFields') && $object !== null) {
-            $fields = $this->getEncryptedFields();
-            foreach ($fields as $field) {
-                $field = ucfirst($field);
-                $getField = 'get' . $field;
-                $setField = 'set' . $field;
-                $object->$setField($this->encryptor->encrypt($object->$getField()));
-            }
-        }
+        $this->fieldEncryption('encrypt', $object);
     }
     /**
      * Decrypts the specified fields for the provided object
@@ -87,19 +79,36 @@ abstract class AbstractManager extends EntityRepository
      */
     protected function decryptFields($object)
     {
+        $this->fieldEncryption('decrypt', $object);
+    }
+
+    /**
+     * Encrypts or decrypts data dependent upon what function name is passed in
+     * @param string $method Should contain either "encrypt" or "decrypt"
+     * @param mixed $object The object to decrypt fields for
+     */
+    private function fieldEncryption($method, $object)
+    {
         if (method_exists($this, 'getEncryptedFields') && $object !== null) {
             $fields = $this->getEncryptedFields();
             foreach ($fields as $field) {
                 $field = ucfirst($field);
                 $getField = 'get' . $field;
                 $setField = 'set' . $field;
-                $object->$setField($this->encryptor->decrypt($object->$getField()));
+                $data = call_user_func(
+                    array(
+                        $this->encryptor,
+                        $method
+                    ),
+                    $object->$getField()
+                );
+                $object->$setField($data);
             }
         }
     }
     /**
      * Fetches a specific entity from the repository by the given Id
-     * @param string The Id of the entity to be returned
+     * @param string mixed The Id of the entity to be returned
      * @return mixed The returned entity
      */
     public function getById($id)
