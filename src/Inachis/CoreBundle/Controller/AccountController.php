@@ -52,10 +52,11 @@ class AccountController extends AbstractController
             }
         }
         if ($response->isLocked()) {
-            return;
+            return null;
         }
-        $data = array(
-            'form' => (new FormBuilder(array(
+        self::adminInit($request, $response);
+        self::$data['page'] = array('title' => 'Inachis Install - Step 1');
+        self::$data['form'] = (new FormBuilder(array(
                 'action' => '/setup',
                 'autocomplete' => false,
                 'cssClasses' => 'form form__login form__setup'
@@ -65,14 +66,12 @@ class AccountController extends AbstractController
             )))
             ->addComponent(new TextType(array(
                 'name' => 'siteName',
-                'cssClasses' => 'field__wide',
                 'label' => 'Site name',
                 'placeholder' => 'e.g. My awesome site',
                 'required' => true
             )))
             ->addComponent(new TextType(array(
                 'name' => 'siteUrl',
-                'cssClasses' => 'field__wide',
                 'label' => 'URL',
                 'required' => true,
                 'type' => 'url',
@@ -116,10 +115,8 @@ class AccountController extends AbstractController
                 'type' => 'submit',
                 'cssClasses' => 'button button--positive',
                 'label' => 'Continue…'
-            ))),
-            'errors' => self::$errors
-        );
-        $response->body($app->twig->render('setup__stage-1.html.twig', $data));
+            )));
+        $response->body($app->twig->render('setup__stage-1.html.twig', self::$data));
     }
 
     /**
@@ -142,7 +139,7 @@ class AccountController extends AbstractController
             return self::redirectToReferrerOrDashboard($response);
         }
         if ($response->isLocked()) {
-            return;
+            return null;
         }
         // Handle sign-in
         if ($request->method('post') && !empty($request->paramsPost()->get('loginUsername'))
@@ -162,8 +159,9 @@ class AccountController extends AbstractController
                 self::$errors['username'] = 'Authentication Failed.';
             }
         }
-        $data = array(
-            'form' => (new FormBuilder(array(
+        self::adminInit($request, $response);
+        self::$data['page'] = array('title' => 'Sign In');
+        self::$data['form'] = (new FormBuilder(array(
                 'action' => '/inadmin/signin',
                 'autocomplete' => false,
                 'cssClasses' => 'form form__login'
@@ -207,16 +205,14 @@ class AccountController extends AbstractController
                 'type' => 'submit',
                 'cssClasses' => 'button button--positive',
                 'label' => 'Log In'
-            ))),
-            'data' => array(
-                'loginUsername' => $request->paramsPost()->get('loginUsername'),
-                'rememberMe' => !empty($request->paramsPost()->get('rememberMe')) ?
-                    $request->paramsPost()->get('rememberMe') :
-                    $request->cookies()->get('rememberMe')
-            ),
-            'errors' => self::$errors
+            )));
+        self::$data['data'] = array(
+            'loginUsername' => $request->paramsPost()->get('loginUsername'),
+            'rememberMe' => !empty($request->paramsPost()->get('rememberMe')) ?
+                $request->paramsPost()->get('rememberMe') :
+                $request->cookies()->get('rememberMe')
         );
-        $response->body($app->twig->render('admin__signin.html.twig', $data));
+        return $response->body($app->twig->render('admin__signin.html.twig', self::$data));
     }
 
     /**
@@ -361,63 +357,62 @@ class AccountController extends AbstractController
             return;
         }
         $pageManager = new PageManager(Application::getInstance()->getService('em'));
-        $data = array(
-            'session' => $_SESSION,
-            'data' => array(
-                'draftCount' => $pageManager->getAllCount(array(
+        self::adminInit($request, $response);
+        self::$data['page'] = array('title' => 'Dashboard');
+        self::$data['data'] = array(
+            'draftCount' => $pageManager->getAllCount(array(
+                'q.status = :status',
+                array('status' => Page::DRAFT)
+            )),
+            'publishCount' => $pageManager->getAllCount(array(
+                'q.status = :status AND q.postDate <= :postDate',
+                array(
+                    'status' => Page::PUBLISHED,
+                    'postDate' => new \DateTime()
+                )
+            )),
+            'upcomingCount' => $pageManager->getAllCount(array(
+                'q.status = :status AND q.postDate > :postDate',
+                array(
+                    'status' => Page::PUBLISHED,
+                    'postDate' => new \DateTime()
+                )
+            )),
+            'drafts' => $pageManager->getAll(
+                0,
+                5,
+                array(
                     'q.status = :status',
                     array('status' => Page::DRAFT)
-                )),
-                'publishCount' => $pageManager->getAllCount(array(
-                    'q.status = :status AND q.postDate <= :postDate',
-                    array(
-                        'status' => Page::PUBLISHED,
-                        'postDate' => new \DateTime()
-                    )
-                )),
-                'upcomingCount' => $pageManager->getAllCount(array(
+                ),
+                'q.postDate, q.modDate'
+            ),
+            'upcoming' => $pageManager->getAll(
+                0,
+                5,
+                array(
                     'q.status = :status AND q.postDate > :postDate',
                     array(
                         'status' => Page::PUBLISHED,
                         'postDate' => new \DateTime()
                     )
-                )),
-                'drafts' => $pageManager->getAll(
-                    0,
-                    5,
+                ),
+                'q.postDate, q.modDate'
+            ),
+            'posts' => $pageManager->getAll(
+                0,
+                5,
+                array(
+                    'q.status = :status AND q.postDate <= :postDate',
                     array(
-                        'q.status = :status',
-                        array('status' => Page::DRAFT)
-                    ),
-                    'q.postDate, q.modDate'
+                        'status' => Page::PUBLISHED,
+                        'postDate' => new \DateTime()
+                    )
                 ),
-                'upcoming' => $pageManager->getAll(
-                    0,
-                    5,
-                   array(
-                        'q.status = :status AND q.postDate > :postDate',
-                        array(
-                            'status' => Page::PUBLISHED,
-                            'postDate' => new \DateTime()
-                        )
-                    ),
-                    'q.postDate, q.modDate'
-                ),
-                'posts' => $pageManager->getAll(
-                    0,
-                    5,
-                    array(
-                        'q.status = :status AND q.postDate <= :postDate',
-                        array(
-                            'status' => Page::PUBLISHED,
-                            'postDate' => new \DateTime()
-                        )
-                    ),
-                    'q.postDate, q.modDate'
-                ),
+                'q.postDate, q.modDate'
             )
         );
-        $response->body($app->twig->render('admin__dashboard.html.twig', $data));
+        return $response->body($app->twig->render('admin__dashboard.html.twig', self::$data));
     }
 
     /**

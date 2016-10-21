@@ -39,7 +39,7 @@ class Category
      */
     protected $icon;
     /**
-     * @ORM\ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="Inachis\Component\CoreBundle\Entity\Category", inversedBy="children")
      * @var Category The parent category, if self is not a top-level category
      */
     protected $parent;

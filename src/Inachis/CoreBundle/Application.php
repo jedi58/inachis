@@ -7,8 +7,9 @@ use Inachis\Component\CoreBundle\Routing\RoutingManager;
 use Inachis\Component\CoreBundle\Security\Authentication;
 use Inachis\Component\CoreBundle\Security\Encryption;
 use Inachis\Component\CoreBundle\Security\SessionManager;
-use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
@@ -49,6 +50,7 @@ class Application
      * Default constructor for {@link Application} which will instantiate required
      * services.
      * @param string $env The environment type being used
+     * @throws \Exception
      */
     public function __construct($env = 'dev')
     {
@@ -58,10 +60,14 @@ class Application
         $this->router = RoutingManager::getInstance();
         $this->router->load();
 
-        $config = new \Doctrine\ORM\Configuration();
+        $config = new Configuration();
         $config->setProxyDir($this->getApplicationRoot() . 'app/persistent/proxies');
         $config->setProxyNamespace('proxies');
         $config->setAutoGenerateProxyClasses(($env === 'dev'));
+
+        if (empty($this->config['system'])) {
+            throw new \Exception('System configuration could not be loaded. Please check config/system.json');
+        }
 
         if (!empty($this->getConfig()['system']->general->activity_tracking)) {
             $this->logActivities = (bool) $this->getConfig()['system']->general->activity_tracking;
@@ -71,7 +77,7 @@ class Application
             $this->getApplicationRoot() . 'vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
         );
         $reader = new AnnotationReader();
-        $driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array( __DIR__ . '/Entity/'));
+        $driverImpl = new AnnotationDriver($reader, array( __DIR__ . '/Entity/'));
         $config->setMetadataDriverImpl($driverImpl);
         $this->services['em'] = EntityManager::create((array) $this->config['system']->repository, $config);
     }
@@ -212,7 +218,7 @@ class Application
     }
     /**
      * Returns the path to the root of where the application has been installed
-     * @return string The filepath to where the application is installed
+     * @return string The file path to where the application is installed
      */
     public static function getApplicationRoot()
     {

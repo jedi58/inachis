@@ -1,6 +1,6 @@
 ---
-# application tasks to be customized and to run after the main provision
+- name: Get Composer dependencies
+  shell: /var/www/inachis/composer install
 
-    - name: Run Composer
-      sudo: false
-      shell: /usr/local/bin/composer install chdir=/var/www/inachis/
+- name: Create database schema
+  shell: /var/www/inachis/vendor/bin/doctrine orm:schema-tool:create -f

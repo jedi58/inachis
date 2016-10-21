@@ -8,7 +8,7 @@ $(document).ready(function() {
 			$(targetElement).hide();
 		}
 	});
-	$uiToggle.on('click', function(event)
+	$uiToggle.on('click', function()
 	{
 		$($(this).attr('data-target')).toggle();
 	});
@@ -16,7 +16,7 @@ $(document).ready(function() {
 	// https://select2.github.io/examples.html
 	$('.js-select').each(function ()
 	{
-		$properties = {
+		var $properties = {
 			allowClear: true,
 			maximumInputLength: 20
 		};
@@ -63,7 +63,7 @@ $(document).ready(function() {
 	if ($('html').attr('lang')) {
 		$.datetimepicker.setLocale($('html').attr('lang'));
 	}
-	$('#publishDate').each(function ()
+	$('#postDate').each(function ()
 	{
 		$(this).datetimepicker({
 			format: 'Y/m/d H:i',
@@ -73,7 +73,7 @@ $(document).ready(function() {
 
 	$('.ui-switch').each(function ()
 	{
-		$properties = {
+		var $properties = {
 			checked: this.checked,
 			clear: true
 		};
@@ -85,7 +85,6 @@ $(document).ready(function() {
 		}
 		$(this).switchButton($properties);
 	});
-
 
 	$('.ui-tabbed').tabs();
 });

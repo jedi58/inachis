@@ -25,7 +25,7 @@
 	<ol id="widget-posts__drafts">
 	{% for post in data.drafts %}
 		<li>
-			<a aria-label="Edit {{ post.title }}" href="/inadmin{{ post.urls[0].link }}"><h2>{{ post.title }}</h2>
+			<a aria-label="Edit {{ post.title }}" href="/inadmin/{%- if post.type == 'page' %}page/{% endif -%}{{ post.urls[0].link }}"><h2>{{ post.title }}</h2>
 			<p>{{ post.content|markdown|striptags|length > 300 ? post.content|markdown|striptags|slice(0, 300) ~ '…' : post.content|markdown|striptags  }}</p></a>
 			<p class="date"><span class="material-icons">schedule</span> Last modified: <em>{{ post.modDate|date('l jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
 		</li>
@@ -41,7 +41,7 @@
 	<ol id="widget-posts__upcoming">
 	{% for post in data.upcoming %}
 		<li>
-			<h2><a aria-label="Edit {{ post.title }}" href="/inadmin{{ post.urls[0].link }}">{{ post.title }}</a></h2>
+			<h2><a aria-label="Edit {{ post.title }}" href="/inadmin/{%- if post.type == 'page' %}page/{% endif -%}{{ post.urls[0].link }}">{{ post.title }}</a></h2>
 			<p>{{ post.content|length > 250 ? post.content|slice(0, 250) ~ '…' : post.content  }}</p>
 			<p class="date"><span class="material-icons">schedule</span> Schedule for <em>{{ post.modDate|date('l jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
 		</li>
@@ -53,7 +53,7 @@
 	<ol id="widget-posts__published">
 	{% for post in data.posts %}
 		<li>
-			<h2><a aria-label="Edit {{ post.title }}" href="/inadmin{{ post.urls[0].link }}">{{ post.title }}</a></h2>
+			<h2><a aria-label="Edit {{ post.title }}" href="/inadmin/{%- if post.type == 'page' %}page/{% endif -%}{{ post.urls[0].link }}">{{ post.title }}</a></h2>
 			<p>{{ post.content|length > 250 ? post.content|slice(0, 250) ~ '…' : post.content  }}</p>
 			<p class="date"><span class="material-icons">schedule</span> Published on <em>{{ post.modDate|date('l jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
 		</li>

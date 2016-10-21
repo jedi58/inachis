@@ -2,17 +2,12 @@
 	{
 		"methods": [ "GET" ],
 		"path": "/[:pageTitle]",
-		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPage"
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPost"
 	},
 	{
 		"methods": [ "GET", "POST" ],
 		"path": "/inadmin/[page:type]/[:pageTitle]",
-		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPageAdmin"
-	},
-	{
-		"methods": [ "GET", "POST" ],
-		"path": "/inadmin/page/new",
-		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPageAdmin"
+		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
 	},
 	{
 		"methods": [ "GET" ],
@@ -26,12 +21,12 @@
 	},
 	{
 		"methods": [ "GET", "POST" ],
-		"path": "/inadmin/post/new",
+		"path": "/inadmin/[page|post:type]/new",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostAdmin"
 	},
 	{
 		"methods": [ "GET" ],
-		"path": "/inadmin/post/list",
+		"path": "/inadmin/[page|post:type]/list",
 		"action": "\\Inachis\\Component\\CoreBundle\\Controller\\PageController::getPostListAdmin"
 	},
 	{
