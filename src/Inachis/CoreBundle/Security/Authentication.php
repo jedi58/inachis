@@ -125,7 +125,9 @@ class Authentication
      */
     public function logout()
     {
-        Application::getInstance()->getService('session')->remove('user');
+        Application::getInstance()->getService('session')->end();
+        Cookie::delete('NX03');
+        Cookie::delete('NX06');
         Application::getInstance()->getService('session')->regenerate();
         if (Application::getInstance()->shouldLogActivities()) {
             //Application::getInstance()->getService('log')->add('logout', $user->getUsername(), $user->getId());

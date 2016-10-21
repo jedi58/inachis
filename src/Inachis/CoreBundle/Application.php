@@ -25,7 +25,7 @@ class Application
     /**
      * @var Application reference to instance of self
      */
-    private static $instance;
+    protected static $instance;
     /**
      * @var string The mode for the current environment; limited to {@link Application::MODES}
      */
@@ -111,7 +111,7 @@ class Application
     }
     /**
      * Returns the {@link Application}'s {@link ConfigManager} object
-     * @return ConfigManager The instance of the config manager
+     * @return string[] The instance of the config manager
      */
     public function getConfig()
     {
@@ -199,7 +199,7 @@ class Application
     public function requireEncryptionService()
     {
         if (!$this->hasService('encryption')) {
-            if (empty($key = Application::getInstance()->getConfig()['system']->security->encryptionKey)) {
+            if (empty($key = self::getInstance()->getConfig()['system']->security->encryptionKey)) {
                 throw new \Exception(
                     'Config error - encryption key not found. Generate one using `gulp encryption:generate-key`'
                 );

@@ -30,10 +30,8 @@ class AdminDialogController extends AbstractController
      * @Method({"POST"})
      * @param \Klein\Request $request
      * @param \Klein\Response $response
-     * @param \Klein\ServiceProvider $service
-     * @param \Klein\App $app
      */
-    public static function getCategoryListContent($request, $response, $service, $app)
+    public static function getCategoryListContent($request, $response)
     {
         self::redirectIfNotAuthenticated($request, $response);
         if ($response->isLocked()) {
@@ -49,7 +47,7 @@ class AdminDialogController extends AbstractController
                     'q.title LIKE :title',
                     array('title' => '%' . $request->paramsPost()->get('q') . '%')
                 ),
-                'q.title'
+                array('q.title')
             );
         self::$data['totalResults'] = $categoryManager->getAllCount(array(
             'q.title LIKE :title',
@@ -83,10 +81,8 @@ class AdminDialogController extends AbstractController
      * @Method({"POST"})
      * @param \Klein\Request $request
      * @param \Klein\Response $response
-     * @param \Klein\ServiceProvider $service
-     * @param \Klein\App $app
      */
-    public static function saveCategoryManagerContent($request, $response, $service, $app)
+    public static function saveCategoryManagerContent($request, $response)
     {
         self::redirectIfNotAuthenticated($request, $response);
         if ($response->isLocked()) {

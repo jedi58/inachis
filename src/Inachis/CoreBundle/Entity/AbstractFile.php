@@ -98,7 +98,7 @@ abstract class AbstractFile
     }
     /**
      * Returns the value of {@link filesize}
-     * @return string The filesize of the record
+     * @return int The filesize of the record
      */
     public function getFilesize()
     {

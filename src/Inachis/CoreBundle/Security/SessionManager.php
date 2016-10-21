@@ -125,6 +125,7 @@ class SessionManager
      */
     public function remove($key)
     {
+        $_SESSION[$key] = null;
         unset($_SESSION[$key]);
     }
     /**

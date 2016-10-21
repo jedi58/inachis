@@ -48,7 +48,7 @@ class ContentSecurityPolicy
     /**
      * @var Application reference to instance of self
      */
-    private static $instance;
+    protected static $instance;
     /**
      * Returns an instance of {@link Application}
      * @return Application The current or a new instance of {@link Application}

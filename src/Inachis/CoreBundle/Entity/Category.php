@@ -46,7 +46,7 @@ class Category
     /**
      * @ORM\OneToMany(targetEntity="Inachis\Component\CoreBundle\Entity\Category", mappedBy="parent")
      * @ORM\OrderBy({"title" = "ASC"})
-     * @var Category[] The array of child categories if applicable
+     * @var ArrayCollection|Category[] The array of child categories if applicable
      */
     protected $children;
     /**
@@ -168,7 +168,7 @@ class Category
     }
     /**
      * Sets the value of {@link parent}
-     * @param Category $parent The parent of the current category
+     * @param null|Category $parent The parent of the current category
      */
     public function setParent(Category $parent = null)
     {
