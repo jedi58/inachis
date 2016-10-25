@@ -64,7 +64,7 @@ class UserManager extends AbstractManager
         $this->em->flush();
     }
     /**
-     * Fetches a specific entity from the repository by the given Id
+     * Fetches a specific entity from the repository by the given Id and decrypts any encrypted fields
      * @param string The Id of the entity to be returned
      * @return mixed The returned entity
      */

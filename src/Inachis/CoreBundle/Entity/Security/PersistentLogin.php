@@ -43,7 +43,7 @@ class PersistentLogin
      * @param int $userId The ID of the user the token is for
      * @param string $userHash The hashed userId and user-agent
      * @param string $tokenHash The hashed token
-     * @param DateTime $expires The expiry date for the token
+     * @param \DateTime $expires The expiry date for the token
      */
     public function __construct($userId = -1, $userHash = null, $tokenHash = null, $expires = null)
     {
@@ -139,12 +139,12 @@ class PersistentLogin
     /**
      * Sets the value of expires.
      * @param \DateTime $expires Sets the expiry date for the token
-     * @return PersistentLogin Returns itself
+     * @return PersistentLogin|null Returns itself
      */
     public function setExpires($expires)
     {
         if (!$expires instanceof \DateTime) {
-            return;
+            return null;
         }
         $this->expires = $expires;
         return $this;
