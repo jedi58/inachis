@@ -189,9 +189,23 @@ class PageController extends AbstractController
     {
         self::redirectIfNotAuthenticated($request, $response);
         if ($response->isLocked()) {
-            return;
+            return null;
         }
         self::adminInit($request, $response);
+        $pageManager = new PageManager(Application::getInstance()->getService('em'));
+        $offset = 0;
+        $limit = 0;
+        $type = self::getContentType($request);
+        self::$data['posts'] = $pageManager->getAll(
+            $offset,
+            $limit,
+            array(
+                'q.type = :type',
+                array('type' => $type)
+            ),
+            'q.postDate, q.modDate'
+
+        );
         return $response->body($app->twig->render('admin__post-list.html.twig', self::$data));
     }
 
