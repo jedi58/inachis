@@ -71,50 +71,6 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->url, $this->manager->getById(1));
     }
     
-    // public function testGetAllForContentTypeAndIdReturnsSingle()
-    // {
-    //     $this->url = $this->manager->create($this->properties);
-    //     $this->repository->shouldReceive('findBy')
-    //         ->with(
-    //             array(
-    //                 'content' => null
-    //             )
-    //         )->andReturn($this->url);
-    //     $this->assertSame(
-    //         $this->url,
-    //         $this->manager->getAllForContentTypeAndId('Page', 1)
-    //     );
-    // }
-    
-    // public function testGetAllForContentTypeAndIdReturnsMultiple()
-    // {
-    //     $urls = array();
-    //     $this->url = $this->manager->create();
-    //     $this->url->setContentType('Page');
-    //     $this->url->setContentId(2);
-    //     $this->url->setDefault(true);
-    //     $this->url->setLink('test-link1');
-    //     $urls[] = $this->url;
-    //     $this->url = $this->manager->create();
-    //     $this->url->setContentType('Page');
-    //     $this->url->setContentId(2);
-    //     $this->url->setDefault(false);
-    //     $this->url->setLink('test-link2');
-    //     $urls[] = $this->url;
-        
-    //     $this->repository->shouldReceive('findBy')
-    //         ->with(
-    //             array(
-    //                 'contentType' => 'Page',
-    //                 'contentId' => '2'
-    //                 )
-    //         )->andReturn($urls);
-    //     $this->assertSame(
-    //         $urls,
-    //         $this->manager->getAllForContentTypeAndId('Page', 2)
-    //     );
-    // }
-
     public function testGetDefaultUrl()
     {
         $this->url = $this->manager->create($this->properties);

@@ -10,6 +10,12 @@ use Inachis\Component\CoreBundle\Configuration\ConfigManager;
  */
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 {
+    protected $config;
+
+    public function setUp()
+    {
+        $this->config = new ConfigManager();
+    }
     public function testLoad()
     {
         $config = ConfigManager::getInstance()->load('core', 'json', 'routing/');
