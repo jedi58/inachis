@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Object for handling custom URLs that are mapped to content
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"link"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"linkCanonical"})})
  */
 class Url
 {
@@ -29,10 +29,15 @@ class Url
      */
     protected $content;
     /**
-     * @ORM\Column(type="string", length=512, unique=true)
+     * @ORM\Column(type="string", length=512)
      * @var string The SEO-friendly short link
      */
     protected $link;
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @var string The canonical hash for the link
+     */
+    protected $linkCanonical;
     /**
      * @ORM\Column(type="boolean", name="defaultLink")
      * @var bool Flag specifying if the URL is the canonical one to use
@@ -53,7 +58,6 @@ class Url
      * URL will be specified as canonical. This can be overridden using
      * {@link Url::setDefault}.
      * @param Page $content The {@link Page} object the link is for
-     * @param int $id The ID of the content record
      * @param string $link The short link for the content
      */
     public function __construct(Page $content, $link = '')
@@ -107,6 +111,7 @@ class Url
     public function setLink($value)
     {
         $this->link = $value;
+        $this->linkCanonical = md5($value);
     }
 
     public function setContent($value)

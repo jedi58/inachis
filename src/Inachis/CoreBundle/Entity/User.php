@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Object for handling User entity
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"username", "email"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"usernameCanonical", "emailCanonical"})})
  */
 class User
 {
@@ -19,10 +19,15 @@ class User
      */
     protected $id;
     /**
-     * @ORM\Column(type="string", length=512, unique=true, nullable=false)
+     * @ORM\Column(type="string", length=512, nullable=false)
      * @var string Username of the user
      */
     protected $username;
+    /**
+     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
+     * @var string Username of the user
+     */
+    protected $usernameCanonical;
     /**
      * @ORM\Column(type="string", length=512, nullable=false)
      * @var string Password for the user
@@ -33,6 +38,11 @@ class User
      * @var string Email address of the user
      */
     protected $email;
+    /**
+     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
+     * @var string Email address of the user
+     */
+    protected $emailCanonical;
     /**
      * @ORM\Column(type="string", length=512)
      * @var string The display name for the user
@@ -189,6 +199,7 @@ class User
     public function setUsername($value)
     {
         $this->username = $value;
+        $this->usernameCanonical = $value;
     }
     /**
      * Sets the value of {@link password}
@@ -218,6 +229,7 @@ class User
     public function setEmail($value)
     {
         $this->email = $value;
+        $this->emailCanonical = $value;
     }
     /**
      * Sets the value of {@link displayName}
