@@ -115,7 +115,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             $this->properties['allow_comments'],
-            $this->page->getAllowComments()
+            $this->page->isAllowComments()
         );
     }
     

@@ -303,7 +303,7 @@ class Page
      * Returns the value of {@link allowComments}
      * @return bool Flag indicating if the {@link Page} allows comments
      */
-    public function getAllowComments()
+    public function isAllowComments()
     {
         return $this->allowComments;
     }
