@@ -31,7 +31,10 @@ class PageTest extends \PHPUnit_Framework_TestCase
             'post_date' => new \DateTime('yesterday noon'),
             'mod_date' => new \DateTime('now'),
             'password' => '',
-            'allow_comments' => true
+            'allow_comments' => true,
+            'type' => 'post',
+            'latlong' => '0.1,0,2',
+            'sharingMessage' => 'This should be less than 140 characters'
         );
     }
     
@@ -52,6 +55,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->page->setModDate($this->properties['mod_date']);
         $this->page->setPassword($this->properties['password']);
         $this->page->setAllowComments($this->properties['allow_comments']);
+        $this->page->setType($this->properties['type']);
+        $this->page->setLatlong($this->properties['latlong']);
+        $this->page->setSharingMessage($this->properties['sharingMessage']);
     }
     
     public function testSettingOfObjectProperties()
@@ -117,6 +123,18 @@ class PageTest extends \PHPUnit_Framework_TestCase
             $this->properties['allow_comments'],
             $this->page->isAllowComments()
         );
+        $this->assertEquals(
+            $this->properties['type'],
+            $this->page->getType()
+        );
+        $this->assertEquals(
+            $this->properties['latlong'],
+            $this->page->getLatlong()
+        );
+        $this->assertEquals(
+            $this->properties['sharingMessage'],
+            $this->page->getSharingMessage()
+        );
     }
     
     public function testValidStatus()
@@ -150,5 +168,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $this->initialiseDefaultObject();
         $this->assertEquals(false, $this->page->isScheduledPage());
+    }
+
+    public function testIsDraft()
+    {
+        $this->page->setStatus(Page::DRAFT);
+        $this->assertEquals(Page::DRAFT, $this->page->getStatus());
     }
 }
