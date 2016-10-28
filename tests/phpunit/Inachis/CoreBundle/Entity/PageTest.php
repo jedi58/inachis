@@ -189,6 +189,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $this->page->setStatus(Page::DRAFT);
         $this->assertEquals(Page::DRAFT, $this->page->getStatus());
+        $this->assertEquals(true, $this->page->isDraft());
+        $this->page->setStatus(Page::PUBLISHED);
+        $this->assertEquals(false, $this->page->isDraft());
     }
 
     public function testGetPostDateAsLink()
@@ -225,7 +228,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         try {
             $this->assertInstanceOf(
                 'Inachis\Component\CoreBundle\Entity\Url',
-                $this->page->getUrl(1)
+                $this->page->getUrl('something-bad')
             );
         } catch (\InvalidArgumentException $exception) {
             $this->assertContains('does not exist', $exception->getMessage());
