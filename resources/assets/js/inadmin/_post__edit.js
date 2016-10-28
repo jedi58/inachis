@@ -5,7 +5,7 @@ var InachisPostEdit = {
 
 	_init: function()
 	{
-		var currentContentType = window.location.href.match(/(post|page)/gi);
+		const currentContentType = window.location.href.match(/(post|page)/gi);
 		if (null !== currentContentType) {
 			this._postOrPage = currentContentType[0].toLowerCase();
 		}
