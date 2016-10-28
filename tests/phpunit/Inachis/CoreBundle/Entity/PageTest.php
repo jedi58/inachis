@@ -2,7 +2,10 @@
 
 namespace Inachis\Tests\CoreBundle\Entity;
 
+use Inachis\Component\CoreBundle\Entity\Category;
 use Inachis\Component\CoreBundle\Entity\Page;
+use Inachis\Component\CoreBundle\Entity\Tag;
+use Inachis\Component\CoreBundle\Entity\Url;
 use Inachis\Component\CoreBundle\Entity\User;
 
 /**
@@ -36,6 +39,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
             'latlong' => '0.1,0,2',
             'sharingMessage' => 'This should be less than 140 characters'
         );
+        $url = new Url($this->page);
+        $url->setLink('test');
+        $this->page->addUrl($url);
     }
     
     private function initialiseDefaultObject()
@@ -170,9 +176,69 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->page->isScheduledPage());
     }
 
+    public function testSetTypeInvalid()
+    {
+        try {
+            $this->page->setType('something-bad');
+        } catch (\Exception $exception) {
+            $this->assertContains('not a valid page type', $exception->getMessage());
+        }
+    }
+
     public function testIsDraft()
     {
         $this->page->setStatus(Page::DRAFT);
         $this->assertEquals(Page::DRAFT, $this->page->getStatus());
+    }
+
+    public function testGetPostDateAsLink()
+    {
+        $this->page->setPostDate(new \DateTime('2016-12-25'));
+        $this->assertEquals('2016/12/25/', $this->page->getPostDateAsLink());
+    }
+
+    public function testGetCategories()
+    {
+        $this->page->addCategory(new Category());
+        $this->assertInstanceOf(
+            'Doctrine\Common\Collections\ArrayCollection',
+            $this->page->getCategories()
+        );
+        $this->assertNotEmpty($this->page->getCategories());
+    }
+
+    public function testGetUrls()
+    {
+        $this->assertArrayHasKey(0, $this->page->getUrls());
+    }
+
+    public function testGetUrl()
+    {
+        $this->assertInstanceOf(
+            'Inachis\Component\CoreBundle\Entity\Url',
+            $this->page->getUrl(0)
+        );
+    }
+
+    public function testGetUrlException()
+    {
+        try {
+            $this->assertInstanceOf(
+                'Inachis\Component\CoreBundle\Entity\Url',
+                $this->page->getUrl(1)
+            );
+        } catch (\InvalidArgumentException $exception) {
+            $this->assertContains('does not exist', $exception->getMessage());
+        }
+    }
+
+    public function testGetTags()
+    {
+        $this->page->addTag(new Tag());
+        $this->assertInstanceOf(
+            'Doctrine\Common\Collections\ArrayCollection',
+            $this->page->getTags()
+        );
+        $this->assertNotEmpty($this->page->getTags());
     }
 }
