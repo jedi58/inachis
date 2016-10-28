@@ -93,4 +93,11 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             '8c56567b93f4183dca478c46aeb114b1c0c1efde4fd32da44ac1');
         $this->assertSame($this->user, $this->manager->getByUsername('test'));
     }
+    
+    public function testGetByIdRaw()
+    {
+        $this->user = $this->manager->create($this->properties);
+        $this->repository->shouldReceive('find')->with($this->user->getId())->andReturn($this->user);
+        $this->assertSame($this->user, $this->manager->getByIdRaw($this->user->getId()));
+    }
 }
