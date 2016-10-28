@@ -153,4 +153,64 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
         $this->repository->shouldReceive('flush')->andReturn(true);
         $this->assertSame(null, $this->manager->remove($this->url));
     }
+
+     public function testConvertBasicURL()
+     {
+         $this->assertEquals('test', $this->manager->urlify('Test'));
+     }
+
+     public function testConvertURLWithSpaces()
+     {
+         $this->assertEquals('a-basic-title', $this->manager->urlify('A Basic Title'));
+     }
+
+     public function testConvertURLWithTabs()
+     {
+         $this->assertEquals('a-basic-title', $this->manager->urlify('A Basic Title'));
+     }
+
+     public function testConvertURLWithPartialPass()
+     {
+         $this->assertEquals('a-basic-title-2', $this->manager->urlify('A-basic title 2'));
+     }
+
+     public function testConvertURLWithPunctuation()
+     {
+         $this->assertEquals(
+             'an-inachis-basic-title',
+             $this->manager->urlify('An Inachis\' Basic Title')
+         );
+     }
+
+     public function testConvertURLWithSizeLimit()
+     {
+         $this->assertEquals(
+             'an-inachis-basi',
+             $this->manager->urlify('An Inachis\' Basic Title', 15)
+         );
+     }
+
+     public function testGetLinkFromURI()
+     {
+         $this->assertEquals(
+             'test-url',
+             $this->manager->fromUri('https://www.test.com/2015/01/01/test-url/?debug#top')
+         );
+     }
+
+     public function testGetLinkFromURIWithoutSchema()
+     {
+         $this->assertEquals(
+             'test-url',
+             $this->manager->fromUri('www.test.com/2015/01/01/test-url/?debug#top')
+         );
+     }
+
+     public function testGetLinkFromURIWithPathOnly()
+     {
+         $this->assertEquals(
+             'test-url',
+             $this->manager->fromUri('test-url?debug#top')
+         );
+     }
 }

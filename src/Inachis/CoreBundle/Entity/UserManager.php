@@ -70,12 +70,22 @@ class UserManager extends AbstractManager
      */
     public function getById($id)
     {
-        $user = $this->getRepository()->find($id);
+        $user = $this->getByIdRaw($id);
         $this->decryptFields($user);
         return $user;
     }
     /**
-     * Returns a {@link User} based on the specified username
+     * Fetches a specific entity from the repository by the given Id
+     * @param string The Id of the entity to be returned
+     * @return mixed The returned entity
+     */
+    public function getByIdRaw($id)
+    {
+        $user = $this->getRepository()->find($id);
+        return $user;
+    }
+    /**
+     * Returns a {@link User} based on the specified username and decrypts any encrypted fields
      * @param string $username The username of the {@link User} to return
      * @return User The retrieved user object
      */
@@ -90,11 +100,11 @@ class UserManager extends AbstractManager
      */
     public function qbByUsernameOrEmail($usernameOrEmail)
     {
-        $qb = $this->getRepository()->createQueryBuilder('u')
-            ->where($qb->expr()->like('username', ':username'))
-            ->whereOr($qb->expr()->like('email', ':username'))
+        $qb = $this->getRepository()->createQueryBuilder('u');
+        return $qb
+            ->where($qb->expr()->like('u.username', ':username'))
+            ->whereOr($qb->expr()->like('u.email', ':username'))
             ->setParameter('username', $usernameOrEmail);
-        return $qb;
     }
     /**
      * Returns a {@link User} based on the specified username or email address
@@ -103,16 +113,10 @@ class UserManager extends AbstractManager
      */
     public function getByUsernameOrEmail($usernameOrEmail)
     {
-        return $this->qbByUsernameAndEmail($usernameOrEmail)
+        $user = $this->qbByUsernameAndEmail($usernameOrEmail)
             ->getQuery()
             ->getResult();
-    }
-
-    public function getUserCount()
-    {
-        return (int) $this->getRepository()->createQueryBuilder('u')
-            ->select('count(u.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
+        $this->decryptFields($user);
+        return $user;
     }
 }
