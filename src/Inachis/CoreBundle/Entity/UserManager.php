@@ -95,28 +95,4 @@ class UserManager extends AbstractManager
         $this->decryptFields($user);
         return $user;
     }
-    /**
-     *
-     */
-    public function qbByUsernameOrEmail($usernameOrEmail)
-    {
-        $qb = $this->getRepository()->createQueryBuilder('u');
-        return $qb
-            ->where($qb->expr()->like('u.username', ':username'))
-            ->whereOr($qb->expr()->like('u.email', ':username'))
-            ->setParameter('username', $usernameOrEmail);
-    }
-    /**
-     * Returns a {@link User} based on the specified username or email address
-     * @param string $username The username/email address of the {@link User} to return
-     * @return User The retrieved user object
-     */
-    public function getByUsernameOrEmail($usernameOrEmail)
-    {
-        $user = $this->qbByUsernameAndEmail($usernameOrEmail)
-            ->getQuery()
-            ->getResult();
-        $this->decryptFields($user);
-        return $user;
-    }
 }
