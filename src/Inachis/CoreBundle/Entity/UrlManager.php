@@ -83,25 +83,9 @@ class UrlManager extends AbstractManager
         return end($uri);
     }
     /**
-     * Returns all Url entities for a given content type and id
-     * @param string $contentType The content type to get the Url(s) for
-     * @param string $contentId The UUID of the content to get the Url(s) for
-     * @return array[Url] The array of {@link Url}s to return
-     */
-    public function getAllForContentTypeAndId($contentType, $contentId)
-    {
-        return $this->getRepository()->findBy(
-            array(
-                'contentType' => $contentType,
-                'contentId' => $contentId
-            )
-        );
-    }
-    /**
      * Fetches the default URL for the specified content type and UUID
-     * @param string $contentType The content type to get the Url(s) for
-     * @param string $contentId The UUID of the content to get the Url(s) for
-     * @return array[Url] The array of {@link Url}s to return
+     * @param string $content The content to get the Url(s) for
+     * @return Object The array of {@link Url}s to return
      */
     public function getDefaultUrl($content)
     {
@@ -116,7 +100,7 @@ class UrlManager extends AbstractManager
      * Returns a Url entity for the given URI. If the admin part of the URL is
      * present, this is stripped along with parameters and targets
      * @param string $url The URL to get the {@link Url} entity for
-     * @return array[Url] The array of {@link Url}s to return
+     * @return Object The array of {@link Url}s to return
      */
     public function getByUrl($url)
     {

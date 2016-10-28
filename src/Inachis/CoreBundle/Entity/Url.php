@@ -62,7 +62,6 @@ class Url
      */
     public function __construct(Page $content, $link = '')
     {
-        //$this->setLink(UrlManager::getInstance()->urlify($link));
         $this->setContent($content);
         $this->setDefault(true);
         $this->setCreateDate(new \DateTime('now'));

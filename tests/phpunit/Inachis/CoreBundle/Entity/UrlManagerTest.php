@@ -114,27 +114,27 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
     //         $this->manager->getAllForContentTypeAndId('Page', 2)
     //     );
     // }
-    
-    // public function testGetDefaultUrlByContentTypeAndId()
-    // {
-    //     $this->url = $this->manager->create($this->properties);
-    //     $this->repository->shouldReceive('findOneBy')
-    //         ->with(
-    //             array(
-    //                 'contentType' => $this->properties['contentType'],
-    //                 'contentId' => $this->properties['contentId'],
-    //                 'default' => $this->properties['default']
-    //                 )
-    //         )
-    //         ->andReturn($this->url);
-    //     $this->assertSame(
-    //         $this->url,
-    //         $this->manager->getDefaultUrlByContentTypeAndId(
-    //             $this->properties['contentType'],
-    //             $this->properties['contentId']
-    //         )
-    //     );
-    // }
+
+    public function testGetDefaultUrl()
+    {
+        $this->url = $this->manager->create($this->properties);
+        $this->repository->shouldReceive('findOneBy')->with(array(
+                'content' => $this->url->getContent(),
+                'default' => true
+            ))
+            ->andReturn($this->url);
+        $this->assertSame($this->url, $this->manager->getDefaultUrl($this->url->getContent()));
+    }
+
+    public function testGetByUrl()
+    {
+        $this->url = $this->manager->create($this->properties);
+        $this->repository->shouldReceive('findOneBy')->with(array(
+            'link' => $this->url->getLink()
+        ))
+            ->andReturn($this->url);
+        $this->assertSame($this->url, $this->manager->getByUrl($this->url->getLink()));
+    }
 
     public function testSave()
     {
