@@ -1,30 +1,30 @@
 #post__edit, #post__properties {
-	margin-bottom: 45px;
+    margin-bottom: 45px;
 
-	a, a:visited {
-		color: #666;
-		text-decoration: none;
-		vertical-align: middle;
-	}
-	input {
-		border: none;
-		border-bottom: 1px solid transparent;
-		outline: none;
+    a, a:visited {
+        color: #666;
+        text-decoration: none;
+        vertical-align: middle;
+    }
+    input {
+        border: none;
+        border-bottom: 1px solid transparent;
+        outline: none;
 
-		&:focus, &:active {
-			border-bottom: 1px solid #eee;
-		}
-	}
+        &:focus, &:active {
+            border-bottom: 1px solid #eee;
+        }
+    }
 
-	label {
-		color: #999;
-		//text-transform: uppercase;
-	}
+    label {
+        color: #999;
+        //text-transform: uppercase;
+    }
 
-	#title {
-		font-size: 1.4em;
-	}
-	#subTitle {
-		font-size: 1.2em;
-	}
+    #title {
+        font-size: 1.4em;
+    }
+    #subTitle {
+        font-size: 1.2em;
+    }
 }
