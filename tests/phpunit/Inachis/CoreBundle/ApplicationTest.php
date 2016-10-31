@@ -10,6 +10,12 @@ use Inachis\Component\CoreBundle\Application;
  */
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
+    protected $application;
+
+    public function setUp()
+    {
+        $this->application = new Application('dev');
+    }
     public function testGetEnvDev()
     {
         $this->assertEquals(
@@ -65,5 +71,20 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testGetServices()
     {
         $this->assertEquals(true, is_array(Application::getInstance()->getServices()));
+    }
+    public function testRequireSessionService()
+    {
+        $session = Application::getInstance()->requireSessionService();
+        $this->assertInstanceOf('Inachis\Component\CoreBundle\Security\SessionManager', $session);
+    }
+    public function testRequireAuthenticationService()
+    {
+        $auth = Application::getInstance()->requireAuthenticationService();
+        $this->assertInstanceOf('Inachis\Component\CoreBundle\Security\Authentication', $auth);
+    }
+    public function testRequireEncryptionService()
+    {
+        $encryption = Application::getInstance()->requireEncryptionService();
+        $this->assertInstanceOf('Inachis\Component\CoreBundle\Security\Encryption', $encryption);
     }
 }
