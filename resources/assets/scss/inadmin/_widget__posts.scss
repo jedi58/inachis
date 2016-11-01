@@ -3,23 +3,41 @@
 		padding: 30px 20px 60px 20px;
 	}
 
-	ol.ui-widget-content {
+	.post, .page {
+		a, a:visited {
+			padding: 0 0 0 25px;
+		}
+	}
+
+	ol.ui-widget-content, .post, .page {
+		clear: left;
 		list-style-type: none;
+		padding: 0 10px 30px 10px;
+
+		@media #{$information-medium} {
+			padding: 0 0 30px 0;
+		}
 
 		a, a:visited {
 			color: #069;
+			display: block;
 			text-decoration: none;
+			vertical-align: middle;
 		}
 		li {
-			margin:25px 0 40px 0;
+			margin:25px 10px 40px 0;
 		}
 		h2 {
 			font-size: 1.2em;
 			margin: 0;
 			padding: 0;
 		}
+		input {
+			float: left;
+			margin:5px 0 0 0;
+		}
 		p {
-			color: #333;
+			color: #666;
 			line-height: 1.7em;
 			margin: 0;
 
@@ -30,6 +48,11 @@
 		}
 		span {
 			vertical-align: middle;
+		}
+
+		.badge {
+			font-size: 0.5em;
+			margin-left: 20px;
 		}
 	}
 }

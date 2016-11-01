@@ -15,7 +15,7 @@ class PersistentLoginManager extends AbstractManager
     protected $qb;
     /**
      * Default constructor for {@link PersistentLoginManager}
-     * @param EntityManager $em The entity manager to use for the repository
+     * @param \Doctrine\ORM\EntityManager $em The entity manager to use for the repository
      */
     public function __construct($em)
     {
@@ -34,7 +34,7 @@ class PersistentLoginManager extends AbstractManager
     /**
      * Creates and returns a new instance of {@link PersistentLogin}
      * @param array $values
-     * @return Url The new entity
+     * @return PersistentLogin The new entity
      */
     public function create($values = array())
     {
@@ -63,7 +63,7 @@ class PersistentLoginManager extends AbstractManager
      * Checks if the provided token hash for a give userID is valid
      * @param string $userHash The UUID for the user
      * @param string $hash The hash of the auth token
-     * @return bool|PersistentLogin The result of valdiating the user's hashed token
+     * @return bool|PersistentLogin The result of validating the user's hashed token
      */
     public function validateTokenForUser($userHash, $hash)
     {

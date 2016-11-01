@@ -5,6 +5,7 @@ namespace Inachis\Tests\CoreBundle\Entity;
 /**
  * @group unit
  */
+use Doctrine\Common\Collections\ArrayCollection;
 use Inachis\Component\CoreBundle\Entity\Category;
 
 class CategoryTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +22,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             'description' => '<p>A description of the category</p>',
             'image' => 'UUID',
             'icon' => 'UUID',
-            'parent' => new Category()
+            'parent' => null
         );
     }
     
@@ -34,6 +35,14 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->category->setImage($this->properties['image']);
         $this->category->setIcon($this->properties['icon']);
         $this->category->setParent($this->properties['parent']);
+        $this->initialiseChildCategoryObject();
+    }
+
+    public function initialiseChildCategoryObject()
+    {
+        $childCategory = new Category('a test child category');
+        $childCategory->setParent(new Category('Test Category'));
+        $this->category->addChild($childCategory);
     }
     
     public function testSettingOfObjectProperties()
@@ -68,20 +77,19 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testParentCategory()
     {
         $this->initialiseDefaultObject();
-        $this->category->setParent(null);
         $this->assertEquals(true, $this->category->isRootCategory());
     }
     
     public function testNotParentCategory()
     {
         $this->initialiseDefaultObject();
-        $this->assertEquals(false, $this->category->isRootCategory());
+        $this->assertEquals(false, $this->category->getChildren()[0]->isRootCategory());
     }
     
     public function testChildCategory()
     {
         $this->initialiseDefaultObject();
-        $this->assertEquals(true, $this->category->isChildCategory());
+        $this->assertEquals(true, $this->category->getChildren()[0]->isChildCategory());
     }
     
     public function testNotChildCategory()
@@ -115,5 +123,15 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->initialiseDefaultObject();
         $this->category->setIcon('');
         $this->assertEquals(false, $this->category->hasIcon());
+    }
+
+    public function testGetFullPath()
+    {
+        $this->initialiseDefaultObject();
+        $this->assertEquals('Test Category', $this->category->getFullPath());
+        $this->assertEquals(
+            'Test Category/a test child category',
+            $this->category->getChildren()[0]->getFullPath()
+        );
     }
 }

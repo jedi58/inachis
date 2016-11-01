@@ -64,18 +64,28 @@ class UserManager extends AbstractManager
         $this->em->flush();
     }
     /**
-     * Fetches a specific entity from the repository by the given Id
+     * Fetches a specific entity from the repository by the given Id and decrypts any encrypted fields
      * @param string The Id of the entity to be returned
      * @return mixed The returned entity
      */
     public function getById($id)
     {
-        $user = $this->getRepository()->find($id);
+        $user = $this->getByIdRaw($id);
         $this->decryptFields($user);
         return $user;
     }
     /**
-     * Returns a {@link User} based on the specified username
+     * Fetches a specific entity from the repository by the given Id
+     * @param string The Id of the entity to be returned
+     * @return mixed The returned entity
+     */
+    public function getByIdRaw($id)
+    {
+        $user = $this->getRepository()->find($id);
+        return $user;
+    }
+    /**
+     * Returns a {@link User} based on the specified username and decrypts any encrypted fields
      * @param string $username The username of the {@link User} to return
      * @return User The retrieved user object
      */
@@ -84,35 +94,5 @@ class UserManager extends AbstractManager
         $user = $this->getRepository()->findOneBy(array('username' => $username));
         $this->decryptFields($user);
         return $user;
-    }
-    /**
-     *
-     */
-    public function qbByUsernameOrEmail($usernameOrEmail)
-    {
-        $qb = $this->getRepository()->createQueryBuilder('u')
-            ->where($qb->expr()->like('username', ':username'))
-            ->whereOr($qb->expr()->like('email', ':username'))
-            ->setParameter('username', $usernameOrEmail);
-        return $qb;
-    }
-    /**
-     * Returns a {@link User} based on the specified username or email address
-     * @param string $username The username/email address of the {@link User} to return
-     * @return User The retrieved user object
-     */
-    public function getByUsernameOrEmail($usernameOrEmail)
-    {
-        return $this->qbByUsernameAndEmail($usernameOrEmail)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function getUserCount()
-    {
-        return (int) $this->getRepository()->createQueryBuilder('u')
-            ->select('count(u.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
     }
 }

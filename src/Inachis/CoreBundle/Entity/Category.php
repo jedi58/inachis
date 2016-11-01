@@ -174,6 +174,15 @@ class Category
     {
         $this->parent = $parent;
     }
+
+    /**
+     * Adds a child category to the current {@link Category}
+     * @param Category $category The {@link Category} to add
+     */
+    public function addChild(Category $category)
+    {
+        $this->children[] = $category;
+    }
     /**
      * Returns the result of testing if current category is a root category
      * @return bool Result of testing if {@link Category} is a root category

@@ -46,7 +46,7 @@
 			<p>
 				<label for="visibility">Visibility</label>
 				<span class="switch-wrapper">
-					<input class="ui-switch" data-label-off="private" data-label-on="public" id="visibility" name="visibility" type="checkbox" />
+					<input class="ui-switch" data-label-off="private" data-label-on="public" id="visibility" name="visibility" type="checkbox"{% if post.visibility == 'public' %} checked{% endif %} />
 				</span>
 			</p>
 			<p>
@@ -103,8 +103,10 @@
 	<div class="fixed-bottom-bar">
 		<p>
 			<button type="submit" class="button button--positive">Save</button>
+			{%- if post.status != "published" %}
 			<button type="submit" class="button button--info" name="publish">{% if post.postDate > date() %}Schedule{% else %}Publish{% endif %}</button>
-			<button type="submit" class="button button--negative">Delete</button>
+			{%- endif %}
+			<button type="submit" class="button button--negative" name="delete">Delete</button>
             {%  if post.id is not empty and not post.isDraft %}
             <a class="button" href="/{{ post.urls|first.link }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span></a>
             {%  endif %}

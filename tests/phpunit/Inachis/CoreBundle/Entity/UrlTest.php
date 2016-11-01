@@ -81,66 +81,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->url->setLink('test-valid-url');
         $this->assertEquals(true, $this->url->validateURL());
     }
-    
-    // public function testConvertBasicURL()
-    // {
-    //     $this->assertEquals('test', $this->url->urlify('Test'));
-    // }
-    
-    // public function testConvertURLWithSpaces()
-    // {
-    //     $this->assertEquals('a-basic-title', $this->url->urlify('A Basic Title'));
-    // }
-    
-    // public function testConvertURLWithTabs()
-    // {
-    //     $this->assertEquals('a-basic-title', $this->url->urlify('A Basic Title'));
-    // }
-
-    // public function testConvertURLWithPartialPass()
-    // {
-    //     $this->assertEquals('a-basic-title-2', $this->url->urlify('A-basic title 2'));
-    // }
-    
-    // public function testConvertURLWithPunctuation()
-    // {
-    //     $this->assertEquals(
-    //         'an-inachis-basic-title',
-    //         $this->url->urlify('An Inachis\' Basic Title')
-    //     );
-    // }
-    
-    // public function testConvertURLWithSizeLimit()
-    // {
-    //     $this->assertEquals(
-    //         'an-inachis-basi',
-    //         $this->url->urlify('An Inachis\' Basic Title', 15)
-    //     );
-    // }
-    
-    // public function testGetLinkFromURI()
-    // {
-    //     $this->assertEquals(
-    //         'test-url',
-    //         $this->url->fromUri('https://www.test.com/2015/01/01/test-url/?debug#top')
-    //     );
-    // }
-    
-    // public function testGetLinkFromURIWithoutSchema()
-    // {
-    //     $this->assertEquals(
-    //         'test-url',
-    //         $this->url->fromUri('www.test.com/2015/01/01/test-url/?debug#top')
-    //     );
-    // }
-    
-    // public function testGetLinkFromURIWithPathOnly()
-    // {
-    //     $this->assertEquals(
-    //         'test-url',
-    //         $this->url->fromUri('test-url?debug#top')
-    //     );
-    // }
 
     public function testSetModDateToNow()
     {

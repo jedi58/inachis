@@ -5,9 +5,9 @@ var InachisPostEdit = {
 
 	_init: function()
 	{
-		this._postOrPage = window.location.href.match(/(post|page)/gi);
-		if (this._postOrPage) {
-			this._postOrPage = this._postOrPage[0].toLowerCase();
+		const currentContentType = window.location.href.match(/(post|page)/gi);
+		if (null !== currentContentType) {
+			this._postOrPage = currentContentType[0].toLowerCase();
 		}
 		this.initTooltips();
 		this.initTitleChange();

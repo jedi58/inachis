@@ -71,70 +71,26 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->url, $this->manager->getById(1));
     }
     
-    // public function testGetAllForContentTypeAndIdReturnsSingle()
-    // {
-    //     $this->url = $this->manager->create($this->properties);
-    //     $this->repository->shouldReceive('findBy')
-    //         ->with(
-    //             array(
-    //                 'content' => null
-    //             )
-    //         )->andReturn($this->url);
-    //     $this->assertSame(
-    //         $this->url,
-    //         $this->manager->getAllForContentTypeAndId('Page', 1)
-    //     );
-    // }
-    
-    // public function testGetAllForContentTypeAndIdReturnsMultiple()
-    // {
-    //     $urls = array();
-    //     $this->url = $this->manager->create();
-    //     $this->url->setContentType('Page');
-    //     $this->url->setContentId(2);
-    //     $this->url->setDefault(true);
-    //     $this->url->setLink('test-link1');
-    //     $urls[] = $this->url;
-    //     $this->url = $this->manager->create();
-    //     $this->url->setContentType('Page');
-    //     $this->url->setContentId(2);
-    //     $this->url->setDefault(false);
-    //     $this->url->setLink('test-link2');
-    //     $urls[] = $this->url;
-        
-    //     $this->repository->shouldReceive('findBy')
-    //         ->with(
-    //             array(
-    //                 'contentType' => 'Page',
-    //                 'contentId' => '2'
-    //                 )
-    //         )->andReturn($urls);
-    //     $this->assertSame(
-    //         $urls,
-    //         $this->manager->getAllForContentTypeAndId('Page', 2)
-    //     );
-    // }
-    
-    // public function testGetDefaultUrlByContentTypeAndId()
-    // {
-    //     $this->url = $this->manager->create($this->properties);
-    //     $this->repository->shouldReceive('findOneBy')
-    //         ->with(
-    //             array(
-    //                 'contentType' => $this->properties['contentType'],
-    //                 'contentId' => $this->properties['contentId'],
-    //                 'default' => $this->properties['default']
-    //                 )
-    //         )
-    //         ->andReturn($this->url);
-    //     $this->assertSame(
-    //         $this->url,
-    //         $this->manager->getDefaultUrlByContentTypeAndId(
-    //             $this->properties['contentType'],
-    //             $this->properties['contentId']
-    //         )
-    //     );
-    // }
+    public function testGetDefaultUrl()
+    {
+        $this->url = $this->manager->create($this->properties);
+        $this->repository->shouldReceive('findOneBy')->with(array(
+                'content' => $this->url->getContent(),
+                'default' => true
+            ))
+            ->andReturn($this->url);
+        $this->assertSame($this->url, $this->manager->getDefaultUrl($this->url->getContent()));
+    }
+
+    public function testGetByUrl()
+    {
+        $this->url = $this->manager->create($this->properties);
+        $this->repository->shouldReceive('findOneBy')->with(array(
+            'link' => $this->url->getLink()
+        ))
+            ->andReturn($this->url);
+        $this->assertSame($this->url, $this->manager->getByUrl($this->url->getLink()));
+    }
 
     public function testSave()
     {
@@ -152,5 +108,65 @@ class UrlManagerTest extends \PHPUnit_Framework_TestCase
         $this->repository->shouldReceive('remove')->andReturn(true);
         $this->repository->shouldReceive('flush')->andReturn(true);
         $this->assertSame(null, $this->manager->remove($this->url));
+    }
+
+    public function testConvertBasicURL()
+    {
+        $this->assertEquals('test', $this->manager->urlify('Test'));
+    }
+
+    public function testConvertURLWithSpaces()
+    {
+        $this->assertEquals('a-basic-title', $this->manager->urlify('A Basic Title'));
+    }
+
+    public function testConvertURLWithTabs()
+    {
+        $this->assertEquals('a-basic-title', $this->manager->urlify('A Basic Title'));
+    }
+
+    public function testConvertURLWithPartialPass()
+    {
+        $this->assertEquals('a-basic-title-2', $this->manager->urlify('A-basic title 2'));
+    }
+
+    public function testConvertURLWithPunctuation()
+    {
+        $this->assertEquals(
+            'an-inachis-basic-title',
+            $this->manager->urlify('An Inachis\' Basic Title')
+        );
+    }
+
+    public function testConvertURLWithSizeLimit()
+    {
+        $this->assertEquals(
+            'an-inachis-basi',
+            $this->manager->urlify('An Inachis\' Basic Title', 15)
+        );
+    }
+
+    public function testGetLinkFromURI()
+    {
+        $this->assertEquals(
+            'test-url',
+            $this->manager->fromUri('https://www.test.com/2015/01/01/test-url/?debug#top')
+        );
+    }
+
+    public function testGetLinkFromURIWithoutSchema()
+    {
+        $this->assertEquals(
+            'test-url',
+            $this->manager->fromUri('www.test.com/2015/01/01/test-url/?debug#top')
+        );
+    }
+
+    public function testGetLinkFromURIWithPathOnly()
+    {
+        $this->assertEquals(
+            'test-url',
+            $this->manager->fromUri('test-url?debug#top')
+        );
     }
 }
