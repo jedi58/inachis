@@ -20,6 +20,7 @@
 
 {% if session.user is not empty %}
 	<header class="admin__header">
+		<!-- h1>Title goes here</h1 -->
 		<section class="admin__user">
 			<a href="#admin__user__options">
 				<img height="40" src="{% if session.user.avatar is not empty %}{{ session.user.avatar }}{% else %}{{ settings.domain }}/inadmin/assets/images/defaultAvatar.png{% endif %}" width="40" />
@@ -33,7 +34,7 @@
 			</ul>
 		</section>
 		<section class="admin__search">
-			<form action="/search/results" method="post">
+			<form action="/inadmin/search/results" method="post">
 				<input type="search" name="q" id="q" placeholder="search…" />
 				<label for="q" class="material-icons">search</label>
 				<button class="material-icons mobile-only" type="submit">search</button>
