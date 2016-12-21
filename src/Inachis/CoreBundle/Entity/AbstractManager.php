@@ -4,6 +4,7 @@ namespace Inachis\Component\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * Abstract class used to provide common functions to
@@ -121,7 +122,7 @@ abstract class AbstractManager extends EntityRepository
      * @param int $offset The offset from which to return results from
      * @param int $limit The maximum number of results to return
      * @param array $where
-     * @param array $order
+     * @param array|string $order
      * @return array [mixed] The result of fetching the objects
      */
     public function getAll(
@@ -135,7 +136,14 @@ abstract class AbstractManager extends EntityRepository
             $qb = $qb->where($where[0]);
         }
         if (!empty($order)) {
-            $qb = $qb->orderBy($order);
+            if (is_array($order)) {
+                foreach($order as $orderOption) {
+                    $qb = $qb->addOrderBy($orderOption[0], $orderOption[1]);
+                }
+            }
+            if (is_string($order)) {
+                $qb = $qb->orderBy($order);
+            }
         }
         if (!empty($where)) {
             $qb = $qb->setParameters($where[1]);
@@ -147,7 +155,13 @@ abstract class AbstractManager extends EntityRepository
         if ($limit > 0) {
             $qb = $qb->setMaxResults($limit);
         }
-        return $qb->getResult();
+        $paginator = new Paginator($qb, $fetchJoinCollection = true);
+        return array(
+            'limit' => $limit,
+            'offset' => $offset,
+            'total' => count($paginator),
+            'results' => $paginator
+        );
     }
 
     /**
