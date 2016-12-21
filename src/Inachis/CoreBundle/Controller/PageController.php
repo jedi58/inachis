@@ -102,6 +102,13 @@ class PageController extends AbstractController
                 $properties['postDate'],
                 new \DateTimeZone($post->getTimezone())
             );
+            if (null !== $request->paramsPost()->get('delete') && !empty($post->getId())) {
+                foreach ($post->getUrls() as $postUrl) {
+                    $urlManager->remove($postUrl);
+                }
+                $pageManager->remove($post);
+                return $response->redirect('/inadmin/');
+            }
             $post = $pageManager->hydrate($post, $properties);
             $post->setAuthor(
                 Application::getInstance()->getService('auth')->getUserManager()->getByIdRaw(

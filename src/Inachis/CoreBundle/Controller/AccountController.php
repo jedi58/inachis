@@ -314,7 +314,7 @@ class AccountController extends AbstractController
     {
         self::redirectIfNotAuthenticated($request, $response);
         if ($response->isLocked()) {
-            return;
+            return null;
         }
         return $response->body('Show all admins');
     }
@@ -330,7 +330,7 @@ class AccountController extends AbstractController
     {
         self::redirectIfNotAuthenticated($request, $response);
         if ($response->isLocked()) {
-            return;
+            return null;
         }
         return $response->body('Show details of specific admin');
     }
@@ -379,7 +379,7 @@ class AccountController extends AbstractController
                     'q.status = :status',
                     array('status' => Page::DRAFT)
                 ),
-                'q.postDate, q.modDate'
+                'q.postDate ASC, q.modDate'
             ),
             'upcoming' => $pageManager->getAll(
                 0,
@@ -391,7 +391,7 @@ class AccountController extends AbstractController
                         'postDate' => new \DateTime()
                     )
                 ),
-                'q.postDate, q.modDate'
+                'q.postDate ASC, q.modDate'
             ),
             'posts' => $pageManager->getAll(
                 0,
@@ -403,7 +403,7 @@ class AccountController extends AbstractController
                         'postDate' => new \DateTime()
                     )
                 ),
-                'q.postDate, q.modDate'
+                'q.postDate ASC, q.modDate'
             )
         );
         return $response->body($app->twig->render('admin__dashboard.html.twig', self::$data));

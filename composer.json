@@ -8,7 +8,7 @@
         { "name": "David G. Paul" }
     ],
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.6",
         
         "doctrine/dbal": "2.*",
         "doctrine/orm": "2.*",
