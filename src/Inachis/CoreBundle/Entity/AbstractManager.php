@@ -137,7 +137,7 @@ abstract class AbstractManager extends EntityRepository
         }
         if (!empty($order)) {
             if (is_array($order)) {
-                foreach($order as $orderOption) {
+                foreach ($order as $orderOption) {
                     $qb = $qb->addOrderBy($orderOption[0], $orderOption[1]);
                 }
             }
