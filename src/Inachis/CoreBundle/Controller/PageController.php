@@ -200,8 +200,8 @@ class PageController extends AbstractController
         }
         self::adminInit($request, $response);
         $pageManager = new PageManager(Application::getInstance()->getService('em'));
-        $offset = 0;
-        $limit = 0;
+        $offset = $request->paramsGet()->get('offset', 0);
+        $limit = 10;
         $type = self::getContentType($request);
         self::$data['posts'] = $pageManager->getAll(
             $offset,
@@ -210,9 +210,13 @@ class PageController extends AbstractController
                 'q.type = :type',
                 array('type' => $type)
             ),
-            'q.postDate, q.modDate'
+            array(
+                array('q.postDate', 'DESC'),
+                array('q.modDate', 'DESC')
+            )
 
         );
+        self::$data['page']['title'] = ucfirst($type) . 's';
         return $response->body($app->twig->render('admin__post-list.html.twig', self::$data));
     }
 
