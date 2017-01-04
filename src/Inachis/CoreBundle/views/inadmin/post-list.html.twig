@@ -15,15 +15,19 @@
             <li>Make private</li>
         </ul>
 
-        {%  for post in posts %}
+        <p>Showing {{ posts.offset + 1 }} to {{  posts.offset + posts.limit }} of {{ posts.total }}</p>
+
+        {%  for post in posts.results %}
         <article id="post-{{ post.id }}" class="{{ post.type }} status-{{ post.status }} visibility-{{ post.visibility }} hentry">
             <input id="post-{{ post.id }}__input" type="checkbox" name="posts[]" value="{{ post.id }}" />
             <a aria-label="Edit {{ post.title }}" href="/inadmin/{%- if post.type == 'page' %}page/{% endif -%}{{ post.urls[0].link }}">
-                <h2><label for="post-{{ post.id }}__input">{{ post.title }}</h2>
+                <h2>
+                    <label for="post-{{ post.id }}__input">{{ post.title }}
+                    {%-  if post.status == 'draft' %}<span class="badge badge__draft">draft</span>{% endif -%}
+                    {%-  if post.visibility == 'private' %}<span class="badge badge__private">private</span>{% endif -%}
+                </h2>
                 <p>{{ post.content|markdown|striptags|length > 300 ? post.content|markdown|striptags|slice(0, 300) ~ '…' : post.content|markdown|striptags  }}</p>
             </a>
-            {%-  if post.status == 'draft' %}<span class="badge badge__draft">draft</span>{% endif -%}
-            {%-  if post.visibility == 'private' %}<span class="badge badge__private">private</span>{% endif -%}
             <p class="date"><span class="material-icons">schedule</span> Last modified: <em>{{ post.modDate|date('jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
         </article>
         {%  endfor %}
