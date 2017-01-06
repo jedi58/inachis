@@ -2,17 +2,17 @@
 	<ul class="widget-posts__tabs">
 		<li>
 			<a href="#widget-posts__drafts">Drafts</a>
-			<em class="badge{% if data.draftCount == 0 %} badge__empty{% endif %}">{{ data.draftCount }}</em>
+			<em class="badge{% if data.draft.total == 0 %} badge__empty{% endif %}">{{ data.draftCount }}</em>
 		</li>
 {% if data.upcomingCount > 0 %}
 		<li>
 			<a href="#widget-posts__upcoming">Upcoming</a>
-			<em class="badge">{{ data.upcomingCount }}</em>
+			<em class="badge">{{ data.upcoming.total }}</em>
 		</li>
 {% endif %}		
 		<li>
 			<a href="#widget-posts__published">Latest</a>
-			<em class="badge{% if data.publishCount == 0 %} badge__empty{% endif %}">{{ data.publishCount }}</em>
+			<em class="badge{% if data.publish.total == 0 %} badge__empty{% endif %}">{{ data.publishCount }}</em>
 		</li>
 {% if data.comments is not empty %}
 		<li>
@@ -23,7 +23,7 @@
 
 {% if data.drafts is not empty %}
 	<ol id="widget-posts__drafts">
-	{% for post in data.drafts %}
+	{% for post in data.drafts.results %}
 		<li>
 			<a aria-label="Edit {{ post.title }}" href="/inadmin/{%- if post.type == 'page' %}page/{% endif -%}{{ post.urls[0].link }}"><h2>{{ post.title }}</h2>
 			<p>{{ post.content|markdown|striptags|length > 300 ? post.content|markdown|striptags|slice(0, 300) ~ '…' : post.content|markdown|striptags  }}</p></a>
@@ -39,7 +39,7 @@
 
 {% if data.upcoming is not empty %}
 	<ol id="widget-posts__upcoming">
-	{% for post in data.upcoming %}
+	{% for post in data.upcoming.results %}
 		<li>
 			<h2><a aria-label="Edit {{ post.title }}" href="/inadmin/{%- if post.type == 'page' %}page/{% endif -%}{{ post.urls[0].link }}">{{ post.title }}</a></h2>
 			<p>{{ post.content|length > 250 ? post.content|slice(0, 250) ~ '…' : post.content  }}</p>
@@ -51,7 +51,7 @@
 
 {% if data.posts is not empty %}
 	<ol id="widget-posts__published">
-	{% for post in data.posts %}
+	{% for post in data.posts.results %}
 		<li>
 			<h2><a aria-label="Edit {{ post.title }}" href="/inadmin/{%- if post.type == 'page' %}page/{% endif -%}{{ post.urls[0].link }}">{{ post.title }}</a></h2>
 			<p>{{ post.content|length > 250 ? post.content|slice(0, 250) ~ '…' : post.content  }}</p>
@@ -67,7 +67,7 @@
 
 {% if data.comments is not empty %}
 	<ol id="widget-posts__comments">
-	{% for comment in data.comments %}
+	{% for comment in data.comments.results %}
 		<li>{{ comment.message }}</li>
 	{% endfor %}
 	</ol>
