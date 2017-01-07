@@ -71,4 +71,11 @@ class TagManagerTest extends \PHPUnit_Framework_TestCase
         $this->repository->shouldReceive('flush')->andReturn(true);
         $this->assertSame(null, $this->manager->remove($this->tag));
     }
+
+    public function testGetTagByTitle()
+    {
+        $this->tag = $this->manager->create($this->properties);
+        $this->repository->shouldReceive('findOneByTitle')->with('awesome-tag')->andReturn($this->tag);
+        $this->assertSame($this->tag, $this->manager->getByTitle('awesome-tag'));
+    }
 }
