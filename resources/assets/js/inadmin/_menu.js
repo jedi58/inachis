@@ -47,24 +47,35 @@ var InachisNavMenu = {
 
 	newNavMouseOut: function(e)
 	{
-		var container = $('.admin__nav-new');
-		if (!container.is(e.target) && container.has(e.target).length === 0)  {
-			container.hide();
-			this._navNewVisible = !this._navNewVisible;
-			Inachis._log('New menu visible: ' + this._navNewVisible);
-			$(document).unbind('mouseup', InachisNavMenu.newNavMouseOut);
-		}
+        this.genericNavMouseOut(
+        	e,
+            $('.admin__nav-new'),
+            '_navNewVisible',
+            'New',
+            InachisNavMenu.newNavMouseOut
+        );
 	},
 
 	userNavMouseOut: function(e)
 	{
-		var container = $('#admin__user__options');
-		if (!container.is(e.target) && container.has(e.target).length === 0)  {
-			container.hide();
-			this._navUserVisible = !this._navUserVisible;
-			Inachis._log('User menu visible: ' + this._navUserVisible);
-			$(document).unbind('mouseup', InachisNavMenu.userNavMouseOut);
-		}
+		this.genericNavMouseOut(
+			e,
+			$('#admin__user__options'),
+			'_navUserVisible',
+			'User',
+            InachisNavMenu.userNavMouseOut
+		);
+	},
+
+	// use this for handling menus that disappear when clicking away
+	genericNavMouseOut: function(e, container, navProperty, menuLabel, callback)
+	{
+        if (!container.is(e.target) && container.has(e.target).length === 0)  {
+            container.hide();
+            this[navProperty] = !this[navProperty];
+            Inachis._log(menuLabel + ' menu visible: ' + this[navProperty]);
+            $(document).unbind('mouseup', callback);
+        }
 	}
 };
 
