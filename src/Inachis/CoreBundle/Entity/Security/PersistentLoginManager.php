@@ -10,7 +10,7 @@ use Inachis\Component\CoreBundle\Entity\AbstractManager;
 class PersistentLoginManager extends AbstractManager
 {
     /**
-     * @var Doctrine ORM query builder for use in querying repository
+     * @var QueryBuilder Doctrine ORM query builder for use in querying repository
      */
     protected $qb;
     /**
