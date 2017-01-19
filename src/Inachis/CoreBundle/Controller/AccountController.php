@@ -326,13 +326,15 @@ class AccountController extends AbstractController
      * @param \Klein\Response $response
      * @return mixed
      */
-    public static function getAdminDetails($request, $response)
+    public static function getAdminDetails($request, $response, $service, $app)
     {
         self::redirectIfNotAuthenticated($request, $response);
         if ($response->isLocked()) {
             return null;
         }
-        return $response->body('Show details of specific admin');
+        self::adminInit($request, $response);
+        self::$data['page'] = array('title' => 'Profile');
+        return $response->body($app->twig->render('admin__profile.html.twig', self::$data));
     }
 
     /**
