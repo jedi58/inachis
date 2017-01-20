@@ -6,7 +6,6 @@ use Inachis\Component\CoreBundle\Application;
 use Inachis\Component\CoreBundle\Entity\UserManager;
 use Inachis\Component\CoreBundle\Entity\Security\PersistentLoginManager;
 use Inachis\Component\CoreBundle\Storage\Cookie;
-use ParagonIE\Halite\Symmetric\Crypto;
 
 class Authentication
 {
@@ -70,8 +69,8 @@ class Authentication
         if (empty(Cookie::get('NX03')) || empty(Cookie::get('NX06'))) {
             return false;
         }
-        $persistentLoginManager = new PersistentLoginManager(Application::getInstance()->getService('em'));
-        $persistentLogin = $persistentLoginManager->validateTokenForUser(Cookie::get('NX03'), Cookie::get('NX06'));
+        $pLoginManager = new PersistentLoginManager(Application::getInstance()->getService('em'));
+        $persistentLogin = $pLoginManager->validateTokenForUser(Cookie::get('NX03'), Cookie::get('NX06'));
         if (!empty($persistentLogin) && !empty($persistentLogin->getUserId())) {
             $userHash = hash(
                 'sha512',
@@ -109,14 +108,14 @@ class Authentication
             'sha512',
             random_bytes(32)
         );
-        $persistentLoginManager = new PersistentLoginManager(Application::getInstance()->getService('em'));
-        $persistentLogin = $persistentLoginManager->create(array(
+        $pLoginManager = new PersistentLoginManager(Application::getInstance()->getService('em'));
+        $persistentLogin = $pLoginManager->create(array(
             'userId' => (string) Application::getInstance()->getService('session')->get('user')->getId(),
             'userHash' => $userHash,
             'tokenHash' => $tokenHash,
             'expires' => new \DateTime('+1 year')
         ));
-        $persistentLoginManager->save($persistentLogin)->flush();
+        $pLoginManager->save($persistentLogin)->flush();
         Cookie::set('NX03', $userHash, Cookie::ONE_YEAR);
         Cookie::set('NX06', $tokenHash, Cookie::ONE_YEAR);
     }
