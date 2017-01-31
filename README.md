@@ -6,7 +6,7 @@ Inachis Framework
 [![Code Climate](https://codeclimate.com/github/jedi58/inachis/badges/gpa.svg)](https://codeclimate.com/github/jedi58/inachis)
 [![Coverage Status](https://coveralls.io/repos/github/jedi58/inachis/badge.svg?branch=master)](https://coveralls.io/github/jedi58/inachis?branch=master)
 
-This is currently an experimental framework - more details will be provided as additions are made available.
+This is currently an experimental framework - more details will be provided as additions are made available (see the [CHANGELOG](CHANGELOG.md)).
 
 ##Installation using Composer
 - Add the `jedi58/inachis` package to the require section of your composer.json file.
