@@ -8,7 +8,7 @@ Inachis Framework
 
 This is currently an experimental framework - more details will be provided as additions are made available.
 
-##Installation using Composer
+## Installation using Composer
 - Add the `jedi58/inachis` package to the require section of your composer.json file.
 ```{r, engine='bash', composer_install}
 $  composer require jedi58/inachis
@@ -18,13 +18,13 @@ $  composer require jedi58/inachis
 If you would like to use the default templates then you will need `npm` and `gulp` so that you can then run `npm install` followed by `gulp` to build prepare the assets.
 
 
-##Deployment and configuration using Ansible
+## Deployment and configuration using Ansible
 Environments deployed using Ansible hav etheir configuration stored in the usual YAML files. For the default passwords used by each service (MySQL, RabbitMQ, etc.) please refer to https://github.com/jedi58/inachis/blob/master/dev/ansible/vars/all.yml
 
 For use in a production environment it is recommended that these passwords are NOT used.
 
 
-##Testing
+## Testing
 Whilst this framework is still in progress the majority of it's testing is done using PHPUnit. To run these tests, from the root of your checkout you can run:
 
 ```{r, engine='bash'}
@@ -46,5 +46,5 @@ $  ./build/install_phpcs.sh
 Once the interface is added the test suite will be expanded to include Behat.
 
 
-##License
-This code is released under the MIT License (MIT). Please see [License File](https://github.com/jedi58/inachis/blob/master/LICENSE) for more information. 
+## License
+This code is released under the MIT License (MIT). Please see [License File](https://github.com/jedi58/inachis/blob/master/LICENSE) for more information. Icons used in the interface are from https://material.io/icons/
