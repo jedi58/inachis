@@ -1,0 +1,22 @@
+{% extends "inadmin/structure/main.html.twig" %}
+{% block content %}
+
+    {% block profile_pre %}{% endblock profile_pre %}
+
+    {% block profile %}
+
+        <div class="col span_4_of_8">
+
+        </div>
+        <div class="col span_4_of_8">
+            <a class="profile-photo" href="#">
+                <i class="material-icons">local_see</i>
+                <img src="/inadmin/assets/images/defaultAvatar.png" />
+            </a>
+        </div>
+
+    {% endblock profile %}
+
+
+    {% block profile_post %}{% endblock profile_post %}
+{% endblock content %}

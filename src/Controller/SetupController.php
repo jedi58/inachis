@@ -1,18 +1,27 @@
 <?php
 
-namespace Inachis\CoreBundle\Controller;
+namespace App\Controller;
 
+use App\Controller\AbstractInachisController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SetupController extends Controller
+class SetupController extends AbstractInachisController
 {
     /**
      * @Route("/setup", methods={"GET", "POST"})
+     * @param Request $request
      * @return Response
      */
-    public function setup()
+    public function setup(Request $request)
     {
 //        self::redirectIfAuthenticated($response);
 //        if (Application::getInstance()->getService('auth')->getUserManager()->getAllCount() > 0) {
@@ -34,66 +43,66 @@ class SetupController extends Controller
 //            return null;
 //        }
 //        self::adminInit($request, $response);
-//        self::$data['page'] = array('title' => 'Inachis Install - Step 1');
-//        self::$data['form'] = (new FormBuilder(array(
-//            'action' => '/setup',
-//            'autocomplete' => false,
-//            'cssClasses' => 'form form__login form__setup'
-//        )))
-//            ->addComponent(new FieldsetType(array(
-//                'legend' => 'Setup your web application'
-//            )))
-//            ->addComponent(new TextType(array(
-//                'name' => 'siteName',
-//                'label' => 'Site name',
-//                'placeholder' => 'e.g. My awesome site',
-//                'required' => true
-//            )))
-//            ->addComponent(new TextType(array(
-//                'name' => 'siteUrl',
-//                'label' => 'URL',
-//                'required' => true,
-//                'type' => 'url',
+        $this->data['page']['title'] = 'Inachis Install - Step 1';
+        $form = $this->createFormBuilder([], [
+            'attr' => [
+                'autocomplete' => 'false',
+                'class' => 'form form__login form__setup'
+            ]
+        ])
+// Setup your web application
+            ->add('siteName', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'e.g. My awesome site'
+                ],
+                'label' => 'Site name',
+                'required' => true,
+            ])
+            ->add('siteUrl', UrlType::class, [
+                'data' => 'https://' . $request->getHttpHost(),
+                'label' => 'URL',
+                'required' => true,
+            ])
+//fieldset - Administrator
+            ->add('username', TextType::class, [
+                'data' => 'admin',
+                'label' => 'Username',
+                'required' => true,
+            ])
+            ->add('password', PasswordType::class, [
+                'label' => 'Password',
+                'required' => true,
+            ])
+            ->add('name', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'e.g. Jane Doe',
+                ],
+                'label' => 'Name',
+                'required' => true,
+            ])
+            ->add('email', EmailType::class, [
+                'attr' => [
+                    'placeholder' => 'e.g. somebody@example.com',
+                ],
+                'label' => 'Email Address',
+                'required' => true,
+            ])
+// Fieldset - Actions
+            ->add('submit', SubmitType::class, [
+                'attr' => [
+                    'class' => 'button button--positive'
+                ],
+                'label' => 'Continue…',
+            ])
+            ->getForm();
+
+        $this->data['form'] = $form->createView();
+
+
 //                'value' => 'http' . ($request->isSecure() ? 's' : '') . '://' .
 //                    $request->server()->get('HTTP_HOST') .
 //                    str_replace('/setup', '', $request->server()->get('REQUEST_URI'))
 //            )))
-//            ->addComponent(new FieldsetType(array(
-//                'legend' => 'Administrator'
-//            )))
-//            ->addComponent(new TextType(array(
-//                'name' => 'username',
-//                'label' => 'Username',
-//                'required' => true,
-//                'value' => 'admin'
-//            )))
-//            ->addComponent(new TextType(array(
-//                'name' => 'password',
-//                'label' => 'Password',
-//                'required' => true,
-//                'type' => 'password'
-//            )))
-//            ->addComponent(new TextType(array(
-//                'name' => 'name',
-//                'label' => 'Name',
-//                'placeholder' => 'e.g. John Smith',
-//                'required' => true
-//            )))
-//            ->addComponent(new TextType(array(
-//                'name' => 'email',
-//                'label' => 'Email Address',
-//                'placeholder' => 'e.g. somebody@example.com',
-//                'required' => true,
-//                'type' => 'email'
-//            )))
-//            ->addComponent(new FieldsetType(array(
-//                'legend' => 'Actions'
-//            )))
-//            ->addComponent(new ButtonType(array(
-//                'type' => 'submit',
-//                'cssClasses' => 'button button--positive',
-//                'label' => 'Continue…'
-//            )));
-        return $this->render('setup/stage-1.html.twig', self::$data);
+        return $this->render('setup/stage-1.html.twig', $this->data);
     }
 }

@@ -1,0 +1,24 @@
+{% extends "inadmin/structure/main.html.twig" %}
+{% block content %}
+
+    <div class="col span_2_of_8"></div>
+    <div class="col span_4_of_8 setup">
+
+        {% block form_setup_stage1_pre %}{% endblock form_setup_stage1_pre %}
+        {% block form_setup_stage1 %}
+
+            <h1>Welcome!</h1>
+            <p>We just need to take a few details to get you set up…</p>
+            <img alt="An image of an Inachis io butterfly" class="admin__form__brand" src="/inadmin/assets/images/inachis.png" />
+
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+
+        {% endblock form_setup_stage1 %}
+        {% block form_setup_stage1_post %}{% endblock form_setup_stage1_post %}
+
+    </div>
+    <div class="col span_2_of_8"></div>
+
+{% endblock content %}

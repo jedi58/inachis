@@ -1,0 +1,9 @@
+admin.label.username: 'Nom d''utilisateur'
+admin.label.password: 'Mot de passe'
+admin.label.remember_me: 'Souviens-toi de moi'
+admin.label.forgot_password: 'Mot de passe oublié?'
+admin.button.login: Loguez
+admin.button.cancel: Annuler
+admin.reset.enter_email_address: 'Entrez votre adresse e-mail pour réinitialiser la connexion'
+admin.label.reset_password: 'Réinitialiser le mot de passe'
+admin.email_example: nom@example.com

@@ -1,26 +1,47 @@
 <?php
 
-namespace Inachis\CoreBundle\Controller;
+namespace App\Controller;
 
+use App\Controller\AbstractInachisController;
+use App\Entity\Page;
+use App\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Translation\TranslatorInterface;
 
-class DashboardController extends Controller
+class DashboardController extends AbstractInachisController
 {
     /**
-     * @Route("/inadmin", methods={"GET"})
+     * @Route("/incc", methods={"GET"})
+     * @param Request $request The request made to the controller
+     * @param TranslatorInterface $translator
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function default()
+    public function default(Request $request, TranslatorInterface $translator)
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        if ($response->isLocked()) {
-//            return;
-//        }
+        //$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 //        $pageManager = new PageManager(Application::getInstance()->getService('em'));
 //        self::adminInit($request, $response);
-//        self::$data['page'] = array('title' => 'Dashboard');
-//        self::$data['data'] = array(
+
+        $entityManager = $this->getDoctrine()->getManager();
+dump($this->get('security.token_storage')->getToken());
+        $this->data['page'] = [ 'title' => 'Dashboard' ];
+        $this->data['dashboard'] = [
+            'draftCount' => $entityManager->getRepository(Page::class)->getAllCount([
+                'q.status = :status',
+                [
+                    'status' => Page::DRAFT,
+                ],
+            ]),
+            'publishCount' => 0,
+            'upcomingCount' => 0,
+            'drafts' => [],
+            'upcoming' => [],
+            'posts' => [],
+        ];
 //            'draftCount' => $pageManager->getAllCount(array(
 //                'q.status = :status',
 //                array('status' => Page::DRAFT)
@@ -73,7 +94,7 @@ class DashboardController extends Controller
 //                'q.postDate ASC, q.modDate'
 //            )
 //        );
-        return $this->render('inadmin/dashboard.html.twig', self::$data);
+        return new Response($this->render('inadmin/dashboard.html.twig', $this->data));
     }
 
 }

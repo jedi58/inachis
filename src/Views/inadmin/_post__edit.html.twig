@@ -1,0 +1,133 @@
+{% extends "inadmin/structure/main.html.twig" %}
+{% block content %}
+
+    <form action="/inadmin/
+    {%- if post.urls|first.link is not empty -%}
+        {%- if post.type == 'page' %}page/{% endif -%}
+        {{  post.urls|first.link }}
+    {%-  else -%}
+        {{ post.type }}/new
+    {%- endif -%}" method="post" class="form form__post">
+        <div class="col span_8_of_8 ui-tabbed">
+            <ul>
+                <li>
+                    <a href="#post__edit">Content</a>
+                </li>
+                <li>
+                    <a href="#post__properties">Properties</a>
+                </li>
+                <li>
+                    <a href="#post__sharing">Sharing</a>
+                </li>
+            </ul>
+            <fieldset id="post__edit">
+                <legend>Edit Post</legend>
+                <p>
+                    <a class="material-icons ui-toggle" href="#" data-target=".post__link__edit" data-target-state="hidden">link</a>
+                    <label for="title">Title</label>
+                    <input autofocus data-tip-content="<strong>Required.</strong> This will also be used in the URL for your content. You can click on the link icon to adjust the URL." id="title" name="title" placeholder="e.g. My First Blog Post" required type="text" value="{{ post.title }}" />
+                </p>
+                <p>
+                    <label for="subTitle">Sub-title</label>
+                    <input id="subTitle" name="subTitle" placeholder="(optional)" type="text" value="{{ post.subTitle }}" />
+                </p>
+                <p class="post__link__edit">
+                    <label for="url">URL</label>
+                    {{ settings.domain }}/<input class="" id="url" name="url" type="text" value="{{  post.urls|first.link }}" />
+                </p>
+                <p>
+                    <label class="hidden" for="content">Content</label>
+                    <textarea name="content" name="content" title="Content for the page or post">{{ post.content }}</textarea>
+                </p>
+            </fieldset>
+
+            <fieldset id="post__properties">
+                <legend>Properties</legend>
+                <p>
+                    <label for="visibility">Visibility</label>
+                    <span class="switch-wrapper">
+					<input class="ui-switch" data-label-off="private" data-label-on="public" id="visibility" name="visibility" type="checkbox"{% if post.visibility == 'public' %} checked{% endif %} />
+				</span>
+                </p>
+                <p>
+                    <label for="postDate">
+                        Publish{% if post.postDate is not empty and date(post.postDate) <= date() %}ed{% endif %} on
+                    </label>
+                    <span id="post__schedule__timed">
+					<input data-tip-title="Publishing" data-tip-content="On publishing this content for the first time, if the date is in the past or the present it will publish immediately. If the date is in the future then it will be scheduled for publishing and will action any social media sharing options selected at the same time." id="postDate" name="postDate" value="{{ post.postDate|date('Y/m/d H:i') }}" type="text" />
+				</span>
+                </p>
+                <p>
+                    <label for="categories">Categories</label>
+                    <select class="js-select" data-tip-content="Separate existing categories with a comma or by pressing [Enter]. New categories should be created using the adjacent [+] icon." data-placeholder="Select a category" data-url="/inadmin/ax/categoryList/get" id="categories" name="categories[]" multiple>
+                        {% if post.categories is not empty %}
+                            {% for category in post.categories %}
+                                <option selected value="{{ category.id }}">{{  category.title }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                    <a class="material-icons category-manager__link" href="#">add_box</a>
+                </p>
+                <p>
+                    <label for="tags">Tags</label>
+                    <select class="js-select" data-tip-content="Separate tags with a comma or by pressing [Enter]" data-tags="true" id="tags" name="tags[]" multiple>
+                        {% if post.tags is not empty %}
+                            {% for tag in post.tags %}
+                                <option selected>{{  tag.title }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </p>
+                <p>
+                    <label for="latlong">Location</label>
+                    <input class="ui-map" data-google-key="{{ settings.google.key }}" data-tip-content="Please enter a location name, postcode, zip code, or longitude/latitude to search for the location." id="latlong" name="latlong" type="text" value="{{ post.latlong }}" />
+                </p>
+            </fieldset>
+            <fieldset id="post__sharing">
+                <h3>Teaser Details</h3>
+                <p>
+                    <label for="featureSnippet">Snippet</label>
+                    <textarea id="featureSnippet" name="featureSnippet">{{ post.featureSnippet }}</textarea>
+
+                    <label for="featureImage">Image</label>
+                    <input id="featureImage" name="featureImage" type="file" value="{{ post.featureImage }}" />
+                </p>
+                <h3>Sharing</h3>
+                <!-- loop through services / accounts for checkboxes + add char counter below for ui-counter -->
+                <p>
+                    <label for="sharingMessage">Message</label>
+                    <textarea class="ui-counter" name="sharingMessage" id="sharingMessage">{{  post.sharingMessage }}</textarea>
+                </p>
+            </fieldset>
+        </div>
+        <div class="fixed-bottom-bar">
+            <p>
+                <button type="submit" class="button button--positive">Save</button>
+                {%- if post.status != "published" %}
+                    <button type="submit" class="button button--info" name="publish">{% if post.postDate > date() %}Schedule{% else %}Publish{% endif %}</button>
+                {%- endif %}
+                <button type="submit" class="button button--negative" name="delete">Delete</button>
+                {%  if post.id is not empty and not post.isDraft %}
+                    <a class="button" href="/{{ post.urls|first.link }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span></a>
+                {%  endif %}
+            </p>
+        </div>
+    </form>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <link rel="stylesheet" href="/inadmin/assets/css/jquery.switchButton.css">
+    <link rel="stylesheet" href="/inadmin/assets/css/jquery.datetimepicker.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="/inadmin/assets/js/jquery.switchButton.js"></script>
+    <script src="/inadmin/assets/js/jquery.datetimepicker.full.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE({
+            element: $("#content")[0],
+            autosave: {
+                enabled: true,
+                uniqueId: '{% if post.id is not empty %}{{ post.id }}{% else %}new-content-{{ session.user.id }}-{{ date()|date('Ymd') }}{% endif %}'
+            },
+            forceSync: true
+        });
+    </script>
+{% endblock content %}

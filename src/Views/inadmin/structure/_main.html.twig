@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ settings.language }}" lang="{{ settings.language }}" dir="{{ settings.textDirection }}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{{ page.title }}{% if page.title != '' and settings.siteTitle != '' %} / {% endif %}{{ settings.siteTitle }}</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="Shortcut Icon" type="image/x-icon" href="{{ settings.domain }}/assets/imgs/incc/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{ settings.domain }}/assets/imgs/incc/inachis.png" />
+    <link rel="apple-touch-icon" href="{{ settings.domain }}/assets/imgs/incc/apple-touch.png" />
+    {% include "inadmin/structure/metadata.html.twig" %}
+    {% include "inadmin/structure/stylesheets.html.twig" %}
+    {% include "inadmin/structure/javascript__top.html.twig" %}
+</head>
+<body>
+
+{% if session.user is not empty %}
+    <header class="admin__header">
+        <!-- h1>Title goes here</h1 -->
+        <section class="admin__user">
+            <a href="#admin__user__options">
+                <img height="40" src="{% if session.user.avatar is not empty %}{{ session.user.avatar }}{% else %}{{ settings.domain }}/assets/imgs/defaultAvatar.png{% endif %}" width="40" />
+                {%- if data.notifications|length > 0 %}<span class="admin__user__notifications">{{ data.notifications|length }}</span>{% endif %}
+            </a>
+            <ul id="admin__user__options">
+                <li><p>Signed in as <span>{{ session.user.displayName }}</span></p></li>
+                <li><a href="/incc/user/{{ session.user.username }}">Edit profile <span class="material-icons">perm_identity</span></a></li>
+                <li><a href="/incc/settings/releases">Update available <span class="material-icons">new_releases</span></a></li>
+                <li><form action="/incc/signout" method="post"><button>Log out <span class="material-icons">exit_to_app</span></button></form></li>
+            </ul>
+        </section>
+        <section class="admin__search">
+            <form action="/incc/search/results" method="post">
+                <input type="search" name="q" id="q" placeholder="search…" />
+                <label for="q" class="material-icons">search</label>
+                <button class="material-icons mobile-only" type="submit">search</button>
+            </form>
+        </section>
+    </header>
+{% endif %}
+
+<section class="admin__body-container">
+    {% block form_login_pre %}
+        {% for message in app.flashes('success') %}
+            <div class="flash-notice">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endblock form_login_pre %}
+
+    {% block content %}{% endblock content %}
+</section>
+
+{% if session.user is not empty %}
+    <section class="admin__container admin__container--collapsed">
+        <section class="admin__identity">
+            <h2><span>Inachis</span></h2>
+        </section>
+        <section class="admin__nav-main">
+            <p class="admin__nav-main__link mobile-only"><a href="#admin__nav-list"><span>menu</span></a></p>
+            <ul class="admin__nav-main__list">
+                <li>
+                    <a class="button admin__add-content" href="#new" title="Add new content"><i class="material-icons">edit</i><span> Add</span></a>
+                    <ul class="admin__nav-new">
+                        <li><a href="{{ settings.domain }}/incc/post/new" title="Add a new post"><i class="material-icons">short_text</i><span> New Post</span></a></li>
+                        <li><a href="{{ settings.domain }}/incc/page/new" title="Add a new page"><i class="material-icons">content_copy</i><span> New Page</span></a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ settings.domain }}/incc/" title="View dashboard"><i class="material-icons">dashboard</i><span> Dashboard</span></a></li>
+                <li><a href="{{ settings.domain }}/incc/post/list" title="View list of posts"><i class="material-icons">short_text</i><span> Posts</span></a></li>
+                <li><a href="{{ settings.domain }}/incc/page/list" title="View list of pages"><i class="material-icons">content_copy</i><span> Pages</span></a></li>
+                <li><a href="{{ settings.domain }}/incc/url/list" title="View list of defined URLs"><i class="material-icons">insert_link</i><span> URLs</span></a></li>
+                <li>
+                    <a href="#admin__nav-settings" title="Change settings"><i class="material-icons">settings</i><span> Settings</span></a>
+                    <ul id="admin__nav-settings">
+                        <li><a href="{{ settings.domain }}/incc/resources" title="Manage resources">
+                                <i class="material-icons">wallpaper</i><span> Resources</span></a>
+                        </li>
+                        <li><a href="{{ settings.domain }}/incc/user-management" title="Manage users">
+                                <i class="material-icons">people</i><span> Users</span></a>
+                        </li>
+                        <li><a href="{{ settings.domain }}/incc/settings/advanced" title="Change advanced settings">
+                                <i class="material-icons">lock</i><span> Advanced</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="admin__nav-expand"><a href="#expand"><i class="material-icons">keyboard_arrow_right</i><span> Expand</span></a></li>
+                <li class="admin__nav-collapse"><a href="#collapse"><i class="material-icons">keyboard_arrow_left</i><span> Collapse</span></a></li>
+            </ul>
+        </section>
+    </section>
+{% endif %}
+
+{% include "inadmin/structure/javascript__bottom.html.twig" %}
+</body>
+</html>

@@ -1,0 +1,6 @@
+twig:
+    paths: ['%kernel.project_dir%/templates', '%kernel.project_dir%/src/Views']
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    #globals:
+    #  settings: "@App\"

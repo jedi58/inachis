@@ -1,0 +1,12 @@
+{% if categories is not empty  %}
+    {% for category in categories %}
+        <li data-value="{{ category.id }}">
+            {{ category.title }}
+            {%-  if category.children is not empty %}
+                <ol>
+                    {{ include("inadmin/dialog/category-manager.html.twig", { 'categories': category.children }) }}
+                </ol>
+            {% endif -%}
+        </li>
+    {% endfor %}
+{% endif %}

@@ -1,65 +1,84 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\EventListener;
 
+use App\Security\ContentSecurityPolicy;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Intl\Locale\Locale;
 
-final class AdminResponseEvent
+final class AdminResponseEvent implements EventSubscriberInterface
 {
-    protected $headers;
+    private $logger;
 
-    public function __construct()
+    private $container;
+
+    /**
+     * AdminResponseEvent constructor.
+     * @param LoggerInterface $logger
+     * @param ContainerInterface $container
+     */
+    public function __construct(LoggerInterface $logger, ContainerInterface $container)
     {
-        $this->headers = $event->getResponse()->headers;
+        $this->logger = $logger;
+        $this->container = $container;
     }
+    /**
+     * @param GetResponseEvent $event
+     */
+    public function onKernelRequest(GetResponseEvent $event)
+    {
+        // Redirect to /setup if no admins
+        // Redirect if not signed in
+        // Redirect if password has expired
+        //$request = $event->getRequest();
+    }
+    /**
+     * @param FilterResponseEvent $event
+     */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        $this->sendSecurityHeaders();
+        $this->sendSecurityHeaders($event);
     }
-    public function sendSecurityHeaders()
+//    public function onKernelController(FilterControllerEvent $event)
+//    {
+//    }
+    /**
+     * @return array
+     */
+    public static function getSubscribedEvents()
     {
-        $this->headers->set('X-Frame-Options', 'SAMEORIGIN');
-        $this->headers->set('X-XSS-Protection', '1; mode=block');
-        $this->headers->set('X-Content-Type-Options', 'nosniff');
-//            $cspHeader = ContentSecurityPolicy::getInstance()->getCSPEnforceHeader();
-//            if (!empty($cspHeader)) {
-//                $this->headers->set('Content-Security-Policy', $cspHeader);
-//            };
-//            $cspReportHeader = ContentSecurityPolicy::getInstance()->getCSPReportHeader();
-//            if (!empty($cspReportHeader)) {
-//                $this->headers->set('Content-Security-Policy-Report-Only', $cspReportHeader);
-//            }
+        return array(
+            KernelEvents::REQUEST => 'onKernelRequest',
+//            KernelEvents::CONTROLLER => 'onKernelController',
+            KernelEvents::RESPONSE => 'onKernelResponse'
+        );
     }
-    private function getStandardData(Request $request)
+    /**
+     * @param FilterResponseEvent $event
+     */
+    public function sendSecurityHeaders(FilterResponseEvent $event)
     {
-        return [
-//            'session' => $_SESSION,
-//            'domain' => ($request->isSecure() ? 'https://' : 'http://') . $request->server()->get('HTTP_HOST'),
-//            'siteTitle' => !empty(Application::getInstance()->getConfig()['system']->title) ?
-//                Application::getInstance()->getConfig()['system']->title :
-//                null,
-//            'google' => Application::getInstance()->getConfig()['system']->google
-            'settings' => [
-                'siteTitle' => '',
-                'domain' => '',
-                'google' => [],
-                'language' => 'en',
-                'textDirection' => 'ltr',
-                'abstract' => '',
-                'fb_app_id' => ''
-            ],
-            'page' => [
-                'self' => '',
-                'title' => '',
-                'description' => ''
-            ],
-            'post' => [
-                'featureImage' => ''
-            ],
-            'session' => [
-                'user' => []
-            ],
-        ];
-//        self::sendSecurityHeaders($response);
+        $event->getResponse()->headers->set('X-Frame-Options', 'SAMEORIGIN');
+        $event->getResponse()->headers->set('X-XSS-Protection', '1; mode=block');
+        $event->getResponse()->headers->set('X-Content-Type-Options', 'nosniff');
+        $cspHeader = ContentSecurityPolicy::getInstance()->getCSPEnforceHeader(
+            $this->container->getParameter('csp')
+        );
+        if (!empty($cspHeader)) {
+//            $event->getResponse()->headers->set('Content-Security-Policy', $cspHeader);
+        };
+        $cspReportHeader = ContentSecurityPolicy::getInstance()->getCSPReportHeader(
+            $this->container->getParameter('csp')
+        );
+        if (!empty($cspReportHeader)) {
+//            $event->getResponse()->headers->set('Content-Security-Policy-Report-Only', $cspReportHeader);
+        }
     }
 }

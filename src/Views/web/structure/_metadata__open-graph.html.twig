@@ -1,0 +1,10 @@
+<meta property="og:url" content="{{ page.self }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ page.title }}{% if page.title != '' %} / {% endif %}{{ settings.siteTitle }}">
+{%  if post.featureImage is defined and is not empty %}
+    <meta property="og:image:url" content="{{ post.featureImage }}">
+{% endif %}
+<meta property="og:description" content="{{ page.description }}">
+{% if settings.fb_app_id is defined and is not empty %}
+    <meta property="fb:app_id" content="{{ settings.fb_app_id }}">
+{% endif %}

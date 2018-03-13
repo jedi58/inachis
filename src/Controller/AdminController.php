@@ -1,6 +1,6 @@
 <?php
 
-namespace Inachis\CoreBundle\Controller;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends Controller
 {
     /**
-     * @Route("/inadmin/user-management", methods={"GET", "POST"})
+     * @Route("/incc/user-management", methods={"GET", "POST"})
      */
     public function adminList()
     {
@@ -21,7 +21,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/inadmin/user/{id}", methods={"GET", "POST"})
+     * @Route("/incc/user/{id}", methods={"GET", "POST"})
      */
     public function adminDetails($id)
     {
@@ -35,7 +35,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/inadmin/settings", methods={"GET", "POST"})
+     * @Route("/incc/settings", methods={"GET", "POST"})
      */
     public function adminSettingsMain()
     {
