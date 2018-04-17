@@ -46,9 +46,15 @@ final class AdminResponseEvent implements EventSubscriberInterface
     {
         $this->sendSecurityHeaders($event);
     }
-//    public function onKernelController(FilterControllerEvent $event)
-//    {
-//    }
+
+    public function onKernelController(FilterControllerEvent $event)
+    {
+        $controller = $event->getController();
+        if (method_exists($controller[0], 'setDefaults')) {
+            $controller[0]->setDefaults();
+        }
+    }
+
     /**
      * @return array
      */
@@ -56,7 +62,7 @@ final class AdminResponseEvent implements EventSubscriberInterface
     {
         return array(
             KernelEvents::REQUEST => 'onKernelRequest',
-//            KernelEvents::CONTROLLER => 'onKernelController',
+            KernelEvents::CONTROLLER => 'onKernelController',
             KernelEvents::RESPONSE => 'onKernelResponse'
         );
     }
@@ -72,13 +78,13 @@ final class AdminResponseEvent implements EventSubscriberInterface
             $this->container->getParameter('csp')
         );
         if (!empty($cspHeader)) {
-//            $event->getResponse()->headers->set('Content-Security-Policy', $cspHeader);
+            $event->getResponse()->headers->set('Content-Security-Policy', $cspHeader);
         };
         $cspReportHeader = ContentSecurityPolicy::getInstance()->getCSPReportHeader(
             $this->container->getParameter('csp')
         );
         if (!empty($cspReportHeader)) {
-//            $event->getResponse()->headers->set('Content-Security-Policy-Report-Only', $cspReportHeader);
+            $event->getResponse()->headers->set('Content-Security-Policy-Report-Only', $cspReportHeader);
         }
     }
 }

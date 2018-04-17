@@ -1,0 +1,57 @@
+$form-background__light: #dde8ed;
+$form-label__light: #666;
+$form-input__complete: #090;
+
+@import 'mixins.scss';
+
+.container__login, .setup {
+	.form__login {
+		@include box-shadow(5px, 7px, 14px, 0, rgba(0,0,0,0.26));
+
+		background: $form-background__light;
+		max-width: 450px;
+
+		fieldset {
+			border: none;
+			margin: 15px 50px;
+			padding: 0;
+		}
+
+		input {
+			border: 2px solid transparent;
+			margin-bottom: 10px;
+			width: 90%;
+		}
+		input[value^=""], .input__complete {
+			border-color: $form-input__complete;
+		}
+		input.checkbox {
+			margin-right: .5em;
+			width: auto;
+		}
+
+		label {
+			color: $form-label__light;
+			display: block;
+			font-size: 0.85em;
+			margin-bottom: 5px;
+			text-transform: uppercase;
+		}
+
+		legend {
+			display: none;
+		}
+	}
+
+	a, a:visited {
+		color: #666;
+		display: block;
+		margin-top: 35px;
+		text-align: center;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #069;
+		text-decoration: underline;
+	}
+}

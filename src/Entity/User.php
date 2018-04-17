@@ -3,14 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Object for handling User entity
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"username_canonical", "email_canonical"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"usernameCanonical", "emailCanonical"})})
  */
-class User extends BaseUser
+class User implements UserInterface//, \Serializable
 {
     /**
      * Constant for specifying passwords have no expiry time
@@ -23,7 +24,39 @@ class User extends BaseUser
      */
     protected $id;
     /**
-     * @ORM\Column(type="string", length=512, nullable=true)
+     * @ORM\Column(type="string", length=512, nullable=false)
+     * @Assert\NotBlank()
+     * @var string Username of the user
+     */
+    protected $username;
+    /**
+     * @ORM\Column(name="usernameCanonical",type="string", length=255, unique=true, nullable=false)
+     * @var string Username of the user
+     */
+    protected $usernameCanonical;
+    /**
+     * @ORM\Column(type="string", length=512, nullable=false)
+     * @var string Password for the user
+     */
+    protected $password;
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     * @var string Plaintext version of password - used for validation only and is not stored
+     */
+    protected $plainPassword;
+    /**
+     * @ORM\Column(type="string", length=512, nullable=false)
+     * @var string Email address of the user
+     */
+    protected $email;
+    /**
+     * @ORM\Column(name="emailCanonical",type="string", length=255, unique=true, nullable=false)
+     * @var string Email address of the user
+     */
+    protected $emailCanonical;
+    /**
+     * @ORM\Column(type="string", length=512)
      * @var string The display name for the user
      */
     protected $displayName;
@@ -67,9 +100,8 @@ class User extends BaseUser
      */
     public function __construct($username = '', $password = '', $email = '')
     {
-        parent::__construct();
         $this->setUsername($username);
-        $this->setPasswordHash($password);
+        $this->setPassword($password);
         $this->setEmail($email);
         $currentTime = new \DateTime('now');
         $this->setCreateDate($currentTime);
@@ -99,6 +131,14 @@ class User extends BaseUser
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
     }
     /**
      * Returns the {@link email} of the {@link User}
@@ -189,18 +229,14 @@ class User extends BaseUser
     {
         $this->password = $value;
     }
+
     /**
-     * Sets the value of {@link password}
-     * @param string $value The value to hash
-     * @param int The hashing method to use
-     * @param array[mixed] Any hashing algorithm specific options to use
+     * @param $value
      */
-    public function setPasswordHash(
-        $value,
-        $method = PASSWORD_DEFAULT,
-        $options = array()
-    ) {
-        $this->setPassword(password_hash($value, $method, $options));
+    public function setPlainPassword($value)
+    {
+        $this->plainPassword = $value;
+        $this->password = null;
     }
     /**
      * Sets the value of {@link email}
@@ -314,24 +350,17 @@ class User extends BaseUser
         );
     }
     /**
-     * Checks the password submitted against the stored password hash
-     * @param string $password The password to validate
-     * @return bool Result of testing the password matches the hash
-     */
-    public function validatePasswordHash($password)
-    {
-        return password_verify($password, $this->password);
-    }
-    /**
      * @return string
      */
     public function serialize()
     {
-//        return $this->serialize(
-//            $this->id,
-//            $this->username,
-//            $this->password
-//        );
+        return serialize([
+            $this->id,
+            $this->username,
+            $this->password,
+            // $this->salt,
+            $this->isActive,
+        ]);
     }
     /**
      * @param string $serialized
@@ -341,7 +370,41 @@ class User extends BaseUser
         list (
             $this->id,
             $this->username,
-            $this->password
-        ) = $this->unserialize($serialized);
+            $this->password,
+            // $this->salt,
+            $this->isActive,
+        ) = unserialize($serialized);
+    }
+
+    /**
+     * @return null
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoles()
+    {
+        return [ 'ROLE_ADMIN', 'ROLE_USER' ];
+    }
+
+    /**
+     *
+     */
+    public function setRoles()
+    {
+
+    }
+
+    /**
+     *
+     */
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
     }
 }

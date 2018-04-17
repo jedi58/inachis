@@ -5,33 +5,33 @@ module.exports = {
 		},
 		dist: {
 			images: {
-				admin: 'web/inadmin/assets/images/',
-				web: 'web/assets/images/'
+				admin: 'public/assets/imgs/incc/',
+				web: 'public/assets/imgs/'
 			},
 			js: {
-				admin: 'web/inadmin/assets/js/',
-				web: 'web/assets/js/'
+				admin: 'public/assets/js/incc/',
+				web: 'public/assets/js/'
 			},
 			sass: {
-				admin: 'web/inadmin/assets/css/',
-				web: 'web/assets/css/'
+				admin: 'public/assets/css/incc/',
+				web: 'public/assets/css/'
 			}
 		},
 		src: {
 			images: {
-				admin: 'resources/assets/images/inadmin/',
-				web: 'resources/assets/images/web/'
+				admin: 'assets/images/inadmin/',
+				web: 'assets/images/web/'
 			},
 			js: {
-				admin: 'resources/assets/js/inadmin/',
-				all: 'resources/assets/js/',
-				shared: 'resources/assets/js/shared/',
-				web: 'resources/assets/js/web/'
+				admin: 'assets/js/inadmin/',
+				all: 'assets/js/',
+				shared: 'assets/js/shared/',
+				web: 'assets/js/web/'
 			},
 			sass: { 
-				admin: 'resources/assets/scss/inadmin/',
-				web: 'resources/assets/scss/web/',
-				all: 'resources/assets/scss/'
+				admin: 'assets/scss/inadmin/',
+				web: 'assets/scss/web/',
+				all: 'assets/scss/'
 			}
 		}
 	}

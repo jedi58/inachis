@@ -12,7 +12,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatorInterface;
 
-
 class LoginType extends AbstractType
 {
     private $translator;
@@ -52,14 +51,14 @@ class LoginType extends AbstractType
                     'id' => 'form-login__password-label'
                 ],
             ])
-            ->add('rememberMe', CheckboxType::class, [
-                'attr' => [
-                    'class' => 'checkbox'
-                ],
-                'required' => false,
-                'value' => '1',
-                'label' => $this->translator->trans('admin.label.remember_me'),
-            ])
+//            ->add('rememberMe', CheckboxType::class, [
+//                'attr' => [
+//                    'class' => 'checkbox'
+//                ],
+//                'required' => false,
+//                'value' => '1',
+//                'label' => $this->translator->trans('admin.label.remember_me'),
+//            ])
             ->add('logIn', SubmitType::class, [
                 'label' => $this->translator->trans('admin.button.login'),
                 'attr' => [

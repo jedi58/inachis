@@ -14,8 +14,8 @@ gulp.task('images:min-admin', function() {
 });
 
 gulp.task('images:watch', function() {
-    gulp.watch(config.paths.src.images.admin + '**/*', ['images:min-admin']);
-    gulp.watch(config.paths.src.images.web + '**/*', ['images:min-web']);
+    gulp.watch(config.paths.src.images.admin + '**/*', [ 'images:min-admin' ]);
+    gulp.watch(config.paths.src.images.web + '**/*', [ 'images:min-web' ]);
 });
 
 function imgMin(src, dest)

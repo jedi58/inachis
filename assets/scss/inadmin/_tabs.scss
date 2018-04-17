@@ -1,0 +1,42 @@
+.ui-tabs {
+	background-color: $admin__tabs-background;
+	clear: both;
+
+	fieldset {
+		clear: both;
+	}
+
+	ol, div {
+		clear: left;
+	}
+
+	.ui-tabs-nav {
+		clear: both;
+		display: block;
+		font-size: 0.9em;
+		list-style-type: none;
+		margin: 5px 5px 0 0;
+		padding: 0;
+
+		a, a:visited {
+			color: #000;
+			text-decoration: none;
+		}
+
+		li {
+			border-bottom: 3px solid transparent;
+			float: left;
+			margin: 0 5px 10px;
+			padding: 10px;
+		}
+
+		.ui-state-active {
+		    border-bottom: 3px solid $admin__tabs__highlighted-color;
+
+			a, a:visited {
+				color: $admin__tabs__highlighted-color;
+				font-weight: bold;
+			}
+		}
+	}
+}

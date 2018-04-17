@@ -1,0 +1,51 @@
+$button--positive--active-color: #393;
+$button--positive--hover-color: lighten($button--positive--active-color, 10);
+$button--negative--active-color: #900;
+$button--negative--hover-color: lighten($button--negative--active-color, 10);
+$button--info--active-color: #999;
+$button--info--hover-color: darken($button--info--active-color, 10);
+
+
+.button {
+	border-radius: 5px;
+	font-size: 1.05em;
+	padding: 10px 20px;
+
+	&:disabled {
+		opacity: 0.5;
+	}
+
+	span {
+		vertical-align: middle;
+	}
+	
+	&.button--positive {
+		background-color: $button--positive--active-color;
+		border:1px solid $button--positive--active-color;
+		color: #fff;
+
+		&:hover {
+			background-color: $button--positive--hover-color;
+		}
+	}
+
+	&.button--negative {
+		background-color: $button--negative--active-color;
+		border: 1px solid $button--negative--active-color;
+		color: #fff;
+
+		&:hover {
+			background-color: $button--negative--hover-color;
+		}
+	}
+
+	&.button--info {
+		background-color: $button--info--active-color;
+		border: 1px solid $button--info--active-color;
+		color: #fff;
+
+		&:hover {
+			background-color: $button--info--hover-color;
+		}
+	}
+}

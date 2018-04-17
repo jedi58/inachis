@@ -39,7 +39,7 @@
 
     {% if dashboard.upcoming is defined and dashboard.upcoming is not empty %}
         <ol id="widget-posts__upcoming">
-            {% for post in data.upcoming.results %}
+            {% for post in dashboard.upcoming %}
                 <li>
                     <h2><a aria-label="Edit {{ post.title }}" href="/inadmin/{%- if post.type == 'page' %}page/{% endif -%}{{ post.urls[0].link }}">{{ post.title }}</a></h2>
                     <p>{{ post.content|length > 250 ? post.content|slice(0, 250) ~ '…' : post.content  }}</p>

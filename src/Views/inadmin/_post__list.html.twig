@@ -33,6 +33,12 @@
                         </article>
                     {%  endfor %}
                 </form>
+            {% else %}
+                <p class="content-warning">
+                    <i class="material-icons">info_outline</i>
+                    <span>You don't have any content yet!</span>
+                    <a href="{{ path('app_zzpage_getpostadmin') }}">Add some now!</a>
+                </p>
             {% endif %}
         </div>
     {% endblock post_list %}

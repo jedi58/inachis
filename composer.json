@@ -5,7 +5,6 @@
         "php": "^7.1.3",
         "ext-iconv": "*",
         "aptoma/twig-markdown": "^3.0",
-        "friendsofsymfony/user-bundle": "^2.1",
         "michelf/php-markdown": "^1.8",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/console": "^4.0",
@@ -23,6 +22,7 @@
         "symfony/yaml": "^4.0"
     },
     "require-dev": {
+        "pheromone/phpcs-security-audit": "^2.0",
         "sensiolabs/security-checker": "^4.1",
         "symfony/debug": "^4.0",
         "symfony/dotenv": "^4.0",

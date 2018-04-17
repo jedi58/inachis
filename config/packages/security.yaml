@@ -1,39 +1,49 @@
 # see https://symfony.com/doc/current/reference/configuration/security.html
+# CSRF Protection: https://symfony.com/doc/current/security/guard_authentication.html
 security:
     encoders:
-        FOS\UserBundle\Model\UserInterface: argon2i
+        App\Entity\User: argon2i
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
 
+    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        fos_userbundle:
-          id: fos_user.user_provider.username
+      admins:
+        entity:
+          class: App\Entity\User
+          property: username
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        main:
-            pattern: ^/
-            form_login:
-              provider: fos_userbundle
-              check_path: fos_user_security_check
-              login_path: fos_user_security_login
+        admin:
+            pattern: ^/incc
+            anonymous: ~
 
+            guard:
+              authenticators:
+                - App\Security\LoginFormAuthenticator
+
+            logout:
+              path: /incc/signout
+
+#            form_login:
+#              provider: ^/
+#
 #              check_path: app_account_login_action
 #              login_path: app_account_login
 #              default_target_path: app_dashboard_default
 #              use_referer: true
 #              csrf_parameter: login[_token]
-              csrf_token_generator: security.csrf.token_manager
+#              csrf_token_generator: security.csrf.token_manager
 #              remember_me: true
 #              username_parameter: login[loginUsername]
 #              password_parameter: login[loginPassword]
-            logout: true
-            anonymous: true
+
 #            remember_me:
               #token_provider: name
 #              secret: '%kernel.secret%'
@@ -45,10 +55,11 @@ security:
 #              httponly: true
 #              remember_me_parameter: login[rememberMe]
     access_control:
-      - { path: ^/incc/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/incc/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/incc/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/incc/login-check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/incc/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/incc/forgot-password$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/incc/logout$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/incc/login-check$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-      - { path: ^/incc, role: [ ROLE_ADMIN ] }
-      - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/incc, roles: [ ROLE_ADMIN ] }
+      #- { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/.*, roles: ROLE_USER }

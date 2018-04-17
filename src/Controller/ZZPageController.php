@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Controller\AbstractInachisController;
+use App\Entity\Page;
+use App\Entity\Url;
+use App\Form\PostType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -54,6 +58,14 @@ class ZZPageController extends AbstractInachisController
 
     /**
      * @Route(
+     *     "/incc/{type}/new",
+     *     methods={"GET", "POST"},
+     *     defaults={"type": "post"},
+     *     requirements={
+     *          "type": "post|page"
+     *     }
+     * )
+     * @Route(
      *     "/incc/{type}/{title}",
      *     methods={"GET", "POST"},
      *     defaults={"type": "post"},
@@ -71,49 +83,57 @@ class ZZPageController extends AbstractInachisController
      *          "day": "\d+"
      *     }
      * )
-     * @Route(
-     *     "/incc/{type}/new",
-     *     methods={"GET", "POST"},
-     *     defaults={"type": "post"},
-     *     requirements={
-     *          "type": "post|page"
-     *     }
-     * )
+     * @param Request $request
+     * @param string $type
+     * @param string $title
      * @return mixed
+     * @throws \Exception
      */
-    public function getPostAdmin($type, $title)
+    public function getPostAdmin(Request $request, $type, $title = null)
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        $urlManager = new UrlManager(Application::getInstance()->getService('em'));
-//        $requestUri = preg_replace('/\/inadmin\/(page\/)?/', '', $request->server()->get('REQUEST_URI'));
-//        if ($requestUri === 'list') {
-//            return null;
-//        }
-//        $url = $urlManager->getByUrl($requestUri);
-//        if (empty($url) && 0 === preg_match(
-//                '/\/?inadmin\/(post|page)\/new\/?/',
-//                $request->server()->get('REQUEST_URI')
-//            )) {
-//            return $response->redirect(sprintf(
-//                '/inadmin/%s/new',
-//                self::getContentType($request)
-//            ))->send();
-//        }
-//        if ($response->isLocked()) {
-//            return null;
-//        }
-//        self::adminInit($request, $response);
-//        $pageManager = new PageManager(Application::getInstance()->getService('em'));
-//        $post = !empty($url) ? $pageManager->getById($url->getContent()->getId()) : $post = $pageManager->create();
-//        if ($post->getId() === null) {
-//            $post->setType(self::getContentType($request));
-//        }
-//        if ($request->method('post')) {
-//            $properties = $request->paramsPost()->all();
-//            $properties['postDate'] = new \DateTime(
-//                $properties['postDate'],
-//                new \DateTimeZone($post->getTimezone())
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $entityManager = $this->getDoctrine()->getManager();
+        $url = $entityManager->getRepository(Url::class)->findByLink($title);
+        // If content with this URL doesn't exist, then redirect
+        if (empty($url) && null !== $title) {
+            return $response->redirect(sprintf(
+                '/inadmin/%s/new',
+                $type
+            ))->send();
+        }
+        $post = null !== $title ? $entityManager->getById($url->getContent()->getId()) : $post = new Page();
+        if ($post->getId() === null) {
+            $post->setType($type);
+        }
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {//} && $form->isValid()) {
+            $post->setAuthor($this->get('security.token_storage')->getToken()->getUser());
+            if (null !== $request->get('publish')) {
+                $post->setStatus(Page::PUBLISHED);
+            }
+//            $post->setVisibility(Page::VIS_PRIVATE);
+//            if ($request->paramsPost()->get('visibility') === 'on') {
+//                $post->setVisibility(Page::VIS_PUBLIC);
+//            }
+            dump($form);
+            dump($post);
+            dump($request);
+
+//            $entityManager->persist($post);
+//            $entityManager->flush();
+
+            exit;
+
+//            return $this->redirect(
+//                '/incc/' .
+//                ( $post->getType() == Page::TYPE_PAGE ? 'page/' : '' ) .
+//                $post->getUrls()[0]->getLink()
 //            );
+        }
+
+
 //            if (null !== $request->paramsPost()->get('delete') && !empty($post->getId())) {
 //                foreach ($post->getUrls() as $postUrl) {
 //                    $urlManager->remove($postUrl);
@@ -121,11 +141,8 @@ class ZZPageController extends AbstractInachisController
 //                $pageManager->remove($post);
 //                return $response->redirect('/inadmin/');
 //            }
-//            $post = $pageManager->hydrate($post, $properties);
-//            $post->setAuthor(
-//                Application::getInstance()->getService('auth')->getUserManager()->getByIdRaw(
-//                    Application::getInstance()->getService('session')->get('user'))
-//            );
+
+
 //            $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
 //            $tagManager = new TagManager(Application::getInstance()->getService('em'));
 //            $categories = $request->paramsPost()->get('categories');
@@ -172,30 +189,16 @@ class ZZPageController extends AbstractInachisController
 //                    'link' => $newUrl
 //                )));
 //            }
-//            if (null !== $request->paramsPost()->get('publish')) {
-//                $post->setStatus(Page::PUBLISHED);
-//            }
-//            $post->setVisibility(Page::VIS_PRIVATE);
-//            if ($request->paramsPost()->get('visibility') === 'on') {
-//                $post->setVisibility(Page::VIS_PUBLIC);
-//            }
-//            // @todo validate post
-//            if (empty(self::$errors)) {
-//                $pageManager->save($post);
-//                return $response->redirect(
-//                    '/inadmin/' .
-//                    ($post->getType() == Page::TYPE_PAGE ? 'page/' : '') .
-//                    $post->getUrls()[0]->getLink()
-//                );
-//            }
-//        }
-//        self::$data['page']['title'] = $post->getId() !== null ?
-//            'Editing "' . $post->getTitle() . '"' :
-//            'New ' . $post->getType();
-//        self::$data['includeEditor'] = true;
-//        self::$data['post'] = $post;
 
-        return $this->render('inadmin/post__edit.html.twig', self::$data);
+
+        $this->data['form'] = $form->createView();
+        $this->data['page']['tab'] = $post->getType();
+        $this->data['page']['title'] = $post->getId() !== null ?
+            'Editing "' . $post->getTitle() . '"' :
+            'New ' . $post->getType();
+        $this->data['includeEditor'] = true;
+        $this->data['post'] = $post;
+        return $this->render('inadmin/post__edit.html.twig', $this->data);
     }
 
     /**
@@ -206,33 +209,34 @@ class ZZPageController extends AbstractInachisController
      *          "type": "post|page"
      *     }
      * )
+     * @param string $type
      * @return null
      */
-    public function getPostListAdmin($type)
+    public function getPostListAdmin($type = 'post')
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        if ($response->isLocked()) {
-//            return null;
-//        }
-//        self::adminInit($request, $response);
-//        $pageManager = new PageManager(Application::getInstance()->getService('em'));
-//        $offset = $request->paramsGet()->get('offset', 0);
-//        $limit = 10;
-//        $type = self::getContentType($request);
-//        self::$data['posts'] = $pageManager->getAll(
-//            $offset,
-//            $limit,
-//            array(
-//                'q.type = :type',
-//                array('type' => $type)
-//            ),
-//            array(
-//                array('q.postDate', 'DESC'),
-//                array('q.modDate', 'DESC')
-//            )
-//        );
-//        self::$data['page']['title'] = ucfirst($type) . 's';
-        return $this->render('inadmin/post__list.html.twig', self::$data);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $entityManager = $this->getDoctrine()->getManager();
+        // @todo sort offset: (int) $request->paramsGet()->get('offset', 0);
+        $offset = 0;
+        $this->data['posts'] = $entityManager->getRepository(Page::class)->getAll(
+            $offset,
+            10,
+            [
+                'q.type = :type',
+                [
+                    'type' => $type,
+                ]
+            ],
+            [
+                [ 'q.postDate', 'DESC' ],
+                [ 'q.modDate', 'DESC' ]
+            ],
+            'q.postDate ASC, q.modDate'
+        );
+
+        $this->data['page']['tab'] = $type;
+        $this->data['page']['title'] = ucfirst($type) . 's';
+        return $this->render('inadmin/post__list.html.twig', $this->data);
     }
 
     /**
@@ -246,14 +250,13 @@ class ZZPageController extends AbstractInachisController
 
     /**
      * Returns `page` or `post` depending on the current URL
-     * @param Request $request
      * @return string The result of testing the current URL
      */
-//    private static function getContentType($request)
-//    {
-//        return 1 === preg_match(
-//            '/\/inadmin\/([0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*|post)/',
-//            $request->server()->get('REQUEST_URI')
-//        ) ? Page::TYPE_POST : Page::TYPE_PAGE;
-//    }
+    private function getContentType()
+    {
+        return 1 === preg_match(
+            '/\/inadmin\/([0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*|post)/',
+            $request->server()->get('REQUEST_URI')
+        ) ? Page::TYPE_POST : Page::TYPE_PAGE;
+    }
 }

@@ -13,7 +13,7 @@ final class ContentSecurityPolicy
     /**
      * @var string[] SRC-based directives
      */
-    public static $srcDirectives = array(
+    public static $srcDirectives = [
         'default-src',
         'child-src',
         'connect-src',
@@ -28,29 +28,29 @@ final class ContentSecurityPolicy
         'script-src',
         'style-src',
         'xhr-src',
-    );
+    ];
     /**
      * @var string[] URI-based directives for reporting
      */
-    public static $uriDirectives = array(
+    public static $uriDirectives = [
         'report-uri',
-        'policy-uri'
-    );
+        'policy-uri',
+    ];
     /**
      * @var string[] Directives used for toggling policy components
      */
-    public static $otherDirectives = array(
+    public static $otherDirectives = [
         'block-all-mixed-content',
         'sandbox',
-        'upgrade-insecure-requests'
-    );
+        'upgrade-insecure-requests',
+    ];
     /**
-     * @var Application reference to instance of self
+     * @var ContentSecurityPolicy reference to instance of self
      */
     protected static $instance;
     /**
      * Returns an instance of {@link Application}
-     * @return Application The current or a new instance of {@link Application}
+     * @return ContentSecurityPolicy The current or a new instance of {@link Application}
      */
     public static function getInstance()
     {
@@ -63,6 +63,7 @@ final class ContentSecurityPolicy
      * Returns the CSP policy for enforcing
      * @param string[] The policy to process for CSP enforce
      * @return string The parsed policies
+     * @throws InvalidContentSecurityPolicyException
      */
     public static function getCSPEnforceHeader($policy)
     {
@@ -75,6 +76,7 @@ final class ContentSecurityPolicy
      * Returns the CSP policy for reporting only
      * @param string[] The policy to process for CSP reporting
      * @return string The parsed policies
+     * @throws InvalidContentSecurityPolicyException
      */
     public static function getCSPReportHeader($policy = array())
     {
@@ -91,7 +93,7 @@ final class ContentSecurityPolicy
      */
     public static function generateCSP($csp)
     {
-        $policies = array();
+        $policies = [];
         foreach ($csp as $policy => $directives) {
             if (!in_array($policy, self::$srcDirectives) &&
                 !in_array($policy, self::$uriDirectives) &&
@@ -102,7 +104,7 @@ final class ContentSecurityPolicy
                 );
             }
             $policies[$policy] = $policy;
-            if (!empty($directives) && is_object($directives)) {
+            if (!empty($directives) && is_array($directives)) {
                 foreach ($directives as $directive => $value) {
                     switch ($directive) {
                         case 'data':

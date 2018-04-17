@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,35 +10,47 @@ use Symfony\Flex\Response;
 
 abstract class AbstractInachisController extends Controller
 {
-    protected $errors;
-    protected $data = [//];
-//            'session' => $_SESSION,
+    protected $entityManager;
+    /**
+     * @var array
+     */
+    protected $errors = [];
+    /**
+     * @var array
+     */
+    protected $data = [];
+
+    public function setDefaults()
+    {
+        $this->entityManager = $this->getDoctrine()->getManager();
+        $this->data = [
 //            'domain' => ($request->isSecure() ? 'https://' : 'http://') . $request->server()->get('HTTP_HOST'),
 //            'siteTitle' => !empty(Application::getInstance()->getConfig()['system']->title) ?
 //                Application::getInstance()->getConfig()['system']->title :
 //                null,
 //            'google' => Application::getInstance()->getConfig()['system']->google
-        'settings' => [
-            'siteTitle' => '',
-            'domain' => '',
-            'google' => [],
-            'language' => 'en',
-            'textDirection' => 'ltr',
-            'abstract' => '',
-            'fb_app_id' => ''
-        ],
-        'page' => [
-            'self' => '',
-            'title' => '',
-            'description' => ''
-        ],
-        'post' => [
-            'featureImage' => ''
-        ],
-        'session' => [
-            'user' => []
-        ],
-    ];
+            'settings' => [
+                'siteTitle' => '',
+                'domain' => '',
+                'google' => [],
+                'language' => 'en',
+                'textDirection' => 'ltr',
+                'abstract' => '',
+                'fb_app_id' => ''
+            ],
+            'notifications' => [],
+            'page' => [
+                'self' => '',
+                'tab' => '',
+                'title' => '',
+                'description' => ''
+            ],
+            'post' => [
+                'featureImage' => ''
+            ],
+            'session' => $this->get('security.token_storage')->getToken(),
+        ];
+    }
 
     /**
      * Returns all current errors on the page
@@ -66,6 +79,18 @@ abstract class AbstractInachisController extends Controller
     {
         $this->errors[$error] = (string) $message;
     }
+
+    /**
+     * @return RedirectResponse
+     */
+    public function redirectIfNoAdmins()
+    {
+        if ($this->entityManager->getRepository(User::class)->count([]) == 0) {
+            return $this->redirectToRoute('app_setup_stage1');
+        }
+        return null;
+    }
+
     /**
      * Used when the request requires authentication; if the not authenticated
      * then the user's requested page URL is stored in the session and then
@@ -76,9 +101,7 @@ abstract class AbstractInachisController extends Controller
      */
     public function redirectIfNotAuthenticated(Request $request)
     {
-//        if ($response->isLocked()) {
-//            return null;
-//        }
+die('redirectIfNotAuthenticated');
         if (true) { // !Application::getInstance()->requireAuthenticationService()->isAuthenticated()
             $redirect = new RedirectResponse('/incc/signin');
             $referrer = parse_url($request->server->get('REQUEST_URI'));
@@ -97,17 +120,14 @@ abstract class AbstractInachisController extends Controller
      * @param Response $response The response object from the router
      * @return RedirectResponse
      */
-    public function redirectIfAuthenticated(Request $request, Response $response)
-    {
-//        if ($response->isLocked()) {
-//            return;
+//    public function redirectIfAuthenticated(Request $request, Response $response)
+//    {
+//        if (true) { //Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
+//            $response = new RedirectResponse('/incc');
+//            $response->prepare($request);
+//            return $response->send();
 //        }
-        if (true) { //Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-            $response = new RedirectResponse('/incc');
-            $response->prepare($request);
-            return $response->send();
-        }
-    }
+//    }
     /**
      * If the user's password has expired their current request URL will be stored in the session
      * and will then be redirected to change-password

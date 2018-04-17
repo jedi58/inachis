@@ -62,9 +62,6 @@
     "doctrine/orm": {
         "version": "v2.6.0"
     },
-    "friendsofsymfony/user-bundle": {
-        "version": "v2.1.1"
-    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -80,8 +77,8 @@
     "ocramius/proxy-manager": {
         "version": "2.2.0"
     },
-    "paragonie/random_compat": {
-        "version": "v2.0.11"
+    "pheromone/phpcs-security-audit": {
+        "version": "2.0.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -112,6 +109,9 @@
             "version": "4.0",
             "ref": "e65a105bf4cd5b1b79012ba029954927f05922e8"
         }
+    },
+    "squizlabs/php_codesniffer": {
+        "version": "3.2.3"
     },
     "symfony/cache": {
         "version": "v4.0.3"
@@ -253,9 +253,6 @@
     },
     "symfony/stopwatch": {
         "version": "v4.0.3"
-    },
-    "symfony/templating": {
-        "version": "v4.0.6"
     },
     "symfony/translation": {
         "version": "3.3",

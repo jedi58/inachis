@@ -1,0 +1,30 @@
+#post__edit, #post__properties, #post__sharing {
+    margin-bottom: 45px;
+
+    a, a:visited {
+        color: #666;
+        text-decoration: none;
+        vertical-align: middle;
+    }
+    input {
+        border: none;
+        border-bottom: 1px solid transparent;
+        outline: none;
+
+        &:focus, &:active {
+            border-bottom: 1px solid #eee;
+        }
+    }
+
+    label {
+        color: #999;
+        //text-transform: uppercase;
+    }
+
+    #post_title {
+        font-size: 1.4em;
+    }
+    #post_subTitle {
+        font-size: 1.2em;
+    }
+}

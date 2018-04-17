@@ -2,18 +2,19 @@ var gulp = require('gulp');
 var config = require('../config');
 
 var concat = require('gulp-concat');
+var minify = require('gulp-babel-minify');
+var pump = require('pump');
 var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
 
 gulp.task('js:compile', [
     'js:compile-admin',
     'js:compile-web'
 ]);
-gulp.task('js:compile-web', function() {
-    return jsCompile(config.paths.src.js.web, config.paths.dist.js.web);
+gulp.task('js:compile-web', function(callback) {
+    jsCompile(config.paths.src.js.web, config.paths.dist.js.web, callback);
 });
-gulp.task('js:compile-admin', function() {
-    return jsCompile(config.paths.src.js.admin, config.paths.dist.js.admin);
+gulp.task('js:compile-admin', function(callback) {
+    jsCompile(config.paths.src.js.admin, config.paths.dist.js.admin, callback);
 });
 
 gulp.task('js:watch', function() {
@@ -23,11 +24,20 @@ gulp.task('js:watch', function() {
     ]);
 });
 
-function jsCompile(src, dest)
+function jsCompile(src, dest, callback)
 {
-    return gulp.src('{' + config.paths.src.js.shared + ',' + src + '}**/*.js')
-        .pipe(concat('scripts.js'))
-        .pipe(uglify())
-        .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest(dest));
+    pump(
+        [
+            gulp.src('{' + config.paths.src.js.shared + ',' + src + '}**/*.js'),
+            concat('scripts.js'),
+            minify({
+                mangle: {
+                    keepClassName: true
+                }
+            }),
+            rename({ suffix: '.min' }),
+            gulp.dest(dest)
+        ],
+        callback
+    );
 }

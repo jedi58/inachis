@@ -2,12 +2,42 @@
 
 namespace App\Repository;
 
-use App\Entity\Page;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 abstract class AbstractRepository extends ServiceEntityRepository
 {
+    /**
+     * @param array $values
+     * @return mixed
+     */
+    public function create($values = [])
+    {
+        $objectType = $this->getClassName();
+        return $this->hydrate(new $objectType(), $values);
+    }
+
+    /**
+     * Uses the objects setters to populat the object
+     * based on the provided values
+     * @param mixed $object The object to hydrate
+     * @param array[mixed] The values to apply to the obect
+     * @return mixed The hydrated object
+     */
+    public function hydrate($object, array $values)
+    {
+        if (!is_object($object)) {
+            return $object;
+        }
+        foreach ($values as $key => $value) {
+            $methodName = 'set' . ucfirst($key);
+            if (method_exists($object, $methodName)) {
+                $object->$methodName($value);
+            }
+        }
+        return $object;
+    }
+
     /**
      * Returns the count for entries in the current repository match any
      * provided constraints
@@ -15,7 +45,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @return int The number of entities located
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getAllCount($where = array())
+    public function getAllCount($where = [])
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('count(q.id)')
@@ -29,5 +59,48 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return (int) $qb
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    /**
+     * Returns all entries for the current repository
+     * @param int $offset The offset from which to return results from
+     * @param int $limit The maximum number of results to return
+     * @param array $where
+     * @param array|string $order
+     * @return Paginator The result of fetching the objects
+     */
+    public function getAll(
+        $offset = 0,
+        $limit = 25,
+        $where = [],
+        $order = []
+    ) {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('q')
+            ->from($this->getClassName(), 'q');
+        if (!empty($where)) {
+            $qb = $qb->where($where[0]);
+        }
+        if (!empty($order)) {
+            if (is_array($order)) {
+                foreach ($order as $orderOption) {
+                    $qb = $qb->addOrderBy($orderOption[0], $orderOption[1]);
+                }
+            }
+            if (is_string($order)) {
+                $qb = $qb->orderBy($order);
+            }
+        }
+        if (!empty($where)) {
+            $qb = $qb->setParameters($where[1]);
+        }
+        $qb = $qb->getQuery();
+        if ($offset > 0) {
+            $qb = $qb->setFirstResult($offset);
+        }
+        if ($limit > 0) {
+            $qb = $qb->setMaxResults($limit);
+        }
+        return new Paginator($qb, false);
     }
 }

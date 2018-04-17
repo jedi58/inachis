@@ -19,14 +19,26 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Token;
 
+/**
+ * Class AccountController
+ * @package App\Controller
+ */
 class AccountController extends AbstractInachisController
 {
+    /**
+     * @var EncoderFactoryInterface
+     */
     private $encoderFactory;
 
+    /**
+     * AccountController constructor.
+     * @param EncoderFactoryInterface $encoderFactory
+     */
     public function __construct(EncoderFactoryInterface $encoderFactory)
     {
         $this->encoderFactory = $encoderFactory;
     }
+
     /**
      * @Route("/incc/login", name="app_account_login", methods={"GET"})
      * @param Request $request
@@ -35,117 +47,34 @@ class AccountController extends AbstractInachisController
      */
     public function login(Request $request, TranslatorInterface $translator)
     {
-        $form = $this->createForm(LoginType::class, []);
+//        $this->redirectIfAuthenticated($request, new \Symfony\Flex\Response(null));
+        $this->redirectIfNoAdmins();
+        $authenticationUtils = $this->get('security.authentication_utils');
+        $form = $this->createForm(LoginType::class, [
+            'loginUsername' => $authenticationUtils->getLastUsername()
+        ]);
         $form->handleRequest($request);
-
-//        self::redirectIfAuthenticated($response);
-//        if (Application::getInstance()->getService('auth')->getUserManager()->getAllCount() === 0) {
-//            return $response->redirect('/setup')->send();
-//        }
-//        // Check if user has cookies to indicate persistent sign-in
-//        if (Application::getInstance()->getService('auth')->getSessionPersist($request->server()->get('HTTP_USER_AGENT'))) {
-//            return self::redirectToReferrerOrDashboard($response);
-//        }
-//        if ($response->isLocked()) {
-//            return null;
-//        }
-//        // Handle sign-in
-//        if ($request->method('post') && !empty($request->paramsPost()->get('loginUsername'))
-//            && !empty($request->paramsPost()->get('loginPassword'))) {
-//            if (Application::getInstance()->getService('auth')->login(
-//                $request->paramsPost()->get('loginUsername'),
-//                $request->paramsPost()->get('loginPassword')
-//            )) {
-//                if (!empty($request->paramsPost()->get('rememberMe')) && (bool) $request->paramsPost()->get('rememberMe')) {
-//                    Application::getInstance()->getService('auth')->setSessionPersist(
-//                        $request->server()->get('HTTP_USER_AGENT'),
-//                        $request->server()->get('HTTP_HOST')
-//                    );
-//                }
-//                return $response->redirect('/inadmin/')->send();
-//            }
-//            self::$errors['username'] = 'Authentication Failed.';
-//        }
-//        self::adminInit($request, $response);
         $this->data['page']['title'] = 'Sign In';
-
-
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $submittedCredentials = $form->getData();
-//        }
-
         $this->data['form'] = $form->createView();
+        $this->data['error'] = $authenticationUtils->getLastAuthenticationError();
         return $this->render('inadmin/signin.html.twig', $this->data);
     }
 
     /**
      * @Route("/incc/login", name="app_account_login_action", methods={"POST"})
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     * @return Response The response the controller results in
      */
-    public function loginAction(Request $request, TranslatorInterface $translator)
+    public function loginAction()
     {
-        $this->addFlash('error', 'Something went wrong I think');
-        $username = $request->request->get('login')['loginUsername'];
-        $password = $request->request->get('login')['loginPassword'];
-        if (empty($username) || empty($password)) {
-            return new Response(
-                'Username or password not provided',
-                Response::HTTP_UNAUTHORIZED,
-                array('Content-type' => 'application/json')
-            );
-        }
-        $user_manager = $this->get('fos_user.user_manager');
-        $user = $user_manager->findUserByUsername($username);
-        if(!$user){
-            return new Response(
-                'Username doesnt exists',
-                Response::HTTP_UNAUTHORIZED,
-                array('Content-type' => 'application/json')
-            );
-        }
-
-        $encoder = $this->encoderFactory->getEncoder($user);
-        $salt = $user->getSalt();
-        if(!$encoder->isPasswordValid($user->getPassword(), $password, $salt)) {
-            return new Response(
-                'Username or Password not valid.',
-                Response::HTTP_UNAUTHORIZED,
-                array('Content-type' => 'application/json')
-            );
-        }
-
-        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-        $this->get('security.token_storage')->setToken($token);
-
-        // If the firewall name is not main, then the set value would be instead:
-        $this->get('session')->set('_security_main', serialize($token));
-
-        // Fire the login event manually
-        $event = new InteractiveLoginEvent($request, $token);
-        $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
-
-        /*
-         * Now the user is authenticated !!!!
-         * Do what you need to do now, like render a view, redirect to route etc.
-         */
-        return new Response(
-            'Welcome '. $user->getUsername(),
-            Response::HTTP_OK,
-            array('Content-type' => 'application/json')
-        );
     }
 
     /**
-     * @Route("/incc/signout", methods={"POST"})
+     * @Route("/incc/signout", name="security_logout", methods={"POST"})
+     * @throws \Exception
      */
-//    public function signout()
-//    {
-//        Application::getInstance()->requireAuthenticationService()->logout();
-//        return $this->redirectToRoute('app_account_signin');
-        //return new Response('', 401);
-//    }
+    public function logoutAction()
+    {
+        throw new \Exception('this should not be reached!');
+    }
 
     /**
      * @Route("/incc/forgot-password", methods={"GET"})
@@ -155,10 +84,7 @@ class AccountController extends AbstractInachisController
      */
     public function forgotPassword(Request $request, TranslatorInterface $translator)
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        if ($response->isLocked()) {
-//            return;
-//        }
+        $this->redirectIfAuthenticated($request, new \Symfony\Flex\Response(null));
         $this->data['page']['title'] = 'Reset your password';
         $form = $this->createFormBuilder([], [
             'attr' => [
@@ -214,15 +140,10 @@ class AccountController extends AbstractInachisController
      */
     public function forgotPasswordSent(Request $request)
     {
-//        if (Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-//            return $response->redirect('/incc')->send();
-//        }
+        $this->redirectIfAuthenticated($request, new \Symfony\Flex\Response(null));
 //        if (false) { // @todo if request contains errors then use
 //            return $response->redirect('/incc/forgot-password')->send();
 //        }
-//        if ($response->isLocked()) {
-//            return;
-//        }
-        return $this->render('inadmin/forgot-password-sent.html.twig', array());
+        return $this->render('inadmin/forgot-password-sent.html.twig');
     }
 }

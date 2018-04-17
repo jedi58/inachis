@@ -1,7 +1,11 @@
 {
+  "name": "inachis",
+  "version": "1.0.0",
+  "private": true,
   "devDependencies": {
-    "gulp": "*",
+    "gulp": "<4.0.0",
     "gulp-autoprefixer": "*",
+    "gulp-babel-minify": "*",
     "gulp-clean": "*",
     "gulp-concat": "*",
     "gulp-cssnano": "*",
@@ -11,12 +15,12 @@
     "gulp-json-editor": "*",
     "gulp-rename": "*",
     "gulp-ruby-sass": "*",
-    "gulp-uglify": "*",
     "jshint": "*",
+    "pump": "*",
     "require-dir": "*"
   },
   "dependencies": {
-    "simplemde": "^1.11.2",
-    "jquery-datetimepicker": "*"
+    "jquery-datetimepicker": "*",
+    "simplemde": "*"
   }
 }

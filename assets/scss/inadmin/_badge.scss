@@ -1,0 +1,21 @@
+.badge {
+	background-color: #ddd;
+	color: #fff;
+	border: 1px solid transparent;
+	border-radius: 40px;
+	font-size: 0.7em;
+	padding: 5px 10px;
+
+
+	.ui-state-active & {
+		background-color: #069;
+	}
+
+	&.badge__draft {
+		background-color: #069;
+	}
+
+	&.badge__private {
+		background-color: #333;
+	}
+}

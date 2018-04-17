@@ -6,11 +6,22 @@ use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class CategoryRepository extends ServiceEntityRepository
+class CategoryRepository extends AbstractRepository
 {
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Category::class);
+    }
+    /**
+     * Returns an array of the root level categories
+     * @return Category[] The array of {@link Category} objects
+     */
+    public function getRootCategories()
+    {
+        return $this->getRepository()->createQueryBuilder('q')
+            ->where('q.parent is null')
+            ->getQuery()
+            ->getResult();
     }
 
     /*

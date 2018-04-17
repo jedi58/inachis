@@ -21,7 +21,7 @@ class SetupController extends AbstractInachisController
      * @param Request $request
      * @return Response
      */
-    public function setup(Request $request)
+    public function stage1(Request $request)
     {
 //        self::redirectIfAuthenticated($response);
 //        if (Application::getInstance()->getService('auth')->getUserManager()->getAllCount() > 0) {

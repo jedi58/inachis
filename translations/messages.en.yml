@@ -7,3 +7,19 @@ admin.button.cancel: Cancel
 admin.reset.enter_email_address: 'Enter your email address to reset login'
 admin.label.reset_password: 'Reset Password'
 admin.email_example: user@example.com
+admin.label.post.title: Title
+admin.placeholder.post.title: e.g. My First Blog Post
+admin.label.post.subTitle: Sub-title
+admin.placeholder.post.subTitle: (Optional)
+admin.label.post.url: URL
+admin.label.post.content: Content
+admin.label.post.visibility: Visibility
+admin.tip.title.post.postDate: Publishing
+admin.tip.content.post.postDate: On publishing this content for the first time, if the date is in the past or the present it will publish immediately. If the date is in the future then it will be scheduled for publishing and will action any social media sharing options selected at the same time.
+admin.label.post.postDate-future: Publish on
+admin.label.post.postDate-past: Published on
+admin.label.post.categories: Categories
+admin.placeholder.post.categories: Select a category
+admin.tip.content.post.categories: Separate existing categories with a comma or by pressing [Enter]. New categories should be created using the adjacent [+] icon.
+admin.label.post.tags: Tags
+admin.tip.content.post.tags: Separate tags with a comma or by pressing [Enter]

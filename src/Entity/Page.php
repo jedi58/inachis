@@ -346,7 +346,7 @@ class Page
      */
     public function getCategories()
     {
-        return $this->categories;
+        return $this->categories->toArray();
     }
     /**
      * Returns an array of {@link Tag)s assigned to the page.
@@ -354,16 +354,16 @@ class Page
      */
     public function getTags()
     {
-        return $this->tags;
+        return $this->tags->toArray();
     }
     /**
      * Returns the Url with a specific index within the array
      * @param mixed $key The index of the item to return
      * @return Url The requested {@link Url} entry
      */
-    public function getUrl($key)
+    public function getUrl($key = null)
     {
-        if (!isset($this->urls[$key])) {
+        if ($key && !isset($this->urls[$key])) {
             throw new \InvalidArgumentException(sprintf('Url `%s` does not exist', $key));
         }
         return $this->urls[$key];
@@ -444,7 +444,7 @@ class Page
      * Sets the value of {@link createDate}
      * @param \DateTime $value The date to be set
      */
-    public function setCreateDate(\DateTime $value)
+    public function setCreateDate(\DateTime $value = null)
     {
         $this->createDate = $value;
     }
@@ -452,7 +452,7 @@ class Page
      * Sets the value of {@link postDate}
      * @param \DateTime $value The date to be set
      */
-    public function setPostDate(\DateTime $value)
+    public function setPostDate(\DateTime $value = null)
     {
         $this->postDate = $value;
     }
@@ -460,7 +460,7 @@ class Page
      * Sets the value of {@link modDate}
      * @param \DateTime $value The date to set
      */
-    public function setModDate(\DateTime $value)
+    public function setModDate(\DateTime $value = null)
     {
         $this->modDate = $value;
     }

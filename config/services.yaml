@@ -36,7 +36,7 @@ parameters:
             - cdn.jsdelivr.net
             - cdnjs.cloudflare.com
             - fonts.googleapis.com
-            - maxcdn.bootstrap.cdn.com
+            - maxcdn.bootstrapcdn.com
         report-uri: https://jedi58.report-uri.io/r/default/csp/enforce
       report:
         report-uri: https://jedi58.report-uri.io/r/default/csp/reportOnly
