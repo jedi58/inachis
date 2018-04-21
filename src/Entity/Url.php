@@ -58,11 +58,13 @@ class Url
      * {@link Url::setDefault}.
      * @param Page $content The {@link Page} object the link is for
      * @param string $link The short link for the content
+     * @param bool $default
      */
-    public function __construct(Page $content, $link = '')
+    public function __construct(Page $content, $link = '', $default = true)
     {
         $this->setContent($content);
-        $this->setDefault(true);
+        $this->setLink($link);
+        $this->setDefault((bool) $default);
         $this->setCreateDate(new \DateTime('now'));
         $this->setModDate(new \DateTime('now'));
         $this->associateContent();

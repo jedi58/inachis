@@ -65,9 +65,9 @@
                 <a class="material-icons category-manager__link" href="#">add_box</a>
             </p>
             <p>
-                {% for tag in form.tags %}
-                    <li>{{ form_row(tag.name) }}</li>
-                {% endfor %}
+                {{ form_label(form.tags) }}
+                {{ form_errors(form.tags) }}
+                {{ form_widget(form.tags) }}
             </p>
             {% if settings.google.key is defined and settings.google.key is not empty %}
                 <p>

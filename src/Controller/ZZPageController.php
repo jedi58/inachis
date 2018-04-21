@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Controller\AbstractInachisController;
+use App\Entity\Category;
 use App\Entity\Page;
+use App\Entity\Tag;
 use App\Entity\Url;
 use App\Form\PostType;
 use Symfony\Component\HttpFoundation\Request;
@@ -117,20 +119,52 @@ class ZZPageController extends AbstractInachisController
 //            if ($request->paramsPost()->get('visibility') === 'on') {
 //                $post->setVisibility(Page::VIS_PUBLIC);
 //            }
-            dump($form);
-            dump($post);
-            dump($request);
+            if (!empty($request->get('post')['url'])) {
+                $newUrl = $request->get('post')['url'];
+                $urlFound = false;
+                if (!empty($post->getUrls())) {
+                    foreach ($post->getUrls() as $url) {
+                        $url->setDefault(false);
+                        if ($url->getLink() === $newUrl) {
+                            $urlFound = true;
+                        }
+                    }
+                }
+                if (!$urlFound) {
+                    new Url($post, $newUrl);
+                }
+            }
+            if (!empty($request->get('post')['categories'])) {
+                $newCategories = $request->get('post')['categories'];
+                if (!empty($newCategories)) {
+                    foreach ($newCategories as $newCategory) {
+                        $category = $entityManager->getRepository(Category::class)->findOneById($newCategory);
+                    }
+                    if (!empty($category)) {
+                        $post->getCategories()->add($category);
+                    }
+                }
+            }
+            if (!empty($request->get('post')['tags'])) {
+                $newTags = $request->get('post')['tags'];
+                if (!empty($newTags)) {
+                    foreach ($newTags as $newTag) {
+                        $tag = $entityManager->getRepository(Tag::class)->findOneByTitle($newTag);
+                        if (empty($tag)) {
+                            $tag = new Tag($newTag);
+                        }
+                        $post->getTags()->add($tag);
+                    }
+                }
+            }
+            $entityManager->persist($post);
+            $entityManager->flush();
 
-//            $entityManager->persist($post);
-//            $entityManager->flush();
-
-            exit;
-
-//            return $this->redirect(
-//                '/incc/' .
-//                ( $post->getType() == Page::TYPE_PAGE ? 'page/' : '' ) .
-//                $post->getUrls()[0]->getLink()
-//            );
+            return $this->redirect(
+                '/incc/' .
+                ( $post->getType() == Page::TYPE_PAGE ? 'page/' : '' ) .
+                $post->getUrls()[0]->getLink()
+            );
         }
 
 
@@ -141,55 +175,6 @@ class ZZPageController extends AbstractInachisController
 //                $pageManager->remove($post);
 //                return $response->redirect('/inadmin/');
 //            }
-
-
-//            $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
-//            $tagManager = new TagManager(Application::getInstance()->getService('em'));
-//            $categories = $request->paramsPost()->get('categories');
-//            $assignedCategories = $post->getCategories()->getValues();
-//            if (!empty($categories)) {
-//                foreach ($categories as $categoryId) {
-//                    $category = $categoryManager->getById($categoryId);
-//                    if (in_array($category, $assignedCategories)) {
-//                        continue;
-//                    }
-//                    $post->addCategory($category);
-//                }
-//            }
-//            $tags = $request->paramsPost()->get('tags');
-//            $assignedTags = $post->getTags()->getValues();
-//            if (!empty($tags)) {
-//                foreach ($tags as $tagTitle) {
-//                    $tag = $tagManager->getByTitle($tagTitle);
-//                    if (in_array($tag, $assignedTags)) {
-//                        continue;
-//                    }
-//                    if (null === $tag) {
-//                        $tag = $tagManager->create(array('title' => $tagTitle));
-//                    }
-//                    $post->addTag($tag);
-//                }
-//            }
-//            $newUrl = $request->paramsPost()->get('url');
-//            $urlFound = false;
-//            $urls = $post->getUrls();
-//            if (!empty($urls)) {
-//                foreach ($urls as $url) {
-//                    if ($url->getLink() !== $newUrl) {
-//                        $url->setDefault(false);
-//                    } else {
-//                        $urlFound = true;
-//                    }
-//                }
-//            }
-//            if (!$urlFound) {
-//                $post->addUrl($urlManager->create(array(
-//                    'content' => $post,
-//                    'default' => true,
-//                    'link' => $newUrl
-//                )));
-//            }
-
 
         $this->data['form'] = $form->createView();
         $this->data['page']['tab'] = $post->getType();

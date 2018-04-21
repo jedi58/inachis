@@ -3,9 +3,12 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Page;
+use App\Entity\Tag;
+use App\Form\DataTransformer\ArrayCollectionToArrayTransformer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,13 +19,18 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class PostType extends AbstractType
 {
-    private $translator;
     private $router;
+    private $transformer;
+    private $translator;
 
-    public function __construct(TranslatorInterface $translator, RouterInterface $router)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        TranslatorInterface $translator,
+        RouterInterface $router,
+        ArrayCollectionToArrayTransformer $transformer
+    ) {
         $this->router = $router;
+        $this->translator = $translator;
+        $this->transformer = $transformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -62,10 +70,11 @@ class PostType extends AbstractType
                     'aria-labelledby' => 'url_label',
                     'aria-required' => 'false',
                 ],
-                'label' => $this->translator->trans('admin.placeholder.post.url', [], 'messages'),
+                'label' => $this->translator->trans('admin.label.post.url', [], 'messages'),
                 'label_attr' => [
                     'id' => 'url_label',
                 ],
+                'mapped' => false,
                 'required' => false,
             ])
             ->add('content', TextareaType::class, [
@@ -80,7 +89,7 @@ class PostType extends AbstractType
                 ],
                 'required' => false,
             ])
-            ->add('visibility', TextType::class, [
+            ->add('visibility', CheckboxType::class, [
                 'attr' => [
                     'aria-labelledby' => 'visibility_label',
                     'aria-required' => 'false',
@@ -114,7 +123,6 @@ class PostType extends AbstractType
             ])
             ->add('categories', EntityType::class, [
                 'class' => Page::class,
-                'choice_label' => $this->translator->trans('admin.label.post.categories', [], 'messages'),
                 'attr' => [
                     'aria-labelledby' => 'categories_label',
                     'aria-required' => 'false',
@@ -123,43 +131,32 @@ class PostType extends AbstractType
                     'data-tip-content' => $this->translator->trans('admin.tip.content.post.categories', [], 'messages'),
                     'data-url' => $this->router->generate('app_admindialog_getcategorymanagerlistcontent'),
                 ],
-//                'label' => $this->translator->trans('admin.label.post.categories', [], 'messages'),
+                'label' => $this->translator->trans('admin.label.post.categories', [], 'messages'),
                 'label_attr' => [
                     'id' => 'categories_label',
                 ],
+                'mapped' => false,
                 'multiple' => true,
                 'required' => false,
             ])
-//            ->add('tags', EntityType::class, [
-//                'class' => Page::class,
-//                'choice_label' => $this->translator->trans('admin.label.post.tags', [], 'messages'),
-//                'attr' => [
-//                    'aria-labelledby' => 'categories_label',
-//                    'aria-required' => 'false',
-//                    'class' => 'js-select',
-//                    'data-tags' => 'true',
-//                    'data-tip-content' => $this->translator->trans('admin.tip.content.post.tags', [], 'messages'),
-//                ],
-////                'label' => $this->translator->trans('admin.label.post.tags', [], 'messages'),
-//                'label_attr' => [
-//
-//                ],
-//                'multiple' => true,
-//                'required' => false,
-//            ])
-
-//            ->add('categories', CollectionType::class, [
-//                'allow_delete' => true,
-//                'by_reference' => false,
-//                'entry_type' => CategoryType::class,
-//            ])
-            ->add('tags', CollectionType::class, [
-//                'allow_delete' => true,
-//                'by_reference' => false,
-                'allow_add' => true,
-                'entry_type' => TagType::class,
+            ->add('tags', EntityType::class, [
+                'attr' => [
+                    'aria-labelledby' => 'tags_label',
+                    'aria-required' => 'false',
+                    'class' => 'js-select',
+                    'data-tags' => 'true',
+                    'data-tip-content' => $this->translator->trans('admin.tip.content.post.tags', [], 'messages'),
+                ],
+                'choices' => $options['data']->getTags()->toArray(),
+                'class' => Tag::class,
+                'label' => $this->translator->trans('admin.label.post.tags', [], 'messages'),
+                'label_attr' => [
+                    'id' => 'tags_label',
+                ],
+                'mapped' => false,
+                'multiple' => true,
+                'required' => false,
             ])
-
 //            ->add('latlong', TextType::class, [
 //                'attr' => [
 //                    'aria-labelledby' => 'latlong_label',
@@ -175,6 +172,7 @@ class PostType extends AbstractType
 //                'required' => false,
 //            ])
         ;
+        $builder->get('tags')->addModelTransformer($this->transformer);
     }
 
     public function configureOptions(OptionsResolver $resolver)

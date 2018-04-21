@@ -23,11 +23,11 @@ class Page
     /**
      * @const string Indicates a Page is public
      */
-    const VIS_PUBLIC = 'public';
+    const VIS_PUBLIC = true;
     /**
      * @const string Indicates a Page is private
      */
-    const VIS_PRIVATE = 'private';
+    const VIS_PRIVATE = false;
     /**
      * @const string Indicates a Page is standalone
      */
@@ -80,7 +80,7 @@ class Page
      */
     protected $status = self::DRAFT;
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="boolean", length=20)
      * @var string Determining if a @{link Page} is visible to the public
      */
     protected $visibility = self::VIS_PUBLIC;
@@ -253,7 +253,7 @@ class Page
     }
     /**
      * Returns the value of {@link visibility}
-     * @return string The current visibility of the {@link Page}
+     * @return bool The current visibility of the {@link Page}
      */
     public function getVisibility()
     {
@@ -338,7 +338,7 @@ class Page
      */
     public function getUrls()
     {
-        return $this->urls->toArray();
+        return $this->urls;
     }
     /**
      * Returns an array of {@link Category)s assigned to the page.
@@ -346,7 +346,7 @@ class Page
      */
     public function getCategories()
     {
-        return $this->categories->toArray();
+        return $this->categories;
     }
     /**
      * Returns an array of {@link Tag)s assigned to the page.
@@ -354,7 +354,7 @@ class Page
      */
     public function getTags()
     {
-        return $this->tags->toArray();
+        return $this->tags;
     }
     /**
      * Returns the Url with a specific index within the array
@@ -434,11 +434,11 @@ class Page
     }
     /**
      * Sets the value of {@link visibility}
-     * @param string $value The visibility of the {@link Page}
+     * @param bool $value The visibility of the {@link Page}
      */
     public function setVisibility($value)
     {
-        $this->visibility = $this->isValidVisibility($value) ? $value : self::VIS_PRIVATE;
+        $this->visibility = (bool) $value;
     }
     /**
      * Sets the value of {@link createDate}

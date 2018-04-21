@@ -95,10 +95,19 @@ var InachisPostEdit = {
 		}
 		title += subTitle;
 		if (this._postOrPage === 'post') {
-			title = $('#postDate').val().substring(0,10) + '/' + title.substring(0, 255);
+			title = this.convertDate($('#post_postDate').val().substring(0,10)) + '/' + title.substring(0, 255);
 		}
 		// @todo XHR to check if URL is already in use
 		return title;
+	},
+
+	convertDate: function(value)
+	{
+		value = value.split('/');
+		if (value[0] == null || value[1] == null || value[2] == null) {
+			return '';
+		}
+		return value[2] + '/' + value[1] + '/' + value[0];
 	},
 
 	urlify: function(value)
