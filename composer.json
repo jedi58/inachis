@@ -22,6 +22,7 @@
         "symfony/yaml": "^4.0"
     },
     "require-dev": {
+        "jakub-onderka/php-parallel-lint": "^1.0",
         "pheromone/phpcs-security-audit": "^2.0",
         "sensiolabs/security-checker": "^4.1",
         "symfony/debug": "^4.0",
