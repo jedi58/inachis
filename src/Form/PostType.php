@@ -8,8 +8,8 @@ use App\Form\DataTransformer\ArrayCollectionToArrayTransformer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -122,7 +122,12 @@ class PostType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('categories', EntityType::class, [
-                'class' => Page::class,
+                'choice_attr' => function($choice, $key, $value) {
+                    return [ 'selected' => 'selected' ];
+                },
+                'choice_label' => 'title',
+                'choices' => $options['data']->getCategories()->toArray(),
+                'class' => Category::class,
                 'attr' => [
                     'aria-labelledby' => 'categories_label',
                     'aria-required' => 'false',
@@ -146,8 +151,13 @@ class PostType extends AbstractType
                     'class' => 'js-select',
                     'data-tags' => 'true',
                     'data-tip-content' => $this->translator->trans('admin.tip.content.post.tags', [], 'messages'),
+                    'selected' => 'selected',
                 ],
                 'choices' => $options['data']->getTags()->toArray(),
+                'choice_label' => 'title',
+                'choice_attr' => function($choice, $key, $value) {
+                    return [ 'selected' => 'selected' ];
+                },
                 'class' => Tag::class,
                 'label' => $this->translator->trans('admin.label.post.tags', [], 'messages'),
                 'label_attr' => [
@@ -171,8 +181,26 @@ class PostType extends AbstractType
 //                ],
 //                'required' => false,
 //            ])
+            ->add('submit', SubmitType::class, [
+                'attr' => [
+                    'class' => 'button button--positive'
+                ],
+                'label' => $this->translator->trans('admin.button.save', [], 'messages'),
+            ])
+            ->add('publish', SubmitType::class, [
+                'attr' => [
+                    'class' => 'button button--info'
+                ],
+                'label' => $this->translator->trans('admin.button.publish', [], 'messages'),
+            ])
+            ->add('delete', SubmitType::class, [
+                'attr' => [
+                    'class' => 'button button--negative'
+                ],
+                'label' => $this->translator->trans('admin.button.delete', [], 'messages'),
+            ])
         ;
-        $builder->get('tags')->addModelTransformer($this->transformer);
+//        $builder->get('tags')->addModelTransformer($this->transformer);
     }
 
     public function configureOptions(OptionsResolver $resolver)

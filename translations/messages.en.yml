@@ -4,6 +4,9 @@ admin.label.remember_me: 'Keep me logged in'
 admin.label.forgot_password: 'Forgot your password?'
 admin.button.login: 'Log In'
 admin.button.cancel: Cancel
+admin.button.save: Save
+admin.button.publish: Publish
+admin.button.delete: Delete
 admin.reset.enter_email_address: 'Enter your email address to reset login'
 admin.label.reset_password: 'Reset Password'
 admin.email_example: user@example.com

@@ -8,6 +8,7 @@ use App\Entity\Page;
 use App\Entity\Tag;
 use App\Entity\Url;
 use App\Form\PostType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -91,19 +92,23 @@ class ZZPageController extends AbstractInachisController
      * @return mixed
      * @throws \Exception
      */
-    public function getPostAdmin(Request $request, $type, $title = null)
+    public function getPostAdmin(Request $request, $type = 'post', $title = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
-        $url = $entityManager->getRepository(Url::class)->findByLink($title);
+        $url = str_replace('/incc/', '', $request->getRequestUri());
+        $url = $entityManager->getRepository(Url::class)->findByLink($url);
         // If content with this URL doesn't exist, then redirect
         if (empty($url) && null !== $title) {
-            return $response->redirect(sprintf(
-                '/inadmin/%s/new',
+            return new RedirectResponse(printf(
+                '/incc/%s/new',
                 $type
-            ))->send();
+            ), HTTP_REDIRECT_TEMP);
         }
-        $post = null !== $title ? $entityManager->getById($url->getContent()->getId()) : $post = new Page();
+        $post = null !== $title ?
+            $entityManager->getRepository(Page::class)->findOneById($url[0]->getContent()->getId()) :
+            $post = new Page()
+        ;
         if ($post->getId() === null) {
             $post->setType($type);
         }
@@ -157,6 +162,15 @@ class ZZPageController extends AbstractInachisController
                     }
                 }
             }
+
+            if ($form->get('publish')->isClicked()) {
+
+            }
+
+            if ($form->get('delete')->isClicked()) {
+
+            }
+
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -188,7 +202,7 @@ class ZZPageController extends AbstractInachisController
 
     /**
      * @Route(
-     *     "/incc/{type}/list",
+     *     "/incc/{type}/list/",
      *     methods={"GET", "POST"},
      *     requirements={
      *          "type": "post|page"
@@ -197,11 +211,10 @@ class ZZPageController extends AbstractInachisController
      * @param string $type
      * @return null
      */
-    public function getPostListAdmin($type = 'post')
+    public function getPostListAdmin(Request $request, $type = 'post')
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
-        // @todo sort offset: (int) $request->paramsGet()->get('offset', 0);
         $offset = 0;
         $this->data['posts'] = $entityManager->getRepository(Page::class)->getAll(
             $offset,
