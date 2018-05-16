@@ -49,15 +49,15 @@ class Page
      */
     protected $title;
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string An optional sub-title for the {@link Page}
      */
-    protected $subTitle;
+    protected $subTitle = null;
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @var string The contents of the {@link Page}
      */
-    protected $content;
+    protected $content = null;
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", cascade={"detach"})
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")

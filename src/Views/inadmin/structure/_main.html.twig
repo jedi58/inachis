@@ -18,7 +18,7 @@
 
 {%- if is_granted('ROLE_USER') %}
     <header class="admin__header">
-        <!-- h1>Title goes here</h1 -->
+        <!-- h1>Title / breadcrumb goes here</h1 -->
         <section class="admin__user">
             <a href="#admin__user__options">
                 <img height="40" src="{% if session.user.avatar is not empty %}{{ session.user.avatar }}{% else %}{{ settings.domain }}/assets/imgs/incc/defaultAvatar.png{% endif %}" width="40" />
@@ -62,7 +62,7 @@
             <ul class="admin__nav-main__list">
                 <li>
                     <a class="button admin__add-content" href="#new" title="Add new content"><i class="material-icons">edit</i><span> Add</span></a>
-                    <ul class="admin__nav-new">
+                    <ul class="admin__nav-new contextual-menu">
                         <li><a href="{{ settings.domain }}/incc/post/new" title="Add a new post"><i class="material-icons">short_text</i><span> New Post</span></a></li>
                         <li><a href="{{ settings.domain }}/incc/page/new" title="Add a new page"><i class="material-icons">content_copy</i><span> New Page</span></a></li>
                     </ul>

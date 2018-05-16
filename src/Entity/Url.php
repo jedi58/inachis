@@ -83,6 +83,11 @@ class Url
         return $this->link;
     }
 
+    public function getLinkCanonical()
+    {
+        return $this->linkCanonical;
+    }
+
     public function getContent()
     {
         return $this->content;

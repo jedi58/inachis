@@ -6,7 +6,7 @@ use App\Entity\Url;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class UrlRepository extends ServiceEntityRepository
+class UrlRepository extends AbstractRepository
 {
     public function __construct(RegistryInterface $registry)
     {

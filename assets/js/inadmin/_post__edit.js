@@ -9,7 +9,9 @@ var InachisPostEdit = {
 		//if (null !== currentContentType) {
 		//	this._postOrPage = currentContentType[0].toLowerCase();
 		//}
-        if ($('.sf-toolbarreset')) { $('.fixed-bottom-bar')[0].style.bottom = '36px'; }
+        if ($('.sf-toolbarreset').length && $('.fixed-bottom-bar').length) {
+        	$('.fixed-bottom-bar')[0].style.bottom = '36px';
+        }
 		this.initTooltips();
 		this.initTitleChange();
 	},

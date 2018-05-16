@@ -129,8 +129,9 @@ class ZZPageController extends AbstractInachisController
                 $urlFound = false;
                 if (!empty($post->getUrls())) {
                     foreach ($post->getUrls() as $url) {
-                        $url->setDefault(false);
-                        if ($url->getLink() === $newUrl) {
+                        if ($url->getLink() !== $newUrl) {
+                            $url->setDefault(false);
+                        } else {
                             $urlFound = true;
                         }
                     }
@@ -142,19 +143,27 @@ class ZZPageController extends AbstractInachisController
             if (!empty($request->get('post')['categories'])) {
                 $newCategories = $request->get('post')['categories'];
                 if (!empty($newCategories)) {
+                    $assignedCategories = $post->getCategories()->getValues();
                     foreach ($newCategories as $newCategory) {
                         $category = $entityManager->getRepository(Category::class)->findOneById($newCategory);
-                    }
-                    if (!empty($category)) {
-                        $post->getCategories()->add($category);
+                         if (!empty($category)) {
+                            if (in_array($category, $assignedCategories)) {
+                                continue;
+                            }
+                            $post->getCategories()->add($category);
+                        }
                     }
                 }
             }
             if (!empty($request->get('post')['tags'])) {
                 $newTags = $request->get('post')['tags'];
                 if (!empty($newTags)) {
+                    $assignedTags = $post->getTags()->getValues();
                     foreach ($newTags as $newTag) {
                         $tag = $entityManager->getRepository(Tag::class)->findOneByTitle($newTag);
+                        if (in_array($tag, $assignedTags)) {
+                            continue;
+                        }
                         if (empty($tag)) {
                             $tag = new Tag($newTag);
                         }
@@ -171,6 +180,8 @@ class ZZPageController extends AbstractInachisController
 
             }
 
+            $post->setModDate(new \DateTime('now'));
+            $entityManager->merge($post);
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -231,7 +242,8 @@ class ZZPageController extends AbstractInachisController
             ],
             'q.postDate ASC, q.modDate'
         );
-
+        $this->data['page']['offset'] = $offset;
+        $this->data['page']['limit'] = 10;
         $this->data['page']['tab'] = $type;
         $this->data['page']['title'] = ucfirst($type) . 's';
         return $this->render('inadmin/post__list.html.twig', $this->data);
@@ -253,7 +265,7 @@ class ZZPageController extends AbstractInachisController
     private function getContentType()
     {
         return 1 === preg_match(
-            '/\/inadmin\/([0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*|post)/',
+            '/\/incc\/([0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*|post)/',
             $request->server()->get('REQUEST_URI')
         ) ? Page::TYPE_POST : Page::TYPE_PAGE;
     }

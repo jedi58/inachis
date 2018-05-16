@@ -8,15 +8,17 @@
         <div class="col span_8_of_8 widget-posts">
             {%  if posts is not empty %}
                 <form>
-                    <p><input type="checkbox" /></p>
                     <button>…</button>
-                    <ul>
-                        <li>with selected, </li>
-                        <li>Delete</li>
-                        <li>Make private</li>
+                    <ul class="contextual-menu">
+                        <li><a href="#">Select all</a></li>
+                        <li><a href="#">Select none</a></li>
+                        <li class="divider"></li>
+                        <li>with selected:</li>
+                        <li><a href="">Delete</a></li>
+                        <li><a href="">Make private</a></li>
                     </ul>
 
-                    <p>Showing x to y of {{ posts|length }}</p>
+                    <p>Showing {{ page.offset + 1 }} to {{ posts|length }} of {{ posts.count }}</p>
 
                     {%  for post in posts.iterator %}
                         <article id="post-{{ post.id }}" class="{{ post.type }} status-{{ post.status }} visibility-{{ post.visibility }} hentry">
