@@ -13,10 +13,7 @@ class AdminController extends Controller
      */
     public function adminList()
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        if ($response->isLocked()) {
-//            return null;
-//        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return new Response('Show all admins');
     }
 
@@ -25,11 +22,7 @@ class AdminController extends Controller
      */
     public function adminDetails($id)
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        if ($response->isLocked()) {
-//            return null;
-//        }
-//        self::adminInit($request, $response);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 //        self::$data['page'] = array('title' => 'Profile');
         return $this->render('inadmin/profile.html.twig', self::$data);
     }
@@ -39,10 +32,7 @@ class AdminController extends Controller
      */
     public function adminSettingsMain()
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        if ($response->isLocked()) {
-//            return;
-//        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return new Response('Show settings page for signed in admin');
     }
 }

@@ -10,7 +10,7 @@
                     <p>Showing {{ page.offset + 1 }} to {{ urls|length }} of {{ urls.count }}</p>
 
                     {%  for url in urls.iterator %}
-                        <article id="url-{{ url.id }}" class="hentry{% if url.default %} url-default{% endif %}">
+                        <article id="url-{{ url.id }}" class="hentry url-{% if not url.default %}not-{% endif %}default">
                             <input id="post-{{ url.id }}__input" type="checkbox" name="urls[]" value="{{ url.id }}" />
                             <label for="post-{{ url.id }}__input">
                                 <strong>{{ url.link }}</strong>

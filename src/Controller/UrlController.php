@@ -26,12 +26,22 @@ class UrlController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
-        $offset = 0;
-        // @todo group by content to make it easier to see what URLs are extra
         // @todo add code for handling deleting of URLs and setting as default
+//        if ($form->isSubmitted()) && $form->isValid()) {
+//            if ($form->get('delete')->isClicked()) {
+//
+//            }
+//        }
+        $offset = 0;
         $this->data['urls'] = $entityManager->getRepository(Url::class)->getAll(
             $offset,
-            10
+            10,
+            [],
+            [
+                [ 'q.content', 'desc' ],
+                [ 'q.default', 'desc' ],
+                [ 'q.link', 'asc' ],
+            ]
         );
         $this->data['page']['offset'] = $offset;
         $this->data['page']['limit'] = 20;

@@ -116,6 +116,22 @@ class ZZPageController extends AbstractInachisController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {//} && $form->isValid()) {
+            if ($form->get('delete')->isClicked()) {
+                // @todo delete URLs
+                foreach ($post->getUrls() as $postUrl) {
+                    $entityManager->getRepository(Url::class)->remove($postUrl);
+                }
+                // @todo delete linked tags
+                //$entityManager->getRepository(Tag::class)->remove($tags);
+                // @todo delete linked categories
+                //$entityManager->getRepository(Category::class)->remove($tags);
+                // @todo delete collection entries
+                //$entityManager->getRepository(Collection:class)->remove($tags);
+                // @todo delete page
+                $entityManager->getRepository(Page::class)->remove($post);
+                return new RedirectResponse('/incc/', HTTP_REDIRECT_PERM);
+            }
+
             $post->setAuthor($this->get('security.token_storage')->getToken()->getUser());
             if (null !== $request->get('publish')) {
                 $post->setStatus(Page::PUBLISHED);
@@ -124,6 +140,7 @@ class ZZPageController extends AbstractInachisController
 //            if ($request->paramsPost()->get('visibility') === 'on') {
 //                $post->setVisibility(Page::VIS_PUBLIC);
 //            }
+            // @todo fix issue with URL being updated to current moddate
             if (!empty($request->get('post')['url'])) {
                 $newUrl = $request->get('post')['url'];
                 $urlFound = false;
@@ -160,7 +177,7 @@ class ZZPageController extends AbstractInachisController
                 if (!empty($newTags)) {
                     $assignedTags = $post->getTags()->getValues();
                     foreach ($newTags as $newTag) {
-                        $tag = $entityManager->getRepository(Tag::class)->findOneByTitle($newTag);
+                        $tag = $entityManager->getRepository(Tag::class)->findOneById($newTag);
                         if (in_array($tag, $assignedTags)) {
                             continue;
                         }
@@ -173,11 +190,7 @@ class ZZPageController extends AbstractInachisController
             }
 
             if ($form->get('publish')->isClicked()) {
-
-            }
-
-            if ($form->get('delete')->isClicked()) {
-
+                $post->setStatus(Page::PUBLISHED);
             }
 
             $post->setModDate(new \DateTime('now'));
@@ -191,15 +204,6 @@ class ZZPageController extends AbstractInachisController
                 $post->getUrls()[0]->getLink()
             );
         }
-
-
-//            if (null !== $request->paramsPost()->get('delete') && !empty($post->getId())) {
-//                foreach ($post->getUrls() as $postUrl) {
-//                    $urlManager->remove($postUrl);
-//                }
-//                $pageManager->remove($post);
-//                return $response->redirect('/inadmin/');
-//            }
 
         $this->data['form'] = $form->createView();
         $this->data['page']['tab'] = $post->getType();
@@ -254,15 +258,16 @@ class ZZPageController extends AbstractInachisController
      */
     public function getSearchResults()
     {
-//        self::redirectIfNotAuthenticated($request, $response);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return new Response('<html><body>Show search results</body></html>');
     }
 
     /**
      * Returns `page` or `post` depending on the current URL
+     * @param Request $request
      * @return string The result of testing the current URL
      */
-    private function getContentType()
+    private function getContentType(Request $request)
     {
         return 1 === preg_match(
             '/\/incc\/([0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*|post)/',

@@ -13,10 +13,7 @@ class CategoryManagerController extends Controller
      */
     public function content()
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        if ($response->isLocked()) {
-//            return;
-//        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 //        $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
 //        self::$data['categories'] = $categoryManager->getRootCategories();
         return $this->render('inadmin/dialog/category-manager.html.twig', $this->data);
@@ -27,10 +24,7 @@ class CategoryManagerController extends Controller
      */
     public function list()
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        if ($response->isLocked()) {
-//            return;
-//        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 //        $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
 //        self::$data['categories'] = empty($request->paramsPost()->get('q')) ?
 //            $categoryManager->getRootCategories() :
@@ -77,10 +71,7 @@ class CategoryManagerController extends Controller
      */
     public function save()
     {
-//        self::redirectIfNotAuthenticated($request, $response);
-//        if ($response->isLocked()) {
-//            return;
-//        }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 //        $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
 //        $newCategory = $categoryManager->create(array(
 //            'title' => $request->paramsPost()->get('categoryName'),
