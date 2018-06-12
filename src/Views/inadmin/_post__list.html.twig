@@ -5,36 +5,50 @@
 
     {% block post_list %}
 
-        <div class="col span_8_of_8 widget-posts">
+        <div class="col span_8_of_8 widget-posts ui-tabs-external">
+            <ul class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
+                <li role="tab" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab ui-tabs-active{% if page.tab == 'post' %} ui-state-active{% endif %}">
+                    <a href="{{ settings.domain }}/incc/post/list">Posts</a>
+                </li>
+                <li role="tab" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab ui-tabs-active{% if page.tab == 'page' %} ui-state-active{% endif %}">
+                    <a href="{{ settings.domain }}/incc/page/list">Pages</a>
+                </li>
+                <li role="tab" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab ui-tabs-active">
+                    <a href="{{ settings.domain }}/incc/import">Import</a>
+                </li>
+            </ul>
+
             {%  if posts is not empty %}
-                <form>
+                {{ form_start(form, {'attr': { 'class': 'form form__post' }}) }}
                     <button>…</button>
                     <ul class="contextual-menu">
                         <li><a href="#">Select all</a></li>
                         <li><a href="#">Select none</a></li>
                         <li class="divider"></li>
                         <li>with selected:</li>
-                        <li><a href="">Delete</a></li>
-                        <li><a href="">Make private</a></li>
+                        <li><button>Delete</button></li>
+                        <li><button>Make private</button></li>
                     </ul>
 
                     <p>Showing {{ page.offset + 1 }} to {{ posts|length }} of {{ posts.count }}</p>
 
+                    {{- form_errors(form) -}}
+
                     {%  for post in posts.iterator %}
                         <article id="post-{{ post.id }}" class="{{ post.type }} status-{{ post.status }} visibility-{{ post.visibility }} hentry">
-                            <input id="post-{{ post.id }}__input" type="checkbox" name="posts[]" value="{{ post.id }}" />
-                            <a aria-label="Edit {{ post.title }}" href="/incc/{%- if post.type == 'page' %}page/{% endif -%}{{ post.urls[0].link }}">
+                            <input class="checkbox" id="post-{{ post.id }}__input" type="checkbox" name="posts[]" value="{{ post.id }}" />
+                            <a aria-label="Edit {{ post.title }}" href="/incc/{{ post.type }}/{{ post.urls[0].link }}">
                                 <h2>
                                     <!-- label for="post-{{ post.id }}__input" -->{{ post.title }}
                                     {%-  if post.status == 'draft' %}<span class="badge badge__draft">draft</span>{% endif -%}
-                                    {%-  if post.visibility == 'private' %}<span class="badge badge__private">private</span>{% endif -%}
+                                    {%-  if not post.visibility %}<span class="badge badge__private">private</span>{% endif -%}
                                 </h2>
                                 <p>{{ post.content|markdown|striptags|length > 300 ? post.content|markdown|striptags|slice(0, 300) ~ '…' : post.content|markdown|striptags  }}</p>
                             </a>
                             <p class="date"><span class="material-icons">schedule</span> Last modified: <em>{{ post.modDate|date('jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
                         </article>
                     {%  endfor %}
-                </form>
+                {{ form_end(form) }}
             {% else %}
                 <p class="content-warning">
                     <i class="material-icons">info_outline</i>
