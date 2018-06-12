@@ -50,8 +50,10 @@ class ZZPageController extends AbstractInachisController
         );
         if (empty($url)) {
             throw new NotFoundHttpException(
-                sprintf('%s does not exist',
-                ltrim($request->getRequestUri(), '/'))
+                sprintf(
+                    '%s does not exist',
+                    ltrim($request->getRequestUri(), '/')
+                )
             );
         }
         if ($url->getContent()->isScheduledPage() || $url->getContent()->isDraft()) {
@@ -77,7 +79,6 @@ class ZZPageController extends AbstractInachisController
         $data['post'] = $url->getContent();
         $data['url'] = $url->getLink();
         return $this->render('web/post.html.twig', $data);
-
     }
 
     /**

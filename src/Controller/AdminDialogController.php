@@ -47,7 +47,7 @@ class AdminDialogController extends AbstractInachisController
                     ],
                 ],
                 'q.title'
-        );
+            );
         $result = [];
         // Below code is used to handle where categories exist with the same name under multiple locations
         if (!empty($categories)) {
