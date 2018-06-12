@@ -34,30 +34,49 @@ class ZZPageController extends AbstractInachisController
      *          "day": "\d+"
      *     }
      * )
+     * @param Request $request
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @param string $title
+     * @return mixed
+     * @throws NotFoundHttpException
      */
-    public function getPost($year, $month, $day, $title)
+    public function getPost(Request $request, $year, $month, $day, $title)
     {
-//        $urlManager = new UrlManager(Application::getInstance()->getService('em'));
-//        $url = $urlManager->getByUrl($request->server()->get('REQUEST_URI'));
-//        if (empty($url)) {
-//            return $response->code(404);
-//        }
-//        if ($url->getContent()->isScheduledPage() || $url->getContent()->isDraft()) {
-//            return $response->redirect('/');
-//        }
-//        if (!$url->getDefault()) {
-//            $url = $urlManager->getDefaultUrl($url->getContent());
-//            if (!empty($url)) {
-//                return $response->redirect($url->getLink(), 301);
-//            }
-//        }
-//        $userManager = new UserManager(Application::getInstance()->getService('em'));
-//        $userManager->getByUsername($url->getContent()->getAuthor()->getUsername());
-        $data = [];/*array(
-            'post' => $url->getContent(),
-            'url' => $url->getLink()
-        );*/
-        return $this->render('post.html.twig', $data);
+        $entityManager = $this->getDoctrine()->getManager();
+        $url = $entityManager->getRepository(Url::class)->findOneByLink(
+            ltrim($request->getRequestUri(), '/')
+        );
+        if (empty($url)) {
+            throw new NotFoundHttpException(
+                sprintf('%s does not exist',
+                ltrim($request->getRequestUri(), '/'))
+            );
+        }
+        if ($url->getContent()->isScheduledPage() || $url->getContent()->isDraft()) {
+            return $this->redirectToRoute(
+                'app_dashboard_default',
+                [],
+                Response::HTTP_TEMPORARY_REDIRECT
+            );
+        }
+        if (!$url->isDefault()) {
+            $url = $entityManager->getRepository(Url::class)->getDefaultUrl($url->getContent());
+            if (!empty($url) && $url->isDefault()) {
+                return new RedirectResponse($url->getLink(), Response::HTTP_PERMANENTLY_REDIRECT);
+            }
+        }
+
+        // Get X from page
+        //Get X from series
+        //If page.id IN series ignore
+        //combine into array with date + title as key
+        //key sort
+
+        $data['post'] = $url->getContent();
+        $data['url'] = $url->getLink();
+        return $this->render('web/post.html.twig', $data);
 
     }
 
@@ -206,7 +225,20 @@ class ZZPageController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
+        $form = $this->createFormBuilder(null);
+        //$form = $this->createForm(PostType::class);
+        //$form->handleRequest($request);
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            if ($form->get('delete')->isClicked()) {
+//                $entityManager->getRepository(Page::class)->remove($post);
+//                return new RedirectResponse(
+//                    sprintf('/incc/%s/list/', $type),
+//                    HTTP_REDIRECT_PERM
+//                );
+//            }
+//        }
         $offset = 0;
+        $this->data['form'] = $form->getForm()->createView();
         $this->data['posts'] = $entityManager->getRepository(Page::class)->getAll(
             $offset,
             10,
