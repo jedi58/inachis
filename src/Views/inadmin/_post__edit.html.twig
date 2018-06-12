@@ -111,7 +111,7 @@
             {%- if post.status != "published" %}
                 <button type="submit" class="button button--info" name="publish">{% if post.postDate > date() %}Schedule{% else %}Publish{% endif %}</button>
             {%- endif %}
-            <button type="submit" class="button button--negative" name="delete">Delete</button>
+            {{ form_widget(form.delete) }}
             {%  if post.id is not empty and not post.isDraft %}
                 <a class="button" href="/{{ post.urls|first.link }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span></a>
             {%  endif %}
