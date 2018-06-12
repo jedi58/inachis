@@ -93,7 +93,7 @@ class Url
         return $this->content;
     }
 
-    public function getDefault()
+    public function isDefault()
     {
         return $this->default;
     }
