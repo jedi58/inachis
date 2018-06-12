@@ -84,12 +84,13 @@
             {% if post.urls is not empty %}
             <p>
                 <input type="text" value="{{ post.urls|first.link }}" />
-                <button>Copy this link</button>
+                <button id="post__link__copy">Copy this link</button>
             </p>
             {% endif %}
             <p>
-                <label for="featureSnippet">Teaser</label>
-                <textarea id="featureSnippet" name="featureSnippet">{{ post.featureSnippet }}</textarea>
+                {{ form_label(form.featureSnippet) }}
+                {{ form_errors(form.featureSnippet) }}
+                {{ form_widget(form.featureSnippet) }}
             </p>
             <p>
                 <label for="featureImage">Preview Image</label>
@@ -99,8 +100,9 @@
             <p><em class="material-icons">info</em> These will be published to the selected Social Media accounts automatically when first published, or scheduled to to be posted.</p>
             <!-- loop through services / accounts for checkboxes + add char counter below for ui-counter -->
             <p>
-                <label for="sharingMessage">Message</label>
-                <textarea class="ui-counter" name="sharingMessage" id="sharingMessage">{{ post.sharingMessage }}</textarea>
+                {{ form_label(form.sharingMessage) }}
+                {{ form_errors(form.sharingMessage) }}
+                {{ form_widget(form.sharingMessage) }}
             </p>
         </fieldset>
     </div>
