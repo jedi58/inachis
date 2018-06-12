@@ -197,7 +197,7 @@ class ZZPageController extends AbstractInachisController
             $this->addFlash('notice', 'Content saved.');
             return $this->redirect(
                 '/incc/' .
-                ( $post->getType() == Page::TYPE_PAGE ? 'page/' : '' ) .
+                $post->getType() . '/' .
                 $post->getUrls()[0]->getLink()
             );
         }
