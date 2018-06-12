@@ -9,9 +9,9 @@
 
             <h1>Welcome!</h1>
             <p>We just need to take a few details to get you set up…</p>
-            <img alt="An image of an Inachis io butterfly" class="admin__form__brand" src="/inadmin/assets/images/inachis.png" />
+            <img alt="An image of an Inachis io butterfly" class="admin__form__brand" src="/assets/imgs/incc/inachis.png" />
 
-            {{ form_start(form) }}
+            {{ form_start(form, {attr: {class: 'form form__login form__setup', autocomplete: false}}) }}
             {{ form_widget(form) }}
             {{ form_end(form) }}
 
