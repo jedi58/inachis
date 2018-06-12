@@ -2,27 +2,44 @@
 
 namespace App\Repository;
 
+use App\Entity\Page;
 use App\Entity\Url;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class UrlRepository extends AbstractRepository
 {
+    /**
+     * UrlRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Url::class);
     }
 
-    /*
-    public function findBySomething($value)
+    /**
+     * @param Url $url
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function remove(Url $url)
     {
-        return $this->createQueryBuilder('u')
-            ->where('u.something = :value')->setParameter('value', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $this->getEntityManager()->remove($url);
+        $this->getEntityManager()->flush();
     }
-    */
+
+    /**
+     * @param Page $page
+     * @return mixed
+     */
+    public function getDefaultUrl(Page $page)
+    {
+        return $this->getEntityManager()->findOneBy(
+            [
+                'content' => $page,
+                'default' => true,
+            ]
+        );
+    }
 }
