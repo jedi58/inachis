@@ -6,9 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CollectionRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\SeriesRepository")
  */
-class Collection
+class Series
 {
     /**
      * @ORM\Column(type="string", unique=true, nullable=false)
@@ -40,16 +40,16 @@ class Collection
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Page")
      * @ORM\JoinTable(
-     *     name="Collection_pages",
+     *     name="Series_pages",
      *     joinColumns={
-     *      @ORM\JoinColumn(name="collection_id", referencedColumnName="id")
+     *      @ORM\JoinColumn(name="series_id", referencedColumnName="id")
      *     },
      *     inverseJoinColumns={
      *      @ORM\JoinColumn(name="page_id", referencedColumnName="id")
      *     }
      * )
      * @ORM\OrderBy({"lastDate" = "DESC"})
-     * @var ArrayCollection|Page[] The array of pages in the collection
+     * @var ArrayCollection|Page[] The array of pages in the series
      */
     protected $items = [];
     /**
@@ -65,7 +65,7 @@ class Collection
     protected $modDate;
 
     /**
-     * Collection constructor.
+     * Series constructor.
      */
     public function __construct()
     {
