@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Category;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class CategoryRepository extends AbstractRepository
@@ -12,8 +11,10 @@ class CategoryRepository extends AbstractRepository
     {
         parent::__construct($registry, Category::class);
     }
+
     /**
-     * Returns an array of the root level categories
+     * Returns an array of the root level categories.
+     *
      * @return Category[] The array of {@link Category} objects
      */
     public function getRootCategories()

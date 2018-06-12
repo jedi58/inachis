@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Series;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**

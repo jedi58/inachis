@@ -9,19 +9,23 @@ abstract class AbstractRepository extends ServiceEntityRepository
 {
     /**
      * @param array $values
+     *
      * @return mixed
      */
     public function create($values = [])
     {
         $objectType = $this->getClassName();
+
         return $this->hydrate(new $objectType(), $values);
     }
 
     /**
      * Uses the objects setters to populat the object
-     * based on the provided values
+     * based on the provided values.
+     *
      * @param mixed $object The object to hydrate
      * @param array[mixed] The values to apply to the obect
+     *
      * @return mixed The hydrated object
      */
     public function hydrate($object, array $values)
@@ -30,20 +34,24 @@ abstract class AbstractRepository extends ServiceEntityRepository
             return $object;
         }
         foreach ($values as $key => $value) {
-            $methodName = 'set' . ucfirst($key);
+            $methodName = 'set'.ucfirst($key);
             if (method_exists($object, $methodName)) {
                 $object->$methodName($value);
             }
         }
+
         return $object;
     }
 
     /**
      * Returns the count for entries in the current repository match any
-     * provided constraints
+     * provided constraints.
+     *
      * @param string[] Array of elements and string replacements
-     * @return int The number of entities located
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return int The number of entities located
      */
     public function getAllCount($where = [])
     {
@@ -56,17 +64,20 @@ abstract class AbstractRepository extends ServiceEntityRepository
                 $qb->setParameters($where[1]);
             }
         }
+
         return (int) $qb
             ->getQuery()
             ->getSingleScalarResult();
     }
 
     /**
-     * Returns all entries for the current repository
-     * @param int $offset The offset from which to return results from
-     * @param int $limit The maximum number of results to return
-     * @param array $where
+     * Returns all entries for the current repository.
+     *
+     * @param int          $offset The offset from which to return results from
+     * @param int          $limit  The maximum number of results to return
+     * @param array        $where
      * @param array|string $order
+     *
      * @return Paginator The result of fetching the objects
      */
     public function getAll(
@@ -107,6 +118,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         if ($limit > 0) {
             $qb = $qb->setMaxResults($limit);
         }
+
         return new Paginator($qb, false);
     }
 }

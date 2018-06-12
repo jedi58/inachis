@@ -84,8 +84,7 @@ class AddUserCommand extends Command
             ->addArgument('password', InputArgument::OPTIONAL, 'The plain password of the new user')
             ->addArgument('email', InputArgument::OPTIONAL, 'The email of the new user')
             ->addArgument('displayName', InputArgument::OPTIONAL, 'The full name of the new user')
-            ->addOption('admin', null, InputOption::VALUE_NONE, 'If set, the user is created as an administrator')
-        ;
+            ->addOption('admin', null, InputOption::VALUE_NONE, 'If set, the user is created as an administrator');
     }
 
     /**

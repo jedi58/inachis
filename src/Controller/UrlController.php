@@ -2,15 +2,7 @@
 
 namespace App\Controller;
 
-use App\Controller\AbstractInachisController;
 use App\Entity\Url;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +11,9 @@ class UrlController extends AbstractInachisController
 {
     /**
      * @Route("/incc/url/list", methods={"GET", "POST"})
+     *
      * @param Request $request
+     *
      * @return Response
      */
     public function list(Request $request)
@@ -38,14 +32,15 @@ class UrlController extends AbstractInachisController
             10,
             [],
             [
-                [ 'q.content', 'desc' ],
-                [ 'q.default', 'desc' ],
-                [ 'q.link', 'asc' ],
+                ['q.content', 'desc'],
+                ['q.default', 'desc'],
+                ['q.link', 'asc'],
             ]
         );
         $this->data['page']['offset'] = $offset;
         $this->data['page']['limit'] = 20;
         $this->data['page']['title'] = 'URLs';
+
         return $this->render('inadmin/url__list.html.twig', $this->data);
     }
 }

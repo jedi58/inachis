@@ -18,69 +18,65 @@ class SetupStage1Type extends AbstractType
     {
         $builder
             ->add('application_settings', FieldsetType::class, [
-                'label' => false,
-                'legend' => 'Setup your web application',
+                'label'    => false,
+                'legend'   => 'Setup your web application',
                 'required' => false,
-                'types' => function (FormBuilderInterface $builder)
-                {
+                'types'    => function (FormBuilderInterface $builder) {
                     $builder
                         ->add('siteName', TextType::class, [
                             'attr' => [
-                                'placeholder' => 'e.g. My awesome site'
+                                'placeholder' => 'e.g. My awesome site',
                             ],
-                            'label' => 'Site name',
+                            'label'    => 'Site name',
                             'required' => true,
                         ])
                         ->add('siteUrl', UrlType::class, [
-                            'data' => '',
-                            'label' => 'URL',
+                            'data'     => '',
+                            'label'    => 'URL',
                             'required' => true,
                         ]);
-                }
+                },
             ])
             ->add('application_administrator', FieldsetType::class, [
                 'legend' => 'Administrator',
-                'types' => function (FormBuilderInterface $builder)
-                {
+                'types'  => function (FormBuilderInterface $builder) {
                     return $builder
                         ->add('username', TextType::class, [
-                            'data' => 'admin',
-                            'label' => 'Username',
+                            'data'     => 'admin',
+                            'label'    => 'Username',
                             'required' => true,
                         ])
                         ->add('password', PasswordType::class, [
-                            'label' => 'Password',
+                            'label'    => 'Password',
                             'required' => true,
                         ])
                         ->add('name', TextType::class, [
                             'attr' => [
                                 'placeholder' => 'e.g. Jane Doe',
                             ],
-                            'label' => 'Name',
+                            'label'    => 'Name',
                             'required' => true,
                         ])
                         ->add('email', EmailType::class, [
                             'attr' => [
                                 'placeholder' => 'e.g. somebody@example.com',
                             ],
-                            'label' => 'Email Address',
+                            'label'    => 'Email Address',
                             'required' => true,
                         ]);
-                }
+                },
             ])
             ->add('application_administrator', FieldsetType::class, [
-                'types' => function (FormBuilderInterface $builder)
-                {
+                'types' => function (FormBuilderInterface $builder) {
                     $builder
                         ->add('submit', SubmitType::class, [
                             'attr' => [
-                                'class' => 'button button--positive'
+                                'class' => 'button button--positive',
                             ],
                             'label' => 'Continue…',
                         ]);
-                }
-            ])
-        ;
+                },
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

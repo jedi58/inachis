@@ -14,26 +14,31 @@ class Series
      * @ORM\Column(type="string", unique=true, nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
+     *
      * @var string
      */
     protected $id;
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     *
      * @var string
      */
     protected $title;
     /**
      * @ORM\Column(type="text", nullable=true)
+     *
      * @var string
      */
     protected $description;
     /**
      * @ORM\Column(type="datetime")
+     *
      * @var string
      */
     protected $firstDate;
     /**
      * @ORM\Column(type="datetime")
+     *
      * @var string
      */
     protected $lastDate;
@@ -49,17 +54,20 @@ class Series
      *     }
      * )
      * @ORM\OrderBy({"lastDate" = "DESC"})
+     *
      * @var ArrayCollection|Page[] The array of pages in the series
      */
     protected $items = [];
     /**
      * @ORM\Column(type="datetime")
+     *
      * @var string
      */
     protected $createDate;
 
     /**
      * @ORM\Column(type="datetime")
+     *
      * @var string
      */
     protected $modDate;
@@ -84,11 +92,13 @@ class Series
 
     /**
      * @param string $id
+     *
      * @return $this
      */
     public function setId(string $id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -102,11 +112,13 @@ class Series
 
     /**
      * @param mixed $title
+     *
      * @return $this
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -120,11 +132,13 @@ class Series
 
     /**
      * @param string $description
+     *
      * @return $this
      */
     public function setDescription(string $description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -138,11 +152,13 @@ class Series
 
     /**
      * @param string $firstDate
+     *
      * @return $this
      */
     public function setFirstDate(string $firstDate)
     {
         $this->firstDate = $firstDate;
+
         return $this;
     }
 
@@ -156,11 +172,13 @@ class Series
 
     /**
      * @param string $lastDate
+     *
      * @return $this
      */
     public function setLastDate(string $lastDate)
     {
         $this->lastDate = $lastDate;
+
         return $this;
     }
 
@@ -174,21 +192,25 @@ class Series
 
     /**
      * @param array $items
+     *
      * @return $this
      */
     public function setItems(array $items)
     {
         $this->items = $items;
+
         return $this;
     }
 
     /**
      * @param Page $item
+     *
      * @return $this
      */
     public function addItem(Page $item)
     {
         $this->items[] = $item;
+
         return $this;
     }
 
@@ -202,11 +224,13 @@ class Series
 
     /**
      * @param mixed $createDate
+     *
      * @return $this
      */
     public function setCreateDate($createDate)
     {
         $this->createDate = $createDate;
+
         return $this;
     }
 
@@ -220,11 +244,13 @@ class Series
 
     /**
      * @param mixed $modDate
+     *
      * @return $this
      */
     public function setModDate($modDate)
     {
         $this->modDate = $modDate;
+
         return $this;
     }
 }

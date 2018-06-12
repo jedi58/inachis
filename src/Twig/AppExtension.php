@@ -10,7 +10,7 @@ class AppExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('activeMenu', [ $this, 'activeMenuFilter' ]),
+            new TwigFilter('activeMenu', [$this, 'activeMenuFilter']),
         ];
     }
 
