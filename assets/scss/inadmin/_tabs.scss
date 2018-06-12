@@ -1,4 +1,4 @@
-.ui-tabs {
+.ui-tabs, .ui-tabs-external {
 	background-color: $admin__tabs-background;
 	clear: both;
 
@@ -17,6 +17,12 @@
 		list-style-type: none;
 		margin: 5px 5px 0 0;
 		padding: 0;
+
+		&::after {
+			content: ' ';
+			clear: both;
+			display: block;
+		}
 
 		a, a:visited {
 			color: #000;
