@@ -182,6 +182,29 @@ class PostType extends AbstractType
 //                ],
 //                'required' => false,
 //            ])
+            ->add('featureSnippet', TextareaType::class, [
+                'attr' => [
+                    'aria-labelledby' => 'teaser_label',
+                    'aria-required'   => 'false',
+                ],
+                'label'      => $this->translator->trans('admin.label.post.teaser', [], 'messages'),
+                'label_attr' => [
+                    'id'    => 'teaser_label',
+                ],
+                'required' => false,
+            ])
+            ->add('sharingMessage', TextareaType::class, [
+                'attr' => [
+                    'aria-labelledby' => 'sharingMessage_label',
+                    'aria-required'   => 'false',
+                    'class' => 'ui-counter',
+                ],
+                'label'      => $this->translator->trans('admin.label.post.sharingMessage', [], 'messages'),
+                'label_attr' => [
+                    'id'    => 'sharingMessage_label',
+                ],
+                'required' => false,
+            ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'button button--positive',
