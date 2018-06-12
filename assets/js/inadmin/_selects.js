@@ -67,7 +67,12 @@ $(document).ready(function() {
 	{
 		$(this).datetimepicker({
 			format: 'd/m/Y H:i',
-			validateOnBlue: false
+			validateOnBlue: false,
+            onChangeDateTime:function(dp,$input) {
+				if (InachisPostEdit) {
+                    $('input#post_url').val(InachisPostEdit.getUrlFromTitle());
+				}
+            }
 		});
 	});
 
