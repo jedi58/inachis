@@ -4,13 +4,13 @@ namespace App\Repository;
 
 use App\Entity\Page;
 use App\Entity\Url;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class UrlRepository extends AbstractRepository
 {
     /**
      * UrlRepository constructor.
+     *
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -20,6 +20,7 @@ class UrlRepository extends AbstractRepository
 
     /**
      * @param Url $url
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -31,6 +32,7 @@ class UrlRepository extends AbstractRepository
 
     /**
      * @param Page $page
+     *
      * @return mixed
      */
     public function getDefaultUrl(Page $page)

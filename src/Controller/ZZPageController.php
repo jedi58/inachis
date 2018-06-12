@@ -99,11 +99,14 @@ class ZZPageController extends AbstractInachisController
      *          "day": "\d+"
      *     }
      * )
+     *
      * @param Request $request
      * @param string $type
      * @param string $title
      * @return mixed
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getPostAdmin(Request $request, $type = 'post', $title = null)
     {
@@ -115,14 +118,13 @@ class ZZPageController extends AbstractInachisController
         if (empty($url) && null !== $title) {
             return $this->redirectToRoute(
                 'app_zzpage_getpostadmin',
-                [ 'type' => $type ],
+                ['type' => $type],
                 Response::HTTP_TEMPORARY_REDIRECT
             );
         }
         $post = null !== $title ?
             $entityManager->getRepository(Page::class)->findOneById($url[0]->getContent()->getId()) :
-            $post = new Page()
-        ;
+            $post = new Page();
         if ($post->getId() === null) {
             $post->setType($type);
         }
@@ -165,7 +167,7 @@ class ZZPageController extends AbstractInachisController
                 if (!empty($newCategories)) {
                     foreach ($newCategories as $newCategory) {
                         $category = $entityManager->getRepository(Category::class)->findOneById($newCategory);
-                         if (!empty($category)) {
+                        if (!empty($category)) {
                             $post->getCategories()->add($category);
                         }
                     }

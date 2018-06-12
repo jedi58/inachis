@@ -12,6 +12,7 @@ class UserRepository extends AbstractRepository //ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
 //    /**
 //     * Fetches a specific entity from the repository by the given Id and decrypts any encrypted fields
 //     * @param string The Id of the entity to be returned

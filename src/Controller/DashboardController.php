@@ -2,10 +2,7 @@
 
 namespace App\Controller;
 
-use App\Controller\AbstractInachisController;
 use App\Entity\Page;
-use App\Repository\PageRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,8 +13,10 @@ class DashboardController extends AbstractInachisController
 {
     /**
      * @Route("/incc", methods={"GET"})
-     * @param Request $request The request made to the controller
+     *
+     * @param Request             $request    The request made to the controller
      * @param TranslatorInterface $translator
+     *
      * @return Response
      */
     public function default(Request $request, TranslatorInterface $translator)
@@ -25,14 +24,14 @@ class DashboardController extends AbstractInachisController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
         $this->data['page'] = [
-            'tab' => 'dashboard',
+            'tab'   => 'dashboard',
             'title' => 'Dashboard',
         ];
         $this->data['dashboard'] = [
-            'draftCount' => 0,
-            'publishCount' => 0,
+            'draftCount'    => 0,
+            'publishCount'  => 0,
             'upcomingCount' => 0,
-            'drafts' => $entityManager->getRepository(Page::class)->getAll(
+            'drafts'        => $entityManager->getRepository(Page::class)->getAll(
                 0,
                 5,
                 [
@@ -49,7 +48,7 @@ class DashboardController extends AbstractInachisController
                 [
                     'q.status = :status AND q.postDate > :postDate',
                     [
-                        'status' => Page::PUBLISHED,
+                        'status'   => Page::PUBLISHED,
                         'postDate' => new \DateTime(),
                     ],
                 ],
@@ -61,8 +60,8 @@ class DashboardController extends AbstractInachisController
                 [
                     'q.status = :status AND q.postDate <= :postDate',
                     [
-                        'status' => Page::PUBLISHED,
-                        'postDate' => new \DateTime()
+                        'status'   => Page::PUBLISHED,
+                        'postDate' => new \DateTime(),
                     ],
                 ],
                 'q.postDate ASC, q.modDate'

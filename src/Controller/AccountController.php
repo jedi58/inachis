@@ -2,26 +2,18 @@
 
 namespace App\Controller;
 
-use App\Controller\AbstractInachisController;
 use App\Form\LoginType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Translation\TranslatorInterface;
-use Twig\Token;
 
 /**
- * Class AccountController
- * @package App\Controller
+ * Class AccountController.
  */
 class AccountController extends AbstractInachisController
 {
@@ -32,6 +24,7 @@ class AccountController extends AbstractInachisController
 
     /**
      * AccountController constructor.
+     *
      * @param EncoderFactoryInterface $encoderFactory
      */
     public function __construct(EncoderFactoryInterface $encoderFactory)
@@ -41,8 +34,10 @@ class AccountController extends AbstractInachisController
 
     /**
      * @Route("/incc/login", name="app_account_login", methods={"GET"})
-     * @param Request $request
+     *
+     * @param Request             $request
      * @param TranslatorInterface $translator
+     *
      * @return Response The response the controller results in
      */
     public function login(Request $request, TranslatorInterface $translator)
@@ -51,12 +46,13 @@ class AccountController extends AbstractInachisController
         $this->redirectIfNoAdmins();
         $authenticationUtils = $this->get('security.authentication_utils');
         $form = $this->createForm(LoginType::class, [
-            'loginUsername' => $authenticationUtils->getLastUsername()
+            'loginUsername' => $authenticationUtils->getLastUsername(),
         ]);
         $form->handleRequest($request);
         $this->data['page']['title'] = 'Sign In';
         $this->data['form'] = $form->createView();
         $this->data['error'] = $authenticationUtils->getLastAuthenticationError();
+
         return $this->render('inadmin/signin.html.twig', $this->data);
     }
 
@@ -69,6 +65,7 @@ class AccountController extends AbstractInachisController
 
     /**
      * @Route("/incc/signout", name="security_logout", methods={"POST"})
+     *
      * @throws \Exception
      */
     public function logoutAction()
@@ -78,8 +75,10 @@ class AccountController extends AbstractInachisController
 
     /**
      * @Route("/incc/forgot-password", methods={"GET"})
-     * @param Request $request
+     *
+     * @param Request             $request
      * @param TranslatorInterface $translator
+     *
      * @return Response
      */
     public function forgotPassword(Request $request, TranslatorInterface $translator)
@@ -89,37 +88,37 @@ class AccountController extends AbstractInachisController
         $form = $this->createFormBuilder([], [
             'attr' => [
                 'autocomplete' => 'false',
-                'class' => 'form form__login form__forgot',
-            ]
+                'class'        => 'form form__login form__forgot',
+            ],
         ])
 //                ->addComponent(new FieldsetType(array(
 //                    'legend' => 'Enter your Email address / Username'
 //                )))
-            ->add('forgot_email', TextType::class,[
+            ->add('forgot_email', TextType::class, [
                 'attr' => [
                     'aria-labelledby' => 'form-login__username-label',
-                    'aria-required' => 'true',
-                    'autofocus' => 'true',
-                    'class' => 'text',
-                    'id' => 'form-forgot__email',
-                    'placeholder' => $translator->trans('admin.email_example'),
+                    'aria-required'   => 'true',
+                    'autofocus'       => 'true',
+                    'class'           => 'text',
+                    'id'              => 'form-forgot__email',
+                    'placeholder'     => $translator->trans('admin.email_example'),
                 ],
-                'label' => $translator->trans('admin.reset.enter_email_address'),
+                'label'      => $translator->trans('admin.reset.enter_email_address'),
                 'label_attr' => [
                     'id' => 'forgot__email-label',
                 ],
             ])
             ->add('resetPassword', SubmitType::class, [
                 'label' => $translator->trans('admin.reset_password'),
-                'attr' => [
-                    'class' => 'button button--positive'
-                ]
+                'attr'  => [
+                    'class' => 'button button--positive',
+                ],
             ])
             ->add('cancel', ButtonType::class, [
                 'label' => $translator->trans('admin.button.cancel'),
-                'attr' => [
-                    'class' => 'button button--negative'
-                ]
+                'attr'  => [
+                    'class' => 'button button--negative',
+                ],
             ])
             ->getForm();
 //            'data' => array(
@@ -130,12 +129,15 @@ class AccountController extends AbstractInachisController
 //            )
 //        );
         $this->data['form'] = $form->createView();
+
         return $this->render('inadmin/forgot-password.html.twig', $this->data);
     }
 
     /**
      * @Route("/incc/forgot-password", methods={"POST"})
+     *
      * @param Request $request
+     *
      * @return Response
      */
     public function forgotPasswordSent(Request $request)

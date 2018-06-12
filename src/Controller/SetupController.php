@@ -2,10 +2,8 @@
 
 namespace App\Controller;
 
-use App\Controller\AbstractInachisController;
 use App\Entity\User;
 use App\Form\SetupStage1Type;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,7 +12,9 @@ class SetupController extends AbstractInachisController
 {
     /**
      * @Route("/setup", methods={"GET", "POST"})
+     *
      * @param Request $request
+     *
      * @return Response
      */
     public function stage1(Request $request)
@@ -29,11 +29,10 @@ class SetupController extends AbstractInachisController
             );
         }
         $form = $this->createForm(SetupStage1Type::class, [
-            'defaultUrl' => 'https://' . $request->getHttpHost(),
+            'defaultUrl' => 'https://'.$request->getHttpHost(),
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
         }
 //        if ($request->method('post') && !empty($request->paramsPost()->get('username')) && !empty($request->paramsPost()->get('password'))) {
 //            if (Application::getInstance()->getService('auth')->create(
@@ -50,6 +49,7 @@ class SetupController extends AbstractInachisController
 
         $this->data['page']['title'] = 'Inachis Install - Step 1';
         $this->data['form'] = $form->createView();
+
         return $this->render('setup/stage-1.html.twig', $this->data);
     }
 }
