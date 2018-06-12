@@ -38,9 +38,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     /**
      * LoginFormAuthenticator constructor.
-     * @param FormFactoryInterface $formFactory
-     * @param EntityManagerInterface $entityManager
-     * @param RouterInterface $router
+     *
+     * @param FormFactoryInterface         $formFactory
+     * @param EntityManagerInterface       $entityManager
+     * @param RouterInterface              $router
      * @param UserPasswordEncoderInterface $userPasswordEncoder
      */
     public function __construct(
@@ -57,6 +58,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     /**
      * @param Request $request
+     *
      * @return bool
      */
     public function supports(Request $request)
@@ -67,12 +69,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     /**
      * @param Request $request
+     *
      * @return mixed|null
      */
     public function getCredentials(Request $request)
     {
         $credentials = $request->request->get('login');
         $request->getSession()->set(Security::LAST_USERNAME, $credentials['loginUsername']);
+
         return [
             'loginUsername' => $credentials['loginUsername'],
             'loginPassword' => $credentials['loginPassword'],
@@ -80,19 +84,21 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * @param mixed $credentials
+     * @param mixed                 $credentials
      * @param UserProviderInterface $userProvider
+     *
      * @return \App\Entity\User|null|object|UserInterface
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         return $this->entityManager->getRepository(User::class)
-            ->findOneBy( [ 'username' => $credentials['loginUsername'] ] );
+            ->findOneBy(['username' => $credentials['loginUsername']]);
     }
 
     /**
-     * @param mixed $credentials
+     * @param mixed         $credentials
      * @param UserInterface $user
+     *
      * @return bool
      */
     public function checkCredentials($credentials, UserInterface $user)
@@ -100,6 +106,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         if ($this->userPasswordEncoder->isPasswordValid($user, $credentials['loginPassword'])) {
             return true;
         }
+
         return false;
     }
 
@@ -112,9 +119,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * @param Request $request
+     * @param Request        $request
      * @param TokenInterface $token
-     * @param string $providerKey
+     * @param string         $providerKey
+     *
      * @return RedirectResponse
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
@@ -123,6 +131,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         if (!$targetPath) {
             $targetPath = $this->router->generate('app_dashboard_default');
         }
+
         return new RedirectResponse($targetPath);
     }
 }

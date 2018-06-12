@@ -6,7 +6,7 @@ use App\Exception\InvalidContentSecurityPolicyException;
 
 /**
  * Object for managing CSP headers which should be valid
- * https://cspvalidator.org and https://content-security-policy.com/
+ * https://cspvalidator.org and https://content-security-policy.com/.
  */
 final class ContentSecurityPolicy
 {
@@ -48,8 +48,10 @@ final class ContentSecurityPolicy
      * @var ContentSecurityPolicy reference to instance of self
      */
     protected static $instance;
+
     /**
-     * Returns an instance of {@link Application}
+     * Returns an instance of {@link Application}.
+     *
      * @return ContentSecurityPolicy The current or a new instance of {@link Application}
      */
     public static function getInstance()
@@ -57,39 +59,50 @@ final class ContentSecurityPolicy
         if (null === static::$instance) {
             static::$instance = new static();
         }
+
         return static::$instance;
     }
+
     /**
-     * Returns the CSP policy for enforcing
+     * Returns the CSP policy for enforcing.
+     *
      * @param string[] The policy to process for CSP enforce
-     * @return string The parsed policies
+     *
      * @throws InvalidContentSecurityPolicyException
+     *
+     * @return string The parsed policies
      */
     public static function getCSPEnforceHeader($policy)
     {
         if (!empty($policy) && !empty($policy['enforce'])) {
             return self::generateCSP($policy['enforce']);
         }
-        return null;
     }
+
     /**
-     * Returns the CSP policy for reporting only
+     * Returns the CSP policy for reporting only.
+     *
      * @param string[] The policy to process for CSP reporting
-     * @return string The parsed policies
+     *
      * @throws InvalidContentSecurityPolicyException
+     *
+     * @return string The parsed policies
      */
-    public static function getCSPReportHeader($policy = array())
+    public static function getCSPReportHeader($policy = [])
     {
         if (!empty($policy) && !empty($policy['report'])) {
             return self::generateCSP($policy['report']);
         }
-        return null;
     }
+
     /**
-     * Generates the CSP from the given policy JSON object
+     * Generates the CSP from the given policy JSON object.
+     *
      * @param mixed[] $csp The CSP policy
-     * @return string The parsed policies
+     *
      * @throws InvalidContentSecurityPolicyException
+     *
+     * @return string The parsed policies
      */
     public static function generateCSP($csp)
     {
@@ -116,14 +129,14 @@ final class ContentSecurityPolicy
                         case 'unsafe-inline':
                         case 'unsafe-eval':
                             if ($value === true) {
-                                $policies[$policy] .= ' \'' . $directive . '\'';
+                                $policies[$policy] .= ' \''.$directive.'\'';
                             }
                             break;
 
                         case 'sources':
                             if (!empty($value)) {
                                 foreach ($value as $source) {
-                                    $policies[$policy] .= ' ' . $source;
+                                    $policies[$policy] .= ' '.$source;
                                 }
                             }
                             break;
@@ -136,6 +149,7 @@ final class ContentSecurityPolicy
                 }
             }
         }
+
         return trim(implode('; ', $policies));
     }
 }

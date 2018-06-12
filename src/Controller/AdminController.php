@@ -14,6 +14,7 @@ class AdminController extends Controller
     public function adminList()
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         return new Response('Show all admins');
     }
 
@@ -33,6 +34,7 @@ class AdminController extends Controller
     public function adminSettingsMain()
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         return new Response('Show settings page for signed in admin');
     }
 }

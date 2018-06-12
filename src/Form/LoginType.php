@@ -27,13 +27,13 @@ class LoginType extends AbstractType
             ->add('loginUsername', TextType::class, [
                 'attr' => [
                     'aria-labelledby' => 'form-login__username-label',
-                    'aria-required' => 'true',
-                    'autofocus' => 'true',
-                    'class' => 'text',
-                    'id' => 'form-login__username',
-                    'placeholder' => $this->translator->trans('admin.label.username', [], 'messages'),
+                    'aria-required'   => 'true',
+                    'autofocus'       => 'true',
+                    'class'           => 'text',
+                    'id'              => 'form-login__username',
+                    'placeholder'     => $this->translator->trans('admin.label.username', [], 'messages'),
                 ],
-                'label' => $this->translator->trans('admin.label.username', [], 'messages'),
+                'label'      => $this->translator->trans('admin.label.username', [], 'messages'),
                 'label_attr' => [
                     'id' => 'form-login__username-label',
                 ],
@@ -41,14 +41,14 @@ class LoginType extends AbstractType
             ->add('loginPassword', PasswordType::class, [
                 'attr' => [
                     'aria-labelled-by' => 'form-login__password-label',
-                    'aria-required' => 'required',
-                    'class' => 'text',
-                    'id' => 'form-login__password',
-                    'placeholder' => $this->translator->trans('admin.label.password'),
+                    'aria-required'    => 'required',
+                    'class'            => 'text',
+                    'id'               => 'form-login__password',
+                    'placeholder'      => $this->translator->trans('admin.label.password'),
                 ],
-                'label' => $this->translator->trans('admin.label.password'),
+                'label'      => $this->translator->trans('admin.label.password'),
                 'label_attr' => [
-                    'id' => 'form-login__password-label'
+                    'id' => 'form-login__password-label',
                 ],
             ])
 //            ->add('rememberMe', CheckboxType::class, [
@@ -61,9 +61,9 @@ class LoginType extends AbstractType
 //            ])
             ->add('logIn', SubmitType::class, [
                 'label' => $this->translator->trans('admin.button.login'),
-                'attr' => [
-                    'class' => 'button button--positive'
-                ]
+                'attr'  => [
+                    'class' => 'button button--positive',
+                ],
             ]);
     }
 

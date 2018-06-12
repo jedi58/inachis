@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Controller\AbstractInachisController;
 use App\Entity\Category;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,19 +13,23 @@ class AdminDialogController extends AbstractInachisController
 {
     /**
      * @Route("/incc/ax/categoryManager/get", methods={"POST"})
+     *
      * @return mixed
      */
     public function getCategoryManagerContent()
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->data['categories'] = $this->entityManager->getRepository(Category::class)->findByParent(null);
+
         return $this->render('inadmin/dialog/categoryManager.html.twig', $this->data);
     }
 
     /**
      * @Route("incc/ax/categoryList/get", methods={"POST"})
-     * @param Request $request
+     *
+     * @param Request         $request
      * @param LoggerInterface $logger
+     *
      * @return string
      */
     public function getCategoryManagerListContent(Request $request, LoggerInterface $logger)
@@ -40,8 +43,8 @@ class AdminDialogController extends AbstractInachisController
                 [
                     'q.title LIKE :title',
                     [
-                        'title' => '%' . $request->request->get('q') . '%'
-                    ]
+                        'title' => '%'.$request->request->get('q').'%',
+                    ],
                 ],
                 'q.title'
         );
@@ -57,16 +60,17 @@ class AdminDialogController extends AbstractInachisController
                     $title = $category->getFullPath();
                 }
                 $result['items'][$title] = (object) [
-                    'id' => $category->getId(),
+                    'id'   => $category->getId(),
                     'text' => $title,
-                    'path' => $category->getFullPath()
+                    'path' => $category->getFullPath(),
                 ];
             }
             $result = array_values($result['items']);
         }
+
         return new JsonResponse(
             [
-                'items' => $result,
+                'items'      => $result,
                 'totalCount' => count($result),
             ],
             Response::HTTP_OK
@@ -75,7 +79,9 @@ class AdminDialogController extends AbstractInachisController
 
     /**
      * @Route("incc/ax/categoryManager/save", methods={"POST"})
+     *
      * @param Request $request
+     *
      * @return string
      */
     public function saveCategoryManagerContent(Request $request)
@@ -87,6 +93,7 @@ class AdminDialogController extends AbstractInachisController
         );
         $this->entityManager->persist($category);
         $this->entityManager->flush();
+
         return new JsonResponse($category, Response::HTTP_OK);
     }
 }

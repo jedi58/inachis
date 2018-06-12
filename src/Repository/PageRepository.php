@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Page;
 use App\Entity\Url;
-use App\Repository\AbstractRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 final class PageRepository extends AbstractRepository
@@ -16,6 +15,7 @@ final class PageRepository extends AbstractRepository
 
     /**
      * @param Page $page
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */

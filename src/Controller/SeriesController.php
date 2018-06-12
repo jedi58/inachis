@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SeriesController extends AbstractInachisController
 {
@@ -14,6 +13,7 @@ class SeriesController extends AbstractInachisController
     {
         return $this->render('inadmin/series__list.html.twig', $this->data);
     }
+
     /**
      * @Route("/incc/series/edit", methods={"GET", "POST"})
      */

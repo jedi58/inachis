@@ -2,17 +2,13 @@
 
 namespace App\Controller;
 
-use App\Controller\AbstractInachisController;
 use App\Entity\Category;
 use App\Entity\Page;
 use App\Entity\Tag;
 use App\Entity\Url;
 use App\Form\PostType;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ZZPageController extends AbstractInachisController
@@ -53,12 +49,11 @@ class ZZPageController extends AbstractInachisController
 //        }
 //        $userManager = new UserManager(Application::getInstance()->getService('em'));
 //        $userManager->getByUsername($url->getContent()->getAuthor()->getUsername());
-        $data = [];/*array(
+        $data = []; /*array(
             'post' => $url->getContent(),
             'url' => $url->getLink()
         );*/
         return $this->render('post.html.twig', $data);
-
     }
 
     /**
@@ -80,11 +75,14 @@ class ZZPageController extends AbstractInachisController
      *          "day": "\d+"
      *     }
      * )
+     *
      * @param Request $request
-     * @param string $type
-     * @param string $title
-     * @return mixed
+     * @param string  $type
+     * @param string  $title
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getPostAdmin(Request $request, $type = 'post', $title = null)
     {
@@ -96,14 +94,13 @@ class ZZPageController extends AbstractInachisController
         if (empty($url) && null !== $title) {
             return $this->redirectToRoute(
                 'app_zzpage_getpostadmin',
-                [ 'type' => $type ],
+                ['type' => $type],
                 Response::HTTP_TEMPORARY_REDIRECT
             );
         }
         $post = null !== $title ?
             $entityManager->getRepository(Page::class)->findOneById($url[0]->getContent()->getId()) :
-            $post = new Page()
-        ;
+            $post = new Page();
         if ($post->getId() === null) {
             $post->setType($type);
         }
@@ -113,6 +110,7 @@ class ZZPageController extends AbstractInachisController
         if ($form->isSubmitted()) {//} && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
                 $entityManager->getRepository(Page::class)->remove($post);
+
                 return $this->redirectToRoute(
                     'app_dashboard_default',
                     [],
@@ -146,7 +144,7 @@ class ZZPageController extends AbstractInachisController
                 if (!empty($newCategories)) {
                     foreach ($newCategories as $newCategory) {
                         $category = $entityManager->getRepository(Category::class)->findOneById($newCategory);
-                         if (!empty($category)) {
+                        if (!empty($category)) {
                             $post->getCategories()->add($category);
                         }
                     }
@@ -174,9 +172,10 @@ class ZZPageController extends AbstractInachisController
             $entityManager->flush();
 
             $this->addFlash('notice', 'Content saved.');
+
             return $this->redirect(
-                '/incc/' .
-                ( $post->getType() == Page::TYPE_PAGE ? 'page/' : '' ) .
+                '/incc/'.
+                ($post->getType() == Page::TYPE_PAGE ? 'page/' : '').
                 $post->getUrls()[0]->getLink()
             );
         }
@@ -184,10 +183,11 @@ class ZZPageController extends AbstractInachisController
         $this->data['form'] = $form->createView();
         $this->data['page']['tab'] = $post->getType();
         $this->data['page']['title'] = $post->getId() !== null ?
-            'Editing "' . $post->getTitle() . '"' :
-            'New ' . $post->getType();
+            'Editing "'.$post->getTitle().'"' :
+            'New '.$post->getType();
         $this->data['includeEditor'] = true;
         $this->data['post'] = $post;
+
         return $this->render('inadmin/post__edit.html.twig', $this->data);
     }
 
@@ -199,7 +199,9 @@ class ZZPageController extends AbstractInachisController
      *          "type": "post|page"
      *     }
      * )
+     *
      * @param string $type
+     *
      * @return null
      */
     public function getPostListAdmin(Request $request, $type = 'post')
@@ -214,17 +216,18 @@ class ZZPageController extends AbstractInachisController
                 'q.type = :type',
                 [
                     'type' => $type,
-                ]
+                ],
             ],
             [
-                [ 'q.postDate', 'DESC' ],
-                [ 'q.modDate', 'DESC' ]
+                ['q.postDate', 'DESC'],
+                ['q.modDate', 'DESC'],
             ]
         );
         $this->data['page']['offset'] = $offset;
         $this->data['page']['limit'] = 10;
         $this->data['page']['tab'] = $type;
-        $this->data['page']['title'] = ucfirst($type) . 's';
+        $this->data['page']['title'] = ucfirst($type).'s';
+
         return $this->render('inadmin/post__list.html.twig', $this->data);
     }
 
@@ -234,12 +237,15 @@ class ZZPageController extends AbstractInachisController
     public function getSearchResults()
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         return new Response('<html><body>Show search results</body></html>');
     }
 
     /**
-     * Returns `page` or `post` depending on the current URL
+     * Returns `page` or `post` depending on the current URL.
+     *
      * @param Request $request
+     *
      * @return string The result of testing the current URL
      */
     private function getContentType(Request $request)

@@ -5,11 +5,9 @@ namespace App\Form\DataTransformer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
- * Class ArrayCollectionToArrayTransformer
- * @package App\Form\DataTransformer
+ * Class ArrayCollectionToArrayTransformer.
  */
 class ArrayCollectionToArrayTransformer implements DataTransformerInterface
 {
@@ -20,6 +18,7 @@ class ArrayCollectionToArrayTransformer implements DataTransformerInterface
 
     /**
      * ArrayCollectionToArrayTransformer constructor.
+     *
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(EntityManagerInterface $entityManager)
@@ -29,6 +28,7 @@ class ArrayCollectionToArrayTransformer implements DataTransformerInterface
 
     /**
      * @param mixed $value
+     *
      * @return mixed
      */
     public function transform($value)
@@ -38,6 +38,7 @@ class ArrayCollectionToArrayTransformer implements DataTransformerInterface
 
     /**
      * @param mixed $value
+     *
      * @return ArrayCollection|mixed
      */
     public function reverseTransform($value)

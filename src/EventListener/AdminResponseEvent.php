@@ -4,14 +4,12 @@ namespace App\EventListener;
 
 use App\Security\ContentSecurityPolicy;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Intl\Locale\Locale;
 
 final class AdminResponseEvent implements EventSubscriberInterface
 {
@@ -21,7 +19,8 @@ final class AdminResponseEvent implements EventSubscriberInterface
 
     /**
      * AdminResponseEvent constructor.
-     * @param LoggerInterface $logger
+     *
+     * @param LoggerInterface    $logger
      * @param ContainerInterface $container
      */
     public function __construct(LoggerInterface $logger, ContainerInterface $container)
@@ -29,6 +28,7 @@ final class AdminResponseEvent implements EventSubscriberInterface
         $this->logger = $logger;
         $this->container = $container;
     }
+
     /**
      * @param GetResponseEvent $event
      */
@@ -39,6 +39,7 @@ final class AdminResponseEvent implements EventSubscriberInterface
         // Redirect if password has expired
         //$request = $event->getRequest();
     }
+
     /**
      * @param FilterResponseEvent $event
      */
@@ -60,12 +61,13 @@ final class AdminResponseEvent implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::REQUEST => 'onKernelRequest',
+        return [
+            KernelEvents::REQUEST    => 'onKernelRequest',
             KernelEvents::CONTROLLER => 'onKernelController',
-            KernelEvents::RESPONSE => 'onKernelResponse'
-        );
+            KernelEvents::RESPONSE   => 'onKernelResponse',
+        ];
     }
+
     /**
      * @param FilterResponseEvent $event
      */
@@ -79,7 +81,7 @@ final class AdminResponseEvent implements EventSubscriberInterface
         );
         if (!empty($cspHeader)) {
             $event->getResponse()->headers->set('Content-Security-Policy', $cspHeader);
-        };
+        }
         $cspReportHeader = ContentSecurityPolicy::getInstance()->getCSPReportHeader(
             $this->container->getParameter('csp')
         );

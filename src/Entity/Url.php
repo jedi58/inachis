@@ -5,7 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Object for handling custom URLs that are mapped to content
+ * Object for handling custom URLs that are mapped to content.
+ *
  * @ORM\Entity(repositoryClass="App\Repository\UrlRepository")
  * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"linkCanonical"})})
  */
@@ -18,47 +19,56 @@ class Url
     /**
      * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
      * @ORM\GeneratedValue(strategy="UUID")
+     *
      * @var string The unique identifier for the Url
      */
     protected $id;
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="urls", fetch="EAGER")
      * @ORM\JoinColumn(name="content_id", referencedColumnName="id")
-     * @var int The UUID of the content of the type specified by @see $contentType
+     *
+     * @var int The UUID of the content of the type specified by @see
      */
     protected $content;
     /**
      * @ORM\Column(type="string", length=512)
+     *
      * @var string The SEO-friendly short link
      */
     protected $link;
     /**
      * @ORM\Column(name="linkCanonical",type="string", length=255, unique=true)
+     *
      * @var string The canonical hash for the link
      */
     protected $linkCanonical;
     /**
      * @ORM\Column(type="boolean", name="defaultLink")
+     *
      * @var bool Flag specifying if the URL is the canonical one to use
      */
     protected $default;
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     *
      * @var string The date the Url was added
      */
     protected $createDate;
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     *
      * @var string The date the Url was last modified
      */
     protected $modDate;
+
     /**
      * Default constructor for entity - by default the
      * URL will be specified as canonical. This can be overridden using
      * {@link Url::setDefault}.
-     * @param Page $content The {@link Page} object the link is for
-     * @param string $link The short link for the content
-     * @param bool $default
+     *
+     * @param Page   $content The {@link Page} object the link is for
+     * @param string $link    The short link for the content
+     * @param bool   $default
      */
     public function __construct(Page $content, $link = '', $default = true)
     {
@@ -69,8 +79,10 @@ class Url
         $this->setModDate(new \DateTime('now'));
         $this->associateContent();
     }
+
     /**
-     * Returns the UUID of the Url
+     * Returns the UUID of the Url.
+     *
      * @return string The UUID of the URL
      */
     public function getId()
@@ -138,15 +150,18 @@ class Url
     {
         $this->modDate = $value;
     }
+
     /**
-     * Sets the mod date for the {@link Url} to the current date
+     * Sets the mod date for the {@link Url} to the current date.
      */
     public function setModDateToNow()
     {
         $this->setModDate(new \DateTime('now'));
     }
+
     /**
-     * Test if the current link is a valid SEO-friendly URL
+     * Test if the current link is a valid SEO-friendly URL.
+     *
      * @return bool The result of validating if the SEO friendly short URL
      *              contains only alphanumeric values and hyphens
      */
