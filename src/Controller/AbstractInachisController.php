@@ -20,18 +20,20 @@ abstract class AbstractInachisController extends Controller
      */
     protected $data = [];
 
+    /**
+     *
+     */
     public function setDefaults()
     {
         $this->entityManager = $this->getDoctrine()->getManager();
         $this->data = [
-//            'domain' => ($request->isSecure() ? 'https://' : 'http://') . $request->server()->get('HTTP_HOST'),
 //            'siteTitle' => !empty(Application::getInstance()->getConfig()['system']->title) ?
 //                Application::getInstance()->getConfig()['system']->title :
 //                null,
 //            'google' => Application::getInstance()->getConfig()['system']->google
             'settings' => [
                 'siteTitle' => '',
-                'domain' => '',
+                'domain' => $this->getProtocolAndHostname(),
                 'google' => [],
                 'language' => 'en',
                 'textDirection' => 'ltr',
@@ -50,6 +52,33 @@ abstract class AbstractInachisController extends Controller
             ],
             'session' => $this->get('security.token_storage')->getToken(),
         ];
+    }
+
+    /**
+     * @return string
+     */
+    private function getProtocolAndHostname() : string
+    {
+        $protocol = $this->isSecure() ? 'https://' : 'http://';
+        return $protocol . (!empty($_ENV['APP_DOMAIN']) ? $_ENV['APP_DOMAIN'] : '');
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSecure() : bool
+    {
+        $isSecure = false;
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+            $isSecure = true;
+        }
+        elseif (
+            !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'
+            || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on'
+        ) {
+            $isSecure = true;
+        }
+        return $isSecure;
     }
 
     /**
