@@ -533,12 +533,28 @@ class Page
         $this->categories[] = $category;
     }
     /**
+     * @return $this
+     */
+    public function removeCategories()
+    {
+        $this->categories->clear();
+        return $this;
+    }
+    /**
      * Adds a {@link Tag} to the {@link Page}
      * @param Tag $tag The new {@link Tag} to add to the {@link Page}
      */
     public function addTag(Tag $tag)
     {
         $this->tags[] = $tag;
+    }
+    /**
+     * @return $this
+     */
+    public function removeTags()
+    {
+        $this->tags->clear();
+        return $this;
     }
     /**
      * Returns the current posts date as a YYYY/mm/dd URL
