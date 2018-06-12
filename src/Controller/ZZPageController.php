@@ -8,9 +8,11 @@ use App\Entity\Page;
 use App\Entity\Tag;
 use App\Entity\Url;
 use App\Form\PostType;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ZZPageController extends AbstractInachisController
@@ -61,7 +63,7 @@ class ZZPageController extends AbstractInachisController
 
     /**
      * @Route(
-     *     "/incc/{type}/new",
+     *     "/incc/{type}/{title}",
      *     methods={"GET", "POST"},
      *     defaults={"type": "post"},
      *     requirements={
@@ -69,18 +71,10 @@ class ZZPageController extends AbstractInachisController
      *     }
      * )
      * @Route(
-     *     "/incc/{type}/{title}",
-     *     methods={"GET", "POST"},
-     *     defaults={"type": "post"},
-     *     requirements={
-     *          "type": "post|page",
-     *          "title": "!new"
-     *     }
-     * )
-     * @Route(
-     *     "/incc/{year}/{month}/{day}/{title}",
+     *     "/incc/{type}/{year}/{month}/{day}/{title}",
      *     methods={"GET", "POST"},
      *     requirements={
+     *          "type": "post",
      *          "year": "\d+",
      *          "month": "\d+",
      *          "day": "\d+"
@@ -96,14 +90,15 @@ class ZZPageController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
-        $url = str_replace('/incc/', '', $request->getRequestUri());
+        $url = preg_replace('/\/?incc\/(page|post)\/?/', '', $request->getRequestUri());
         $url = $entityManager->getRepository(Url::class)->findByLink($url);
         // If content with this URL doesn't exist, then redirect
         if (empty($url) && null !== $title) {
-            return new RedirectResponse(printf(
-                '/incc/%s/new',
-                $type
-            ), HTTP_REDIRECT_TEMP);
+            return $this->redirectToRoute(
+                'app_zzpage_getpostadmin',
+                [ 'type' => $type ],
+                Response::HTTP_TEMPORARY_REDIRECT
+            );
         }
         $post = null !== $title ?
             $entityManager->getRepository(Page::class)->findOneById($url[0]->getContent()->getId()) :
@@ -117,30 +112,18 @@ class ZZPageController extends AbstractInachisController
 
         if ($form->isSubmitted()) {//} && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
-                // @todo delete URLs
-                foreach ($post->getUrls() as $postUrl) {
-                    $entityManager->getRepository(Url::class)->remove($postUrl);
-                }
-                // @todo delete linked tags
-                //$entityManager->getRepository(Tag::class)->remove($tags);
-                // @todo delete linked categories
-                //$entityManager->getRepository(Category::class)->remove($tags);
-                // @todo delete collection entries
-                //$entityManager->getRepository(Collection:class)->remove($tags);
-                // @todo delete page
                 $entityManager->getRepository(Page::class)->remove($post);
-                return new RedirectResponse('/incc/', HTTP_REDIRECT_PERM);
+                return $this->redirectToRoute(
+                    'app_dashboard_default',
+                    [],
+                    Response::HTTP_PERMANENTLY_REDIRECT
+                );
             }
 
             $post->setAuthor($this->get('security.token_storage')->getToken()->getUser());
             if (null !== $request->get('publish')) {
                 $post->setStatus(Page::PUBLISHED);
             }
-//            $post->setVisibility(Page::VIS_PRIVATE);
-//            if ($request->paramsPost()->get('visibility') === 'on') {
-//                $post->setVisibility(Page::VIS_PUBLIC);
-//            }
-            // @todo fix issue with URL being updated to current moddate
             if (!empty($request->get('post')['url'])) {
                 $newUrl = $request->get('post')['url'];
                 $urlFound = false;
@@ -157,16 +140,13 @@ class ZZPageController extends AbstractInachisController
                     new Url($post, $newUrl);
                 }
             }
+            $post = $post->removeCategories()->removeTags();
             if (!empty($request->get('post')['categories'])) {
                 $newCategories = $request->get('post')['categories'];
                 if (!empty($newCategories)) {
-                    $assignedCategories = $post->getCategories()->getValues();
                     foreach ($newCategories as $newCategory) {
                         $category = $entityManager->getRepository(Category::class)->findOneById($newCategory);
                          if (!empty($category)) {
-                            if (in_array($category, $assignedCategories)) {
-                                continue;
-                            }
                             $post->getCategories()->add($category);
                         }
                     }
@@ -175,12 +155,8 @@ class ZZPageController extends AbstractInachisController
             if (!empty($request->get('post')['tags'])) {
                 $newTags = $request->get('post')['tags'];
                 if (!empty($newTags)) {
-                    $assignedTags = $post->getTags()->getValues();
                     foreach ($newTags as $newTag) {
                         $tag = $entityManager->getRepository(Tag::class)->findOneById($newTag);
-                        if (in_array($tag, $assignedTags)) {
-                            continue;
-                        }
                         if (empty($tag)) {
                             $tag = new Tag($newTag);
                         }
@@ -194,10 +170,10 @@ class ZZPageController extends AbstractInachisController
             }
 
             $post->setModDate(new \DateTime('now'));
-            $entityManager->merge($post);
             $entityManager->persist($post);
             $entityManager->flush();
 
+            $this->addFlash('notice', 'Content saved.');
             return $this->redirect(
                 '/incc/' .
                 ( $post->getType() == Page::TYPE_PAGE ? 'page/' : '' ) .
@@ -243,8 +219,7 @@ class ZZPageController extends AbstractInachisController
             [
                 [ 'q.postDate', 'DESC' ],
                 [ 'q.modDate', 'DESC' ]
-            ],
-            'q.postDate ASC, q.modDate'
+            ]
         );
         $this->data['page']['offset'] = $offset;
         $this->data['page']['limit'] = 10;
