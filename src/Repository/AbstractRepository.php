@@ -73,7 +73,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $offset = 0,
         $limit = 25,
         $where = [],
-        $order = []
+        $order = [],
+        $groupBy = []
     ) {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('q')
@@ -93,6 +94,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
         if (!empty($where)) {
             $qb = $qb->setParameters($where[1]);
+        }
+        if (!empty($groupBy)) {
+            foreach ($groupBy as $group) {
+                $qb->addGroupBy($group);
+            }
         }
         $qb = $qb->getQuery();
         if ($offset > 0) {
