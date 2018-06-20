@@ -1,0 +1,26 @@
+{% extends "inadmin/structure/main.html.twig" %}
+{% block content %}
+
+    {% block import_main_pre %}{% endblock import_main_pre %}
+
+    {% block import_main %}
+    <div class="col span_8_of_8">
+        <h2>Import Posts</h2>
+        <form action="{{ path('app_import_index') }}" class="dropzone" method="post">
+        {{
+            include('inadmin/partials/dropzone.html.twig', {
+                'dropzoneUrl': path('app_import_index'),
+                'helpText': 'Upload posts using markdown files (.MD), or multiple at the same time from a .ZIP file.',
+                'paramName': 'markdownFiles',
+                'uploadMultiple': true,
+                'maxFilesize': 2,
+                'acceptedFiles': 'text/plain,.md'
+            })
+        }}
+        </form>
+    </div>
+    {% endblock import_main %}
+
+
+    {% block import_main_post %}{% endblock import_main_post %}
+{% endblock content %}

@@ -681,10 +681,12 @@ class Page
      */
     public function getPostDateAsLink()
     {
+        if (empty($this->postDate)) {
+            return '';
+        }
         return $this->postDate->format('Y').
             '/'.$this->postDate->format('m').
-            '/'.$this->postDate->format('d').
-            '/';
+            '/'.$this->postDate->format('d');
     }
 
     /**

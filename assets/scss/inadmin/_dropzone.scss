@@ -1,0 +1,64 @@
+$admin__dropzone__background: rgb(223, 232, 238);
+$admin__dropzone__background_hover: rgb(189, 209, 216);
+$admin__dropzone__border_hover: $admin__container-add-button;
+$admin__dropzone__image_color: rgb(124, 156, 160);
+
+.dropzone {
+  .dz-default {
+    background-color: $admin__dropzone__background;
+    border: 2px dashed rgb(129,160,163);
+    border-radius: 25px;
+    font-size: 1.5em;
+    margin: 1.5em;
+    padding: 20px;
+    text-align: center;
+
+    //@supports
+    //((-webkit-text-stroke-color: #f1f1f1)
+    //and
+    //(-webkit-text-fill-color: rgb(2, 30, 41)))
+    //or
+    //((-moz-text-stroke-color: #f1f1f1)
+    //and
+    //(-moz-text-fill-color: rgb(2, 30, 41))) {
+    //  span {
+    //    -webkit-text-stroke-width: 1px;
+    //    -webkit-text-stroke-color: #f1f1f1;
+    //    -webkit-text-fill-color: rgb(2, 30, 41);
+    //
+    //    -moz-text-stroke-width: 1px;
+    //    -moz-text-stroke-color: #f1f1f1;
+    //    -moz-text-fill-color: rgb(2, 30, 41);
+    //  }
+    //}
+
+    span {
+      color: $admin__dropzone__image_color; //rgb(2, 30, 41);
+    }
+  }
+  .dz-message:before {
+    color: $admin__dropzone__image_color;
+    content: '\E2C3';
+    display: block;
+    font-family: "Material Icons";
+    font-size: 6em;
+  }
+  .dz-success-mark, .dz-error-mark {
+    display: none;
+  }
+  .dz-success .dz-success-mark, .dz-error .dz-error-mark, .dz-error .dz-error-message {
+    display: inline;
+  }
+}
+
+.dz-drag-hover {
+  .dz-default, .dz-default span {
+    border-color: $admin__dropzone__border_hover;
+    color: $admin__dropzone__border_hover;
+    background-color: $admin__dropzone__background_hover;
+  }
+  .dz-message:before {
+    color: $admin__dropzone__border_hover;
+  }
+
+}
