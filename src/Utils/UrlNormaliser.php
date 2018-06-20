@@ -16,21 +16,24 @@ class UrlNormaliser
      */
     public static function toUri($title, $limit = Url::DEFAULT_URL_SIZE_LIMIT)
     {
-        $title = preg_replace(
-            [
-                '/[\_\s]+/',
-                '/[^a-z0-9\-]/i'
-            ],
-            [
-                '-',
-                ''
-            ],
-            mb_strtolower($title)
+        $title = trim(
+            preg_replace(
+                [
+                    '/[\_\s]+/',
+                    '/[^a-z0-9\-]/i'
+                ],
+                [
+                    '-',
+                    ''
+                ],
+                mb_strtolower($title)
+            ),
+            '-'
         );
         if (mb_strlen($title) > $limit) {
             $title = mb_substr($title, 0, $limit);
         }
-        return $title;
+        return trim($title, '-');
     }
 
     /**
