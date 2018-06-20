@@ -51,8 +51,7 @@ class ImportController extends AbstractInachisController
                 );
                 $this->getDoctrine()->getManager()->persist($post);
                 $this->getDoctrine()->getManager()->flush();
-            }
-            else {
+            } else {
                 return $this->json('error', 400);
             }
         }
