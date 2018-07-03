@@ -14,7 +14,7 @@ class UrlNormaliser
      *                   is defined by URL::DEFAULT_URL_SIZE_LIMIT
      * @return string The generated SEO-friendly URL
      */
-    public static function toUri($title, $limit = Url::DEFAULT_URL_SIZE_LIMIT)
+    public static function toUri(string $title, $limit = Url::DEFAULT_URL_SIZE_LIMIT) : string
     {
         $title = trim(
             preg_replace(
@@ -41,7 +41,7 @@ class UrlNormaliser
      * @param string $uri The URL to parse and obtain the short URL for
      * @return string
      */
-    public static function fromUri($uri)
+    public static function fromUri(string $uri) : string
     {
         $uri = parse_url($uri, PHP_URL_PATH);
         if (substr($uri, -1) == '/') {

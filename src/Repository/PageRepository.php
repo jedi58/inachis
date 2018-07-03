@@ -8,6 +8,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 final class PageRepository extends AbstractRepository
 {
+    /**
+     * The maximum number of items to show in the amdin interface
+     */
+    const MAX_ITEMS_TO_SHOW_ADMIN = 10;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Page::class);

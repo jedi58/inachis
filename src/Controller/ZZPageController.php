@@ -83,6 +83,61 @@ class ZZPageController extends AbstractInachisController
 
     /**
      * @Route(
+     *     "/incc/{type}/list/{offset}/{limit}",
+     *     methods={"GET", "POST"},
+     *     requirements={
+     *          "type": "post|page",
+     *          "offset": "\d+",
+     *          "limit"="\d+"
+     *     },
+     *     defaults={"offset"=0, "limit"=10}
+     * )
+     * @param Request $request
+     * @param string $type
+     * @return null
+     */
+    public function getPostListAdmin(Request $request, $type = 'post')
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $entityManager = $this->getDoctrine()->getManager();
+        $form = $this->createFormBuilder(null);
+        //$form = $this->createForm(PostType::class);
+        //$form->handleRequest($request);
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            if ($form->get('delete')->isClicked()) {
+//                $entityManager->getRepository(Page::class)->remove($post);
+//                return new RedirectResponse(
+//                    sprintf('/incc/%s/list/', $type),
+//                    HTTP_REDIRECT_PERM
+//                );
+//            }
+//        }
+        $offset = (int) $request->get('offset', 0);
+        $limit = $entityManager->getRepository(Page::class)->getMaxItemsToShow();
+        $this->data['form'] = $form->getForm()->createView();
+        $this->data['posts'] = $entityManager->getRepository(Page::class)->getAll(
+            $offset,
+            $limit,
+            [
+                'q.type = :type',
+                [
+                    'type' => $type,
+                ]
+            ],
+            [
+                [ 'q.postDate', 'DESC' ],
+                [ 'q.modDate', 'DESC' ]
+            ]
+        );
+        $this->data['page']['offset'] = $offset;
+        $this->data['page']['limit'] = $limit;
+        $this->data['page']['tab'] = $type;
+        $this->data['page']['title'] = ucfirst($type) . 's';
+        return $this->render('inadmin/post__list.html.twig', $this->data);
+    }
+
+    /**
+     * @Route(
      *     "/incc/{type}/{title}",
      *     methods={"GET", "POST"},
      *     defaults={"type": "post"},
@@ -211,56 +266,6 @@ class ZZPageController extends AbstractInachisController
         $this->data['includeEditor'] = true;
         $this->data['post'] = $post;
         return $this->render('inadmin/post__edit.html.twig', $this->data);
-    }
-
-    /**
-     * @Route(
-     *     "/incc/{type}/list/",
-     *     methods={"GET", "POST"},
-     *     requirements={
-     *          "type": "post|page"
-     *     }
-     * )
-     * @param string $type
-     * @return null
-     */
-    public function getPostListAdmin(Request $request, $type = 'post')
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $entityManager = $this->getDoctrine()->getManager();
-        $form = $this->createFormBuilder(null);
-        //$form = $this->createForm(PostType::class);
-        //$form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            if ($form->get('delete')->isClicked()) {
-//                $entityManager->getRepository(Page::class)->remove($post);
-//                return new RedirectResponse(
-//                    sprintf('/incc/%s/list/', $type),
-//                    HTTP_REDIRECT_PERM
-//                );
-//            }
-//        }
-        $offset = 0;
-        $this->data['form'] = $form->getForm()->createView();
-        $this->data['posts'] = $entityManager->getRepository(Page::class)->getAll(
-            $offset,
-            10,
-            [
-                'q.type = :type',
-                [
-                    'type' => $type,
-                ]
-            ],
-            [
-                [ 'q.postDate', 'DESC' ],
-                [ 'q.modDate', 'DESC' ]
-            ]
-        );
-        $this->data['page']['offset'] = $offset;
-        $this->data['page']['limit'] = 10;
-        $this->data['page']['tab'] = $type;
-        $this->data['page']['title'] = ucfirst($type) . 's';
-        return $this->render('inadmin/post__list.html.twig', $this->data);
     }
 
     /**

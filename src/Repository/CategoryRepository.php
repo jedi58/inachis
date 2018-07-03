@@ -14,8 +14,8 @@ class CategoryRepository extends AbstractRepository
 
     /**
      * Returns an array of the root level categories.
-     *
      * @return Category[] The array of {@link Category} objects
+     * @throws
      */
     public function getRootCategories()
     {

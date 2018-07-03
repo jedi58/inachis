@@ -30,7 +30,7 @@
                         <li><button>Make private</button></li>
                     </ul>
 
-                    <p>Showing {{ page.offset + 1 }} to {{ posts|length }} of {{ posts.count }}</p>
+                    <p>Showing {{ page.offset + 1 }} to {{ min(page.offset + page.limit, posts.count) }}  of {{ posts.count }}</p>
 
                     {{- form_errors(form) -}}
 
@@ -48,6 +48,13 @@
                             <p class="date"><span class="material-icons">schedule</span> Last modified: <em>{{ post.modDate|date('jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
                         </article>
                     {%  endfor %}
+                    {{ include('inadmin/partials/pagination.html.twig', {
+                        offset: page.offset + 1,
+                        limit: page.limit,
+                        maxResults: posts.count,
+                        maxPagesToShow: 4,
+                        result_url: path('app_zzpage_getpostlistadmin')
+                    }) }}
                 {{ form_end(form) }}
             {% else %}
                 <p class="content-warning">

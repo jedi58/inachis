@@ -121,4 +121,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         return new Paginator($qb, false);
     }
+
+    /**
+     * @return int
+     */
+    public function getMaxItemsToShow()
+    {
+        // @todo check if an alternative is set in yaml config
+        $count = defined('static::MAX_ITEMS_TO_SHOW_ADMIN') ? (int) static::MAX_ITEMS_TO_SHOW_ADMIN : 10;
+        return $count;
+    }
 }

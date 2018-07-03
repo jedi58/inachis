@@ -7,7 +7,7 @@
         <div class="col span_8_of_8 widget-data-list">
             {%  if urls is not empty %}
                 <form>
-                    <p>Showing {{ page.offset + 1 }} to {{ urls|length }} of {{ urls.count }}</p>
+                    <p>Showing {{ page.offset + 1 }} to {{ min(page.offset + page.limit, urls.count) }} of {{ urls.count }}</p>
 
                     {%  for url in urls.iterator %}
                         <article id="url-{{ url.id }}" class="hentry url-{% if not url.default %}not-{% endif %}default">
@@ -22,6 +22,13 @@
                             </label>
                         </article>
                     {%  endfor %}
+                    {{  include('inadmin/partials/pagination.html.twig', {
+                        offset: page.offset,
+                        limit: page.limit,
+                        maxResults: urls.count,
+                        maxPagesToShow: 4,
+                        result_url: path('app_url_list')
+                    }) }}
                 </form>
             {% else %}
                 <p class="content-warning">

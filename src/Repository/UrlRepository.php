@@ -9,6 +9,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class UrlRepository extends AbstractRepository
 {
     /**
+     * The maximum number of items to show in the amdin interface
+     */
+    const MAX_ITEMS_TO_SHOW_ADMIN = 20;
+
+    /**
      * UrlRepository constructor.
      *
      * @param RegistryInterface $registry

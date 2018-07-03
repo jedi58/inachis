@@ -10,7 +10,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class UrlController extends AbstractInachisController
 {
     /**
-     * @Route("/incc/url/list", methods={"GET", "POST"})
+     * @Route(
+     *     "/incc/url/list/{offset}/{limit}",
+     *     methods={"GET", "POST"},
+     *     defaults={"offset"=0,"limit"=20},
+     *     requirements={"offset"="\d+", "limit"="\d+"}
+     * )
      *
      * @param Request $request
      *
@@ -26,10 +31,11 @@ class UrlController extends AbstractInachisController
 //
 //            }
 //        }
-        $offset = 0;
+        $offset = (int) $request->get('offset', 0);
+        $limit = $entityManager->getRepository(Url::class)->getMaxItemsToShow();
         $this->data['urls'] = $entityManager->getRepository(Url::class)->getAll(
             $offset,
-            10,
+            $limit,
             [],
             [
                 ['q.content', 'desc'],
@@ -38,7 +44,7 @@ class UrlController extends AbstractInachisController
             ]
         );
         $this->data['page']['offset'] = $offset;
-        $this->data['page']['limit'] = 20;
+        $this->data['page']['limit'] = $limit;
         $this->data['page']['title'] = 'URLs';
 
         return $this->render('inadmin/url__list.html.twig', $this->data);
