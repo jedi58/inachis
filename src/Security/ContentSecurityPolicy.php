@@ -54,7 +54,7 @@ final class ContentSecurityPolicy
      *
      * @return ContentSecurityPolicy The current or a new instance of {@link Application}
      */
-    public static function getInstance()
+    public static function getInstance() : ContentSecurityPolicy
     {
         if (null === static::$instance) {
             static::$instance = new static();
@@ -72,11 +72,12 @@ final class ContentSecurityPolicy
      *
      * @return string The parsed policies
      */
-    public static function getCSPEnforceHeader($policy)
+    public static function getCSPEnforceHeader($policy) : string
     {
         if (!empty($policy) && !empty($policy['enforce'])) {
             return self::generateCSP($policy['enforce']);
         }
+        return '';
     }
 
     /**
@@ -88,11 +89,12 @@ final class ContentSecurityPolicy
      *
      * @return string The parsed policies
      */
-    public static function getCSPReportHeader($policy = [])
+    public static function getCSPReportHeader($policy = []) : string
     {
         if (!empty($policy) && !empty($policy['report'])) {
             return self::generateCSP($policy['report']);
         }
+        return '';
     }
 
     /**
@@ -104,7 +106,7 @@ final class ContentSecurityPolicy
      *
      * @return string The parsed policies
      */
-    public static function generateCSP($csp)
+    public static function generateCSP($csp) : string
     {
         $policies = [];
         foreach ($csp as $policy => $directives) {
@@ -125,6 +127,7 @@ final class ContentSecurityPolicy
                                 $policies[$policy] .= ' data:';
                             }
                             break;
+
                         case 'self':
                         case 'unsafe-inline':
                         case 'unsafe-eval':

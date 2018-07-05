@@ -13,8 +13,14 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final class AdminResponseEvent implements EventSubscriberInterface
 {
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
+    /**
+     * @var ContainerInterface
+     */
     private $container;
 
     /**

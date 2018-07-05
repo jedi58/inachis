@@ -6,15 +6,29 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/**
+ * Class LocaleSubscriber
+ * @package App\EventListener
+ */
 class LocaleSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var string
+     */
     private $defaultLocale;
 
+    /**
+     * LocaleSubscriber constructor.
+     * @param string $defaultLocale
+     */
     public function __construct($defaultLocale = 'en')
     {
         $this->defaultLocale = $defaultLocale;
     }
 
+    /**
+     * @param GetResponseEvent $event
+     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
@@ -31,6 +45,9 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
     }
 
+    /**
+     * @return array
+     */
     public static function getSubscribedEvents()
     {
         return [

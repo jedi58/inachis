@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -136,7 +137,7 @@ class Category
      *
      * @return ArrayCollection|Category[]
      */
-    public function getChildren()
+    public function getChildren() : Collection
     {
         return $this->children;
     }
@@ -214,9 +215,9 @@ class Category
     /**
      * Sets the value of {@link parent}.
      *
-     * @param null|Category $parent The parent of the current category
+     * @param Category $parent The parent of the current category
      */
-    public function setParent(self $parent = null)
+    public function setParent(Category $parent = null)
     {
         $this->parent = $parent;
     }
@@ -226,7 +227,7 @@ class Category
      *
      * @param Category $category The {@link Category} to add
      */
-    public function addChild(self $category)
+    public function addChild(Category $category)
     {
         $this->children[] = $category;
     }
