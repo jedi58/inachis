@@ -6,6 +6,7 @@ use App\Entity\Url;
 use App\Parser\MarkdownFileParser;
 use App\Utils\UrlNormaliser;
 use Doctrine\ORM\EntityManager;
+use PHPUnit\Util\Json;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +29,7 @@ class ImportController extends AbstractInachisController
      * @param Request $request
      * @return JsonResponse
      */
-    public function process(Request $request)
+    public function process(Request $request) : JsonResponse
     {
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
@@ -40,14 +41,21 @@ class ImportController extends AbstractInachisController
             $parser = new MarkdownFileParser();
             $post = $parser->parse($this->getDoctrine()->getManager(), file_get_contents($file->getRealPath()));
             if ($post->getTitle() !== '' && $post->getContent() !== '') {
-                $post->setAuthor($this->get('security.token_storage')->getToken()->getUser());
-                new Url(
-                    $post,
-                    $post->getPostDateAsLink() . '/' .
+                $newLink = $post->getPostDateAsLink() . '/' .
                     UrlNormaliser::toUri(
                         $post->getTitle() .
                         ($post->getSubTitle() !== '' ? ' ' . $post->getSubTitle() : '')
-                    )
+                );
+                if (!empty(
+                    $this->getDoctrine()->getManager()->getRepository(Url::class)->findOneByLink($newLink)
+                )) {
+                    // @todo should it prompt to rename?
+                    return $this->json('error', 409);
+                }
+                $post->setAuthor($this->get('security.token_storage')->getToken()->getUser());
+                new Url(
+                    $post,
+                    $newLink
                 );
                 $this->getDoctrine()->getManager()->persist($post);
                 $this->getDoctrine()->getManager()->flush();
