@@ -1,3 +1,24 @@
 {% block javascript_bottom %}
     <script src="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js" integrity="sha384-tQvP4sEZT2V3+Qfw7xvXWQQgW4NGu9uCYOG4ErMY3ns2KqdbHyCvznZ9YuxC4jXU" crossorigin="anonymous"></script>
+
+    {% if includeEditor|default(false) %}
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+        {% if editorHighlighting|default(false) %}
+    <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">
+        {% endif %}
+    <script>
+        var simplemde = new SimpleMDE({
+            element: $('.mde_editor')[0],
+            autosave: {
+                enabled: true,
+                uniqueId: '{% if series.id is not empty %}{{ series.id }}{% else %}new-content-{{ session.user.id }}-{{ date()|date('Ymd') }}{% endif %}'
+            },
+        {% if editorHighlighting|default(false) %}
+            codeSyntaxHighlighting: true,
+        {% endif %}
+            forceSync: true
+        });
+    </script>
+    {% endif %}
 {% endblock javascript_bottom %}

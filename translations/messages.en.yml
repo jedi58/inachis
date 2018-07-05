@@ -5,6 +5,7 @@ admin.label.forgot_password: 'Forgot your password?'
 admin.button.login: 'Log In'
 admin.button.cancel: Cancel
 admin.button.save: Save
+admin.button.addItem: Add Item
 admin.button.publish: Publish
 admin.button.delete: Delete
 admin.reset.enter_email_address: 'Enter your email address to reset login'
@@ -27,3 +28,8 @@ admin.tip.content.post.categories: Separate existing categories with a comma or 
 admin.label.post.tags: Tags
 admin.tip.content.post.tags: Separate tags with a comma or by pressing [Enter]
 admin.label.post.teaser: Teaser
+admin.label.series.title: Title
+admin.placeholder.series.title: e.g. The Great Adventure
+admin.label.series.description: Short description
+admin.label.series.firstDate: First date
+admin.label.series.lastDate: Last date

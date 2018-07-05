@@ -82,6 +82,7 @@ class PostType extends AbstractType
                 'attr' => [
                     'aria-labelledby' => 'content_label',
                     'aria-required'   => 'false',
+                    'class' => 'mde_editor',
                 ],
                 'label'      => $this->translator->trans('admin.label.post.content', [], 'messages'),
                 'label_attr' => [

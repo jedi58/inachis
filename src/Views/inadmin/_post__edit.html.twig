@@ -33,7 +33,7 @@
             <p class="post__link__edit">
                 {{ form_label(form.url) }}
                 {{ form_errors(form.url) }}
-                {{ settings.domain -}}/{{- form_widget(form.url) }}
+                {{ settings.domain -}}/<input id="post_url" name="post[url]" type="text" value="{% if post.urls is not empty %}{{ post.urls|first.link }}{% endif %}" />
             </p>
             <p>
                 {{ form_label(form.content) }}
@@ -123,13 +123,16 @@
     {{ form_end(form, { 'render_rest': false }) }}
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <!-- link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" -->
     <link rel="stylesheet" href="/assets/css/incc/jquery.switchButton.css">
     <link rel="stylesheet" href="/assets/css/incc/jquery.datetimepicker.css">
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <!-- script src="https://unpkg.com/easymde/dist/easymde.min.js"></script -->
     <script src="/assets/js/incc/jquery.switchButton.js"></script>
     <script src="/assets/js/incc/jquery.datetimepicker.full.min.js"></script>
     <script>
         var simplemde = new SimpleMDE({
+        //var simplemde = new EasyMDE({
             element: $("#content")[0],
             autosave: {
                 enabled: true,
