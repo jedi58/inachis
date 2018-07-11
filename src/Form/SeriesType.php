@@ -40,13 +40,26 @@ class SeriesType extends AbstractType
                     'aria-required'    => 'true',
                     'data-tip-content' => '<strong>Required.</strong>',
                     'autofocus'        => 'true',
-                    'class'            => 'text',
+                    'class'            => 'editor__title text',
                     'placeholder'      => $this->translator->trans('admin.placeholder.series.title', [], 'messages'),
                 ],
                 'label'      => $this->translator->trans('admin.label.series.title', [], 'messages'),
                 'label_attr' => [
                     'id' => 'title_label',
                 ],
+            ])
+            ->add('subTitle', TextType::class, [
+                'attr' => [
+                    'aria-labelledby' => 'subTitle_label',
+                    'aria-required'   => 'false',
+                    'class' => 'editor__sub-title text',
+                    'placeholder'     => $this->translator->trans('admin.placeholder.series.subTitle', [], 'messages'),
+                ],
+                'label'      => $this->translator->trans('admin.label.series.subTitle', [], 'messages'),
+                'label_attr' => [
+                    'id' => 'subTitle_label',
+                ],
+                'required' => false,
             ])
             ->add('description', TextareaType::class, [
                 'attr' => [
@@ -61,45 +74,49 @@ class SeriesType extends AbstractType
                 ],
                 'required' => false,
             ])
-            ->add('firstDate', DateTimeType::class, [
-                'attr' => [
-                    'aria-labelledby'  => 'firstDate_label',
-                    'aria-required'    => 'false',
-                    'data-tip-content' => $this->translator->trans('admin.tip.series.firstDate', [], 'messages'),
-                    'data-tip-title'   => $this->translator->trans('admin.tip.title.series.firstDate', [], 'messages'),
-                    'readOnly' => true,
-                ],
-                'format' => 'dd/MM/yyyy HH:mm',
-                'html5'  => true,
-                'label'  => $this->translator->trans('admin.label.series.firstDate', [], 'messages'),
-                'label_attr' => [
-                    'id' => 'firstDate_label',
-                ],
-                'required' => false,
-                'widget'   => 'single_text',
-
-            ])
-            ->add('lastDate', DateTimeType::class, [
-                'attr' => [
-                    'aria-labelledby'  => 'lastDate_label',
-                    'aria-required'    => 'false',
-                    'data-tip-content' => $this->translator->trans('admin.tip.series.lastDate', [], 'messages'),
-                    'data-tip-title'   => $this->translator->trans('admin.tip.title.series.lastDate', [], 'messages'),
-                    'readOnly' => true,
-                ],
-                'format' => 'dd/MM/yyyy HH:mm',
-                'html5'  => true,
-                'label'  => $this->translator->trans('admin.label.series.lastDate', [], 'messages'),
-                'label_attr' => [
-                    'id' => 'lastDate_label',
-                ],
-                'required' => false,
-                'widget'   => 'single_text',
-
-            ])
         ;
         if (!empty($options['data']->getId())) {
             $builder
+                ->add('firstDate', DateTimeType::class, [
+                    'attr' => [
+                        'aria-labelledby'  => 'firstDate_label',
+                        'aria-required'    => 'false',
+                        'class' => 'halfwidth',
+                        'data-tip-content' => $this->translator->trans('admin.tip.series.firstDate', [], 'messages'),
+                        'data-tip-title'   => $this->translator->trans('admin.tip.title.series.firstDate', [], 'messages'),
+                        'readOnly' => true,
+                    ],
+                    'format' => 'dd/MM/yyyy HH:mm',
+                    'html5'  => true,
+                    'label'  => $this->translator->trans('admin.label.series.firstDate', [], 'messages'),
+                    'label_attr' => [
+                        'class' => 'date-range__label',
+                        'id' => 'firstDate_label',
+                    ],
+                    'required' => false,
+                    'widget'   => 'single_text',
+
+                ])
+                ->add('lastDate', DateTimeType::class, [
+                    'attr' => [
+                        'aria-labelledby'  => 'lastDate_label',
+                        'aria-required'    => 'false',
+                        'class' => 'halfwidth',
+                        'data-tip-content' => $this->translator->trans('admin.tip.series.lastDate', [], 'messages'),
+                        'data-tip-title'   => $this->translator->trans('admin.tip.title.series.lastDate', [], 'messages'),
+                        'readOnly' => true,
+                    ],
+                    'format' => 'dd/MM/yyyy HH:mm',
+                    'html5'  => true,
+                    'label'  => $this->translator->trans('admin.label.series.lastDate', [], 'messages'),
+                    'label_attr' => [
+                        'class' => 'date-range__label',
+                        'id' => 'lastDate_label',
+                    ],
+                    'required' => false,
+                    'widget'   => 'single_text',
+
+                ])
                 ->add('addItem', ButtonType::class, [
                     'attr' => [
                         'class' => 'button button--information',

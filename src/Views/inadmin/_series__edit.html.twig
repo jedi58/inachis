@@ -6,44 +6,72 @@
     {% block series_edit %}
 
         {{ form_start(form, {'attr': { 'class': 'form form__post form__series' }}) }}
-        <div class="col span_8_of_8 ui-tabbed">
+        <div class="col span_6_of_8 content__edit">
             <fieldset id="post__edit">
-                <legend>Series</legend>
+                <legend>{% trans %}admin.series.legend{% endtrans %}</legend>
                 <p>
                     {{ form_label(form.title) }}
                     {{ form_errors(form.title) }}
                     {{ form_widget(form.title) }}
                 </p>
                 <p>
+                    {{ form_label(form.subTitle) }}
+                    {{ form_errors(form.subTitle) }}
+                    {{ form_widget(form.subTitle) }}
+                </p>
+                <p>
                     {{ form_label(form.description) }}
                     {{ form_errors(form.description) }}
                     {{ form_widget(form.description) }}
                 </p>
+            </fieldset>
+        </div>
+        <div class="col span_2_of_8 content__edit">
+            {% if series.id is not empty %}<p class="float_right">{{ form_widget(form.addItem) }}</p>{% endif %}
+            <h2>
+                {% trans %}admin.series.contents.title{% endtrans %}
+                <span class="badge">{{ series.items|length }}</span>
+            </h2>
+            {% if series.id is not empty %}
+                {{ form_errors(form.firstDate) }}
+                {{ form_errors(form.lastDate) }}
                 <p>
                     {{ form_label(form.firstDate) }}
-                    {{ form_errors(form.firstDate) }}
-                    {{ form_widget(form.firstDate) }}
+                    {{ form_label(form.lastDate) }}
                 </p>
                 <p>
-                    {{ form_label(form.lastDate) }}
-                    {{ form_errors(form.lastDate) }}
+                    {{ form_widget(form.firstDate) }}
                     {{ form_widget(form.lastDate) }}
                 </p>
-            </fieldset>
-            <div class="fixed-bottom-bar">
-                <p>
-                {% if series.id is not empty %}
-                    {{ form_widget(form.addItem) }}
+
+                <p></p>
+
+                {% if series.items is not empty %}
+                    <ol>
+                    {% for item in series.items %}
+                        <li>{{ item.title }}</li>
+                    {% endfor %}
+                    </ol>
+                {% else %}
+                    <p class="content-warning">
+                        <i class="material-icons">info_outline</i>
+                        <span>{% trans %}admin.series.contents.no_content{% endtrans %}</span>
+                    </p>
                 {% endif %}
-                    {{ form_widget(form.submit) }}
-                    {{ form_widget(form.delete) }}
+            {% else %}
+                <p class="content-warning">
+                    <i class="material-icons">info_outline</i>
+                    <span>{% trans %}admin.series.contents.not_saved{% endtrans %}</span>
                 </p>
-            </div>
+            {% endif %}
+        </div>
+        <div class="fixed-bottom-bar">
+            <p>
+                {{ form_widget(form.submit) }}
+                {{ form_widget(form.delete) }}
+            </p>
         </div>
         {{ form_end(form) }}
-
-        <link rel="stylesheet" href="/assets/css/incc/jquery.datetimepicker.css">
-        <script src="/assets/js/incc/jquery.datetimepicker.full.min.js"></script>
 
     {% endblock series_edit %}
 

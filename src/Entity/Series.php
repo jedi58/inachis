@@ -25,19 +25,24 @@ class Series
      */
     protected $title;
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    protected $subTitle;
+    /**
      * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
     protected $description;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      *
      * @var string
      */
     protected $firstDate;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      *
      * @var string
      */
@@ -53,7 +58,6 @@ class Series
      *      @ORM\JoinColumn(name="page_id", referencedColumnName="id")
      *     }
      * )
-     * @ORM\OrderBy({"lastDate" = "DESC"})
      *
      * @var ArrayCollection|Page[] The array of pages in the series
      */
@@ -123,6 +127,26 @@ class Series
     }
 
     /**
+     * @return mixed
+     */
+    public function getSubTitle()
+    {
+        return $this->subTitle;
+    }
+
+    /**
+     * @param mixed $subTitle
+     *
+     * @return $this
+     */
+    public function setSubTitle($subTitle)
+    {
+        $this->subTitle = $subTitle;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getDescription()
@@ -155,7 +179,7 @@ class Series
      *
      * @return $this
      */
-    public function setFirstDate(string $firstDate)
+    public function setFirstDate(string $firstDate = null)
     {
         $this->firstDate = $firstDate;
 
@@ -175,7 +199,7 @@ class Series
      *
      * @return $this
      */
-    public function setLastDate(string $lastDate)
+    public function setLastDate(string $lastDate = null)
     {
         $this->lastDate = $lastDate;
 
