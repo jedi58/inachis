@@ -28,6 +28,7 @@ final class ContentSecurityPolicy
         'script-src',
         'style-src',
         'xhr-src',
+        'base-uri'
     ];
     /**
      * @var string[] URI-based directives for reporting
