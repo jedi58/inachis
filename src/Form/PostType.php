@@ -45,7 +45,7 @@ class PostType extends AbstractType
                     'aria-required'    => 'true',
                     'data-tip-content' => '<strong>Required.</strong> This will also be used in the URL for your content. You can click on the link icon to adjust the URL.',
                     'autofocus'        => 'true',
-                    'class'            => 'text',
+                    'class'            => 'editor__title text',
                     'placeholder'      => $this->translator->trans('admin.placeholder.post.title', [], 'messages'),
                 ],
                 'label'      => $this->translator->trans('admin.label.post.title', [], 'messages'),
@@ -57,6 +57,7 @@ class PostType extends AbstractType
                 'attr' => [
                     'aria-labelledby' => 'subTitle_label',
                     'aria-required'   => 'false',
+                    'class' => 'editor__sub-title text',
                     'placeholder'     => $this->translator->trans('admin.placeholder.post.subTitle', [], 'messages'),
                 ],
                 'label'      => $this->translator->trans('admin.label.post.subTitle', [], 'messages'),

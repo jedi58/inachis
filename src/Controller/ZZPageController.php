@@ -264,6 +264,8 @@ class ZZPageController extends AbstractInachisController
             'Editing "' . $post->getTitle() . '"' :
             'New ' . $post->getType();
         $this->data['includeEditor'] = true;
+        $this->data['includeEditorId'] = $post->getId();
+        $this->data['includeDatePicker'] = true;
         $this->data['post'] = $post;
         return $this->render('inadmin/post__edit.html.twig', $this->data);
     }

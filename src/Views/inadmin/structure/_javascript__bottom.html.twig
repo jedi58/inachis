@@ -1,6 +1,10 @@
 {% block javascript_bottom %}
     <script src="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js" integrity="sha384-tQvP4sEZT2V3+Qfw7xvXWQQgW4NGu9uCYOG4ErMY3ns2KqdbHyCvznZ9YuxC4jXU" crossorigin="anonymous"></script>
 
+    {% if includeDatePicker|default(false) %}
+    <script src="/assets/js/incc/jquery.datetimepicker.full.min.js"></script>
+    {% endif %}
+
     {% if includeEditor|default(false) %}
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
         {% if editorHighlighting|default(false) %}
@@ -12,7 +16,7 @@
             element: $('.mde_editor')[0],
             autosave: {
                 enabled: true,
-                uniqueId: '{% if series.id is not empty %}{{ series.id }}{% else %}new-content-{{ session.user.id }}-{{ date()|date('Ymd') }}{% endif %}'
+                uniqueId: '{% if includeEditorId|default(null) is not empty %}{{ includeEditorId }}{% else %}new-content-{{ session.user.id }}-{{ date()|date('Ymd') }}{% endif %}'
             },
         {% if editorHighlighting|default(false) %}
             codeSyntaxHighlighting: true,

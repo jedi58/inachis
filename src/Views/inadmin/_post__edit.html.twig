@@ -2,7 +2,7 @@
 {% block content %}
 
     {{ form_start(form, {'attr': { 'class': 'form form__post' }}) }}
-    <div class="col span_8_of_8 ui-tabbed">
+    <div class="col span_8_of_8 ui-tabbed content__edit">
         <ul>
             <li>
                 <a href="#post__edit">Content</a>
@@ -109,7 +109,8 @@
 
     <div class="fixed-bottom-bar">
         <p>
-            <button type="submit" class="button button--positive">Save</button>
+            <!-- button type="submit" class="button button--positive">Save</button -->
+            {{ form_widget(form.submit) }}
             {%- if post.status != "published" %}
                 <button type="submit" class="button button--info" name="publish">{% if post.postDate > date() %}Schedule{% else %}Publish{% endif %}</button>
             {%- endif %}
@@ -122,14 +123,10 @@
     {{ form_row(form._token) }}
     {{ form_end(form, { 'render_rest': false }) }}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <!-- link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" -->
     <link rel="stylesheet" href="/assets/css/incc/jquery.switchButton.css">
-    <link rel="stylesheet" href="/assets/css/incc/jquery.datetimepicker.css">
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <!-- script src="https://unpkg.com/easymde/dist/easymde.min.js"></script -->
     <script src="/assets/js/incc/jquery.switchButton.js"></script>
-    <script src="/assets/js/incc/jquery.datetimepicker.full.min.js"></script>
     <script>
         var simplemde = new SimpleMDE({
         //var simplemde = new EasyMDE({
