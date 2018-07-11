@@ -5,13 +5,15 @@ var InachisPostEdit = {
 
 	_init: function()
 	{
-		//const currentContentType = window.location.href.match(/(post|page)/gi);
-		//if (null !== currentContentType) {
-		//	this._postOrPage = currentContentType[0].toLowerCase();
-		//}
-        if ($('.sf-toolbarreset').length && $('.fixed-bottom-bar').length) {
-        	$('.fixed-bottom-bar')[0].style.bottom = '36px';
-        }
+		var currentContentType = window.location.href.match(/(post|page)/gi);
+		if (null !== currentContentType) {
+			this._postOrPage = currentContentType[0].toLowerCase();
+		}
+        // if ($('.sf-toolbarreset').length && $('.fixed-bottom-bar').length) {
+        // 	var _BarHeight = $('.sf-toolbarreset').css('height');
+        // 	$('.fixed-bottom-bar').css('bottom', _BarHeight);
+        // 	$('.ui-tabs-panel').css('margin-bottom', _BarHeight);
+        // }
 		this.initTooltips();
 		this.initTitleChange();
 	},
