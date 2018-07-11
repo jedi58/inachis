@@ -1,4 +1,4 @@
-#post__edit, #post__properties, #post__sharing {
+.content__edit {
     margin-bottom: 45px;
 
     a, a:visited {
@@ -14,17 +14,28 @@
         &:focus, &:active {
             border-bottom: 1px solid #eee;
         }
+
+        &.halfwidth {
+            width: 40%;
+        }
     }
 
     label {
         color: #999;
         //text-transform: uppercase;
+
+        &.date-range__label {
+            display: inline-flex;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            width: 49%;
+        }
     }
 
-    #post_title {
+    .editor__title {
         font-size: 1.4em;
     }
-    #post_subTitle {
+    .editor__sub-title {
         font-size: 1.2em;
     }
 }
