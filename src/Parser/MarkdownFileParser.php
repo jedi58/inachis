@@ -35,7 +35,7 @@ class MarkdownFileParser
      * @param string $post
      * @return Page
      */
-    public function parse(ObjectManager $entityManager, $post)
+    public function parse(ObjectManager $entityManager, string $post) : Page
     {
         $this->entityManager = $entityManager;
         $page = new Page();
@@ -66,7 +66,7 @@ class MarkdownFileParser
      * @param Category|null $category
      * @return Category
      */
-    private function getCategoryFromPath(array $categoryPath, Category $category = null)
+    private function getCategoryFromPath(array $categoryPath, Category $category = null) : Category
     {
         if ($category === null) {
             $category = $categoryPath;
