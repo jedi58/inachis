@@ -5,14 +5,23 @@
 
     {% block series_list %}
         <div class="col span_8_of_8 widget-posts">
-            <form class="form form__post">
             <a class="button button--positive" href="{{ path('app_series_new') }}"><span class="material-icons">add</span> Create Series</a>
-        {#{% include 'inadmin/partials/list.html.twig' with {#}
-                {#'className': 'form__series',#}
-                                {##}
-            {#}#}
-        {#%}#}
-            </form>
+        {% include 'inadmin/partials/list.html.twig' with {
+                'className': 'form__series',
+                'type': 'series',
+
+                'offset': page.offset,
+                'limit': page.limit,
+                'total': dataset.count,
+
+                'snippet_description': 'description',
+                'slug_prefix': 'series/edit',
+                'slug': 'id',
+
+                'url_add': path('app_series_new'),
+                'url_result': path('app_zzpage_getpostlistadmin'),
+            }
+        %}
         </div>
     {% endblock series_list %}
 

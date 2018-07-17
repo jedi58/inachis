@@ -1,0 +1,66 @@
+{% block list %}
+
+{% if dataset|default(null) is not empty %}
+    {{ form_start(form, {'attr': { 'class': 'form form__' ~ type ~ ' content__list' }}) }}
+    <button>…</button>
+    <ul class="contextual-menu">
+        <li><a href="#">Select all</a></li>
+        <li><a href="#">Select none</a></li>
+        <li class="divider"></li>
+        <li>with selected:</li>
+        <li><button>Delete</button></li>
+        <li><button>Make private</button></li>
+    </ul>
+
+    {{- form_errors(form) -}}
+
+    <p>Showing {{ offset + 1 }} to {{ min(offset + limit, total) }} of {{ total }}</p>
+
+    {% for item in dataset.iterator %}
+    <article id="{{ type }}-{{ item.id }}" class="{{ type }} {{ additional_classes|default(null) }} hentry">
+        <input class="checkbox" id="{{ type }}-{{ item.id }}__input" type="checkbox" name="items[]" value="{{ item.id }}" />
+        <a aria-label="Edit {{ item.title }}" href="/incc/{{ slug_prefix }}/{{ attribute(item, slug) }}">
+            <h2>
+                <!-- label for="post-{{ item.id }}__input" -->
+                {{ item.title }}
+
+                {% if badges|default(null) is not empty %}
+                    {% for badgeName,badge in badges %}
+                        {%- if attribute(item, badge.field) == badge.condition %}
+                            <span class="badge {{ badge.className }}">{{ badgeName }}</span>
+                        {% endif -%}
+                    {% endfor %}
+                {% endif %}
+            </h2>
+        </a>
+        <p>
+            {{ attribute(item, snippet_description|default('content'))|markdown|striptags|slice(0, 300) }}
+            {% if attribute(item, snippet_description|default('content'))|markdown|striptags|length > 300 %}…{% endif %}
+        </p>
+        {% if item.modDate is defined %}
+            {% set timezone = item.timezone|default('UTC') %}
+        <p class="date"><span class="material-icons">schedule</span> Last modified: <em>{{ item.modDate|date('jS F Y \\a\\t H:i', timezone) }} {{ timezone }}</em></p>
+        {% endif %}
+    </article>
+    {%  endfor %}
+
+    {{ include('inadmin/partials/pagination.html.twig', {
+        offset: offset + 1,
+        limit: limit,
+        maxResults: total,
+        maxPagesToShow: 4,
+        result_url: url_result
+    }) }}
+    {{ form_end(form) }}
+
+{% else %}
+    <p class="content-warning">
+        <i class="material-icons">info_outline</i>
+        <span>You don't have any content yet!</span>
+    {% if url_add|default(null) is not empty %}
+        <a href="{{ url_add }}">Add some now!</a>
+    {% endif %}
+    </p>
+{% endif %}
+
+{% endblock list %}
