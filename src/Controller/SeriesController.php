@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Series;
 use App\Form\SeriesType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SeriesController extends AbstractInachisController
@@ -12,16 +13,27 @@ class SeriesController extends AbstractInachisController
     /**
      * @Route("/incc/series/list", methods={"GET", "POST"})
      * @param Request $request
-     * @return
+     * @return Response
      */
     public function list(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $entityManager = $this->getDoctrine()->getManager();
-//        $series = new Series();
-//        $form = $this->createForm(PostType::class, $post);
-//        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $form = $this->createFormBuilder(null);
 
+        $offset = (int) $request->get('offset', 0);
+        $limit = $entityManager->getRepository(Series::class)->getMaxItemsToShow();
+        $this->data['form'] = $form->getForm()->createView();
+        $this->data['dataset'] = $entityManager->getRepository(Series::class)->getAll(
+            $offset,
+            $limit,
+            [],
+            [
+                [ 'q.lastDate', 'DESC' ]
+            ]
+        );
+        $this->data['page']['offset'] = $offset;
+        $this->data['page']['limit'] = $limit;
         return $this->render('inadmin/series__list.html.twig', $this->data);
     }
 
@@ -29,7 +41,7 @@ class SeriesController extends AbstractInachisController
      * @Route("/incc/series/edit/{id}", methods={"GET", "POST"})
      * @Route("/incc/series/new", methods={"GET", "POST"}, name="app_series_new")
      * @param Request $request
-     * @return
+     * @return Response
      */
     public function edit(Request $request)
     {
