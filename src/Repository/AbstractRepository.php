@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractRepository extends ServiceEntityRepository
 {
@@ -130,5 +131,28 @@ abstract class AbstractRepository extends ServiceEntityRepository
         // @todo check if an alternative is set in yaml config
         $count = defined('static::MAX_ITEMS_TO_SHOW_ADMIN') ? (int) static::MAX_ITEMS_TO_SHOW_ADMIN : 10;
         return $count;
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     * @throws \Doctrine\DBAL\ConnectionException
+     */
+    public function wipe(LoggerInterface $logger)
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $connection->beginTransaction();
+
+        try {
+            $connection->query('SET FOREIGN_KEY_CHECKS=0');
+            $connection->query(
+                'DELETE FROM ' .
+                $this->getEntityManager()->getClassMetadata($this->getClassName())->getTableName()
+            );
+            $connection->query('SET FOREIGN_KEY_CHECKS=1');
+            $connection->commit();
+        } catch (\Exception $e) {
+            $logger->error(sprintf('Failed to wipe table: %s', $e->getTraceAsString()));
+            $connection->rollBack();
+        }
     }
 }
