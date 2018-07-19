@@ -12,9 +12,8 @@ class SettingsController extends AbstractInachisController
      */
     public function index()
     {
-//        return $this->render('settings/index.html.twig', [
-//            'controller_name' => 'SettingsController',
-//        ]);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        return $this->render('inadmin/settings.html.twig', $this->data);
     }
 
     /**
@@ -22,6 +21,7 @@ class SettingsController extends AbstractInachisController
      */
     public function check()
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->data['check'] = [
             'cache_writable' => '',
             'php' => [
