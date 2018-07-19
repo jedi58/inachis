@@ -8,6 +8,7 @@ before_script:
 #  - pecl channel-update pecl.php.net
   - wget http://getcomposer.org/composer.phar
 #  - composer require satooshi/php-coveralls:dev-master
+  - cp .env.dist .env
   - php composer.phar install --no-interaction
   - php composer.phar dump-autoload --optimize
 
