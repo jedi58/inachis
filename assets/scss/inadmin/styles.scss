@@ -41,6 +41,7 @@ body {
 
 @import '_widget__posts';
 @import '_pagination';
+@import '_contextual';
 
 .admin__header {
 	border-bottom: 1px solid #eee;
@@ -335,28 +336,6 @@ body {
 				list-style-type: none;
 				margin: 0;
 				padding: 0;
-			}
-		}
-	}
-
-	ul.contextual-menu {
-		background-color: #333;
-		box-shadow: rgba(0, 0, 0, 0.3) 20px 0px 20px 0px;
-		color: #fff;
-		display: none;
-		position: absolute;
-		width: 13em;
-		z-index: 5;
-
-		li {
-			padding: 0 5px;
-
-			span {
-				display: inline-block;
-				/*height: 1.8em;*/
-				padding-left: 5px;
-				vertical-align: middle;
-				width: 6em;
 			}
 		}
 	}
