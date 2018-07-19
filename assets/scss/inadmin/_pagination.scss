@@ -12,12 +12,14 @@ $pagination-border-radius: 5px;
 
     &:first-child {
       .page-link {
-        border-radius: $pagination-border-radius 0 0 $pagination-border-radius;
+        border-top-left-radius: $pagination-border-radius;
+        border-bottom-left-radius: $pagination-border-radius;
       }
     }
     &:last-child {
       .page-link {
-        border-radius: 0 $pagination-border-radius $pagination-border-radius 0;
+        border-top-right-radius: $pagination-border-radius;
+        border-bottom-right-radius: $pagination-border-radius;
       }
     }
 

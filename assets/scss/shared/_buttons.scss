@@ -48,4 +48,9 @@ $button--info--hover-color: darken($button--info--active-color, 10);
 			background-color: $button--info--hover-color;
 		}
 	}
+
+	&.button--menu {
+		float: left;
+		padding: 5px 10px;
+	}
 }
