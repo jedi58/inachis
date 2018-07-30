@@ -93,4 +93,21 @@ $(document).ready(function() {
 
 	// jQuery Tabs
 	$('.ui-tabbed').tabs();
+
+	// Select all/none buttons
+	$('.button--select-all').on('click', function()
+	{
+		$(this).closest('form').first().find('input[type=checkbox]').prop('checked', true);
+	});
+	$('.button--select-none').on('click', function()
+	{
+		$(this).closest('form').first().find('input[type=checkbox]').prop('checked', false);
+	});
+	$('.error-select').hide();
+
+    $(function() {
+        $('#progressbar').progressbar({
+            value: $('#progressbar').data('percentage')
+        });
+    });
 });
