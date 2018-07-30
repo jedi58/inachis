@@ -1,0 +1,11 @@
+#progressbar {
+  background-color: #eee;
+  border: 1px solid #333;
+  padding: 1px;
+
+  .ui-progressbar-value {
+    background-color: #069;
+    display: block;
+    height: 30px;
+  }
+}
