@@ -8,13 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractInachisController
 {
     /**
-     * @Route(
-     *     "/",
-     *     methods={"GET"}
-     * )
+     * @Route("/", methods={"GET"})
      */
-    public function default()
+    public function homepage()
     {
-        return new Response('Homepage!');
+        return $this->render('web/homepage.html.twig', $this->data);
     }
 }
