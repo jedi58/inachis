@@ -2,6 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
+use App\Entity\Page;
+use App\Entity\Series;
+use App\Entity\Tag;
+use App\Entity\Url;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -13,6 +19,11 @@ class SettingsController extends AbstractInachisController
     public function index()
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->data['storage']['percent'] = 75; //@todo calculate hdd space from allowance - usage
+        $this->data['counts']['page'] = $this->getDoctrine()->getManager()->getRepository(Page::class)->getAllCount();
+        $this->data['counts']['series'] = $this->getDoctrine()->getManager()->getRepository(Series::class)->getAllCount();
+        $this->data['counts']['tag'] = $this->getDoctrine()->getManager()->getRepository(Tag::class)->getAllCount();
+        $this->data['counts']['url'] = $this->getDoctrine()->getManager()->getRepository(Url::class)->getAllCount();
         return $this->render('inadmin/settings.html.twig', $this->data);
     }
 
@@ -47,6 +58,22 @@ class SettingsController extends AbstractInachisController
             '>'
         );
         return $this->render('inadmin/settings__check.html.twig', $this->data);
+    }
+
+    /**
+     * @Route("/incc/settings/wipe", methods={"POST"})
+     */
+    public function wipe(LoggerInterface $logger)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($this->get('confirm')) {
+            $this->getDoctrine()->getRepository(Image::class)->wipe($logger);
+            $this->getDoctrine()->getRepository(Page::class)->wipe($logger);
+            $this->getDoctrine()->getRepository(Series::class)->wipe($logger);
+            $this->getDoctrine()->getRepository(Tag::class)->wipe($logger);
+            $this->getDoctrine()->getRepository(Url::class)->wipe($logger);
+        }
+        return $this->redirectToRoute('app_settings_index');
     }
 
     /**
