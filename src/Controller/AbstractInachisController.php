@@ -24,18 +24,23 @@ abstract class AbstractInachisController extends Controller
     {
         $this->entityManager = $this->getDoctrine()->getManager();
         $this->data = [
-//            'siteTitle' => !empty(Application::getInstance()->getConfig()['system']->title) ?
-//                Application::getInstance()->getConfig()['system']->title :
-//                null,
-//            'google' => Application::getInstance()->getConfig()['system']->google
             'settings' => [
-                'siteTitle'     => '',
+                'siteTitle' => $this->container->hasParameter('app.title') ?
+                    $this->container->getParameter('app.title') :
+                    null,
                 'domain'        => $this->getProtocolAndHostname(),
                 'google'        => [],
-                'language'      => 'en',
+                'language' => $this->container->hasParameter('locale') ?
+                    $this->container->getParameter('locale') :
+                    'en',
                 'textDirection' => 'ltr',
                 'abstract'      => '',
-                'fb_app_id'     => '',
+                'fb_app_id' => $this->container->hasParameter('app.fb_app_id') ?
+                    $this->container->getParameter('app.fb_app_id') :
+                    null,
+                'twitter' => $this->container->hasParameter('app.twitter') ?
+                    $this->container->getParameter('app.twitter') :
+                    null,
             ],
             'notifications' => [],
             'page'          => [
@@ -43,6 +48,8 @@ abstract class AbstractInachisController extends Controller
                 'tab'         => '',
                 'title'       => '',
                 'description' => '',
+                'keywords' => '',
+                'modDate' => '',
             ],
             'post' => [
                 'featureImage' => '',
