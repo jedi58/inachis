@@ -1,4 +1,41 @@
 {% block metadata %}
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="keywords" content="{{ page.keywords }}" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Last-Update" content="{{ page.modDate }}" />
+    <meta http-equiv="Content-Language" content="{{ settings.language }}" />
+    <meta http-equiv="imagetoolbar" content="no" />
+    <meta name="Author" content="David G. Paul" />
+    <meta name="Copyright" content="&copy; David G. Paul" />
+    <meta name="keywords" content="{{ page.keywords }}" />
+    <meta name="description" content="{{ page.description }}" />
+    <meta name="abstract" content="" />
+    <meta name="category" content="home page" />
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="NOODP" />
+    <meta name="language" content="{{ settings.language }}" />
+    <meta name="revised" content="{{ page.modDate }}" />
+    {% if settings.geo.lat|default('') is not empty and settings.geo.long|default('') is not empty %}
+        <meta name="ICBM" content="{{ settings.geo.lat }}, {{ settings.geo.long }}" />
+        <meta name="geo.position" content="{{ settings.geo.lat }}, {{ settings.geo.long }}" />
+    {% endif %}
+    {% if settings.geo.name|default('') is not empty %}
+        <meta name="geo.placename" content="{{ settings.geo.name }}" />
+    {% endif %}
+    {% if settings.geo.region|default('') is not empty %}
+        <meta name="geo.region" content="{{ settings.geo.region }}" />
+    {% endif %}
+    <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+    <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
+    <meta name="DC.title" content="{{ settings.siteTitle }}" />
+    <meta name="DC.creator" content="David G. Paul" />
+    <meta name="DC.subject" content="" />
+    <meta name="DC.description" content="{{ page.description }}" />
+    <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
+    <meta name="DC.format" content="text/html" />
+    <meta name="DC.identifier" scheme="DCTERMS.URI" content="{{ page.self }}" />
+    <meta name="generator" content="inachis" />
+
     <link rel="apple-touch-icon" sizes="57x57" href="/inadmin/assets/images/favicons/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/inadmin/assets/images/favicons/apple-touch-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/inadmin/assets/images/favicons/apple-touch-icon-72x72.png">
@@ -8,7 +45,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="/inadmin/assets/images/favicons/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/inadmin/assets/images/favicons/apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/inadmin/assets/images/favicons/apple-touch-icon-180x180.png">
-    <meta name="apple-mobile-web-app-title" content="{{ settings.siteTitle }}">
+    <meta name="apple-mobile-web-app-title" content="{{ 'siteTitle' }}">
     <link rel="mask-icon" href="/inadmin/assets/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
 
     <link rel="icon" type="image/png" href="/inadmin/assets/images/favicons/favicon-32x32.png" sizes="32x32">
@@ -22,4 +59,12 @@
     <meta name="application-name" content="{{ settings.siteTitle }}">
     <meta name="msapplication-TileColor" content="#2d89ef">
     <meta name="msapplication-TileImage" content="/inadmin/assets/images/windows10-144x144.png">
+
+    <link rel="canonical" href="/" />
+    <link rel="search" type="application/opensearchdescription+xml" title="{{ settings.siteTitle }}" href="/search.xml" />
+    <link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{ page.self }}/favicon.ico" />
+
+    {% include "web/structure/_metadata__open-graph.html.twig" %}
+
 {% endblock metadata %}
