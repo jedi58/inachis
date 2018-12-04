@@ -1,0 +1,38 @@
+{% if post.items is defined %}
+    {% set post_url = post.items|first.urls|first.link %}
+{% elseif post.urls is defined %}
+    {% set post_url = post.urls|first.link %}
+{% endif %}
+<div class="section group">
+    <div class="col span_1_of_8"></div>
+    <div class="col span_6_of_8">
+        <article class="blogbox {{ cycle(['right', 'left'], loop.index0) }} trip">
+            {% if post.image is defined %}
+            <a href="{{ post_url }}" class="blogbox_image">
+                <img alt="{{ post.image.alt }}" src="{{ post.image.src }}" />
+            </a>
+            {% endif %}
+            <div>
+                <header>
+                    <h2><a href="{{ post_url }}">{{ post.title }}</a></h2>
+                </header>
+                <p>
+                {%- if post.description is defined %}
+                    {{ post.description }}
+                {% elseif post.featureSnippet is defined %}
+                    {{ post.featureSnippet }}
+                {% endif -%}
+                </p>
+                <p class="post-details">
+                {% if post.items is defined %}
+                    <span>{{ post.firstDate|date("F j, Y") }} to {{ post.lastDate|date("F j, Y") }}</span> |
+                    <strong>{{ post.items|length }}</strong> posts
+                {% else %}
+                    <span>{{ post.postDate|date("F j, Y") }}</span>
+                {% endif %}
+                </p>
+            </div>
+        </article>
+    </div>
+    <div class="col span_1_of_8"></div>
+</div>
