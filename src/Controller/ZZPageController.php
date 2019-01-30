@@ -17,13 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ZZPageController extends AbstractInachisController
 {
-//     * @Route("/{slug}", methods={"GET"})
-//    public function getPage($slug)
-//    {
-//        return new Response('<html><body>Page controller</body></html>');
-//        //throw $this->createNotFoundException('This page does not exist');
-//    }
-
     /**
      * @Route(
      *     "/{year}/{month}/{day}/{title}",
@@ -69,16 +62,9 @@ class ZZPageController extends AbstractInachisController
                 return new RedirectResponse($url->getLink(), Response::HTTP_PERMANENTLY_REDIRECT);
             }
         }
-
-        // Get X from page
-        //Get X from series
-        //If page.id IN series ignore
-        //combine into array with date + title as key
-        //key sort
-
-        $data['post'] = $url->getContent();
-        $data['url'] = $url->getLink();
-        return $this->render('web/post.html.twig', $data);
+        $this->data['post'] = $url->getContent();
+        $this->data['url'] = $url->getLink();
+        return $this->render('web/post.html.twig', $this->data);
     }
 
     /**
@@ -100,21 +86,37 @@ class ZZPageController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
-        $form = $this->createFormBuilder(null);
-        //$form = $this->createForm(PostType::class);
-        //$form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            if ($form->get('delete')->isClicked()) {
-//                $entityManager->getRepository(Page::class)->remove($post);
-//                return new RedirectResponse(
-//                    sprintf('/incc/%s/list/', $type),
-//                    HTTP_REDIRECT_PERM
-//                );
-//            }
-//        }
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid() && !empty($request->get('items'))) {
+            foreach ($request->get('items') as $item) {
+                if ($request->get('delete') !== null) {
+                    $post = $entityManager->getRepository(Page::class)->findOneById($item);
+                    if ($post !== null) {
+                        $entityManager->getRepository(Page::class)->remove($post);
+                    }
+                }
+                if ($request->get('privacy') !== null) {
+                    $post = $entityManager->getRepository(Page::class)->findOneById($item);
+                    if ($post !== null) {
+                        $post->setVisibility(Page::VIS_PRIVATE);
+                        $post->setModDate(new \DateTime('now'));
+                        $entityManager->persist($post);
+                    }
+                }
+            }
+            if ($request->get('privacy') !== null) {
+                $entityManager->flush();
+            }
+            return $this->redirectToRoute(
+                'app_zzpage_getpostlistadmin',
+                ['type' => $type],
+                Response::HTTP_PERMANENTLY_REDIRECT
+            );
+        }
         $offset = (int) $request->get('offset', 0);
         $limit = $entityManager->getRepository(Page::class)->getMaxItemsToShow();
-        $this->data['form'] = $form->getForm()->createView();
+        $this->data['form'] = $form->createView();
         $this->data['posts'] = $entityManager->getRepository(Page::class)->getAll(
             $offset,
             $limit,
@@ -277,6 +279,19 @@ class ZZPageController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return new Response('<html><body>Show search results</body></html>');
+    }
+
+    /**
+     * @Route(
+     *     "/{page}",
+     *     methods={"GET"}
+     * )
+     * @param Request $request
+     * @return mixed
+     */
+    public function getPage(Request $request)
+    {
+        return $this->getPost($request, 0 ,0 ,0, '');
     }
 
     /**

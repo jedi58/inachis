@@ -2,6 +2,7 @@
 var InachisNavMenu = {
 	_navNewVisible: false,
 	_navUserVisible: false,
+	_contextMenuVisible: false,
 
 	_init: function()
 	{
@@ -15,6 +16,16 @@ var InachisNavMenu = {
 			}
 			return false;
 		}, this));
+		// contextual menus
+        $('.contextual-menu').click($.proxy(function() {
+            //$('.admin__nav-new').toggle();
+            this._contextMenuVisible = !this._contextMenuVisible;
+            Inachis._log('Contextual menu visible: ' + this._contextMenuVisible);
+            if (this._contextMenuVisible) {
+                $(document).mouseup($.proxy(this.contextMenuMouseOut, this));
+            }
+            return false;
+        }, this));
 		// settings menu
 		$('a[href*=admin__nav-settings]').click(function() {
 			$('#admin__nav-settings').toggle();

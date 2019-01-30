@@ -2,24 +2,31 @@
 
 {% if dataset|default(null) is not empty %}
     {{ form_start(form, {'attr': { 'class': 'form form__' ~ type ~ ' content__list' }}) }}
-    <button>…</button>
-    <ul class="contextual-menu">
-        <li><a href="#">Select all</a></li>
-        <li><a href="#">Select none</a></li>
-        <li class="divider"></li>
-        <li>with selected:</li>
-        <li><button>Delete</button></li>
-        <li><button>Make private</button></li>
-    </ul>
 
     {{- form_errors(form) -}}
 
-    <p>Showing {{ offset + 1 }} to {{ min(offset + limit, total) }} of {{ total }}</p>
+    <p class="pagination--info">Showing {{ offset + 1 }} to {{ min(offset + limit, total) }} of {{ total }}</p>
 
     {% for item in dataset.iterator %}
-    <article id="{{ type }}-{{ item.id }}" class="{{ type }} {{ additional_classes|default(null) }} hentry">
-        <input class="checkbox" id="{{ type }}-{{ item.id }}__input" type="checkbox" name="items[]" value="{{ item.id }}" />
-        <a aria-label="Edit {{ item.title }}" href="/incc/{{ slug_prefix }}/{{ attribute(item, slug) }}">
+        {% if '.' in slug %}
+            {% set slug_exploded = slug|split('.')  %}
+            {% set slug_object = item %}
+            {% for part in slug_exploded %}
+                {% if '[' in part %}
+                    {% set part = part|split('[')[0] %}
+                    {% set slug_object = attribute(slug_object, part)[0] %}
+                {% else %}
+                    {% set slug_object = attribute(slug_object, part) %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% set slug_object = attribute(item, slug) %}
+        {% endif %}
+    <article id="{{ type ~ '-' ~ item.id }}" class="{{ type }} {{ additional_classes|default(null) }} hentry">
+        {% if actions|default(null) is not empty %}
+            <input class="checkbox" id="{{ type }}-{{ item.id }}__input" type="checkbox" name="items[]" value="{{ item.id }}" />
+        {% endif %}
+        <a aria-label="Edit {{ item.title }}" href="/incc/{{ slug_prefix }}/{{ slug_object }}">
             <h2>
                 <!-- label for="post-{{ item.id }}__input" -->
                 {{ item.title }}
@@ -51,6 +58,33 @@
         maxPagesToShow: 4,
         result_url: url_result
     }) }}
+    {% if actions|default(null) is not empty %}
+    <div class="fixed-bottom-bar">
+        <p>
+            <button class="button button--select button--select-all" type="button">
+                <span class="material-icons">select_all</span>
+                Select all
+            </button>
+            <button class="button button--select button--select-none" type="button">
+                <span class="material-icons">filter_none</span>
+                Select none
+            </button>
+            <span class="divider"></span>
+            <span class="error ui-state-error error-select">Select content to see actions</span>
+            <span>with selected:</span>
+        {% for key, action in actions %}
+            <button class="button {{ action.button_class|default(null) }}"{%-
+                if action.id is defined %} id="{{ action.id }}"{% endif
+            %} name="{{ key }}" type="submit">
+            {% if action.icon is not empty %}
+                <span class="material-icons">{{ action.icon }}</span>
+            {% endif %}
+                {{ action.title|default(null) }}
+            </button>
+        {% endfor %}
+        </p>
+    </div>
+    {% endif %}
     {{ form_end(form) }}
 
 {% else %}

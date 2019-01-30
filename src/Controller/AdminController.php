@@ -25,6 +25,6 @@ class AdminController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 //        self::$data['page'] = array('title' => 'Profile');
-        return $this->render('inadmin/profile.html.twig', self::$data);
+        return $this->render('inadmin/profile.html.twig', $this->data);
     }
 }

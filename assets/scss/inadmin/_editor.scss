@@ -1,3 +1,9 @@
 .editor-toolbar, .CodeMirror, .editor-preview-side, .editor-statusbar {
 	margin-right: 15px;
 }
+
+.CodeMirror .CodeMirror-code .cm-url {
+	max-width: 100px;
+	overflow: hidden;
+	width: 100px;
+}

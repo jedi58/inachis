@@ -6,7 +6,7 @@ use App\Entity\Tag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class TagRepository extends ServiceEntityRepository
+class TagRepository extends AbstractRepository
 {
     public function __construct(RegistryInterface $registry)
     {

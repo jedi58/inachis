@@ -28,13 +28,13 @@ abstract class AbstractInachisController extends Controller
                 'siteTitle' => $this->container->hasParameter('app.title') ?
                     $this->container->getParameter('app.title') :
                     null,
-                'domain'        => $this->getProtocolAndHostname(),
-                'google'        => [],
+                'domain' => $this->getProtocolAndHostname(),
+                'google' => [],
                 'language' => $this->container->hasParameter('locale') ?
                     $this->container->getParameter('locale') :
                     'en',
                 'textDirection' => 'ltr',
-                'abstract'      => '',
+                'abstract' => '',
                 'fb_app_id' => $this->container->hasParameter('app.fb_app_id') ?
                     $this->container->getParameter('app.fb_app_id') :
                     null,
@@ -44,12 +44,12 @@ abstract class AbstractInachisController extends Controller
             ],
             'notifications' => [],
             'page'          => [
-                'self'        => '',
-                'tab'         => '',
-                'title'       => '',
-                'description' => '',
-                'keywords' => '',
-                'modDate' => '',
+                'self'          => '',
+                'tab'           => '',
+                'title'         => '',
+                'description'   => '',
+                'keywords'      => '',
+                'modDate'       => '',
             ],
             'post' => [
                 'featureImage' => '',
@@ -65,7 +65,7 @@ abstract class AbstractInachisController extends Controller
     {
         $protocol = $this->isSecure() ? 'https://' : 'http://';
 
-        return $protocol.(!empty($_ENV['APP_DOMAIN']) ? $_ENV['APP_DOMAIN'] : '');
+        return $protocol . (!empty($_ENV['APP_DOMAIN']) ? $_ENV['APP_DOMAIN'] : '');
     }
 
     /**

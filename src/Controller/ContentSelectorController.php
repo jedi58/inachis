@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Page;
+use App\Entity\Series;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class ContentSelectorController extends Controller
+{
+    /**
+     * @var array
+     */
+    protected $errors = [];
+    /**
+     * @var array
+     */
+    protected $data = [];
+
+    /**
+     * @Route("/incc/ax/contentSelector/get", methods={"POST"})
+     */
+    public function contentList()
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // @todo paginate data returned with auto-loading from Ajax
+        $this->data['pages'] = $this->getDoctrine()->getRepository(Page::class)->findAll();
+        return $this->render('inadmin/dialog/content-selector.html.twig', $this->data);
+    }
+
+    /**
+     * @Route("/incc/ax/contentSelector/save", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function saveContent(Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if (!empty($request->get('ids'))) {
+            $series = $this->getDoctrine()->getRepository(Series::class)->findOneById($request->get('seriesId'));
+            foreach ($request->get('ids') as $pageId) {
+                $page = $this->getDoctrine()->getRepository(Page::class)->findOneById($pageId);
+                if (!empty($page) && !empty($page->getId())) {
+                    $series->addItem($page);
+                }
+                if ($page->getPostDate()->format('Y-m-d H:i:s') < $series->getFirstDate()->format('Y-m-d H:i:s')) {
+                    $series->setFirstDate($page->getPostDate()->format('Y-m-d H:i:s'));
+                }
+                if ($page->getPostDate()->format('Y-m-d H:i:s') > $series->getLastDate()->format('Y-m-d H:i:s')) {
+                    $series->setLastDate($page->getPostDate()->format('Y-m-d H:i:s'));
+                }
+            }
+            $series->setModDate(new \DateTime('now'));
+            $this->getDoctrine()->getManager()->persist($series);
+            $this->getDoctrine()->getManager()->flush();
+            return new Response('Saved', Response::HTTP_CREATED);
+        }
+        return new Response('No change', Response::HTTP_NO_CONTENT);
+    }
+}

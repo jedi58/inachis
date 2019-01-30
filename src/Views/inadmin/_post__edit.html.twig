@@ -109,7 +109,6 @@
 
     <div class="fixed-bottom-bar">
         <p>
-            <!-- button type="submit" class="button button--positive">Save</button -->
             {{ form_widget(form.submit) }}
             {%- if post.status != "published" %}
                 <button type="submit" class="button button--info" name="publish">{% if post.postDate > date() %}Schedule{% else %}Publish{% endif %}</button>

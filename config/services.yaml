@@ -1,7 +1,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.title: 'Wandering the World'
     locale: 'en'
+    app.twitter: 'jedi58'
     csp:
       enforce:
         default-src:
@@ -23,12 +25,17 @@ parameters:
           self: true
           sources:
             - maps.googleapis.com
+            - staticflickr.com
         script-src:
           self: true
           sources:
+            - ajax.googleapis.com
             - cdn.jsdelivr.net
             - cdnjs.cloudflare.com
+            - unpkg.com
+            - www.google-analytics.com
           unsafe-inline: true
+          unsafe-eval: true
         style-src:
           self: true
           data: true
@@ -37,6 +44,7 @@ parameters:
             - cdnjs.cloudflare.com
             - fonts.googleapis.com
             - maxcdn.bootstrapcdn.com
+            - unpkg.com
         report-uri: https://jedi58.report-uri.io/r/default/csp/enforce
       report:
         report-uri: https://jedi58.report-uri.io/r/default/csp/reportOnly

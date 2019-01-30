@@ -119,7 +119,7 @@ class SeriesType extends AbstractType
                 ])
                 ->add('addItem', ButtonType::class, [
                     'attr' => [
-                        'class' => 'button button--information',
+                        'class' => 'button button--information content-selector__link',
                     ],
                     'label' => $this->translator->trans('admin.button.addItem', [], 'messages'),
                 ])

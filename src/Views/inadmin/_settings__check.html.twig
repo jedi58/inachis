@@ -34,6 +34,21 @@
                         <th colspan="2" id="php_shorttags">Short Tags disabled</th>
                         <td headers="php_settings php_shorttags"><span class="material-icons">check_box{% if not check.php.short_tags_disabled %}_outline_blank{% endif %}</span></td>
                     </tr>
+                    <tr>
+                        <th id="php_session_name">PHP Session Name</th>
+                        <td headers="php_settings php_session_name">{{ check.php.session.name }}</td>
+                        <td headers="php_settings php_session_name"><span class="material-icons">check_box{% if check.php.session.name == 'PHPSESSID' %}_outline_blank{% endif %}</span></td>
+                    </tr>
+                    <tr>
+                        <th id="php_session_name">PHP Session Cookie Domain</th>
+                        <td headers="php_settings php_session_name">{{ check.php.session.domain }}</td>
+                        <td headers="php_settings php_session_name"><span class="material-icons">check_box{% if check.php.session.domain is empty %}_outline_blank{% endif %}</span></td>
+                    </tr>
+                    <tr>
+                        <th id="php_session_name">PHP Session Hash Bits per Character</th>
+                        <td headers="php_settings php_session_name">{{ check.php.session.hash_bits }}</td>
+                        <td headers="php_settings php_session_name"><span class="material-icons">check_box{% if check.php.session.hash_bits <= 6 %}_outline_blank{% endif %}</span></td>
+                    </tr>
                 </tbody>
                 <thead>
                     <tr>

@@ -4,8 +4,16 @@
   padding: 1px;
 
   .ui-progressbar-value {
-    background-color: #069;
+    background-color: green;
     display: block;
     height: 30px;
+  }
+
+  &.ui-progressbar-warning .ui-progressbar-value {
+    background-color: orange;
+  }
+
+  &.ui-progressbar-danger .ui-progressbar-value {
+    background-color: red;
   }
 }

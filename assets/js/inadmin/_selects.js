@@ -70,6 +70,7 @@ $(document).ready(function() {
 			validateOnBlue: false,
             onChangeDateTime:function(dp,$input) {
 				if (InachisPostEdit) {
+					// @todo Need to update JS so that it only updates URL if previously set URL matches the auto-generated pattern
                     $('input#post_url').val(InachisPostEdit.getUrlFromTitle());
 				}
             }

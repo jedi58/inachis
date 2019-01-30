@@ -6,57 +6,21 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Wandering the World</title>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <meta http-equiv="keywords" content="" />
-    <meta http-equiv="Content-Style-Type" content="text/css" />
-    <meta http-equiv="Last-Update" content="2011-07-02T07:55:30 +01:00" />
-    <meta http-equiv="Content-Language" content="en" />
-    <meta http-equiv="imagetoolbar" content="no" />
-    <meta name="Author" content="David G. Paul" />
-    <meta name="Copyright" content="&copy; New Earth Online." />
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    <meta name="abstract" content="" />
-    <meta name="category" content="home page" />
-    <meta name="robots" content="index,follow" />
-    <meta name="googlebot" content="NOODP" />
-    <meta name="language" content="en" />
-    <meta name="revised" content="12 February 2011" />
-    <meta name="ICBM" content="52.573925,-1.123070" />
-    <meta name="geo.position" content="52.573925,-1.123070" />
-    <meta name="geo.placename" content="Leicester, England" />
-    <meta name="geo.region" content="GB-LCE" />
-    <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
-    <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
-    <meta name="DC.title" content="Fauna.me" />
-    <meta name="DC.creator" content="David G. Paul" />
-    <meta name="DC.subject" content="" />
-    <meta name="DC.description" content="" />
-    <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
-    <meta name="DC.format" content="text/html" />
-    <meta name="DC.identifier" scheme="DCTERMS.URI" content="http://davidgpaul.co.uk" />
-    <meta name="generator" content="inachis" />
+    <title>{{ settings.siteTitle }}</title>
+
     {% include "web/structure/metadata.html.twig" %}
-    <link rel="canonical" href="/" />
-    <link rel="search" type="application/opensearchdescription+xml" title="Fauna.me" href="/search.xml" />
-    <link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/x-icon" href="http://davidgpaul.co.uk/favicon.ico" />
-    <link type="text/css" rel="stylesheet" href="/css/style.css" media="screen" />
+
+    <link type="text/css" rel="stylesheet" href="{{ settings.domain }}/assets/css/style.min.css?v={{ 1 }}" media="screen" />
     <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <link type="text/css" rel="stylesheet" href="{{ settings.domain }}/assets/css/ie.min.css?v={{ 1 }}" media="screen" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha384-qFIkRsVO/J5orlMvxK1sgAt2FXT67og+NyFTITYzvbIP1IJavVEKZM7YWczXkwpB" crossorigin="anonymous"></script>
     <![endif]-->
-    <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
-    <script type="text/javascript">
-        window.cookieconsent_options = {"message":"This website uses cookies to ensure you get the best experience on our website","dismiss":"Got it!","learnMore":"More info","link":"/cookies","theme":"light-bottom"};
-    </script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.10/cookieconsent.min.js"></script>
-    <!-- End Cookie Consent plugin -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
 </head>
 <body>
 <!-- googleoff: snippet -->
 <!--[if lt IE 9]>
-<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> or <a href="https://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 <![endif]-->
 <div id="skiptomain"><a href="#maincontent">skip to main content</a></div>
 
@@ -65,13 +29,16 @@
         <header>
             <h1><span>Wandering the World</span></h1>
             <p class="introtext">Stories and tips from around the world.</p>
-            <nav>
-                <ul>
-                    <li><a href="/books">Books</a></li>
-                    <li><a href="https://500px.com/jedi58">Photos</a></li>
-                    <li><a href="https://www.youtube.com/user/jedi58">Videos</a></li>
-                </ul>
-            </nav>
+            {%
+            include "web/structure/nav.html.twig" with {
+                'tabs': {
+                    'Books':    { 'url': '/books' },
+                    'Photos':   { 'url': 'https://500px.com/jedi58' },
+                    'Videos':   { 'url': 'https://www.youtube.com/user/jedi58' },
+                    'Me':       { 'url': '/me' }
+                }
+            }
+            %}
         </header>
     </div>
     <!-- googleon: snippet -->
@@ -80,29 +47,6 @@
         <div id="maincontent">
 
             {% block content %}{% endblock content %}
-
-            <div class="section group">
-                <div class="col span_1_of_8"></div>
-                <div class="col span_6_of_8">
-                    <article class="blogbox right trip">
-                        <a href="#" class="blogbox_image">
-                            <img src="http://farm8.staticflickr.com/7384/9354972902_fdc36c4732_c.jpg" />
-                        </a>
-                        <div>
-                            <header><h2>San Diego Comic Con International 2013</h2></header>
-                            <p>A few days in San Diego to see the sights and experience the wonders of Comic Con International</p>
-                            <p class="post-details">
-                                <span>July 17, 2013 to July 21, 2013</span> |
-                                <strong>5</strong> posts
-                            </p>
-                        </div>
-                    </article>
-                </div>
-                <div class="col span_1_of_8"></div>
-            </div>
-
-
-
 
         </div>
     </div>
@@ -113,41 +57,21 @@
             <div class="backtotop col span_8_of_8">
                 <a href="#">Top &uarr;</a>
             </div>
-            <div class="col span_2_of_8">
-                <h4>Recent Trips</h4>
-{% if trips is defined and trips is not empty %}
-    {% for trip in trips %}
-                <p><a href="#"><strong>Antarctica</strong></a><br />Here is a bit of text that describes the trip to make you want to read more</p>
-    {% endfor %}
-                <p><a href="/trips">More Trips…</a></p>
-{% else %}
-                <p>There aren't any yet!</p>
-{% endif %}
-            </div>
-            <div class="col span_2_of_8">
-                <h4>Recent Races</h4>
-{% if races is defined and races is not empty %}
-    {% for race in races %}
-                <p><a href="#"><strong>Sainsbury's Sport Relief Mile</strong></a> (6 mile)<br />A run around Leicester Forest East RFC in support of Sport Relief. This is an initiative set up by Comic Relief to raise cash and change lives of poor and disadvantaged people in the UK and across the world.</p>
-    {% endfor %}
-                <p><a href="/running">More Running…</a></p>
-{% else %}
-                <p>There aren't any yet!</p>
-{% endif %}
-            </div>
-            <div class="col span_2_of_8">
-                <h4>Recent Articles</h4>
-{% if articles is defined and articles is not empty %}
-                <ul>
-    {% for article in articles %}
-                    <li><a href="#">Sending Emails Without Becoming a Spammer</a><!-- br />Without the correct headers and precautions, emails sent from your site or web application could easily get marked as spam. --></li>
-    {% endfor %}
-                    <li><a href="/articles">More Articles…</a></li>
-                </ul>
-{% else %}
-                <p>There aren't any yet!</p>
-{% endif %}
-            </div>
+            {{  render(controller(
+                'App\\Controller\\WidgetController::getRecentTrips', {
+                    'maxDisplayCount': 5
+                }
+            )) }}
+            {{  render(controller(
+                'App\\Controller\\WidgetController::getRecentRunning', {
+                    'maxDisplayCount': 5
+                }
+            )) }}
+            {{  render(controller(
+                'App\\Controller\\WidgetController::getRecentArticles', {
+                    'maxDisplayCount': 5
+                }
+            )) }}
             <div class="col span_2_of_8 subscribe">
                 <h4>Subscribe to…</h4>
                 <ul>
@@ -162,19 +86,19 @@
 
             <div id="smallprint">
                 <p id="social_follow">
-{% if settings.twitter is defined and is not empty %}
+{% if settings is defined and settings.twitter is defined and settings.twitter is not empty %}
                     <a href="https://twitter.com/{{ settings.twitter }}" class="twitter-follow-button" data-show-count="false"><span>Follow @{{ settings.twitter }}</span></a>
 {% endif %}
-{% if settings.facebookUrl is defined and is not empty %}
+{% if settings.facebookUrl is defined and settings.facebookUrl is not empty %}
                     <a href="https://www.facebook.com/{{ settings.facebookUrl }}" class="facebook-follow-button" data-show-count="false"><span>Facebook</span></a>
 {% endif %}
-{% if settings.pinterest is defined and is not empty %}
+{% if settings.pinterest is defined and settings.pinterest is not empty %}
                     <a href="http://www.pinterest.com/{{ settings.pinterest }}/" class="pinterest-follow-button" data-show-count="false"><span>Pinterest</span></a>
 {% endif %}
-{% if settings.googleplus is defined and is not empty %}
+{% if settings.googleplus is defined and settings.googleplus is not empty %}
                     <a href="https://plus.google.com/u/0/{{ settings.googleplus }}/" class="googleplus-follow-button" data-show-count="false"><span>Google+</span></a>
 {% endif %}
-{% if settings.instagram is defined and is not empty %}
+{% if settings.instagram is defined and settings.instagram is not empty %}
                     <a href="https://instagram.com/{{ settings.instagram }}/" class="googleplus-follow-button" data-show-count="false"><span>Instagram</span></a>
 {% endif %}
                 </p>
@@ -185,12 +109,11 @@
     <!-- googleon: snippet -->
 </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4= sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA=="></script>
-    <script>window.jQuery || document.write('<script src="js/jquery.321.min.js"><\/script>')</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4= sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA=="></script>
+    <script>window.jQuery || document.write('<script src="{{ settings.domain }}/assets/js/jquery.331.min.js"><\/script>')</script>
     <!--[if (lt IE 9) & (!IEMobile)]>
-    <-- script src="js/selectivizr-min.js"></script>
+    <-- script src="/assets/js/selectivizr-min.js"></script>
     <-- ![endif]-->
-    <script src="/js/main.js"></script>
     <script>
         var _gaq=[['_setAccount',''],['_trackPageview']];
         (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
@@ -198,15 +121,33 @@
             s.parentNode.insertBefore(g,s)}(document,'script'));
     </script>
     <script type="application/ld+json">
-    { "@context" : "http://schema.org",
-      "@type" : "Person",
-      "name" : "your name",
-      "url" : "http://www.your-site.com",
-      "sameAs" : [ "http://www.facebook.com/your-profile",
-          "http://instagram.com/yourProfile",
-          "http://www.linkedin.com/in/yourprofile",
-          "http://plus.google.com/your_profile"]
-    }
+        { "@context" : "http://schema.org",
+          "@type" : "Person",
+          "name" : "your name",
+          "url" : "http://www.your-site.com",
+          "sameAs" : [ "http://www.facebook.com/your-profile",
+              "http://instagram.com/yourProfile",
+              "http://www.linkedin.com/in/yourprofile",
+              "http://plus.google.com/your_profile"]
+        }
+    </script>
+    <script src="{{ settings.domain }}/assets/js/scripts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#edeff5",
+                        "text": "#838391"
+                    },
+                    "button": {
+                        "background": "#4b81e8"
+                    }
+                },
+                "theme": "classic"
+            })
+        });
     </script>
 </body>
 </html>

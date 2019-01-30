@@ -36,12 +36,25 @@ class SettingsController extends AbstractInachisController
         $this->data['check'] = [
             'cache_writable' => '',
             'php' => [
-                'required_version' => '7.0.0',
+                'required_version' => '7.1.0',
                 'current_version' => phpversion(),
 
                 'accelerator' => $this->getOpCacheStatus(),
+                'default_socket_timeout' => ini_get('default_socket_timeout'),
                 'magic_quotes_disabled' => !get_magic_quotes_gpc(),
                 'short_tags_disabled' => ini_get('short_open_tag'),
+                'session' => [
+                    'name' => ini_get('session.name'),
+                    'auto_start' => ini_get('session.auto_start'),
+                    'cookie_domain' => ini_get('session.cookie_domain'),
+                    'cookie_lifetime' => ini_get('session.cookie_lifetime'),
+                    'cookie_secure' => ini_get('session.cookie_secure'),
+                    'cookie_httponly' => ini_get('session.cookie_httponly'),
+                    'hash_bits' => ini_get('session.hash_bits_per_character'),
+                    'use_trans_sid' => ini_get('session.use_trans_sid'),
+                    'use_only_cookies' => ini_get('session.use_only_cookies'),
+                    'cache_expire' => ini_get('session.cache_expire'),
+                ],
             ],
             'timezone' => [
                 'current' => date_default_timezone_get(),
@@ -67,6 +80,7 @@ class SettingsController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if ($this->get('confirm')) {
+            $logger->info('Wiping all content');
             $this->getDoctrine()->getRepository(Image::class)->wipe($logger);
             $this->getDoctrine()->getRepository(Page::class)->wipe($logger);
             $this->getDoctrine()->getRepository(Series::class)->wipe($logger);

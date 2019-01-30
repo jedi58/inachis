@@ -1,5 +1,8 @@
 {% extends "web/structure/main.html.twig" %}
 {% block content %}
 
+    {% for post in content %}
+        {% include 'web/structure/post-feature.html.twig' %}
+    {% endfor %}
 
 {% endblock content %}

@@ -14,58 +14,65 @@
                     <a href="{{ settings.domain ~ path('app_zzpage_getpostlistadmin', {'type': 'page'}) }}">Pages</a>
                 </li>
                 <li role="tab" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab ui-tabs-active">
-                    <a href="{{ settings.domain }}/incc/import">Import</a>
+                    <a href="{{ settings.domain ~ path('app_import_index') }}">Import</a>
                 </li>
             </ul>
 
-            {%  if posts is not empty %}
-                {{ form_start(form, {'attr': { 'class': 'form form__post' }}) }}
-                    <button>…</button>
-                    <ul class="contextual-menu">
-                        <li><a href="#">Select all</a></li>
-                        <li><a href="#">Select none</a></li>
-                        <li class="divider"></li>
-                        <li>with selected:</li>
-                        <li><button>Delete</button></li>
-                        <li><button>Make private</button></li>
-                    </ul>
+{# 'additional_classes': 'status-' ~ post.status ~ ' visibility-' ~ post.visibility, #}
+            {% include 'inadmin/partials/list.html.twig' with {
+                'className': 'form__posts',
+                'type': 'post',
+                'dataset': posts,
 
-                    <p>Showing {{ page.offset + 1 }} to {{ min(page.offset + page.limit, posts.count) }}  of {{ posts.count }}</p>
 
-                    {{- form_errors(form) -}}
+                'offset': page.offset,
+                'limit': page.limit,
+                'total': posts.count,
 
-                    {%  for post in posts.iterator %}
-                        <article id="post-{{ post.id }}" class="{{ post.type }} status-{{ post.status }} visibility-{{ post.visibility }} hentry">
-                            <input class="checkbox" id="post-{{ post.id }}__input" type="checkbox" name="posts[]" value="{{ post.id }}" />
-                            <a aria-label="Edit {{ post.title }}" href="/incc/{{ post.type }}/{{ post.urls[0].link }}">
-                                <h2>
-                                    <!-- label for="post-{{ post.id }}__input" -->{{ post.title }}
-                                    {%-  if post.status == 'draft' %}<span class="badge badge__draft">draft</span>{% endif -%}
-                                    {%-  if not post.visibility %}<span class="badge badge__private">private</span>{% endif -%}
-                                </h2>
-                                <p>{{ post.content|markdown|striptags|length > 300 ? post.content|markdown|striptags|slice(0, 300) ~ '…' : post.content|markdown|striptags  }}</p>
-                            </a>
-                            <p class="date"><span class="material-icons">schedule</span> Last modified: <em>{{ post.modDate|date('jS F Y \\a\\t H:i', post.timezone) }} {{ post.timezone }}</em></p>
-                        </article>
-                    {%  endfor %}
-                    {{ include('inadmin/partials/pagination.html.twig', {
-                        offset: page.offset + 1,
-                        limit: page.limit,
-                        maxResults: posts.count,
-                        maxPagesToShow: 4,
-                        result_url: path('app_zzpage_getpostlistadmin')
-                    }) }}
-                {{ form_end(form) }}
-            {% else %}
-                <p class="content-warning">
-                    <i class="material-icons">info_outline</i>
-                    <span>You don't have any content yet!</span>
-                    <a href="{{ path('app_zzpage_getpostadmin', {'type': page.tab}) }}">Add some now!</a>
-                </p>
-            {% endif %}
+                'snippet_description': 'content',
+                'slug_prefix': page.tab,
+                'slug': 'urls[0].link',
+
+                'url_add': path('app_zzpage_getpostadmin', {'type': page.tab}),
+                'url_result': path('app_zzpage_getpostlistadmin'),
+
+                'badges': {
+                    'draft': {
+                        'field': 'status',
+                        'condition': 'draft',
+                        'className': 'badge__draft'
+                    },
+                    'private': {
+                        'field': 'visibility',
+                        'condition': 'draft',
+                        'className': 'badge__private'
+                    }
+                },
+
+                'actions': {
+                    'delete': {
+                        'button_class': 'button--negative button--delete',
+                        'icon': 'delete_forever',
+                        'title': 'Delete',
+                    },
+                    'private': {
+                        'button_class': 'button--privacy',
+                        'icon': 'remove_red_eye',
+                        'title': 'Make private',
+                    },
+                }
+            }
+            %}
+
         </div>
     {% endblock post_list %}
 
 
     {% block post_list_post %}{% endblock post_list_post %}
 {% endblock content %}
+
+
+
+
+
+
