@@ -7,17 +7,17 @@ php:
 before_script:
 #  - pecl channel-update pecl.php.net
   - wget http://getcomposer.org/composer.phar
-#  - composer require satooshi/php-coveralls:dev-master
+  - composer require php-coveralls/php-coveralls
   - cp .env.dist .env
   - php composer.phar install --no-interaction
   - php composer.phar dump-autoload --optimize
 
-#script:
-#  - mkdir ./tests/logs/
-#  - ./vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
+script:
+  - mkdir ./tests/logs/
+  - ./vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
  
-#after_script:
-#  - travis_retry php vendor/bin/coveralls -v
+after_script:
+  - travis_retry php vendor/bin/coveralls -v
 
 matrix:
     fast_finish: true
