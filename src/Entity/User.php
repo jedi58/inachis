@@ -186,7 +186,7 @@ class User implements UserInterface //, \Serializable
     /**
      * Returns the {@link avatar} for the {@link User}.
      *
-     * @return string The avatar for the user
+     * @return \App\Entity\Image The avatar for the user
      */
     public function getAvatar()
     {
@@ -275,7 +275,7 @@ class User implements UserInterface //, \Serializable
     }
 
     /**
-     * @param $value
+     * @param string $value New password to use
      */
     public function setPlainPassword($value)
     {

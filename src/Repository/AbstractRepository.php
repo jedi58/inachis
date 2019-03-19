@@ -25,7 +25,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * based on the provided values.
      *
      * @param mixed $object The object to hydrate
-     * @param array[mixed] The values to apply to the obect
+     * @param array[mixed] $values The values to apply to the obect
      *
      * @return mixed The hydrated object
      */
@@ -48,7 +48,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * Returns the count for entries in the current repository match any
      * provided constraints.
      *
-     * @param string[] Array of elements and string replacements
+     * @param string[] $where Array of elements and string replacements
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
@@ -112,6 +112,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
                 $qb->addGroupBy($group);
             }
         }
+
         $qb = $qb->getQuery();
         if ($offset > 0) {
             $qb = $qb->setFirstResult($offset);

@@ -67,7 +67,7 @@ final class ContentSecurityPolicy
     /**
      * Returns the CSP policy for enforcing.
      *
-     * @param string[] The policy to process for CSP enforce
+     * @param string[] $policy The policy to process for CSP enforce
      *
      * @throws InvalidContentSecurityPolicyException
      *
@@ -84,7 +84,7 @@ final class ContentSecurityPolicy
     /**
      * Returns the CSP policy for reporting only.
      *
-     * @param string[] The policy to process for CSP reporting
+     * @param string[] $policy The policy to process for CSP reporting
      *
      * @throws InvalidContentSecurityPolicyException
      *
@@ -101,7 +101,7 @@ final class ContentSecurityPolicy
     /**
      * Generates the CSP from the given policy JSON object.
      *
-     * @param mixed[] $csp The CSP policy
+     * @param mixed $csp The CSP policy
      *
      * @throws InvalidContentSecurityPolicyException
      *
