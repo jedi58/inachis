@@ -84,12 +84,9 @@ class AccountController extends AbstractInachisController
     public function forgotPassword(Request $request, TranslatorInterface $translator)
     {
         $this->redirectIfAuthenticated($request, new \Symfony\Flex\Response(null));
-        $this->data['page']['title'] = 'Reset your password';
-        $form = $this->createFormBuilder([], [
-            'attr' => [
-                'autocomplete' => 'false',
-                'class'        => 'form form__login form__forgot',
-            ],
+        $this->data['page']['title'] = 'Request a password reset';
+        $form = $this->createFormBuilder([
+            'forgot_email' => $request->get('forgot_email'),
         ])
 //                ->addComponent(new FieldsetType(array(
 //                    'legend' => 'Enter your Email address / Username'
@@ -114,20 +111,7 @@ class AccountController extends AbstractInachisController
                     'class' => 'button button--positive',
                 ],
             ])
-            ->add('cancel', ButtonType::class, [
-                'label' => $translator->trans('admin.button.cancel'),
-                'attr'  => [
-                    'class' => 'button button--negative',
-                ],
-            ])
             ->getForm();
-//            'data' => array(
-//                "resetEmailAddress" => $request->paramsPost()->get('resetEmailAddress')
-//            ),
-//            'error' =>array(
-//                //validate email address format
-//            )
-//        );
         $this->data['form'] = $form->createView();
 
         return $this->render('inadmin/forgot-password.html.twig', $this->data);
