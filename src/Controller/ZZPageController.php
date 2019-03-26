@@ -291,7 +291,7 @@ class ZZPageController extends AbstractInachisController
      */
     public function getPage(Request $request)
     {
-        return $this->getPost($request, 0 ,0 ,0, '');
+        return $this->getPost($request, 0, 0, 0, '');
     }
 
     /**
