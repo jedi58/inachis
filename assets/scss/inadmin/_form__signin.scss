@@ -5,11 +5,15 @@ $form-input__complete: #090;
 @import 'mixins.scss';
 
 .container__login, .setup {
+	text-align: center;
+
 	.form__login {
 		@include box-shadow(5px, 7px, 14px, 0, rgba(0,0,0,0.26));
 
 		background: $form-background__light;
+		margin: 0 auto;
 		max-width: 450px;
+		padding: 10px;
 
 		fieldset {
 			border: none;
@@ -29,12 +33,13 @@ $form-input__complete: #090;
 			margin-right: .5em;
 			width: auto;
 		}
-
+so
 		label {
 			color: $form-label__light;
 			display: block;
 			font-size: 0.85em;
 			margin-bottom: 5px;
+			text-align: left;
 			text-transform: uppercase;
 		}
 
@@ -44,6 +49,10 @@ $form-input__complete: #090;
 	}
 
 	a, a:visited {
+		&.button {
+			color: #fff;
+			display: inline;
+		}
 		color: #666;
 		display: block;
 		margin-top: 35px;
@@ -51,6 +60,10 @@ $form-input__complete: #090;
 		text-decoration: none;
 	}
 	a:hover {
+		&.button {
+			color: #fff;
+			text-decoration: none;
+		}
 		color: #069;
 		text-decoration: underline;
 	}

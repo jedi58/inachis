@@ -67,13 +67,11 @@ final class ContentSecurityPolicy
     /**
      * Returns the CSP policy for enforcing.
      *
-     * @param string[] The policy to process for CSP enforce
-     *
+     * @param string[] $policy The policy to process for CSP enforce
      * @throws InvalidContentSecurityPolicyException
-     *
      * @return string The parsed policies
      */
-    public static function getCSPEnforceHeader($policy) : string
+    public static function getCSPEnforceHeader($policy = []) : string
     {
         if (!empty($policy) && !empty($policy['enforce'])) {
             return self::generateCSP($policy['enforce']);
@@ -84,10 +82,8 @@ final class ContentSecurityPolicy
     /**
      * Returns the CSP policy for reporting only.
      *
-     * @param string[] The policy to process for CSP reporting
-     *
+     * @param string[] $policy The policy to process for CSP reporting
      * @throws InvalidContentSecurityPolicyException
-     *
      * @return string The parsed policies
      */
     public static function getCSPReportHeader($policy = []) : string
@@ -101,20 +97,15 @@ final class ContentSecurityPolicy
     /**
      * Generates the CSP from the given policy JSON object.
      *
-     * @param mixed[] $csp The CSP policy
-     *
+     * @param mixed $csp The CSP policy
      * @throws InvalidContentSecurityPolicyException
-     *
      * @return string The parsed policies
      */
     public static function generateCSP($csp) : string
     {
         $policies = [];
         foreach ($csp as $policy => $directives) {
-            if (!in_array($policy, self::$srcDirectives) &&
-                !in_array($policy, self::$uriDirectives) &&
-                !in_array($policy, self::$otherDirectives)
-            ) {
+            if (!self::isValidDirective($policy)) {
                 throw new InvalidContentSecurityPolicyException(
                     sprintf('%s policy is not supported or is invalid', $policy)
                 );
@@ -155,5 +146,16 @@ final class ContentSecurityPolicy
         }
 
         return trim(implode('; ', $policies));
+    }
+
+    /**
+     * @param $directive
+     * @return bool
+     */
+    private static function isValidDirective($directive)
+    {
+        return in_array($directive, self::$srcDirectives) ||
+            in_array($directive, self::$uriDirectives) ||
+            in_array($directive, self::$otherDirectives);
     }
 }
