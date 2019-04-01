@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    bootstrap="vendor/autoload.php"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true">
+    
+    <testsuites>
+        <testsuite name="Inachis">
+            <directory>./tests/phpunit/</directory>
+        </testsuite>
+    </testsuites>
+    
+    <filter>
+        <whitelist>
+            <directory>./vendor/</directory>
+<!--            <exclude>-->
+<!--                <directory>./vendor/</directory>-->
+<!--            </exclude>-->
+        </whitelist>
+    </filter>
+    
+    <logging>
+        <log type="coverage-clover" target="tests/logs/clover.xml"/>
+    </logging>
+</phpunit>
