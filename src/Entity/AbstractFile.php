@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 /**
  * File entity properties common to different upload types
@@ -203,7 +204,18 @@ abstract class AbstractFile
      */
     public function setFiletype($value)
     {
+        if (!$this->isValidFiletype($value)) {
+            throw new FileException(sprintf('Invalid file type %s', $value));
+        }
         $this->filetype = $value;
+    }
+
+    public function isValidFiletype($value)
+    {
+        if (defined('static::ALLOWED_TYPES')) {
+            return preg_match('/' . static::ALLOWED_TYPES . '/', $value) === 1;
+        }
+        return true;
     }
 
     /**
@@ -213,6 +225,9 @@ abstract class AbstractFile
      */
     public function setFilesize($value)
     {
+        if ($value < 0) {
+            throw new FileException('File size must be a positive integer');
+        }
         $this->filesize = (int) $value;
     }
 
