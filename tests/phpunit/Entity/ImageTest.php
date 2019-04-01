@@ -90,4 +90,28 @@ class ImageTest extends TestCase
         $this->image->setModDateFromDateTime($now);
         $this->assertEquals($now->format('Y-m-d H:i:s'), $this->image->getModDate());
     }
+
+    public function testSetAndGetDimensionX()
+    {
+        $this->image->setDimensionX(100);
+        $this->assertEquals(100, $this->image->getDimensionX());
+    }
+
+    public function testSetAndGetDimensionY()
+    {
+        $this->image->setDimensionY(100);
+        $this->assertEquals(100, $this->image->getDimensionY());
+    }
+
+    public function testSetAndGetCaption()
+    {
+        $this->image->setCaption('test');
+        $this->assertEquals('test', $this->image->getCaption());
+    }
+
+    public function testSetAndGetAltText()
+    {
+        $this->image->setAltText('test');
+        $this->assertEquals('test', $this->image->getAltText());
+    }
 }
