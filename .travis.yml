@@ -24,6 +24,3 @@ matrix:
     allow_failures:
       - php: "nightly"
 
-addons:
-    code_climate:
-        repo_token: 85e9beea73c263cb01cea13642b2c6de1f1a8fd24c95d576c43b768f12c1558d
