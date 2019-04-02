@@ -3,6 +3,7 @@
 namespace App\Tests\phpunit\Entity;
 
 use App\Entity\Page;
+use App\Exception\InvalidTimezoneException;
 use PHPUnit\Framework\TestCase;
 
 class PageTest extends TestCase
@@ -36,34 +37,22 @@ class PageTest extends TestCase
 
     public function testSetAndGetTimezone()
     {
-
+        $this->page->setTimezone('Europe/London');
+        $this->assertEquals('Europe/London', $this->page->getTimezone());
+        $this->expectException(InvalidTimezoneException::class);
+        $this->page->setTimezone('test');
     }
 
     public function testSetAndGetFeatureImage()
     {
-
-    }
-
-    public function testSetAndGetTags()
-    {
-
-    }
-
-    public function testSetAndGetUrls()
-    {
-
+        $this->page->setFeatureImage('test');
+        $this->assertEquals('test', $this->page->getFeatureImage());
     }
 
     public function testSetAndGetPassword()
     {
         $this->page->setPassword('test');
         $this->assertEquals('test', $this->page->getPassword());
-    }
-
-    public function testIsValidTimezone()
-    {
-        $this->assertTrue($this->page->isValidTimezone('Europe/London'));
-        $this->assertFalse($this->page->isValidTimezone('test'));
     }
 
     public function testIsValidVisibility()
@@ -147,11 +136,6 @@ class PageTest extends TestCase
         $this->assertEquals(Page::DRAFT, $this->page->getStatus());
     }
 
-    public function testSetAndGetCategories()
-    {
-
-    }
-
     public function testSetAndGetFeatureSnippet()
     {
             $this->page->setFeatureSnippet('test');
@@ -165,20 +149,10 @@ class PageTest extends TestCase
         $this->assertTrue($this->page->isValidStatus(Page::PUBLISHED));
     }
 
-    public function testSetAndGetAuthor()
-    {
-
-    }
-
     public function testSetAndGetPostDate()
     {
         $currentTime = new \DateTime('now');
         $this->page->setPostDate($currentTime);
         $this->assertEquals($currentTime, $this->page->getPostDate());
-    }
-
-    public function testSetAndGetUrl()
-    {
-
     }
 }
