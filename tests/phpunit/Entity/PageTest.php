@@ -62,12 +62,15 @@ class PageTest extends TestCase
 
     public function testIsValidTimezone()
     {
-
+        $this->assertTrue($this->page->isValidTimezone('Europe/London'));
+        $this->assertFalse($this->page->isValidTimezone('test'));
     }
 
     public function testIsValidVisibility()
     {
-
+        $this->assertTrue($this->page->isValidVisibility(Page::VIS_PRIVATE));
+        $this->assertTrue($this->page->isValidVisibility(Page::VIS_PUBLIC));
+        $this->assertFalse($this->page->isValidVisibility('test'));
     }
 
     public function testSetAndGetTitle()
@@ -78,42 +81,58 @@ class PageTest extends TestCase
 
     public function testSetAndGetCreateDate()
     {
-
+        $currentTime = new \DateTime('now');
+        $this->page->setCreateDate($currentTime);
+        $this->assertEquals($currentTime, $this->page->getCreateDate());
     }
 
     public function testIsScheduledPage()
     {
-
+        $currentTime = new \DateTime('yesterday');
+        $this->page->setPostDate($currentTime);
+        $this->assertFalse($this->page->isScheduledPage());
+        $currentTime = new \DateTime('tomorrow');
+        $this->page->setPostDate($currentTime);
+        $this->assertTrue($this->page->isScheduledPage());
     }
 
     public function testSetAndGetVisibility()
     {
-
+        $this->page->setVisibility(Page::VIS_PRIVATE);
+        $this->assertEquals(Page::VIS_PRIVATE, $this->page->getVisibility());
     }
 
     public function testSetAndGetModDate()
     {
-
+        $currentTime = new \DateTime('now');
+        $this->page->setModDate($currentTime);
+        $this->assertEquals($currentTime, $this->page->getModDate());
     }
 
     public function testIsAllowComments()
     {
-
+        $this->page->setAllowComments(true);
+        $this->assertTrue($this->page->isAllowComments());
     }
 
     public function testSetAndGetType()
     {
-
+        $this->page->setType(Page::TYPE_PAGE);
+        $this->assertEquals(Page::TYPE_PAGE, $this->page->getType());
+        $this->page->setType(Page::TYPE_POST);
+        $this->assertEquals(Page::TYPE_POST, $this->page->getType());
     }
 
     public function testSetAndGetSharingMessage()
     {
-
+        $this->page->setSharingMessage('test');
+        $this->assertEquals('test', $this->page->getSharingMessage());
     }
 
     public function testSetAndGetSubTitle()
     {
-
+        $this->page->setSubTitle('test');
+        $this->assertEquals('test', $this->page->getSubTitle());
     }
 
     public function testSetAndGetId()
@@ -141,7 +160,7 @@ class PageTest extends TestCase
 
     public function testIsValidStatus()
     {
-        $this->assertFalse($this->page->isValidStatus('moo'));
+        $this->assertFalse($this->page->isValidStatus('test'));
         $this->assertTrue($this->page->isValidStatus(Page::DRAFT));
         $this->assertTrue($this->page->isValidStatus(Page::PUBLISHED));
     }
@@ -153,7 +172,9 @@ class PageTest extends TestCase
 
     public function testSetAndGetPostDate()
     {
-
+        $currentTime = new \DateTime('now');
+        $this->page->setPostDate($currentTime);
+        $this->assertEquals($currentTime, $this->page->getPostDate());
     }
 
     public function testSetAndGetUrl()
