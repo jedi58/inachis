@@ -39,5 +39,6 @@ class UrlNormaliserTest extends TestCase
             UrlNormaliser::fromUri('/2018/03/12/something-really-cool')
         );
         $this->assertEquals('something-really-cool', UrlNormaliser::fromUri('something-really-cool'));
+        $this->assertEquals('something-really-cool', UrlNormaliser::fromUri('something-really-cool/'));
     }
 }
