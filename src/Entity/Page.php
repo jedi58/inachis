@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Exception\InvalidTimezoneException;
 
 /**
  * Object for handling pages of a site.
@@ -563,9 +564,15 @@ class Page
      * Sets the value of {@link timezone}.
      *
      * @param string $value The timezone for the post_date
+     * @throws InvalidTimezoneException
      */
     public function setTimezone($value)
     {
+        if (!$this->isValidTimezone($value)) {
+            throw new InvalidTimezoneException(
+                sprintf('Did not recognise timezone %s', $value)
+            );
+        }
         $this->timezone = $value;
     }
 
@@ -729,6 +736,7 @@ class Page
      * Determines if current page is scheduled for publishing.
      *
      * @return bool Result of testing if {@link post_date} is in the future
+     * @throws \Exception
      */
     public function isScheduledPage()
     {
