@@ -2,7 +2,9 @@
 
 namespace App\Tests\phpunit\Entity;
 
+use App\Entity\Category;
 use App\Entity\Page;
+use App\Entity\Tag;
 use App\Entity\Url;
 use App\Entity\User;
 use App\Exception\InvalidTimezoneException;
@@ -171,4 +173,15 @@ class PageTest extends TestCase
         $this->assertNotEmpty($this->page->getUrls());
     }
 
+    public function testAddAndGetCategories()
+    {
+        $this->page->addCategory(new Category('test-category'));
+        $this->assertNotEmpty($this->page->getCategories());
+    }
+
+    public function testAddAndGetTags()
+    {
+        $this->page->addTag(new Tag('test-tag'));
+        $this->assertNotEmpty($this->page->getTags());
+    }
 }
