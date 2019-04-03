@@ -3,6 +3,8 @@
 namespace App\Tests\phpunit\Entity;
 
 use App\Entity\Page;
+use App\Entity\Url;
+use App\Entity\User;
 use App\Exception\InvalidTimezoneException;
 use PHPUnit\Framework\TestCase;
 
@@ -155,4 +157,18 @@ class PageTest extends TestCase
         $this->page->setPostDate($currentTime);
         $this->assertEquals($currentTime, $this->page->getPostDate());
     }
+
+    public function testSetAndGetAuthor()
+    {
+        $this->page->setAuthor(new User('test'));
+        $this->assertInstanceOf(User::class, $this->page->getAuthor());
+        $this->assertEquals('test', $this->page->getAuthor()->getUsername());
+    }
+
+    public function testAddAndGetUrls()
+    {
+        $this->page->addUrl(new Url($this->page, 'test', true));
+        $this->assertNotEmpty($this->page->getUrls());
+    }
+
 }
