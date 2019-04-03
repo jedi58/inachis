@@ -142,8 +142,8 @@ class PageTest extends TestCase
 
     public function testSetAndGetFeatureSnippet()
     {
-            $this->page->setFeatureSnippet('test');
-            $this->assertEquals('test', $this->page->getFeatureSnippet());
+        $this->page->setFeatureSnippet('test');
+        $this->assertEquals('test', $this->page->getFeatureSnippet());
     }
 
     public function testIsValidStatus()
