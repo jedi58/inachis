@@ -114,6 +114,8 @@ class PageTest extends TestCase
         $this->assertEquals(Page::TYPE_PAGE, $this->page->getType());
         $this->page->setType(Page::TYPE_POST);
         $this->assertEquals(Page::TYPE_POST, $this->page->getType());
+        $this->expectException(\Exception::class);
+        $this->page->setType('test');
     }
 
     public function testSetAndGetSharingMessage()
@@ -171,17 +173,33 @@ class PageTest extends TestCase
     {
         $this->page->addUrl(new Url($this->page, 'test', true));
         $this->assertNotEmpty($this->page->getUrls());
+        $this->assertNull($this->page->getUrl());
+        $this->assertInstanceOf('\App\Entity\Url', $this->page->getUrl(0));
+        $this->expectException(\InvalidArgumentException::class);
+        $this->page->getUrl(100);
     }
 
     public function testAddAndGetCategories()
     {
         $this->page->addCategory(new Category('test-category'));
         $this->assertNotEmpty($this->page->getCategories());
+        $this->page->removeCategories();
+        $this->assertEmpty($this->page->getCategories());
     }
 
     public function testAddAndGetTags()
     {
         $this->page->addTag(new Tag('test-tag'));
         $this->assertNotEmpty($this->page->getTags());
+        $this->page->removeTags();
+        $this->assertEmpty($this->page->getTags());
+    }
+
+    public function testGetPostDateAsLink()
+    {
+        $this->page->setPostDate(new \DateTime('1970-01-01'));
+        $this->assertEquals('1970/01/01', $this->page->getPostDateAsLink());
+        $this->page->setPostDate(null);
+        $this->assertEquals('', $this->page->getPostDateAsLink());
     }
 }
