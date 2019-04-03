@@ -66,26 +66,29 @@ class UserTest extends TestCase
     public function testHasBeenRemoved()
     {
         $this->assertFalse($this->user->hasBeenRemoved());
-        $this->user->setRemoved();
+        $this->user->setRemoved(true);
         $this->assertTrue($this->user->hasBeenRemoved());
     }
 
     public function testSetAndGetCreateDate()
     {
-        $this->user->setCreateDate('test');
-        $this->assertEquals('test', $this->user->getCreateDate());
+        $currentDateTime = new \DateTime('now');
+        $this->user->setCreateDate($currentDateTime);
+        $this->assertEquals($currentDateTime, $this->user->getCreateDate());
     }
 
     public function testSetAndGetModDate()
     {
-        $this->user->setModDate('test');
-        $this->assertEquals('test', $this->user->getModDate());
+        $currentDateTime = new \DateTime('now');
+        $this->user->setModDate($currentDateTime);
+        $this->assertEquals($currentDateTime, $this->user->getModDate());
     }
 
     public function testSetAndGetPasswordModDate()
     {
-        $this->user->setPasswordModDate('test');
-        $this->assertEquals('test', $this->user->getPasswordModDate());
+        $currentDateTime = new \DateTime('now');
+        $this->user->setPasswordModDate($currentDateTime);
+        $this->assertEquals($currentDateTime, $this->user->getPasswordModDate());
     }
 
     public function testHasCredentialsExpired()
