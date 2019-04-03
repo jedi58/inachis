@@ -4,3 +4,5 @@ twig:
     strict_variables: '%kernel.debug%'
     #globals:
     #  settings: "@App\"
+    form_themes:
+      - 'form/fieldset.html.twig'
