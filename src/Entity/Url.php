@@ -69,6 +69,7 @@ class Url
      * @param Page   $content The {@link Page} object the link is for
      * @param string $link    The short link for the content
      * @param bool   $default
+     * @throws \Exception
      */
     public function __construct(Page $content, $link = '', $default = true)
     {
@@ -167,7 +168,7 @@ class Url
      */
     public function validateURL()
     {
-        return preg_match('/^[a-z0-9\-]+$/i', $this->link);
+        return preg_match('/^[a-z0-9\-]+$/i', $this->link) === 1;
     }
 
     public function associateContent()
