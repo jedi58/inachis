@@ -27,6 +27,12 @@ class SeriesTest extends TestCase
         $this->assertEquals('test', $this->series->getTitle());
     }
 
+    public function testGetAndSetSubTitle()
+    {
+        $this->series->setSubTitle('test');
+        $this->assertEquals('test', $this->series->getSubTitle());
+    }
+
     public function testGetAndSetDescription()
     {
         $this->series->setDescription('test');

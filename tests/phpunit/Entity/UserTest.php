@@ -135,6 +135,7 @@ class UserTest extends TestCase
 
     public function testGetRoles()
     {
+        $this->user->setRoles();
         $this->assertEquals([ 'ROLE_ADMIN', 'ROLE_USER' ], $this->user->getRoles());
     }
 
@@ -144,5 +145,15 @@ class UserTest extends TestCase
         $this->assertEquals('test', $this->user->getPlainPassword());
         $this->user->eraseCredentials();
         $this->assertEquals('', $this->user->getPlainPassword());
+    }
+
+    public function testErase()
+    {
+        $this->assertNull($this->user->erase());
+    }
+
+    public function getSalt()
+    {
+        $this->assertNull($this->user->getSalt());
     }
 }
