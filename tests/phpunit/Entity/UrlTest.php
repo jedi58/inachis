@@ -69,4 +69,21 @@ class UrlTest extends TestCase
         $this->url->setLink('test\'s-link');
         $this->assertFalse($this->url->validateURL());
     }
+
+    public function testGetCreateDate()
+    {
+        $this->assertGreaterThan(0, $this->url->getCreateDate()->getTimestamp());
+    }
+
+    public function testGetContent()
+    {
+        $this->assertInstanceOf(Page::class, $this->url->getContent());
+    }
+
+    public function testIsDefault()
+    {
+        $this->assertTrue($this->url->isDefault());
+        $this->url->setDefault(false);
+        $this->assertFalse($this->url->isDefault());
+    }
 }
