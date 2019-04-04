@@ -55,14 +55,6 @@ class Image extends AbstractFile
     {
     }
 
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getDimensionX()
     {
         return $this->dimensionX;
@@ -81,14 +73,6 @@ class Image extends AbstractFile
     public function getAltText()
     {
         return $this->altText;
-    }
-
-    /**
-     * @param $value
-     */
-    public function setId($value)
-    {
-        $this->id = $value;
     }
 
     public function setDimensionX($value)
