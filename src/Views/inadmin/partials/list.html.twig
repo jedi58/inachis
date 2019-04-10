@@ -45,7 +45,7 @@
             {% if attribute(item, snippet_description|default('content'))|markdown|striptags|length > 300 %}…{% endif %}
         </p>
         {% if item.modDate is defined %}
-            {% set timezone = item.timezone|default('UTC') %}
+            {% set timezone = session.user.timezone|default(item.timezone) %}
         <p class="date"><span class="material-icons">schedule</span> Last modified: <em>{{ item.modDate|date('jS F Y \\a\\t H:i', timezone) }} {{ timezone }}</em></p>
         {% endif %}
     </article>

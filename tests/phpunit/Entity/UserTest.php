@@ -3,6 +3,7 @@
 namespace App\Tests\phpunit\Entity;
 
 use App\Entity\User;
+use App\Exception\InvalidTimezoneException;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
@@ -155,5 +156,13 @@ class UserTest extends TestCase
     public function getSalt()
     {
         $this->assertNull($this->user->getSalt());
+    }
+
+    public function testSetAndGetTimezone()
+    {
+        $this->user->setTimezone('Europe/London');
+        $this->assertEquals('Europe/London', $this->user->getTimezone());
+        $this->expectException(InvalidTimezoneException::class);
+        $this->user->setTimezone('Alpha Centauri');
     }
 }
