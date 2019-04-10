@@ -78,6 +78,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @param int          $limit  The maximum number of results to return
      * @param array        $where
      * @param array|string $order
+     * @param array|string $groupBy
      *
      * @return Paginator The result of fetching the objects
      */

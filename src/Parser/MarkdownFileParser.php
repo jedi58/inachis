@@ -23,6 +23,9 @@ class MarkdownFileParser
      */
     const PARSE_DATE = '/([0-9]{4})-([0-9]{2})-([0-9]{2})/';
 
+    /**
+     * @var
+     */
     private $entityManager;
 
     /**
@@ -34,6 +37,7 @@ class MarkdownFileParser
      * @param ObjectManager $entityManager
      * @param string $post
      * @return Page
+     * @throws \Exception
      */
     public function parse(ObjectManager $entityManager, string $post) : Page
     {
