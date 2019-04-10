@@ -172,6 +172,7 @@ class ZZPageController extends AbstractInachisController
         $entityManager = $this->getDoctrine()->getManager();
         $url = preg_replace('/\/?incc\/(page|post)\/?/', '', $request->getRequestUri());
         $url = $entityManager->getRepository(Url::class)->findByLink($url);
+        $title = $title === 'new' ? null : $title;
         // If content with this URL doesn't exist, then redirect
         if (empty($url) && null !== $title) {
             return $this->redirectToRoute(
