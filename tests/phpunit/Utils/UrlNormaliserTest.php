@@ -20,6 +20,7 @@ class UrlNormaliserTest extends TestCase
         $this->assertEquals('some-hort-text', UrlNormaliser::toUri('some $hort text'));
         $this->assertEquals('some', UrlNormaliser::toUri('some short text', 5));
         $this->assertEquals('some-s', UrlNormaliser::toUri('some short text', 6));
+        $this->assertEquals('rock-and-roll', UrlNormaliser::toUri('rock & roll'));
     }
 
     public function testFromUriException()
