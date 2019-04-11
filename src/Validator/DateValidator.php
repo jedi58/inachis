@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
  */
 class DateValidator
 {
-    public function validateTimezone(?string $timezone): string
+    public static function validateTimezone(?string $timezone): string
     {
         if (empty($timezone)) {
             throw new InvalidArgumentException('The timezone can not be empty.');
