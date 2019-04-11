@@ -11,6 +11,14 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
  */
 class DateValidator
 {
+    /**
+     * Tests if a timezone is valid - errors if it is not, otherwise returns the timezone. If user input is possible
+     * it should gracefully handle this exception.
+     *
+     * @param string|null $timezone The timezone to validate
+     * @return string The validated timezone
+     * @throws InvalidTimezoneException
+     */
     public static function validateTimezone(?string $timezone): string
     {
         if (empty($timezone)) {
