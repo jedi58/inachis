@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Flex\Response;
 
-abstract class AbstractInachisController extends Controller
+abstract class AbstractInachisController extends AbstractController
 {
     protected $entityManager;
     /**
