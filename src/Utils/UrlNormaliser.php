@@ -19,10 +19,12 @@ class UrlNormaliser
         $title = trim(
             preg_replace(
                 [
+                    '&',
                     '/[\_\s]+/',
                     '/[^a-z0-9\-]/i'
                 ],
                 [
+                    'and',
                     '-',
                     ''
                 ],
