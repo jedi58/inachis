@@ -23,7 +23,6 @@ final class Version20190410102237 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE user ADD timezone VARCHAR(32) DEFAULT \'UTC\' NOT NULL');
-
     }
 
     public function down(Schema $schema) : void

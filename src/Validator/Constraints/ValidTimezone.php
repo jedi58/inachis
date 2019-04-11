@@ -8,5 +8,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class ValidTimezone extends Constraint
 {
-        public $message = '"{{ string }}" is not a recognised timezone';
+    public $message = '"{{ string }}" is not a recognised timezone';
 }
