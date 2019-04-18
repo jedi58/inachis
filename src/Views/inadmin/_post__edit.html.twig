@@ -122,19 +122,7 @@
     {{ form_row(form._token) }}
     {{ form_end(form, { 'render_rest': false }) }}
 
-    <!-- link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" -->
     <link rel="stylesheet" href="/assets/css/incc/jquery.switchButton.css">
-    <!-- script src="https://unpkg.com/easymde/dist/easymde.min.js"></script -->
     <script src="/assets/js/incc/jquery.switchButton.js"></script>
-    <script>
-        var simplemde = new SimpleMDE({
-        //var simplemde = new EasyMDE({
-            element: $("#content")[0],
-            autosave: {
-                enabled: true,
-                uniqueId: '{% if post.id is not empty %}{{ post.id }}{% else %}new-content-{{ session.user.id }}-{{ date()|date('Ymd') }}{% endif %}'
-            },
-            forceSync: true
-        });
-    </script>
+
 {% endblock content %}
