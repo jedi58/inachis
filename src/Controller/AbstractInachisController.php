@@ -25,21 +25,21 @@ abstract class AbstractInachisController extends AbstractController
         $this->entityManager = $this->getDoctrine()->getManager();
         $this->data = [
             'settings' => [
-                'siteTitle' => $this->container->hasParameter('app.title') ?
-                    $this->container->getParameter('app.title') :
+                'siteTitle' => $this->container->has('app.title') ?
+                    $this->container->get('app.title') :
                     null,
                 'domain' => $this->getProtocolAndHostname(),
                 'google' => [],
-                'language' => $this->container->hasParameter('locale') ?
-                    $this->container->getParameter('locale') :
+                'language' => $this->container->has('locale') ?
+                    $this->container->get('locale') :
                     'en',
                 'textDirection' => 'ltr',
                 'abstract' => '',
-                'fb_app_id' => $this->container->hasParameter('app.fb_app_id') ?
-                    $this->container->getParameter('app.fb_app_id') :
+                'fb_app_id' => $this->container->has('app.fb_app_id') ?
+                    $this->container->get('app.fb_app_id') :
                     null,
-                'twitter' => $this->container->hasParameter('app.twitter') ?
-                    $this->container->getParameter('app.twitter') :
+                'twitter' => $this->container->has('app.twitter') ?
+                    $this->container->get('app.twitter') :
                     null,
             ],
             'notifications' => [],
