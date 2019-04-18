@@ -14,6 +14,14 @@ class AppExtensionTest extends TestCase
         $this->appExtension = new AppExtension();
     }
 
+    public function testGetFilters() : void
+    {
+        $filters = $this->appExtension->getFilters();
+        $this->assertCount(1, $filters);
+        $this->assertInstanceOf('Twig\TwigFilter', $filters[0]);
+        $this->assertEquals('activeMenu', $filters[0]->getName());
+    }
+
     public function testActiveMenuFilter() : void
     {
         $this->assertEquals('menu__active', $this->appExtension->activeMenuFilter('test', 'test'));
