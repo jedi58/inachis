@@ -1,6 +1,6 @@
 {% block list %}
 
-{% if dataset|default(null) is not empty %}
+{% if dataset|default(null) is not empty and form|default(null) is not empty %}
     {{ form_start(form, {'attr': { 'class': 'form form__' ~ type ~ ' content__list' }}) }}
 
     {{- form_errors(form) -}}
@@ -45,8 +45,15 @@
             {% if attribute(item, snippet_description|default('content'))|markdown|striptags|length > 300 %}…{% endif %}
         </p>
         {% if item.modDate is defined %}
-            {% set timezone = item.timezone|default('UTC') %}
-        <p class="date"><span class="material-icons">schedule</span> Last modified: <em>{{ item.modDate|date('jS F Y \\a\\t H:i', timezone) }} {{ timezone }}</em></p>
+            {% set timezone = session.user.timezone|default(item.timezone|default('UTC')) %}
+        <p class="date">
+            {% if item.postDate|default(false) %}
+            <span class="material-icons">schedule</span>
+             Post date: <em>{{ item.postDate|date('jS F Y \\a\\t H:i', timezone) }}</em>
+            {% endif %}
+            <span class="material-icons">schedule</span>
+             Last modified: <em>{{ item.modDate|date('jS F Y \\a\\t H:i', timezone) }}</em>
+        </p>
         {% endif %}
     </article>
     {%  endfor %}
@@ -74,6 +81,9 @@
             <span>with selected:</span>
         {% for key, action in actions %}
             <button class="button {{ action.button_class|default(null) }}"{%-
+                if action.data is defined and action.data is not empty %}
+                    {% for datakey, datavalue in action.data %} data-{{ datakey }}="{{ datavalue }}"{% endfor %}
+            {%- endif %}{%-
                 if action.id is defined %} id="{{ action.id }}"{% endif
             %} name="{{ key }}" type="submit">
             {% if action.icon is not empty %}

@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use App\Exception\InvalidTimezoneException;
+use App\Validator\DateValidator;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as InachisAssert;
 
 /**
  * Object for handling User entity.
@@ -103,6 +106,13 @@ class User implements UserInterface //, \Serializable
      * @var string The date the password was last modified
      */
     protected $passwordModDate;
+    /**
+     * @ORM\Column(type="string",length=32, options={"default": "UTC"})
+     * @Assert\NotBlank()
+     * @InachisAssert\ValidTimezone()
+     * @var string The local timezone for the user
+     */
+    protected $timezone;
 
     /**
      * Default constructor for {@link User}. If a password if passed into
@@ -113,6 +123,7 @@ class User implements UserInterface //, \Serializable
      * @param string $username The username for the {@link User}
      * @param string $password The password for the {@link User}
      * @param string $email    The email for the {@link User}
+     * @throws \Exception
      */
     public function __construct($username = '', $password = '', $email = '')
     {
@@ -123,6 +134,7 @@ class User implements UserInterface //, \Serializable
         $this->setCreateDate($currentTime);
         $this->setModDate($currentTime);
         $this->setPasswordModDate($currentTime);
+        $this->setTimezone('UTC');
     }
 
     /**
@@ -234,6 +246,16 @@ class User implements UserInterface //, \Serializable
     }
 
     /**
+     * Returns the {@link timezone} for the {@link User}.
+     *
+     * @return string The local timezone for the user
+     */
+    public function getTimezone()
+    {
+        return $this->timezone;
+    }
+
+    /**
      * Returns the {@link passwordModDate} for the {@link User}.
      *
      * @return string The password last modification date for the user
@@ -248,7 +270,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param string $value The value to set
      */
-    public function setId($value)
+    public function setId($value) : void
     {
         $this->id = $value;
     }
@@ -258,7 +280,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param string $value The value to set
      */
-    public function setUsername($value)
+    public function setUsername($value) : void
     {
         $this->username = $value;
         $this->usernameCanonical = $value;
@@ -269,7 +291,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param string $value The value to set
      */
-    public function setPassword($value)
+    public function setPassword($value) : void
     {
         $this->password = $value;
     }
@@ -277,7 +299,7 @@ class User implements UserInterface //, \Serializable
     /**
      * @param string $value New password to use
      */
-    public function setPlainPassword($value)
+    public function setPlainPassword($value) : void
     {
         $this->plainPassword = $value;
         $this->password = null;
@@ -288,7 +310,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param string $value The value to set
      */
-    public function setEmail($value)
+    public function setEmail($value) : void
     {
         $this->email = $value;
         $this->emailCanonical = $value;
@@ -299,7 +321,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param string $value The value to set
      */
-    public function setDisplayName($value)
+    public function setDisplayName($value) : void
     {
         $this->displayName = $value;
     }
@@ -309,7 +331,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param string $value The value to set
      */
-    public function setAvatar($value)
+    public function setAvatar($value) : void
     {
         $this->avatar = $value;
     }
@@ -319,7 +341,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param bool $value The value to set
      */
-    public function setActive($value)
+    public function setActive($value) : void
     {
         $this->isActive = (bool) $value;
     }
@@ -329,7 +351,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param bool $value The value to set
      */
-    public function setRemoved($value)
+    public function setRemoved($value) : void
     {
         $this->isRemoved = (bool) $value;
     }
@@ -339,7 +361,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param \DateTime $value The date to be set
      */
-    public function setCreateDate(\DateTime $value)
+    public function setCreateDate(\DateTime $value) : void
     {
         //$this->setCreateDate($value->format('Y-m-d H:i:s'));
         $this->createDate = $value;
@@ -350,7 +372,7 @@ class User implements UserInterface //, \Serializable
      *
      * @param \DateTime $value The date to set
      */
-    public function setModDate(\DateTime $value)
+    public function setModDate(\DateTime $value) : void
     {
         //$this->setModDate($value->format('Y-m-d H:i:s'));
         $this->modDate = $value;
@@ -361,9 +383,18 @@ class User implements UserInterface //, \Serializable
      *
      * @param \DateTime $value The date to set
      */
-    public function setPasswordModDate(\DateTime $value)
+    public function setPasswordModDate(\DateTime $value) : void
     {
         $this->passwordModDate = $value;
+    }
+
+    /**
+     * @param string $value
+     * @throws InvalidTimezoneException
+     */
+    public function setTimezone(string $value) : void
+    {
+        $this->timezone = DateValidator::validateTimezone($value);
     }
 
     /**

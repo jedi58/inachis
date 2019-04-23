@@ -52,8 +52,7 @@ class ZZPageController extends AbstractInachisController
         if ($url->getContent()->isScheduledPage() || $url->getContent()->isDraft()) {
             return $this->redirectToRoute(
                 'app_dashboard_default',
-                [],
-                Response::HTTP_TEMPORARY_REDIRECT
+                []
             );
         }
         if (!$url->isDefault()) {
@@ -81,6 +80,7 @@ class ZZPageController extends AbstractInachisController
      * @param Request $request
      * @param string $type
      * @return null
+     * @throws \Exception
      */
     public function getPostListAdmin(Request $request, $type = 'post')
     {
@@ -90,28 +90,29 @@ class ZZPageController extends AbstractInachisController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() && !empty($request->get('items'))) {
             foreach ($request->get('items') as $item) {
-                if ($request->get('delete') !== null) {
+                if ($request->request->has('delete')) {
                     $post = $entityManager->getRepository(Page::class)->findOneById($item);
                     if ($post !== null) {
                         $entityManager->getRepository(Page::class)->remove($post);
                     }
                 }
-                if ($request->get('privacy') !== null) {
+                if ($request->request->has('private') || $request->request->has('public')) {
                     $post = $entityManager->getRepository(Page::class)->findOneById($item);
                     if ($post !== null) {
-                        $post->setVisibility(Page::VIS_PRIVATE);
+                        $post->setVisibility(
+                            $request->request->has('private') ? Page::VIS_PRIVATE : Page::VIS_PUBLIC
+                        );
                         $post->setModDate(new \DateTime('now'));
                         $entityManager->persist($post);
                     }
                 }
             }
-            if ($request->get('privacy') !== null) {
+            if ($request->request->has('private') || $request->request->has('public')) {
                 $entityManager->flush();
             }
             return $this->redirectToRoute(
                 'app_zzpage_getpostlistadmin',
-                ['type' => $type],
-                Response::HTTP_PERMANENTLY_REDIRECT
+                [ 'type' => $type ]
             );
         }
         $offset = (int) $request->get('offset', 0);
@@ -172,12 +173,12 @@ class ZZPageController extends AbstractInachisController
         $entityManager = $this->getDoctrine()->getManager();
         $url = preg_replace('/\/?incc\/(page|post)\/?/', '', $request->getRequestUri());
         $url = $entityManager->getRepository(Url::class)->findByLink($url);
+        $title = $title === 'new' ? null : $title;
         // If content with this URL doesn't exist, then redirect
         if (empty($url) && null !== $title) {
             return $this->redirectToRoute(
                 'app_zzpage_getpostadmin',
-                ['type' => $type],
-                Response::HTTP_TEMPORARY_REDIRECT
+                ['type' => $type]
             );
         }
         $post = null !== $title ?

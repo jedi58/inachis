@@ -7,7 +7,10 @@ use App\Entity\Page;
 use App\Entity\Series;
 use App\Entity\Tag;
 use App\Entity\Url;
+use Doctrine\DBAL\Exception\ConnectionException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -74,12 +77,16 @@ class SettingsController extends AbstractInachisController
     }
 
     /**
+     * @param LoggerInterface $logger
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws \Doctrine\DBAL\ConnectionException
      * @Route("/incc/settings/wipe", methods={"POST"})
      */
-    public function wipe(LoggerInterface $logger)
+    public function wipe(LoggerInterface $logger, Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        if ($this->get('confirm')) {
+        if ($request->get('confirm', false)) {
             $logger->info('Wiping all content');
             $this->getDoctrine()->getRepository(Image::class)->wipe($logger);
             $this->getDoctrine()->getRepository(Page::class)->wipe($logger);
