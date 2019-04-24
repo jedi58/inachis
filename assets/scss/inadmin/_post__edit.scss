@@ -22,13 +22,17 @@
 
     label {
         color: #999;
-        //text-transform: uppercase;
+        display: block;
 
         &.date-range__label {
             display: inline-flex;
             font-size: 0.75em;
             text-transform: uppercase;
             width: 49%;
+        }
+
+        &.inline_label {
+            display: inline;
         }
     }
 
