@@ -25,7 +25,7 @@ class DateValidator
             throw new InvalidArgumentException('The timezone can not be empty.');
         }
 
-        if (!in_array($timezone, \DateTimeZone::listIdentifiers())) {
+        if (!in_array($timezone, timezone_identifiers_list())) {
             throw new InvalidTimezoneException(sprintf(
                 '"%s" is not a valid timezone',
                 $timezone
