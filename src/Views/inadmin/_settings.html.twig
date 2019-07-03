@@ -15,6 +15,9 @@
                 ui-progressbar-warning
             {%- endif -%}"></div>
         </section>
+
+        {% include "/inadmin/partials/export.html.twig" %}
+
         <section class="section--boxed action-warning">
             <form method="post" action="{{ path('app_settings_wipe') }}">
                 <h2>Delete All Content</h2>

@@ -27,6 +27,19 @@ class SettingsController extends AbstractInachisController
         $this->data['counts']['series'] = $this->getDoctrine()->getManager()->getRepository(Series::class)->getAllCount();
         $this->data['counts']['tag'] = $this->getDoctrine()->getManager()->getRepository(Tag::class)->getAllCount();
         $this->data['counts']['url'] = $this->getDoctrine()->getManager()->getRepository(Url::class)->getAllCount();
+
+        $this->data['data_types'] = [
+            'raw' => $this->entityManager->getConfiguration()->getMetadataDriverImpl()->getAllClassNames()
+        ];
+        if (!empty($this->data['data_types']['raw'])) {
+            foreach ($this->data['data_types']['raw'] as $type) {
+                if (class_exists($type) && method_exists($type, 'isExportable') && $type::isExportable()) {
+                    $this->data['data_types'][$type] = $type::getName();
+                }
+            }
+            unset($this->data['data_types']['raw']);
+        }
+
         return $this->render('inadmin/settings.html.twig', $this->data);
     }
 
@@ -98,7 +111,7 @@ class SettingsController extends AbstractInachisController
     }
 
     /**
-     * @return bool
+     * @return string
      */
     private function getOpCacheStatus()
     {
