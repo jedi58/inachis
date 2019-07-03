@@ -58,6 +58,7 @@ class Series
      *      @ORM\JoinColumn(name="page_id", referencedColumnName="id")
      *     }
      * )
+     * @ORM\OrderBy({"postDate" = "ASC"})
      *
      * @var ArrayCollection|Page[] The array of pages in the series
      */

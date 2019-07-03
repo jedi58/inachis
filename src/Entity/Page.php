@@ -197,6 +197,7 @@ class Page
      * @param string    $content The content for the {@link Page}
      * @param User|null $author  The {@link User} that authored the {@link Page}
      * @param string    $type    The type of {@link Page} - post or page
+     * @throws \Exception
      */
     public function __construct($title = '', $content = '', $author = null, $type = self::TYPE_POST)
     {
@@ -757,5 +758,15 @@ class Page
     public function isDraft()
     {
         return $this->status === self::DRAFT;
+    }
+
+    public function isExportable()
+    {
+        return true;
+    }
+
+    public function getName()
+    {
+        return 'Pages and Posts';
     }
 }
