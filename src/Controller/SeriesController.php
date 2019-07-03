@@ -36,7 +36,7 @@ class SeriesController extends AbstractInachisController
                 [],
                 Response::HTTP_PERMANENTLY_REDIRECT
             );
-            }
+        }
 
         $offset = (int) $request->get('offset', 0);
         $limit = $entityManager->getRepository(Series::class)->getMaxItemsToShow();
