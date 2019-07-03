@@ -19,11 +19,28 @@ class SeriesController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
-        $form = $this->createFormBuilder(null);
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() && !empty($request->get('items'))) {
+            foreach ($request->get('items') as $item) {
+                if ($request->get('delete') !== null) {
+                    $post = $entityManager->getRepository(Series::class)->findOneById($item);
+                    if ($post !== null) {
+                        $entityManager->getRepository(Series::class)->remove($post);
+                    }
+                }
+            }
+            return $this->redirectToRoute(
+                'app_series_list',
+                [],
+                Response::HTTP_PERMANENTLY_REDIRECT
+            );
+            }
 
         $offset = (int) $request->get('offset', 0);
         $limit = $entityManager->getRepository(Series::class)->getMaxItemsToShow();
-        $this->data['form'] = $form->getForm()->createView();
+        $this->data['form'] = $form->createView();
         $this->data['dataset'] = $entityManager->getRepository(Series::class)->getAll(
             $offset,
             $limit,
@@ -42,6 +59,7 @@ class SeriesController extends AbstractInachisController
      * @Route("/incc/series/new", methods={"GET", "POST"}, name="app_series_new")
      * @param Request $request
      * @return Response
+     * @throws \Exception
      */
     public function edit(Request $request)
     {
