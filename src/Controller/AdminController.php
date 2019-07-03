@@ -2,11 +2,10 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AdminController extends Controller
+class AdminController extends AbstractInachisController
 {
     /**
      * @Route("/incc/user-management", methods={"GET", "POST"})
@@ -24,7 +23,8 @@ class AdminController extends Controller
     public function adminDetails($id)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        self::$data['page'] = array('title' => 'Profile');
+        $this->data['page']['title'] = 'Profile';
+
         return $this->render('inadmin/profile.html.twig', $this->data);
     }
 }
