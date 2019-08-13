@@ -133,12 +133,12 @@ abstract class AbstractInachisController extends AbstractController
     }
 
     /**
-     * @return RedirectResponse
+     * @return string
      */
     public function redirectIfNoAdmins()
     {
         if ($this->entityManager->getRepository(User::class)->count([]) == 0) {
-            return $this->redirectToRoute('app_setup_stage1');
+            return 'app_setup_stage1';
         }
     }
 
@@ -146,13 +146,21 @@ abstract class AbstractInachisController extends AbstractController
      * If the user is trying to access a page such as sign-in but is already authenticated
      * they will be redirected to the dashboard.
      *
-     * @return RedirectResponse
+     * @return string
      */
     public function redirectIfAuthenticated()
     {
         if ($this->isAuthenticated()) {
-            return $this->redirectToRoute('app_dashboard_default');
+            return 'app_dashboard_default';
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function redirectIfAuthenticatedOrNoAdmins()
+    {
+        return $this->redirectIfAuthenticated() ?: $this->redirectIfNoAdmins();
     }
 
     /**
