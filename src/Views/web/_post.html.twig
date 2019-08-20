@@ -10,7 +10,7 @@
         <header class="entry-header">
             <h1 class="entry-title">{{ post.title }}</h1>
             {%- if post.subTitle is not empty %}
-                <h2>{{ post.subTitle }}</h2>
+            <h2 class="entry-subtitle">{{ post.subTitle }}</h2>
             {% endif %}
             {% if post.type == "post" %}
             <div class="entry-meta">
