@@ -8,9 +8,9 @@ php:
 before_script:
 #  - pecl channel-update pecl.php.net
   - wget http://getcomposer.org/composer.phar
-  - composer require php-coveralls/php-coveralls
+  - php -d memory_limit=-1 composer.phar require php-coveralls/php-coveralls
   - php -d memory_limit=-1 composer.phar install --no-interaction
-  - php composer.phar dump-autoload --optimize
+  - php -d memory_limit=-1 composer.phar dump-autoload --optimize
 
 script:
   - mkdir -p ./tests/logs/
