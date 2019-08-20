@@ -31,10 +31,11 @@ class DefaultController extends AbstractInachisController
             ]
         );
 
-        $pageQuery = 'q.status = :status AND q.postDate <= :postDate';
+        $pageQuery = 'q.status = :status AND q.postDate <= :postDate AND q.type = :type';
         $pageParameters = [
             'status'   => Page::PUBLISHED,
             'postDate' => new \DateTime(),
+            'type' => Page::TYPE_POST,
         ];
         $this->data['content'] = [];
         $excludePages = [];
