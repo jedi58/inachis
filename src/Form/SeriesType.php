@@ -86,7 +86,7 @@ class SeriesType extends AbstractType
                         'data-tip-title'   => $this->translator->trans('admin.tip.title.series.firstDate', [], 'messages'),
                         'readOnly' => true,
                     ],
-                    'format' => 'dd/MM/yyyy HH:mm',
+                    'format' => 'dd/MM/yyyy', // HH:mm',
                     'html5'  => true,
                     'label'  => $this->translator->trans('admin.label.series.firstDate', [], 'messages'),
                     'label_attr' => [
@@ -106,7 +106,7 @@ class SeriesType extends AbstractType
                         'data-tip-title'   => $this->translator->trans('admin.tip.title.series.lastDate', [], 'messages'),
                         'readOnly' => true,
                     ],
-                    'format' => 'dd/MM/yyyy HH:mm',
+                    'format' => 'dd/MM/yyyy', // HH:mm',
                     'html5'  => true,
                     'label'  => $this->translator->trans('admin.label.series.lastDate', [], 'messages'),
                     'label_attr' => [

@@ -49,7 +49,7 @@
                 {% if series.items is not empty %}
                     <ol>
                     {% for item in series.items %}
-                        <li>{{ item.title }}</li>
+                        <li><a href="/incc/{{ item.type }}/{{ item.urls|first.link }}">{{ item.title }}</a></li>
                     {% endfor %}
                     </ol>
                 {% else %}

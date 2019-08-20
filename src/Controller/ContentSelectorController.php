@@ -51,10 +51,10 @@ class ContentSelectorController extends Controller
                 $firstDate = $series->getFirstDate();
                 $lastDate = $series->getLastDate();
                 if ($firstDate === null || $page->getPostDate()->format('Y-m-d H:i:s') < $firstDate->format('Y-m-d H:i:s')) {
-                    $series->setFirstDate($page->getPostDate()->format('Y-m-d H:i:s'));
+                    $series->setFirstDate($page->getPostDate());
                 }
                 if ($lastDate === null || $page->getPostDate()->format('Y-m-d H:i:s') > $lastDate->format('Y-m-d H:i:s')) {
-                    $series->setLastDate($page->getPostDate()->format('Y-m-d H:i:s'));
+                    $series->setLastDate($page->getPostDate());
                 }
             }
             $series->setModDate(new \DateTime('now'));

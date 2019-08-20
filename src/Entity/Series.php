@@ -176,11 +176,10 @@ class Series
     }
 
     /**
-     * @param string $firstDate
-     *
+     * @param \DateTime $firstDate
      * @return $this
      */
-    public function setFirstDate(string $firstDate = null)
+    public function setFirstDate(\DateTime $firstDate = null)
     {
         $this->firstDate = $firstDate;
 
@@ -196,11 +195,11 @@ class Series
     }
 
     /**
-     * @param string $lastDate
+     * @param \DateTime $lastDate
      *
      * @return $this
      */
-    public function setLastDate(string $lastDate = null)
+    public function setLastDate(\DateTime $lastDate = null)
     {
         $this->lastDate = $lastDate;
 
