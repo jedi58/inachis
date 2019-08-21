@@ -11,7 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class SeriesController extends AbstractInachisController
 {
     /**
-     * @Route("/incc/series/list", methods={"GET", "POST"})
+     * @Route("/incc/series/list/{offset}/{limit}",
+     *     methods={"GET", "POST"},
+     *     requirements={
+     *          "offset": "\d+",
+     *          "limit"="\d+"
+     *     },
+     *     defaults={"offset"=0, "limit"=10}
+     * )
      * @param Request $request
      * @return Response
      */
