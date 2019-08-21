@@ -91,6 +91,8 @@ var InachisPostEdit = {
 
 	getUrlFromTitle: function()
 	{
+		var $originalTitle = $('#post_url').val();
+		if ($originalTitle.match(/\d{4}\/\d{2}\/\d{2}\/[a-z0-9\-]+/)) {
 		var $postContainer = $('#post__edit'),
 			title = this.urlify($postContainer.find('#post_title').val()),
 			subTitle = this.urlify($postContainer.find('#post_subTitle').val());
@@ -103,6 +105,8 @@ var InachisPostEdit = {
 		}
 		// @todo XHR to check if URL is already in use
 		return title;
+		}
+		return $originalTitle;
 	},
 
 	convertDate: function(value)
