@@ -92,19 +92,19 @@ var InachisPostEdit = {
 	getUrlFromTitle: function()
 	{
 		var $originalTitle = $('#post_url').val();
-		if ($originalTitle.match(/\d{4}\/\d{2}\/\d{2}\/[a-z0-9\-]+/)) {
-		var $postContainer = $('#post__edit'),
-			title = this.urlify($postContainer.find('#post_title').val()),
-			subTitle = this.urlify($postContainer.find('#post_subTitle').val());
-		if (title.length > 0 && subTitle.length > 0) {
-			title += '-';
-		}
-		title += subTitle;
-		if (this._postOrPage === 'post') {
-			title = this.convertDate($('#post_postDate').val().substring(0,10)) + '/' + title.substring(0, 255);
-		}
-		// @todo XHR to check if URL is already in use
-		return title;
+		if ($originalTitle === '' || $originalTitle.match(/\d{4}\/\d{2}\/\d{2}\/[a-z0-9\-]+/)) {
+			var $postContainer = $('#post__edit'),
+				title = this.urlify($postContainer.find('#post_title').val()),
+				subTitle = this.urlify($postContainer.find('#post_subTitle').val());
+			if (title.length > 0 && subTitle.length > 0) {
+				title += '-';
+			}
+			title += subTitle;
+			if (this._postOrPage === 'post') {
+				title = this.convertDate($('#post_postDate').val().substring(0,10)) + '/' + title.substring(0, 255);
+			}
+			// @todo XHR to check if URL is already in use
+			return title;
 		}
 		return $originalTitle;
 	},
