@@ -62,9 +62,16 @@ class Revision
      */
     protected $modDate;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getPageId(): ?string
@@ -84,8 +91,16 @@ class Revision
         return $this->versionNumber;
     }
 
+    /**
+     * @param int $versionNumber
+     * @return Revision
+     * @throws \Exception
+     */
     public function setVersionNumber(int $versionNumber): self
     {
+        if ($versionNumber < 1) {
+            throw new \Exception('Invalid version number');
+        }
         $this->versionNumber = $versionNumber;
 
         return $this;
@@ -105,10 +120,13 @@ class Revision
      * Sets the value of {@link modDate}.
      *
      * @param \DateTime $value The date to set
+     * @return Revision
      */
-    public function setModDate(\DateTime $value = null)
+    public function setModDate(\DateTime $value = null): self
     {
         $this->modDate = $value;
+
+        return $this;
     }
 
     /**
@@ -123,10 +141,13 @@ class Revision
      * Sets the value of {@link author}.
      *
      * @param User $value The UUID of the {@link Page} author
+     * @return Revision
      */
-    public function setUser(User $value = null)
+    public function setUser(User $value = null): self
     {
         $this->user = $value;
+
+        return $this;
     }
 
     public function getAction(): ?string

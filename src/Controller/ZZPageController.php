@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Controller\AbstractInachisController;
 use App\Entity\Category;
 use App\Entity\Page;
+use App\Entity\Revision;
 use App\Entity\Tag;
 use App\Entity\Url;
 use App\Form\PostType;
+use App\Repository\RevisionRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,6 +96,7 @@ class ZZPageController extends AbstractInachisController
                     $post = $entityManager->getRepository(Page::class)->findOneById($item);
                     if ($post !== null) {
                         $entityManager->getRepository(Page::class)->remove($post);
+                        $entityManager->getRepository(Revision::class)->deleteAndRecordByPage($post);
                     }
                 }
                 if ($request->request->has('private') || $request->request->has('public')) {
@@ -108,6 +111,12 @@ class ZZPageController extends AbstractInachisController
                 }
             }
             if ($request->request->has('private') || $request->request->has('public')) {
+                $revision = $entityManager->getRepository(Revision::class)->hydrateNewRevisionFromPage($post);
+                $revision = $revision
+                    ->setContent('')
+                    ->setAction(sprintf(RevisionRepository::VISIBILITY_CHANGE, $post->getVisibility()));
+                $entityManager->persist($revision);
+
                 $entityManager->flush();
             }
             return $this->redirectToRoute(
@@ -187,19 +196,23 @@ class ZZPageController extends AbstractInachisController
         if ($post->getId() === null) {
             $post->setType($type);
         }
+        if (!empty($post->getId())) {
+            $revision = $entityManager->getRepository(Revision::class)->hydrateNewRevisionFromPage($post);
+            $revision = $revision->setAction(RevisionRepository::UPDATED);
+        }
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {//} && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
                 $entityManager->getRepository(Page::class)->remove($post);
+                $entityManager->getRepository(Revision::class)->deleteAndRecordByPage($post);
                 return $this->redirectToRoute(
                     'app_dashboard_default',
                     [],
                     Response::HTTP_PERMANENTLY_REDIRECT
                 );
             }
-
             $post->setAuthor($this->get('security.token_storage')->getToken()->getUser());
             if (null !== $request->get('publish')) {
                 $post->setStatus(Page::PUBLISHED);
@@ -250,6 +263,9 @@ class ZZPageController extends AbstractInachisController
             }
 
             $post->setModDate(new \DateTime('now'));
+            if (!empty($post->getId())) {
+                $entityManager->persist($revision);
+            }
             $entityManager->persist($post);
             $entityManager->flush();
 

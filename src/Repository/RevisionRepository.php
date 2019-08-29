@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Page;
 use App\Entity\Revision;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use \Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Revision|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +16,62 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class RevisionRepository extends AbstractRepository
 {
+    const DELETED = 'Deleted';
+    const VISIBILITY_CHANGE = 'Visibility changed to %s';
+    const UPDATED = 'Updated';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Revision::class);
     }
 
-    // /**
-    //  * @return Revisions[] Returns an array of Revisions objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param Page $page
+     * @return Revision
+     * @throws NonUniqueResultException
+     * @throws \Exception
+     */
+    public function hydrateNewRevisionFromPage(Page $page)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $revision = new Revision();
+        return $revision
+            ->setPageId($page->getId())
+            ->setVersionNumber($this->getNextVersionNumberForPageId($page->getId()))
+            ->setTitle($page->getTitle())
+            ->setSubTitle($page->getSubTitle())
+            ->setContent($page->getContent())
+            ->setUser($page->getAuthor())
+            ->setModDate($page->getModDate());
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Revisions
+    /**
+     * @param string $pageId
+     * @return int
+     * @throws NonUniqueResultException
+     */
+    public function getNextVersionNumberForPageId(string $pageId)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
+        return ((int) $this->createQueryBuilder('r')
+            ->select('MAX(r.versionNumber) as max_version')
+            ->where('r.page_id = :pageId')
+            ->setParameter('pageId', $pageId)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getSingleScalarResult()) + 1;
     }
-    */
+
+    public function deleteAndRecordByPage(Page $page): Revision
+    {
+        $this->createQueryBuilder('r')
+            ->delete()
+            ->where('r.page_id = :pageId')
+            ->setParameter('pageId', $page->getId());
+        $revision = new Revision();
+        return $revision
+            ->setPageId($page->getId())
+            ->setTitle($page->getTitle())
+            ->setSubTitle($page->getSubTitle())
+            ->setUser()
+            ->setModDate(new \DateTime())
+            ->setAction(self::DELETED);
+    }
 }

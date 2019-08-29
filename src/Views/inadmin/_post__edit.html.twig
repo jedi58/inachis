@@ -13,9 +13,11 @@
             <li>
                 <a href="#post__sharing">Sharing</a>
             </li>
+            {%  if revisions is defined and revisions is not empty %}
             <li>
                 <a href="#post__history">History</a>
             </li>
+            {% endif %}
         </ul>
 
         {{- form_errors(form) -}}
@@ -109,6 +111,7 @@
             </p>
         </fieldset>
 
+        {%  if revisions is defined and revisions is not empty %}
         <fieldset id="post__history">
             <table class="table table-responsive table-striped table-borderless">
                 <caption>Revision history</caption>
@@ -121,8 +124,8 @@
                         <th scope="col">&nbsp;</th>
                     </tr>
                 </thead>
-                <tobdy>
-
+                <tbody>
+                {% for revision in revisions %}
                     <tr>
                         <th scope="row">23</th>
                         <td>22/09/2019</td>
@@ -134,10 +137,11 @@
                             <button class="button button--negative" type="button"><span class="material-icons">undo</span> Revert</button>
                         </td>
                     </tr>
-
-                </tobdy>
+                {% endfor %}
+                </tbody>
             </table>
         </fieldset>
+        {% endif %}
     </div>
 
     <div class="fixed-bottom-bar">
