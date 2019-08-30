@@ -17,8 +17,9 @@ use \Doctrine\ORM\NonUniqueResultException;
 class RevisionRepository extends AbstractRepository
 {
     const DELETED = 'Deleted';
-    const VISIBILITY_CHANGE = 'Visibility changed to %s';
+    const PUBLISHED = 'Published';
     const UPDATED = 'Updated';
+    const VISIBILITY_CHANGE = 'Visibility changed to %s';
 
     public function __construct(ManagerRegistry $registry)
     {

@@ -216,6 +216,9 @@ class ZZPageController extends AbstractInachisController
             $post->setAuthor($this->get('security.token_storage')->getToken()->getUser());
             if (null !== $request->get('publish')) {
                 $post->setStatus(Page::PUBLISHED);
+                if (isset($revision)) {
+                    $revision->setAction(RevisionRepository::PUBLISHED);
+                }
             }
             if (!empty($request->get('post')['url'])) {
                 $newUrl = $request->get('post')['url'];
@@ -260,6 +263,9 @@ class ZZPageController extends AbstractInachisController
 
             if ($form->get('publish')->isClicked()) {
                 $post->setStatus(Page::PUBLISHED);
+                if (!empty($post->getId())) {
+                    $revision->setAction(RevisionRepository::PUBLISHED);
+                }
             }
 
             $post->setModDate(new \DateTime('now'));
@@ -286,6 +292,10 @@ class ZZPageController extends AbstractInachisController
         $this->data['includeEditorId'] = $post->getId();
         $this->data['includeDatePicker'] = true;
         $this->data['post'] = $post;
+        $this->data['revisions'] = $entityManager->getRepository(Revision::class)
+            ->getAll(0, 25, [], [
+                [ 'q.versionNumber', 'DESC']
+            ]);
         return $this->render('inadmin/post__edit.html.twig', $this->data);
     }
 
