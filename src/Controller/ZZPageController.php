@@ -293,7 +293,11 @@ class ZZPageController extends AbstractInachisController
         $this->data['includeDatePicker'] = true;
         $this->data['post'] = $post;
         $this->data['revisions'] = $entityManager->getRepository(Revision::class)
-            ->getAll(0, 25, [], [
+            ->getAll(0, 25, [
+                'q.page_id = :pageId', [
+                    'pageId' => $post->getId(),
+                ]
+            ], [
                 [ 'q.versionNumber', 'DESC']
             ]);
         return $this->render('inadmin/post__edit.html.twig', $this->data);
