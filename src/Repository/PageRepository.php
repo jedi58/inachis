@@ -53,4 +53,28 @@ final class PageRepository extends AbstractRepository
             ->getQuery()
             ->execute();
     }
+
+    /**
+     * @param $type
+     * @param $offset
+     * @param $limit
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function getAllOfTypeByPostDate($type, $offset, $limit)
+    {
+        return $this->getAll(
+            $offset,
+            $limit,
+            [
+                'q.type = :type',
+                [
+                    'type' => $type,
+                ]
+            ],
+            [
+                [ 'q.postDate', 'DESC' ],
+                [ 'q.modDate', 'DESC' ]
+            ]
+        );
+    }
 }

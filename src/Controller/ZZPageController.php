@@ -10,6 +10,7 @@ use App\Entity\Tag;
 use App\Entity\Url;
 use App\Form\PostType;
 use App\Repository\RevisionRepository;
+use App\Utils\ContentRevisionCompare;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,19 +128,10 @@ class ZZPageController extends AbstractInachisController
         $offset = (int) $request->get('offset', 0);
         $limit = $entityManager->getRepository(Page::class)->getMaxItemsToShow();
         $this->data['form'] = $form->createView();
-        $this->data['posts'] = $entityManager->getRepository(Page::class)->getAll(
+        $this->data['posts'] = $entityManager->getRepository(Page::class)->getAllOfTypeByPostDate(
+            $type,
             $offset,
-            $limit,
-            [
-                'q.type = :type',
-                [
-                    'type' => $type,
-                ]
-            ],
-            [
-                [ 'q.postDate', 'DESC' ],
-                [ 'q.modDate', 'DESC' ]
-            ]
+            $limit
         );
         $this->data['page']['offset'] = $offset;
         $this->data['page']['limit'] = $limit;
@@ -169,6 +161,7 @@ class ZZPageController extends AbstractInachisController
      * )
      *
      * @param Request $request
+     * @param ContentRevisionCompare $contentRevisionCompare
      * @param string $type
      * @param string $title
      * @return mixed
@@ -176,7 +169,7 @@ class ZZPageController extends AbstractInachisController
      *
      * @return mixed
      */
-    public function getPostAdmin(Request $request, $type = 'post', $title = null)
+    public function getPostAdmin(Request $request, ContentRevisionCompare $contentRevisionCompare, $type = 'post', $title = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
@@ -217,6 +210,9 @@ class ZZPageController extends AbstractInachisController
             if (null !== $request->get('publish')) {
                 $post->setStatus(Page::PUBLISHED);
                 if (isset($revision)) {
+                    if ($contentRevisionCompare->doesPageMatchRevision($post, $revision)) {
+                        $revision->setContent('');
+                    }
                     $revision->setAction(RevisionRepository::PUBLISHED);
                 }
             }
@@ -263,7 +259,7 @@ class ZZPageController extends AbstractInachisController
 
             if ($form->get('publish')->isClicked()) {
                 $post->setStatus(Page::PUBLISHED);
-                if (!empty($post->getId())) {
+                if (isset($revision)) {
                     $revision->setAction(RevisionRepository::PUBLISHED);
                 }
             }
