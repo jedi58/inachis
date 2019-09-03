@@ -13,7 +13,9 @@
                 ui-progressbar-danger
             {%- elseif storage.percent >= 75 -%}
                 ui-progressbar-warning
-            {%- endif -%}"></div>
+            {%- endif -%}">
+                <div class="progress-label">{{ storage.percent|number_format(2)|trim(0)|trim('.') }}%</div>
+            </div>
         </section>
 
         {% include "/inadmin/partials/export.html.twig" %}
