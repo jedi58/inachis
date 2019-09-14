@@ -24,16 +24,22 @@ class CategoryRepository extends AbstractRepository
             ->getResult();
     }
 
-    /*
-    public function findBySomething($value)
+    /**
+     * @param $title
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function findByTitleLike($title)
     {
-        return $this->createQueryBuilder('c')
-            ->where('c.something = :value')->setParameter('value', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->getAll(
+            0,
+            25,
+            [
+                'q.title LIKE :title',
+                [
+                    'title' => '%' . $title . '%',
+                ],
+            ],
+            'q.title'
+        );
     }
-    */
 }

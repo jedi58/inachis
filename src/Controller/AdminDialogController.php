@@ -53,18 +53,8 @@ class AdminDialogController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $categories = empty($request->get('q')) ?
-            $this->entityManager->getRepository(Category::class)->findByParent(null) : // Get Root categories
-            $this->entityManager->getRepository(Category::class)->getAll(
-                0,
-                25,
-                [
-                    'q.title LIKE :title',
-                    [
-                        'title' => '%'.$request->request->get('q').'%',
-                    ],
-                ],
-                'q.title'
-            );
+            $this->entityManager->getRepository(Category::class)->findByParent(null) :
+            $this->entityManager->getRepository(Category::class)->findByTitleLike($request->request->get('q'));
         $result = [];
         // Below code is used to handle where categories exist with the same name under multiple locations
         if (!empty($categories)) {
