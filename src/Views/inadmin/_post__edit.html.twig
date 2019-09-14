@@ -67,7 +67,15 @@
                 {{ form_label(form.categories) }}
                 {{ form_errors(form.categories) }}
                 {{ form_widget(form.categories) }}
-                <a class="material-icons category-manager__link" href="#">add_box</a>
+                <!-- a class="material-icons category-manager__link" href="#">add_box</a -->
+
+                <a href="#" class="material-icons dialog__link"
+                        data-buttons="W3sidGl0bGUiOiJDcmVhdGUgQ2F0ZWdvcnkiLCJjbGFzcyI6ImJ1dHRvbiBidXR0b24tLXBvc2l0aXZlIiwiZGlzYWJsZWQiOnRydWV9XQ=="
+                        data-class-name="dialog__categoryManager"
+                        data-template-name="category-manager"
+                        data-title="Categories"
+                >add_box</a>
+
             </p>
             <p>
                 {{ form_label(form.tags) }}
