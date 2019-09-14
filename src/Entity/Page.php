@@ -72,9 +72,10 @@ class Page
      */
     protected $author;
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Image", cascade={"detach"})
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
      *
-     * @var string The featured image for the {@link Page}
+     * @var Image The featured {@link Image} for the {@link Page}
      */
     protected $featureImage;
     /**

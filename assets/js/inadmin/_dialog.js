@@ -1,6 +1,5 @@
 var InachisDialog = {
-    alreadyInitialised: false,
-
+    //alreadyInitialised: false,
     className: '',
     buttons: [],
     templateName: '',
@@ -8,28 +7,24 @@ var InachisDialog = {
 
     _init: function()
     {
-        if ($('.dialog__link').length > 0) {
-            this.title = $('.dialog__link').data('title'),
-                this.templateName = $('.dialog__link').data('templateName'),
-                this.className = $('.dialog__link').data('className'),
-                this.buttons = JSON.parse(window.atob($('.dialog__link').data('buttons')));
-
-            this.buttons = (typeof this.buttons != 'undefined' && this.buttons instanceof Array) ? this.buttons : [ this.buttons ];
-
-            $(document).on('click', '.dialog__link', $.proxy(function()
-            {
-                this.createDialog();
-            }, this));
-        }
+        $(document).on('click', '.dialog__link', $.proxy(this.createDialog, this));
     },
 
-    createDialog: function()
+    createDialog: function(event)
     {
         var dialogWidth = $(window).width() * 0.75;
         if (dialogWidth < 380) {
             dialogWidth = 376;
         }
-        $('<div id="' + this.className + '"><form class="form"></form></div>').dialog(
+        var $dialogLink = $(event.currentTarget);
+        this.title = $dialogLink.data('title'),
+            this.templateName = $dialogLink.data('templateName'),
+            this.className = $dialogLink.data('className'),
+            this.buttons = JSON.parse(window.atob($dialogLink.data('buttons')));
+
+        this.buttons = (typeof this.buttons != 'undefined' && this.buttons instanceof Array) ? this.buttons : [ this.buttons ];
+
+        $('<div id="' + this.className + '"><form class="form"><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p></form></div>').dialog(
             {
                 buttons: this.buttons.concat([
                     {
@@ -70,7 +65,7 @@ var InachisDialog = {
             }, function() // response, status, xhr
             {
                 $(this).parent().removeClass('ui-dialog-loading');
-                $('#dialog').dialog('option', 'position', { my: 'center', at: 'center', of: window });
+                $('.ui-dialog').position({my: 'center', at: 'center', of: window});
             }
         );
     },

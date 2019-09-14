@@ -24,6 +24,22 @@
     }
   }
 
+  .ui-dialog-secondary-bar {
+    background-color: #eee;
+    border: 1px solid #ddd;
+    padding: 5px;
+
+    a, a:visited {
+      text-decoration: none;
+    }
+    input {
+      float: right;
+    }
+    label {
+      display: none;
+    }
+  }
+
   .ui-dialog-content {
     max-height: 400px !important;
     padding: 10px;
@@ -37,6 +53,42 @@
 
     button {
       margin: 3px;
+    }
+  }
+
+  .gallery {
+    max-height: 330px;
+    overflow-y: scroll;
+
+    img {
+      height: 150px;
+      object-fit: cover;
+      width: 150px;
+    }
+    input {
+      position: absolute;
+      right: 0.5em;
+      top: 0.5em;
+    }
+    label span {
+      display: none;
+    }
+    li {
+      float: left;
+      position: relative;
+    }
+    ol, li {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .material-icons {
+      color: #fff;
+      bottom: 0.1em;
+      position: absolute;
+      right: 0.1em;
+      text-shadow: 1px 1px 3px #333;
     }
   }
 }

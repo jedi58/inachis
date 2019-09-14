@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Image;
+use App\Form\ImageType;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +24,21 @@ class AdminDialogController extends AbstractInachisController
         $this->data['categories'] = $this->entityManager->getRepository(Category::class)->findByParent(null);
 
         return $this->render('inadmin/dialog/categoryManager.html.twig', $this->data);
+    }
+
+    /**
+     * @Route("/incc/ax/imageManager/get", methods={"POST"})
+     * @return mixed
+     */
+    public function getImageManagerList()
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->data['form'] = $this->createForm(ImageType::class)->createView();
+        $this->data['allowedTypes'] = Image::ALLOWED_TYPES;
+        // @todo add pagination
+        $this->data['images'] = $this->entityManager->getRepository(Image::class)->getAll();
+        $this->data['image_count'] = sizeof($this->data['images']);
+        return $this->render('inadmin/dialog/imageManager.html.twig', $this->data);
     }
 
     /**

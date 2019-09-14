@@ -4,7 +4,7 @@
 </div>
 <script src="/assets/js/incc/dropzone.min.js"></script>
 <script>
-    $('div#{{ paramName }}').dropzone({
+    var dropzone = $('.dropzone').dropzone({
         url: '{{ dropzoneUrl }}',
         paramName: '{{ paramName }}',
 
