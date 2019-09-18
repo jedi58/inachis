@@ -52,6 +52,14 @@
                         <li><a href="/incc/{{ item.type }}/{{ item.urls|first.link }}">{{ item.title }}</a></li>
                     {% endfor %}
                     </ol>
+
+                    {{
+                        include('inadmin/partials/image_preview.html.twig', {
+                            'id': 'image',
+                            'value': series.image,
+                            'additionalClass': 'preview__small'
+                        })
+                    }}
                 {% else %}
                     <p class="content-warning">
                         <i class="material-icons">info_outline</i>

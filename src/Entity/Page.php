@@ -10,7 +10,7 @@ use App\Exception\InvalidTimezoneException;
  * Object for handling pages of a site.
  *
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title", "author_id"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title", "author_id", "image_id"})})
  */
 class Page
 {

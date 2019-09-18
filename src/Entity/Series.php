@@ -64,6 +64,13 @@ class Series
      */
     protected $items = [];
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Image", cascade={"detach"})
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
+     *
+     * @var Image
+     */
+    protected $image = '';
+    /**
      * @ORM\Column(type="datetime")
      *
      * @var string
@@ -234,6 +241,25 @@ class Series
     public function addItem(Page $item)
     {
         $this->items[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * @return Image
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param Image $image
+     * @return $this
+     */
+    public function setImage(Image $image)
+    {
+        $this->image = $image;
 
         return $this;
     }

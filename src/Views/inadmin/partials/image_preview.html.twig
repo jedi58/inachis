@@ -1,0 +1,13 @@
+<p class="image_preview" id="{{ id }}__preview">
+    <input id="{{ id }}" name="{{id}}" type="hidden" value="{{ value }}" />
+    <img alt="Preview of chosen image"{% if
+        additionalClass is defined and additionalClass is not empty %} class="{{ additionalClass }}"{%
+        endif %} src="{% if value is empty %}/assets/imgs/no-image.svg{% else %}{% endif %}" />
+    <button href="#" class="button button--information dialog__link"
+            data-buttons="eyJ0ZXh0IjoiQ2hvb3NlIEltYWdlIiwiY2xhc3MiOiJidXR0b24gYnV0dG9uLS1wb3NpdGl2ZSIsImRpc2FibGVkIjp0cnVlfQ=="
+            data-class-name="dialog__imageManager"
+            data-template-name="image-manager"
+            data-title="Image Manager"
+            type="button"
+    >Choose Image</button>
+</p>

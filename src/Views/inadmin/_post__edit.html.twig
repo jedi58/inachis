@@ -107,25 +107,25 @@
             </p>
             </section>
             <section class="col span_3_of_8">
-                <p style="text-align: center">
-                    <input id="featureImage" name="featureImage" type="hidden" value="{{ post.featureImage }}" />
-                    <img style="display: block; margin: 0 auto 10px auto; width:250px;border: 1px solid #999; padding: 2px;" src="/assets/imgs/no-image.svg" />
-                    <button href="#" class="button button--information dialog__link"
-                        data-buttons="eyJ0ZXh0IjoiQ2hvb3NlIEltYWdlIiwiY2xhc3MiOiJidXR0b24gYnV0dG9uLS1wb3NpdGl2ZSIsImRpc2FibGVkIjp0cnVlfQ=="
-                        data-class-name="dialog__imageManager"
-                        data-template-name="image-manager"
-                        data-title="Image Manager"
-                        type="button"
-                    >Choose Image</button>
-            </p>
             <h3>Sharing</h3>
             <p><em class="material-icons">info</em> These will be published to the selected Social Media accounts automatically when first published, or scheduled to to be posted.</p>
             <!-- loop through services / accounts for checkboxes + add char counter below for ui-counter -->
+            {{
+                include('inadmin/partials/image_preview.html.twig', {
+                    'id': 'featureImage',
+                    'value': post.featureImage
+                })
+            }}
             <p>
                 {{ form_label(form.sharingMessage) }}
                 {{ form_errors(form.sharingMessage) }}
                 {{ form_widget(form.sharingMessage) }}
+            {% if post.urls is not empty %}
+            <p class="col span_8_of_8">
+                <input class="halfwidth" type="text" value="{{ settings.domain }}/{{ post.urls|first.link }}" />
+                <button class="button button--information" id="post__link__copy" type="button">Copy this link</button>
             </p>
+            {% endif %}
         </fieldset>
 
         {%  if revisions is defined and revisions is not empty %}
