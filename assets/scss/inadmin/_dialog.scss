@@ -27,16 +27,22 @@
   .ui-dialog-secondary-bar {
     background-color: #eee;
     border: 1px solid #ddd;
+    margin: 10px 0 0 0;
     padding: 5px;
 
     a, a:visited {
       text-decoration: none;
     }
-    input {
+    .search {
       float: right;
-    }
-    label {
-      display: none;
+
+      input {
+        font-size: 1.2em;
+        padding: 5px;
+      }
+      label {
+        display: none;
+      }
     }
   }
 
@@ -44,6 +50,15 @@
     max-height: 400px !important;
     padding: 10px;
     overflow-y: auto;
+
+    fieldset {
+      padding: 0;
+    }
+
+    .dz-default {
+      font-size: 1em;
+      margin: 1.5em 1.5em 0 1.5em;
+    }
   }
 
   .ui-dialog-buttonpane {
