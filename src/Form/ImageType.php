@@ -18,7 +18,7 @@ class ImageType extends AbstractType
                 'attr' => [
                     'aria-labelledby' => 'image-uploader__filename__label',
                     'data-tip-content' => 'Must be a linked to a file and not a webpage',
-                    'class' => 'text',
+                    'class' => 'text full-width',
                 ],
                 'label' => 'URL',
                 'label_attr' => [
@@ -28,7 +28,7 @@ class ImageType extends AbstractType
             ->add('title', TextType::class, [
                 'attr' => [
                     'aria-labelledby' => 'image-uploader__title__label',
-                    'class' => 'text',
+                    'class' => 'text full-width',
                 ],
                 'label' => 'Title',
                 'label_attr' => [
@@ -39,8 +39,9 @@ class ImageType extends AbstractType
             ->add('altText', TextareaType::class, [
                 'attr' => [
                     'aria-labelledby' => 'image-uploader__altText__label',
-                    'class' => '',
+                    'class' => 'full-width',
                     'data-tip-content' => 'This is important as it is used by screen readers to improve accessibility',
+                    'rows' => 1,
                 ],
                 'label' => 'Alt Text',
                 'label_attr' => [
@@ -51,7 +52,8 @@ class ImageType extends AbstractType
             ->add('description', TextareaType::class, [
                 'attr' => [
                     'aria-labelledby' => 'image-uploader__description__label',
-                    'class' => '',
+                    'class' => 'full-width',
+                    'rows' => 2,
                 ],
                 'label' => 'Caption',
                 'label_attr' => [

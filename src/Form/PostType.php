@@ -193,7 +193,8 @@ class PostType extends AbstractType
                 'attr' => [
                     'aria-labelledby' => 'teaser_label',
                     'aria-required'   => 'false',
-                    'class' => 'halfwidth',
+                    'class' => 'full-width',
+                    'rows' => 3,
                 ],
                 'label'      => $this->translator->trans('admin.label.post.teaser', [], 'messages'),
                 'label_attr' => [
