@@ -1,6 +1,9 @@
 <section class="ui-dialog-secondary-bar">
-    <label class="ui-helper-hidden-accessible" for="ui-dialog-search-input">Search</label>
-    <input id="ui-dialog-search-input" placeholder="Search…" type="search" />
+    <form class="search">
+        <label class="ui-helper-hidden-accessible" for="ui-dialog-search-input">Search</label>
+        <input class="text ui-icon-search" id="ui-dialog-search-input" placeholder="Filter by name" type="search" />
+        <button class="material-icons" type="submit">search</button>
+    </form>
     <p>
         <a class="button button--positive" href="#"><span class="material-icons">cloud_upload</span> Upload Image</a>
         <strong>{{ image_count|number_format }}</strong> images
@@ -26,7 +29,7 @@
     <p>No images to choose from, please add some!</p>
 {% endif %}
 </section>
-<section class="ui-dialog-image-uploader hidden">
+<section class="ui-dialog-image-uploader visually-hidden">
     {{ form_start(form, {'action': path('app_resource_saveimage'), 'attr': { 'class': 'form' }}) }}
         <fieldset class="col dropzone span_1_of_2">
         {{
@@ -56,10 +59,10 @@
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
             </p>
+            <p>
+                <button class="button button--positive" data-submit-url="{{ path('app_resource_saveimage') }}" type="submit">Save Image</button>
+            </p>
         </fieldset>
-        <p class="col span_2_of_2">
-            <button class="button button--positive" data-submit-url="{{ path('app_resource_saveimage') }}" type="submit">Save Image</button>
-        </p>
     {{ form_row(form._token) }}
     {{ form_end(form, { 'render_rest': false }) }}
 </section>
