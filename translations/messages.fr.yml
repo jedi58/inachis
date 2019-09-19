@@ -7,3 +7,5 @@ admin.button.cancel: Annuler
 admin.reset.enter_email_address: 'Entrez votre adresse e-mail pour réinitialiser la connexion'
 admin.label.reset_password: 'Réinitialiser le mot de passe'
 admin.email_example: nom@example.com
+
+admin.dialog.image_manager.title: Gestionnaire d'Images
