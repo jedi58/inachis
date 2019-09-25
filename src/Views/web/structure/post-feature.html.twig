@@ -3,13 +3,18 @@
 {% elseif post.urls is defined %}
     {% set post_url = post.urls|first.link %}
 {% endif %}
+{% if post.featureImage is defined %}
+    {% set post_image = post.featureImage %}
+{% elseif post.image is defined %}
+    {% set post_image = post.image %}
+{% endif %}
 <div class="section group">
     <div class="col span_1_of_8"></div>
     <div class="col span_6_of_8">
         <article class="blogbox {{ cycle(['right', 'left'], loop.index0) }} trip">
-            {% if post.image is defined %}
+            {% if post_image is not empty %}
             <a href="{{ post_url }}" class="blogbox_image">
-                <img alt="{{ post.image.alt }}" src="{{ post.image.src }}" />
+                <img alt="{{ post_image.altText }}" src="{{ post_image.filename }}" />
             </a>
             {% endif %}
             <div>
