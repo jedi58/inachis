@@ -79,9 +79,13 @@ class SeriesController extends AbstractInachisController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {//} && $form->isValid()) {
-//            dump($request);
-//            dump($series);
-//            exit;
+            if (!empty($request->get('series')['image'])) {
+                $series->setImage(
+                    $entityManager->getRepository(Image::class)->findOneById(
+                        $request->get('series')['image']
+                    )
+                );
+            }
             if ($form->get('delete')->isClicked()) {
                 // @todo should redirect back to series list
 //                $entityManager->getRepository(Series::class)->remove($series);
@@ -112,5 +116,18 @@ class SeriesController extends AbstractInachisController
         $this->data['includeEditorId'] = $series->getId();
         $this->data['includeDatePicker'] = true;
         return $this->render('inadmin/series__edit.html.twig', $this->data);
+    }
+
+    /**
+     * @Route("/{year}-{title}", methods={"GET"})
+     * @param Request $request
+     * @param int $year
+     * @param string $title
+     * @return Response
+     */
+    public function view(Request $request, $year = 0, $title = '')
+    {
+        $this->data['series'] = $this->entityManager->getRepository(Series::class)->findOneByTitle($title);
+        return $this->render('web/series.html.twig', $this->data);
     }
 }
