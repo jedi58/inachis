@@ -58,6 +58,10 @@
 .image_preview {
     text-align: center;
 
+    .form__series & {
+        float: right;
+    }
+
     img {
         border: 1px solid #999;
         display: block;
@@ -66,7 +70,7 @@
         width: 250px;
 
         &.preview__small {
-            width: 150px;
+            width: 100px;
         }
     }
 }

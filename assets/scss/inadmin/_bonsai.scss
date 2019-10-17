@@ -8,8 +8,9 @@
     width: auto;
   }
 
-  label {
+  label, .ui-dialog & label {
     margin-left: 10px;
+    display: inline-block;
   }
 
   li {
