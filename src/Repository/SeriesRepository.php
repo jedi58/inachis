@@ -17,4 +17,15 @@ class SeriesRepository extends AbstractRepository
     {
         parent::__construct($registry, Series::class);
     }
+
+    public function getSeriesByPost($page)
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s')
+            ->leftJoin('s.items', 'Series_pages')
+            ->where('Series_pages.id = :pageId')
+            ->setParameter('pageId', $page->getId())
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
