@@ -123,7 +123,7 @@ var InachisPostEdit = {
 		if (typeof value === 'undefined') {
 			return;
 		}
-		return value.toLowerCase().replace(/&/g, 'and').replace(/[_\s]/g, '-').replace(/[^a-z0-9\-]/gi, '')
+		return value.toLowerCase().replace(/&/g, 'and').replace(/[_\s]/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\-]/gi, '')
 	}
 };
 
