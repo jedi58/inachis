@@ -1,7 +1,7 @@
 {% if pages is not empty  %}
     {% for page in pages %}
         <li data-value="{{ page.id }}">
-            <label for="page_{{ page.id }}">{{ page.title }}</label>
+            <label for="page_{{ page.id }}">{{ page.title }}{% if page.subTitle is not empty %} - {{ page.subTitle }}{% endif %}</label>
         </li>
     {% endfor %}
 {% endif %}
