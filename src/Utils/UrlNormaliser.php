@@ -20,7 +20,7 @@ class UrlNormaliser
             preg_replace(
                 [
                     '/&/',
-                    '/[\_\s]+/',
+                    '/[_\s\x{00a0}]/',
                     '/[^a-z0-9\-]/i'
                 ],
                 [
