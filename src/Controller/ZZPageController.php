@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Controller\AbstractInachisController;
 use App\Entity\Category;
+use App\Entity\Image;
 use App\Entity\Page;
 use App\Entity\Revision;
+use App\Entity\Series;
 use App\Entity\Tag;
 use App\Entity\Url;
 use App\Form\PostType;
@@ -66,6 +68,18 @@ class ZZPageController extends AbstractInachisController
         }
         $this->data['post'] = $url->getContent();
         $this->data['url'] = $url->getLink();
+        $series = $entityManager->getRepository(Series::class)->getSeriesByPost($this->data['post']);
+        $postIndex = $series->getItems()->indexOf($this->data['post']);
+        if (!empty($series)){
+            $this->data['series'] = [
+                'title' => $series->getTitle(),
+                'subTitle' => $series->getSubTitle(),
+                // @todo change below to only append if index is in bounds
+                'previous' => $series->getItems()[$postIndex - 1],
+                'next' => $series->getItems()[$postIndex + 1],
+            ];
+        }
+        unset($series);
         return $this->render('web/post.html.twig', $this->data);
     }
 
@@ -255,6 +269,13 @@ class ZZPageController extends AbstractInachisController
                         $post->getTags()->add($tag);
                     }
                 }
+            }
+            if (!empty($request->get('post')['featureImage'])) {
+                $post->setFeatureImage(
+                    $entityManager->getRepository(Image::class)->findOneById(
+                        $request->get('post')['featureImage']
+                    )
+                );
             }
 
             if ($form->get('publish')->isClicked()) {
