@@ -2,20 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CategoryManagerController extends Controller
+class CategoryManagerController extends AbstractInachisController
 {
     /**
      * @Route("/incc/ax/categoryManager/get", methods={"POST"})
      */
     public function content()
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $categoryManager = new CategoryManager(Application::getInstance()->getService('em'));
-//        self::$data['categories'] = $categoryManager->getRootCategories();
-        return $this->render('inadmin/dialog/category-manager.html.twig', $this->data);
+//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+//        $this->data['categories'] =  $this->entityManager->getRepository(Category::class)->getRootCategories();
+//        return $this->render('inadmin/dialog/category-manager-list.html.twig', $this->data);
     }
 
     /**

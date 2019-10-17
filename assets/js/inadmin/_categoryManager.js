@@ -1,83 +1,46 @@
 var InachisCategoryManager = {
     alreadyInitialised: false,
+    buttons: [
+        {
+            class: 'button button--positive',
+            disabled: true,
+            text: 'Create Category',
+            click: function ()
+            {
+                InachisCategoryManager.saveNewCategory();
+            }
+        }
+    ],
+    saveUrl: '',
 
     _init: function()
     {
-        $(document).on('click', '.category-manager__link', $.proxy(function()
-        {
-            this.createDialog();
-        }, this));
-    },
+        this.updateDialogButtons();
 
-    createDialog: function()
-    {
-        var dialogWidth = $(window).width() * 0.75;
-        if (dialogWidth < 380) {
-            dialogWidth = 376;
-        }
-        $('<div id="dialog__categoryManager"><form class="form"></form></div>').dialog(
-        {
-            buttons: [
-                {
-                    text: 'Create Category',
-                    class: 'button button--positive',
-                    disabled: true,
-                    click: $.proxy(this.saveNewCategory, this)
-                },
-                {
-                    text: 'Close',
-                    class: 'button button--negative',
-                    click: function() {
-                        $(this).dialog('close');
-                    }
-                }
-            ],
-            close: function()
-            {
-                $(this).dialog('destroy');
-                $(this).parent().remove();
-                $('.fixed-bottom-bar').toggle();
-            },
-            draggable: false,
-            modal: true,
-            open: $.proxy(function()
-            {
-                $('.fixed-bottom-bar').toggle();
-                this.addDialogContent();
-                this.getCategoryTree();
-            }, this),
-            resizable: false,
-            title: 'Categories',
-            width: dialogWidth
-        });
-    },
-
-    addDialogContent: function()
-    {
-        $('.ui-dialog-titlebar-close').addClass('material-icons').html('close');
-        $('#dialog__categoryManager').find('form').prepend(
-            '<p>' +
-                '<label for="dialog__categoryManager__new">New category name</label>' +
-                '<input id="dialog__categoryManager__new" placeholder="Enter category name…" type="text" />' +
-            '</p>' +
-            '<p>' +
-                '<label for="dialog__categoryManager__existing">' +
-                    '<input checked class="checkbox" id="dialog__categoryManager__existing" name="catParent[]" type="radio" value="-1" /> ' +
-                    'As top-level category</label>' +
-            '</p>' +
-            '<p>As a sub-category of:</p>' +
-            '<ol data-name="catParent[]"></ol>'
-        );
+        var $categoryManager = $('#dialog__categoryManager'),
+            $categoryMangerTree = $categoryManager.find('ol');
+        // if (this.alreadyInitialised) {
+        //     $categoryMangerTree.bonsai('update');
+        //     $categoryMangerTree.bonsai('expandAll');
+        //     return;
+        // }
         $(document).on('keyup', '#dialog__categoryManager__new', function(event)
         {
             var $targetElement = $(event.currentTarget),
                 $createButton = $('.ui-dialog-buttonset').find('.button--positive').first();
-            if ($targetElement.val() === '' || /[^a-z0-9\s\-_'"]/i.test($targetElement.val())) {
+            if ($targetElement.val() === '' || /[^a-z0-9\s\-_'"]/i.test($targetElement.val().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))) {
                 $createButton.prop('disabled', true);
                 return;
             }
             $createButton.removeAttr('disabled');
         });
+        $categoryMangerTree.bonsai({
+            addExpandAll: true,
+            // addSelectAll: true,
+            createInputs: 'radio',
+            expandAll: false
+        });
+        this.alreadyInitialised = true;
     },
 
     saveNewCategory: function()
@@ -107,7 +70,10 @@ var InachisCategoryManager = {
                 method: 'POST',
                 success: $.proxy(function()
                 {
-                    this.getCategoryTree();
+                    // this.getCategoryTree();
+
+                    // @todo need to update tree
+
                     $createCategory.html('<span class="material-icons">done</span> Saved OK');
                     $newCategory.val('');
                 }, this)
@@ -115,37 +81,8 @@ var InachisCategoryManager = {
         );
     },
 
-    getCategoryTree: function()
+    updateDialogButtons: function()
     {
-        var $categoryManager = $('#dialog__categoryManager');
-        $categoryManager.find('ol').load('/incc/ax/categoryManager/get',
-        {
-            default: null
-        }, function(responseText, status) {
-            var $uiDialog = $('.ui-dialog'),
-                $categoryMangerTree = $categoryManager.find('ol');
-            if (responseText.trim() === '') {
-                var $dialogParas = $('#dialog__categoryManager').find('p');
-                $dialogParas.last().toggle();
-            }
-            if (status === 'success') {
-                if (this.alreadyInitialised) {
-                    $categoryMangerTree.bonsai('update');
-                    $categoryMangerTree.bonsai('expandAll');
-                    $uiDialog.position({ my: 'center', at: 'center', of: window });
-                    return;
-                }
-                $categoryMangerTree.bonsai({
-                    createInputs: 'radio',
-                    expandAll: true
-                });
-                this.alreadyInitialised = true;
-            }
-            $uiDialog.position({ my: 'center', at: 'center', of: window });
-        }, $categoryManager);
+        $('#dialog__categoryManager').dialog('option', 'buttons', this.buttons.concat(InachisDialog.buttons));
     }
 };
-
-$(document).ready(function () {
-    InachisCategoryManager._init();
-});
