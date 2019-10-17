@@ -1,7 +1,15 @@
 var InachisDialog = {
     //alreadyInitialised: false,
     className: '',
-    buttons: [],
+    buttons: [
+        {
+            text: 'Close',
+            class: 'button button--negative',
+            click: function() {
+                $(this).dialog('close');
+            }
+        }
+    ],
     templateName: '',
     title: '',
 
@@ -19,22 +27,14 @@ var InachisDialog = {
         var $dialogLink = $(event.currentTarget);
         this.title = $dialogLink.data('title'),
             this.templateName = $dialogLink.data('templateName'),
-            this.className = $dialogLink.data('className'),
-            this.buttons = JSON.parse(window.atob($dialogLink.data('buttons')));
+            this.className = $dialogLink.data('className');//,
+            //this.buttons = JSON.parse(window.atob($dialogLink.data('buttons')));
 
         this.buttons = (typeof this.buttons != 'undefined' && this.buttons instanceof Array) ? this.buttons : [ this.buttons ];
 
         $('<div id="' + this.className + '"><form class="form"><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p></form></div>').dialog(
             {
-                buttons: this.buttons.concat([
-                    {
-                        text: 'Close',
-                        class: 'button button--negative',
-                        click: function() {
-                            $(this).dialog('close');
-                        }
-                    }
-                ]),
+                buttons: [].concat(this.buttons),
                 close: function()
                 {
                     $(this).dialog('destroy');

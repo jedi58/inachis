@@ -1,10 +1,22 @@
 var InachisImageManager = {
+    buttons: [
+        {
+            class: 'button button--positive',
+            disabled: true,
+            text: 'Choose Image',
+            click: function ()
+            {
+                InachisImageManager.chooseImageAction();
+            }
+        }
+    ],
+
     saveUrl: '',
 
     _init: function()
     {
+        this.updateDialogButtons();
         $('.ui-dialog-secondary-bar a').click(this.toggleUploadImage);
-
         $('.ui-dialog-image-uploader form').submit(function (event)
         {
             var $submitButton = $('.ui-dialog-image-uploader button[type=submit]');
@@ -32,22 +44,29 @@ var InachisImageManager = {
                         newImage += '</li>';
                         $gallery.append(newImage);
                         $imageCount.text(parseInt($imageCount.text(), 10) + 1);
+                        $('#chosenImage_' + data['image']['id']).change(InachisImageManager.enableChooseButton);
                     }
                     InachisImageManager.toggleUploadImage();
                     $('.ui-dialog-image-uploader button[type=submit]').prop('disabled', false);
                 });
             event.preventDefault();
         });
+        $('.gallery input[type=radio]').change(InachisImageManager.enableChooseButton);
     },
 
     enableChooseButton: function()
     {
-
+        InachisImageManager.buttons[0].disabled = false;
+        InachisImageManager.updateDialogButtons();
     },
 
     chooseImageAction: function()
     {
-
+        var selectedImage = $('.gallery input[type=radio]:checked'),
+            imageTarget = $('.image_preview .dialog__link').data('target');
+        $('#' + imageTarget).val(selectedImage.val());
+        $('.image_preview img').prop('src', selectedImage.siblings().first().children('img').prop('src'));
+        $('#dialog__imageManager').dialog('close');
     },
 
     searchImages: function()
@@ -60,5 +79,10 @@ var InachisImageManager = {
         $('.ui-dialog-image-uploader form').trigger('reset');
         $('.ui-dialog-image-uploader').toggle();
         $('.gallery').toggle();
+    },
+
+    updateDialogButtons: function()
+    {
+        $('#dialog__imageManager').dialog('option', 'buttons', this.buttons.concat(InachisDialog.buttons));
     }
 };

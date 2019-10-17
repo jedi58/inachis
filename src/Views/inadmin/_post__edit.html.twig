@@ -100,6 +100,7 @@
                 <button id="post__link__copy">Copy this link</button>
             </p>
             {% endif %}
+            <section class="col span_4_of_8">
             <p>
                 {{ form_label(form.featureSnippet) }}
                 {{ form_errors(form.featureSnippet) }}
@@ -107,12 +108,10 @@
             </p>
             </section>
             <section class="col span_3_of_8">
-            <h3>Sharing</h3>
-            <p><em class="material-icons">info</em> These will be published to the selected Social Media accounts automatically when first published, or scheduled to to be posted.</p>
-            <!-- loop through services / accounts for checkboxes + add char counter below for ui-counter -->
             {{
                 include('inadmin/partials/image_preview.html.twig', {
                     'id': 'featureImage',
+                    'name': 'post[featureImage]',
                     'value': post.featureImage
                 })
             }}
@@ -120,6 +119,7 @@
                 {{ form_label(form.sharingMessage) }}
                 {{ form_errors(form.sharingMessage) }}
                 {{ form_widget(form.sharingMessage) }}
+            </section>
             {% if post.urls is not empty %}
             <p class="col span_8_of_8">
                 <input class="halfwidth" type="text" value="{{ settings.domain }}/{{ post.urls|first.link }}" />

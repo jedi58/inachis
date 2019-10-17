@@ -58,6 +58,7 @@ class AdminDialogController extends AbstractInachisController
         $result = [];
         // Below code is used to handle where categories exist with the same name under multiple locations
         if (!empty($categories)) {
+            $result['items'] = [];
             foreach ($categories as $category) {
                 $title = $category->getTitle();
                 if (isset($result['items'][$title])) {
