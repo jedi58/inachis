@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Series;
 use App\Form\SeriesType;
 use Symfony\Component\HttpFoundation\Request;
