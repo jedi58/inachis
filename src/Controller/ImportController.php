@@ -33,12 +33,13 @@ class ImportController extends AbstractInachisController
     {
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
-        foreach ($request->files as $file) {
-            if ($file[0]->getError() != UPLOAD_ERR_OK) {
+
+        foreach ($request->files->get('markdownFiles') as $file) {
+            if ($file->getError() != UPLOAD_ERR_OK) {
                 return $this->json('error', 400);
             }
             $parser = new MarkdownFileParser();
-            $post = $parser->parse($this->getDoctrine()->getManager(), file_get_contents($file[0]->getRealPath()));
+            $post = $parser->parse($this->getDoctrine()->getManager(), file_get_contents($file->getRealPath()));
             if ($post->getTitle() !== '' && $post->getContent() !== '') {
                 $newLink = $post->getPostDateAsLink() . '/' .
                     UrlNormaliser::toUri(
