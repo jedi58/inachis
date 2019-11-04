@@ -75,10 +75,11 @@ class MarkdownFileParser
         if ($category === null) {
             $category = $categoryPath;
             if (is_array($categoryPath)) {
-                $category = array_shift($categoryPath);
+                $category = str_replace(['-'], [' '], array_shift($categoryPath));
             }
             $category = $this->entityManager->getRepository(Category::class)->findOneByTitle($category);
         }
+
         if (!empty($categoryPath) && !empty($category->getChildren())) {
             foreach ($category->getChildren() as $childCategory) {
                 if ($childCategory->getTitle() === $categoryPath[0]) {
