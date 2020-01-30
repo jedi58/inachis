@@ -4,12 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Page;
 use App\Entity\Series;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ContentSelectorController extends Controller
+class ContentSelectorController extends AbstractInachisController
 {
     /**
      * @var array

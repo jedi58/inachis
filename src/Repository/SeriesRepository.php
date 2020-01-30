@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Series;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * @method Series|null find($id, $lockMode = null, $lockVersion = null)
@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class SeriesRepository extends AbstractRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Series::class);
     }

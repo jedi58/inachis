@@ -6,9 +6,9 @@ use App\Security\ContentSecurityPolicy;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 final class AdminResponseEvent implements EventSubscriberInterface
@@ -36,9 +36,9 @@ final class AdminResponseEvent implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param ResponseEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         // Redirect to /setup if no admins
         // Redirect if not signed in
@@ -47,14 +47,14 @@ final class AdminResponseEvent implements EventSubscriberInterface
     }
 
     /**
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         $this->sendSecurityHeaders($event);
     }
 
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(ControllerEvent $event)
     {
         $controller = $event->getController();
         if (method_exists($controller[0], 'setDefaults')) {
@@ -75,9 +75,9 @@ final class AdminResponseEvent implements EventSubscriberInterface
     }
 
     /**
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      */
-    public function sendSecurityHeaders(FilterResponseEvent $event)
+    public function sendSecurityHeaders(ResponseEvent $event)
     {
         $event->getResponse()->headers->set('X-Frame-Options', 'SAMEORIGIN');
         $event->getResponse()->headers->set('X-XSS-Protection', '1; mode=block');
