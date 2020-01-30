@@ -9,9 +9,11 @@ class CategoryTest extends TestCase
 {
     protected $category;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->category = new Category();
+
+        parent::setUp();
     }
 
     public function testGetAndSetId()

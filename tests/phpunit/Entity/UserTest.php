@@ -10,9 +10,11 @@ class UserTest extends TestCase
 {
     protected $user;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->user = new User();
+
+        parent::setUp();
     }
 
     public function testSetAndGetId()

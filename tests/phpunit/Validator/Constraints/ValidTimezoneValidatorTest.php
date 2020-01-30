@@ -14,6 +14,8 @@ class ValidTimezoneValidatorTest extends TestCase
     public function setUp() : void
     {
         $this->validTimezoneValidator = new ValidTimezoneValidator();
+
+        parent::setUp();
     }
 
     public function testValidateEmpty() : void

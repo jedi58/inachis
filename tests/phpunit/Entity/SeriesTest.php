@@ -10,9 +10,11 @@ class SeriesTest extends TestCase
 {
     protected $series;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->series = new Series();
+
+        parent::setUp();
     }
 
     public function testGetAndSetId()

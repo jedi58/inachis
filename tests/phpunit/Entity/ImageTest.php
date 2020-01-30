@@ -10,9 +10,11 @@ class ImageTest extends TestCase
 {
     protected $image;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->image = new Image();
+
+        parent::setUp();
     }
 
     public function testGetAndSetId()

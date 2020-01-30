@@ -9,9 +9,11 @@ class TagTest extends TestCase
 {
     protected $tag;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->tag = new Tag();
+
+        parent::setUp();
     }
 
     public function testSetAndGetId()

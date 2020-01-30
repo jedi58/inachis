@@ -20,7 +20,7 @@ class ContentSecurityPolicyTest extends TestCase
     /**
      * Set-up CSP defaults
      */
-    public function setUp()
+    public function setUp() : void
     {
         $this->csp = json_decode(
             '{
@@ -46,6 +46,8 @@ class ContentSecurityPolicyTest extends TestCase
             }',
             true
         );
+
+        parent::setUp();
     }
     /**
      * Test the enforce header

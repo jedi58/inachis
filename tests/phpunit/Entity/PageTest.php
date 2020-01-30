@@ -14,9 +14,11 @@ class PageTest extends TestCase
 {
     protected $page;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->page = new Page();
+
+        parent::setUp();
     }
 
     public function testSetAndGetLatlong()

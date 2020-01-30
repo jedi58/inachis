@@ -9,9 +9,11 @@ class KernelTest extends TestCase
 {
     protected $kernel;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->kernel = new Kernel('test', false);
+
+        parent::setUp();
     }
 
     public function testGetCacheDir()
