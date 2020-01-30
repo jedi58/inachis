@@ -10,16 +10,14 @@ php:
 
 before_install:
   # Manually compile the libsodium library
-  #- sudo apt-get update -qq
-  - git clone -b stable https://github.com/jedisct1/libsodium.git
-  - cd libsodium && sudo ./configure && sudo make check && sudo make install && cd ..
+  - sudo apt-get update -qq
   - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
   - composer self-update
 
 install:
   # Manually install libsodium, because the TravisCI image doesn't provide PHP7.2 with libsodium
-  - pecl install libsodium
-  - echo "extension=sodium.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  #- pecl install libsodium
+  #- echo "extension=sodium.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
 #  - pecl channel-update pecl.php.net
