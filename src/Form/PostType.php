@@ -118,7 +118,7 @@ class PostType extends AbstractType
                     'data-tip-title'   => $this->translator->trans('admin.tip.title.post.postDate', [], 'messages'),
                 ],
                 'format' => 'dd/MM/yyyy HH:mm',
-                'html5'  => true,
+                'html5'  => false,
                 'label'  => $options['data']->getPostDate() < new \DateTime() ?
                     $this->translator->trans('admin.label.post.postDate-past', [], 'messages') :
                     $this->translator->trans('admin.label.post.postDate-future', [], 'messages'),

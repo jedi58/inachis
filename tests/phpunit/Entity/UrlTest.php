@@ -13,9 +13,11 @@ class UrlTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function setUp()
+    public function setUp() : void
     {
         $this->url = new Url(new Page());
+
+        parent::setUp();
     }
 
     /**

@@ -10,9 +10,11 @@ class UserValidatorTest extends TestCase
 {
     protected $userValidator;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->userValidator = new UserValidator();
+
+        parent::setUp();
     }
 
     public function testValidateUsernameEmpty() : void

@@ -9,9 +9,11 @@ class AppExtensionTest extends TestCase
 {
     protected $appExtension;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->appExtension = new AppExtension();
+
+        parent::setUp();
     }
 
     public function testGetFilters() : void

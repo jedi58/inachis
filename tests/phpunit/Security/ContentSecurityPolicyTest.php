@@ -20,7 +20,7 @@ class ContentSecurityPolicyTest extends TestCase
     /**
      * Set-up CSP defaults
      */
-    public function setUp()
+    public function setUp() : void
     {
         $this->csp = json_decode(
             '{
@@ -46,6 +46,8 @@ class ContentSecurityPolicyTest extends TestCase
             }',
             true
         );
+
+        parent::setUp();
     }
     /**
      * Test the enforce header
@@ -103,7 +105,7 @@ class ContentSecurityPolicyTest extends TestCase
             );
             ContentSecurityPolicy::getInstance()->generateCSP($csp);
         } catch (\Exception $exception) {
-            $this->assertContains('policy is not supported', $exception->getMessage());
+            $this->assertStringContainsString('policy is not supported', $exception->getMessage());
         }
     }
 
@@ -120,7 +122,7 @@ class ContentSecurityPolicyTest extends TestCase
             );
             ContentSecurityPolicy::getInstance()->generateCSP($csp);
         } catch (\Exception $exception) {
-            $this->assertContains('Could not understand', $exception->getMessage());
+            $this->assertStringContainsString('Could not understand', $exception->getMessage());
         }
     }
 }

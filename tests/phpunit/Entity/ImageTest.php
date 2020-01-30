@@ -10,9 +10,11 @@ class ImageTest extends TestCase
 {
     protected $image;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->image = new Image();
+
+        parent::setUp();
     }
 
     public function testGetAndSetId()
@@ -75,20 +77,14 @@ class ImageTest extends TestCase
 
     public function testSetAndGetCreateDate()
     {
-        $this->image->setCreateDate('1970-01-02 01:34:56');
-        $this->assertEquals('1970-01-02 01:34:56', $this->image->getCreateDate());
-        $now = new \DateTime('now');
-        $this->image->setCreateDateFromDateTime($now);
-        $this->assertEquals($now->format('Y-m-d H:i:s'), $this->image->getCreateDate());
+        $this->image->setCreateDate(new \DateTime('1970-01-02 01:34:56'));
+        $this->assertEquals('1970-01-02 01:34:56', $this->image->getCreateDate()->format('Y-m-d H:i:s'));
     }
 
     public function testSetAndGetModDate()
     {
-        $this->image->setModDate('1970-01-02 01:34:56');
-        $this->assertEquals('1970-01-02 01:34:56', $this->image->getModDate());
-        $now = new \DateTime('now');
-        $this->image->setModDateFromDateTime($now);
-        $this->assertEquals($now->format('Y-m-d H:i:s'), $this->image->getModDate());
+        $this->image->setModDate(new \DateTime('1970-01-02 01:34:56'));
+        $this->assertEquals('1970-01-02 01:34:56', $this->image->getModDate()->format('Y-m-d H:i:s'));
     }
 
     public function testSetAndGetDimensionX()
@@ -101,12 +97,6 @@ class ImageTest extends TestCase
     {
         $this->image->setDimensionY(100);
         $this->assertEquals(100, $this->image->getDimensionY());
-    }
-
-    public function testSetAndGetCaption()
-    {
-        $this->image->setCaption('test');
-        $this->assertEquals('test', $this->image->getCaption());
     }
 
     public function testSetAndGetAltText()

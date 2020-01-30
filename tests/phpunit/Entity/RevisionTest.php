@@ -10,9 +10,11 @@ class RevisionTest extends TestCase
 {
     protected $revision;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->revision = new Revision();
+
+        parent::setUp();
     }
 
     public function testGetAndSetId()
