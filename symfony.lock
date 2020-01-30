@@ -92,6 +92,30 @@
     "monolog/monolog": {
         "version": "1.23.0"
     },
+    "nette/bootstrap": {
+        "version": "v2.4.6"
+    },
+    "nette/di": {
+        "version": "v2.4.13"
+    },
+    "nette/finder": {
+        "version": "v2.4.2"
+    },
+    "nette/neon": {
+        "version": "v2.4.3"
+    },
+    "nette/php-generator": {
+        "version": "v3.0.4"
+    },
+    "nette/robot-loader": {
+        "version": "v3.0.4"
+    },
+    "nette/schema": {
+        "version": "v1.0.1"
+    },
+    "nette/utils": {
+        "version": "v2.5.2"
+    },
     "nikic/php-parser": {
         "version": "v4.0.1"
     },
@@ -174,7 +198,7 @@
         "version": "v4.0.3"
     },
     "symfony/cache-contracts": {
-        "version": "v1.1.5"
+        "version": "v2.0.0"
     },
     "symfony/config": {
         "version": "v4.0.3"
@@ -207,13 +231,13 @@
         "version": "v4.0.3"
     },
     "symfony/error-handler": {
-        "version": "v4.4.3"
+        "version": "v4.4.0"
     },
     "symfony/event-dispatcher": {
         "version": "v4.0.3"
     },
     "symfony/event-dispatcher-contracts": {
-        "version": "v1.1.5"
+        "version": "v1.1.7"
     },
     "symfony/expression-language": {
         "version": "v4.2.2"
@@ -273,7 +297,7 @@
         }
     },
     "symfony/mime": {
-        "version": "v4.3.2"
+        "version": "v5.0.0"
     },
     "symfony/monolog-bridge": {
         "version": "v4.0.3"
@@ -309,7 +333,7 @@
         "version": "v1.6.0"
     },
     "symfony/polyfill-intl-idn": {
-        "version": "v1.11.0"
+        "version": "v1.12.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.6.0"
@@ -318,7 +342,7 @@
         "version": "v1.6.0"
     },
     "symfony/polyfill-php73": {
-        "version": "v1.11.0"
+        "version": "v1.12.0"
     },
     "symfony/process": {
         "version": "v4.0.3"
@@ -360,7 +384,7 @@
         "version": "v4.2.2"
     },
     "symfony/service-contracts": {
-        "version": "v1.1.5"
+        "version": "v2.0.0"
     },
     "symfony/stopwatch": {
         "version": "v4.0.3"
@@ -378,7 +402,7 @@
         }
     },
     "symfony/translation-contracts": {
-        "version": "v1.1.5"
+        "version": "v2.0.0"
     },
     "symfony/twig-bridge": {
         "version": "v4.0.3"
