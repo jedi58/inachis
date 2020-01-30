@@ -3,16 +3,14 @@ language: php
 php:
   - 7.2
   - 7.3
+  - 7.4
   - nightly
 
 before_install:
   # Manually compile the libsodium library
-  - sudo add-apt-repository ppa:ondrej/php -y
-  - sudo apt-get update -qq
-  - sudo apt-get install -y libsodium-dev
-  #- sudo apt-get install build-essential git -y
-  #- git clone -b stable https://github.com/jedisct1/libsodium.git
-  #- cd libsodium && sudo ./configure && sudo make check && sudo make install && cd ..
+  #- sudo apt-get update -qq
+  - git clone -b stable https://github.com/jedisct1/libsodium.git
+  - cd libsodium && sudo ./configure && sudo make check && sudo make install && cd ..
   - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
   - composer self-update
 
