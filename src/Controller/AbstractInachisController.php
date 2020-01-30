@@ -6,10 +6,12 @@ use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Flex\Response;
 
 abstract class AbstractInachisController extends AbstractController
 {
+    protected $security;
     protected $entityManager;
     /**
      * @var array
@@ -86,6 +88,17 @@ abstract class AbstractInachisController extends AbstractController
     }
 
     /**
+     * Returns the result of testing if a user is currently signed in
+     * @return bool Status of user authentication
+     */
+    private function isAuthenticated()
+    {
+        return $this->security instanceof Security &&
+            $this->security->getUser() instanceof User &&
+            !empty($this->security->getUser()->getUsername());
+    }
+
+    /**
      * Returns all current errors on the page.
      *
      * @return string[] The array of errors
@@ -120,81 +133,34 @@ abstract class AbstractInachisController extends AbstractController
     }
 
     /**
-     * @return RedirectResponse
+     * @return string
      */
     public function redirectIfNoAdmins()
     {
         if ($this->entityManager->getRepository(User::class)->count([]) == 0) {
-            return $this->redirectToRoute('app_setup_stage1');
+            return 'app_setup_stage1';
         }
-    }
-
-    /**
-     * Used when the request requires authentication; if the not authenticated
-     * then the user's requested page URL is stored in the session and then
-     * redirected to the sign-in page. Otherwise, it also tests if their password
-     * has expired.
-     *
-     * @param Request $request The request object from the router
-     *
-     * @return mixed
-     */
-    public function redirectIfNotAuthenticated(Request $request)
-    {
-        die('redirectIfNotAuthenticated');
-        if (true) { // !Application::getInstance()->requireAuthenticationService()->isAuthenticated()
-            $redirect = new RedirectResponse('/incc/signin');
-            $referrer = parse_url($request->server->get('REQUEST_URI'));
-            if (!empty($referrer) && (empty($referrer['host']) || $referrer['host'] == $request->server->get('HTTP_HOST'))) {
-                $request->getSession()->set('referrer', $request->server->get('REQUEST_URI'));
-            }
-            $redirect->prepare($request);
-
-            return $redirect->send();
-        }
-//        return self::redirectIfPasswordExpired($request, $response);
     }
 
     /**
      * If the user is trying to access a page such as sign-in but is already authenticated
      * they will be redirected to the dashboard.
      *
-     * @param Request  $request
-     * @param Response $response The response object from the router
-     *
-     * @return RedirectResponse
+     * @return string
      */
-//    public function redirectIfAuthenticated(Request $request, Response $response)
-//    {
-//        if (true) { //Application::getInstance()->requireAuthenticationService()->isAuthenticated()) {
-//            $response = new RedirectResponse('/incc');
-//            $response->prepare($request);
-//            return $response->send();
-//        }
-//    }
+    public function redirectIfAuthenticated()
+    {
+        if ($this->isAuthenticated()) {
+            return 'app_dashboard_default';
+        }
+    }
 
     /**
-     * If the user's password has expired their current request URL will be stored in the session
-     * and will then be redirected to change-password.
-     *
-     * @param Request  $request  The request object from the router
-     * @param Response $response The response object from the router
+     * @return string
      */
-    public function redirectIfPasswordExpired(Request $request, Response $response)
+    public function redirectIfAuthenticatedOrNoAdmins()
     {
-//        if ($response->isLocked()) {
-//            return;
-//        }
-//        if (Application::getInstance()->getService('session')->get('user')->hasCredentialsExpired()) {
-//            $referrer = parse_url($request->server()->get('HTTP_REFERER'));
-//            if (!empty($referrer) &&
-//                (empty($referrer['host']) || $referrer['host'] == $request->server()->get('HTTP_HOST')) &&
-//                strpos($referrer, 'change-password') === false
-//            ) {
-//                Application::getInstance()->requireSessionService()->set('referrer', $request->server()->get('HTTP_REFERER'));
-//            }
-//            $response->redirect('/inadmin/change-password')->send();
-//        }
+        return $this->redirectIfAuthenticated() ?: $this->redirectIfNoAdmins();
     }
 
     /**
@@ -208,9 +174,6 @@ abstract class AbstractInachisController extends AbstractController
      */
     public function redirectToReferrerOrDashboard(Request $request, Response $response)
     {
-//        if ($response->isLocked()) {
-//            return null;
-//        }
         $referrer = $request->getSession()->get('referrer');
         if (!empty($referrer)) {
 //            return $response->redirect($referrer)->send();

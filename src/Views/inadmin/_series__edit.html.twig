@@ -9,6 +9,15 @@
         <div class="col span_6_of_8 content__edit">
             <fieldset id="post__edit">
                 <legend>{% trans %}admin.series.legend{% endtrans %}</legend>
+
+                {{
+                include('inadmin/partials/image_preview.html.twig', {
+                    'id': 'series_image',
+                    'name': 'series[image]',
+                    'value': series.image,
+                    'additionalClass': 'preview__small'
+                })
+                }}
                 <p>
                     {{ form_label(form.title) }}
                     {{ form_errors(form.title) }}
@@ -49,7 +58,10 @@
                 {% if series.items is not empty %}
                     <ol>
                     {% for item in series.items %}
-                        <li>{{ item.title }}</li>
+                        <li>
+                            <a href="/incc/{{ item.type }}/{{ item.urls|first.link }}">
+                                {{ item.title }}{% if item.subTitle is not empty %} - {{ item.subTitle }}{% endif %}</a>
+                        </li>
                     {% endfor %}
                     </ol>
                 {% else %}

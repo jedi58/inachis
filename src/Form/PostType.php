@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PostType extends AbstractType
 {
@@ -51,18 +51,20 @@ class PostType extends AbstractType
                 'label'      => $this->translator->trans('admin.label.post.title', [], 'messages'),
                 'label_attr' => [
                     'id' => 'title_label',
+                    'class' => 'inline_label',
                 ],
             ])
             ->add('subTitle', TextType::class, [
                 'attr' => [
                     'aria-labelledby' => 'subTitle_label',
                     'aria-required'   => 'false',
-                    'class' => 'editor__sub-title text',
+                    'class' => 'editor__sub-title text inline_label',
                     'placeholder'     => $this->translator->trans('admin.placeholder.post.subTitle', [], 'messages'),
                 ],
                 'label'      => $this->translator->trans('admin.label.post.subTitle', [], 'messages'),
                 'label_attr' => [
                     'id' => 'subTitle_label',
+                    'class' => 'inline_label',
                 ],
                 'required' => false,
             ])
@@ -71,6 +73,7 @@ class PostType extends AbstractType
                 'attr' => [
                     'aria-labelledby' => 'url_label',
                     'aria-required'   => 'false',
+                    'class' => 'halfwidth',
                 ],
                 'label'      => $this->translator->trans('admin.label.post.url', [], 'messages'),
                 'label_attr' => [
@@ -103,6 +106,7 @@ class PostType extends AbstractType
                 'label'      => $this->translator->trans('admin.label.post.visibility', [], 'messages'),
                 'label_attr' => [
                     'id' => 'visibility_label',
+                    'class' => 'inline_label',
                 ],
                 'required' => false,
             ])
@@ -120,6 +124,7 @@ class PostType extends AbstractType
                     $this->translator->trans('admin.label.post.postDate-future', [], 'messages'),
                 'label_attr' => [
                     'id' => 'postDate_label',
+                    'class' => 'inline_label',
                 ],
                 'required' => false,
                 'widget'   => 'single_text',
@@ -134,7 +139,7 @@ class PostType extends AbstractType
                 'attr'         => [
                     'aria-labelledby'  => 'categories_label',
                     'aria-required'    => 'false',
-                    'class'            => 'js-select',
+                    'class'            => 'js-select halfwidth',
                     'data-placeholder' => $this->translator->trans('admin.placeholder.post.categories', [], 'messages'),
                     'data-tip-content' => $this->translator->trans('admin.tip.content.post.categories', [], 'messages'),
                     'data-url'         => $this->router->generate('app_admindialog_getcategorymanagerlistcontent'),
@@ -151,7 +156,7 @@ class PostType extends AbstractType
                 'attr' => [
                     'aria-labelledby'  => 'tags_label',
                     'aria-required'    => 'false',
-                    'class'            => 'js-select',
+                    'class'            => 'js-select halfwidth',
                     'data-tags'        => 'true',
                     'data-tip-content' => $this->translator->trans('admin.tip.content.post.tags', [], 'messages'),
                     'selected'         => 'selected',
@@ -188,6 +193,8 @@ class PostType extends AbstractType
                 'attr' => [
                     'aria-labelledby' => 'teaser_label',
                     'aria-required'   => 'false',
+                    'class' => 'full-width',
+                    'rows' => 3,
                 ],
                 'label'      => $this->translator->trans('admin.label.post.teaser', [], 'messages'),
                 'label_attr' => [
@@ -199,7 +206,7 @@ class PostType extends AbstractType
                 'attr' => [
                     'aria-labelledby' => 'sharingMessage_label',
                     'aria-required'   => 'false',
-                    'class' => 'ui-counter',
+                    'class' => 'halfwidth ui-counter',
                 ],
                 'label'      => $this->translator->trans('admin.label.post.sharingMessage', [], 'messages'),
                 'label_attr' => [

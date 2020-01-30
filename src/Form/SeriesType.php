@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SeriesType extends AbstractType
 {
@@ -86,7 +86,7 @@ class SeriesType extends AbstractType
                         'data-tip-title'   => $this->translator->trans('admin.tip.title.series.firstDate', [], 'messages'),
                         'readOnly' => true,
                     ],
-                    'format' => 'dd/MM/yyyy HH:mm',
+                    'format' => 'dd/MM/yyyy', // HH:mm',
                     'html5'  => true,
                     'label'  => $this->translator->trans('admin.label.series.firstDate', [], 'messages'),
                     'label_attr' => [
@@ -106,7 +106,7 @@ class SeriesType extends AbstractType
                         'data-tip-title'   => $this->translator->trans('admin.tip.title.series.lastDate', [], 'messages'),
                         'readOnly' => true,
                     ],
-                    'format' => 'dd/MM/yyyy HH:mm',
+                    'format' => 'dd/MM/yyyy', // HH:mm',
                     'html5'  => true,
                     'label'  => $this->translator->trans('admin.label.series.lastDate', [], 'messages'),
                     'label_attr' => [

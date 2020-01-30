@@ -10,7 +10,7 @@ use App\Exception\InvalidTimezoneException;
  * Object for handling pages of a site.
  *
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title", "author_id"})})
+ * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title", "author_id", "image_id"})})
  */
 class Page
 {
@@ -72,9 +72,10 @@ class Page
      */
     protected $author;
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Image", cascade={"detach"})
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
      *
-     * @var string The featured image for the {@link Page}
+     * @var Image The featured {@link Image} for the {@link Page}
      */
     protected $featureImage;
     /**
@@ -197,6 +198,7 @@ class Page
      * @param string    $content The content for the {@link Page}
      * @param User|null $author  The {@link User} that authored the {@link Page}
      * @param string    $type    The type of {@link Page} - post or page
+     * @throws \Exception
      */
     public function __construct($title = '', $content = '', $author = null, $type = self::TYPE_POST)
     {
@@ -757,5 +759,15 @@ class Page
     public function isDraft()
     {
         return $this->status === self::DRAFT;
+    }
+
+    public function isExportable()
+    {
+        return true;
+    }
+
+    public function getName()
+    {
+        return 'Pages and Posts';
     }
 }

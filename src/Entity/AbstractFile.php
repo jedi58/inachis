@@ -25,7 +25,7 @@ abstract class AbstractFile
      */
     protected $title;
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string
      */
@@ -47,7 +47,7 @@ abstract class AbstractFile
      *
      * @var int
      */
-    protected $filesize;
+    protected $filesize = 0;
     /**
      * @ORM\Column(type="string")
      *
@@ -244,41 +244,21 @@ abstract class AbstractFile
     /**
      * Sets the value of {@link createDate}.
      *
-     * @param string $value The date the post was created
+     * @param \DateTime $value The date to be set
      */
-    public function setCreateDate($value)
+    public function setCreateDate(\DateTime $value = null)
     {
         $this->createDate = $value;
     }
 
     /**
-     * Sets the {@link createDate} from a DateTime object.
-     *
-     * @param \DateTime $value The date to be set
-     */
-    public function setCreateDateFromDateTime(\DateTime $value)
-    {
-        $this->setCreateDate($value->format('Y-m-d H:i:s'));
-    }
-
-    /**
      * Sets the value of {@link modDate}.
      *
-     * @param string $value Specifies the mod date for the {@link Page}
+     * @param \DateTime $value Specifies the mod date for the {@link Page}
      */
-    public function setModDate($value)
+    public function setModDate(\DateTime $value = null)
     {
         $this->modDate = $value;
-    }
-
-    /**
-     * Sets the {@link modDate} from a DateTime object.
-     *
-     * @param \DateTime $value The date to set
-     */
-    public function setModDateFromDateTime(\DateTime $value)
-    {
-        $this->setModDate($value->format('Y-m-d H:i:s'));
     }
 
     /**

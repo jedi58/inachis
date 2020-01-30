@@ -1,19 +1,29 @@
 #progressbar {
   background-color: #eee;
-  border: 1px solid #333;
-  padding: 1px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  position: relative;
+
+  .progress-label {
+    color: #fff;
+    left: 50%;
+    position: absolute;
+    top: 0.65em;
+  }
 
   .ui-progressbar-value {
-    background-color: green;
+    background-color: rgb(191, 210, 85);
     display: block;
-    height: 30px;
+    height: 2.5em;
+    border-right: 1px solid transparent;
+    border-radius: 5px;
   }
 
   &.ui-progressbar-warning .ui-progressbar-value {
-    background-color: orange;
+    background-color: rgb(240, 146, 70);
   }
 
   &.ui-progressbar-danger .ui-progressbar-value {
-    background-color: red;
+    background-color: rgb(217, 35, 92);
   }
 }

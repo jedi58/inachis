@@ -58,10 +58,18 @@ class Series
      *      @ORM\JoinColumn(name="page_id", referencedColumnName="id")
      *     }
      * )
+     * @ORM\OrderBy({"postDate" = "ASC"})
      *
      * @var ArrayCollection|Page[] The array of pages in the series
      */
     protected $items = [];
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Image", cascade={"detach"})
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
+     *
+     * @var Image
+     */
+    protected $image = '';
     /**
      * @ORM\Column(type="datetime")
      *
@@ -175,11 +183,10 @@ class Series
     }
 
     /**
-     * @param string $firstDate
-     *
+     * @param \DateTime $firstDate
      * @return $this
      */
-    public function setFirstDate(string $firstDate = null)
+    public function setFirstDate(\DateTime $firstDate = null)
     {
         $this->firstDate = $firstDate;
 
@@ -195,11 +202,11 @@ class Series
     }
 
     /**
-     * @param string $lastDate
+     * @param \DateTime $lastDate
      *
      * @return $this
      */
-    public function setLastDate(string $lastDate = null)
+    public function setLastDate(\DateTime $lastDate = null)
     {
         $this->lastDate = $lastDate;
 
@@ -234,6 +241,25 @@ class Series
     public function addItem(Page $item)
     {
         $this->items[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * @return Image
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param Image $image
+     * @return $this
+     */
+    public function setImage(Image $image)
+    {
+        $this->image = $image;
 
         return $this;
     }

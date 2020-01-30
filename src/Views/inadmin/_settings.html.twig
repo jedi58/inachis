@@ -13,8 +13,13 @@
                 ui-progressbar-danger
             {%- elseif storage.percent >= 75 -%}
                 ui-progressbar-warning
-            {%- endif -%}"></div>
+            {%- endif -%}">
+                <div class="progress-label">{{ storage.percent|number_format(2)|trim(0)|trim('.') }}%</div>
+            </div>
         </section>
+
+        {% include "/inadmin/partials/export.html.twig" %}
+
         <section class="section--boxed action-warning">
             <form method="post" action="{{ path('app_settings_wipe') }}">
                 <h2>Delete All Content</h2>

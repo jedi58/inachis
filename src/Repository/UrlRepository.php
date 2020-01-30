@@ -4,21 +4,21 @@ namespace App\Repository;
 
 use App\Entity\Page;
 use App\Entity\Url;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class UrlRepository extends AbstractRepository
 {
     /**
-     * The maximum number of items to show in the amdin interface
+     * The maximum number of items to show in the admin interface
      */
     const MAX_ITEMS_TO_SHOW_ADMIN = 20;
 
     /**
      * UrlRepository constructor.
      *
-     * @param RegistryInterface $registry
+     * @param ManagerRegistry $registry
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Url::class);
     }

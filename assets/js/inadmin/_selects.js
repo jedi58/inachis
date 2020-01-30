@@ -18,7 +18,8 @@ $(document).ready(function() {
 	{
 		var $properties = {
 			allowClear: true,
-			maximumInputLength: 20
+			maximumInputLength: 20,
+			width: '40%'
 		};
 		if ($(this).attr('data-tags')) {
 			$properties.tags = 'true';
@@ -81,7 +82,9 @@ $(document).ready(function() {
 	{
 		var $properties = {
 			checked: this.checked,
-			clear: true
+			clear: true,
+			height: 20,
+			width: 40
 		};
 		if ($(this).attr('data-label-on')) {
 			$properties.on_label = $(this).attr('data-label-on');

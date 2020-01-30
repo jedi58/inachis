@@ -20,7 +20,7 @@ class ValidTimezoneValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'string');
         }
 
-        if (!in_array($value, DateTimeZone::listIdentifiers())) {
+        if (!in_array($value, timezone_identifiers_list())) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)
                 ->addViolation();

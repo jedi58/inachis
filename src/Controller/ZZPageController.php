@@ -4,10 +4,15 @@ namespace App\Controller;
 
 use App\Controller\AbstractInachisController;
 use App\Entity\Category;
+use App\Entity\Image;
 use App\Entity\Page;
+use App\Entity\Revision;
+use App\Entity\Series;
 use App\Entity\Tag;
 use App\Entity\Url;
 use App\Form\PostType;
+use App\Repository\RevisionRepository;
+use App\Utils\ContentRevisionCompare;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,6 +68,18 @@ class ZZPageController extends AbstractInachisController
         }
         $this->data['post'] = $url->getContent();
         $this->data['url'] = $url->getLink();
+        $series = $entityManager->getRepository(Series::class)->getSeriesByPost($this->data['post']);
+        $postIndex = $series->getItems()->indexOf($this->data['post']);
+        if (!empty($series)) {
+            $this->data['series'] = [
+                'title' => $series->getTitle(),
+                'subTitle' => $series->getSubTitle(),
+                // @todo change below to only append if index is in bounds
+                'previous' => $series->getItems()[$postIndex - 1],
+                'next' => $series->getItems()[$postIndex + 1],
+            ];
+        }
+        unset($series);
         return $this->render('web/post.html.twig', $this->data);
     }
 
@@ -94,6 +111,7 @@ class ZZPageController extends AbstractInachisController
                     $post = $entityManager->getRepository(Page::class)->findOneById($item);
                     if ($post !== null) {
                         $entityManager->getRepository(Page::class)->remove($post);
+                        $entityManager->getRepository(Revision::class)->deleteAndRecordByPage($post);
                     }
                 }
                 if ($request->request->has('private') || $request->request->has('public')) {
@@ -108,6 +126,12 @@ class ZZPageController extends AbstractInachisController
                 }
             }
             if ($request->request->has('private') || $request->request->has('public')) {
+                $revision = $entityManager->getRepository(Revision::class)->hydrateNewRevisionFromPage($post);
+                $revision = $revision
+                    ->setContent('')
+                    ->setAction(sprintf(RevisionRepository::VISIBILITY_CHANGE, $post->getVisibility()));
+                $entityManager->persist($revision);
+
                 $entityManager->flush();
             }
             return $this->redirectToRoute(
@@ -118,19 +142,10 @@ class ZZPageController extends AbstractInachisController
         $offset = (int) $request->get('offset', 0);
         $limit = $entityManager->getRepository(Page::class)->getMaxItemsToShow();
         $this->data['form'] = $form->createView();
-        $this->data['posts'] = $entityManager->getRepository(Page::class)->getAll(
+        $this->data['posts'] = $entityManager->getRepository(Page::class)->getAllOfTypeByPostDate(
+            $type,
             $offset,
-            $limit,
-            [
-                'q.type = :type',
-                [
-                    'type' => $type,
-                ]
-            ],
-            [
-                [ 'q.postDate', 'DESC' ],
-                [ 'q.modDate', 'DESC' ]
-            ]
+            $limit
         );
         $this->data['page']['offset'] = $offset;
         $this->data['page']['limit'] = $limit;
@@ -160,6 +175,7 @@ class ZZPageController extends AbstractInachisController
      * )
      *
      * @param Request $request
+     * @param ContentRevisionCompare $contentRevisionCompare
      * @param string $type
      * @param string $title
      * @return mixed
@@ -167,7 +183,7 @@ class ZZPageController extends AbstractInachisController
      *
      * @return mixed
      */
-    public function getPostAdmin(Request $request, $type = 'post', $title = null)
+    public function getPostAdmin(Request $request, ContentRevisionCompare $contentRevisionCompare, $type = 'post', $title = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
@@ -187,22 +203,32 @@ class ZZPageController extends AbstractInachisController
         if ($post->getId() === null) {
             $post->setType($type);
         }
+        if (!empty($post->getId())) {
+            $revision = $entityManager->getRepository(Revision::class)->hydrateNewRevisionFromPage($post);
+            $revision = $revision->setAction(RevisionRepository::UPDATED);
+        }
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {//} && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
                 $entityManager->getRepository(Page::class)->remove($post);
+                $entityManager->getRepository(Revision::class)->deleteAndRecordByPage($post);
                 return $this->redirectToRoute(
                     'app_dashboard_default',
                     [],
                     Response::HTTP_PERMANENTLY_REDIRECT
                 );
             }
-
             $post->setAuthor($this->get('security.token_storage')->getToken()->getUser());
             if (null !== $request->get('publish')) {
                 $post->setStatus(Page::PUBLISHED);
+                if (isset($revision)) {
+                    if ($contentRevisionCompare->doesPageMatchRevision($post, $revision)) {
+                        $revision->setContent('');
+                    }
+                    $revision->setAction(RevisionRepository::PUBLISHED);
+                }
             }
             if (!empty($request->get('post')['url'])) {
                 $newUrl = $request->get('post')['url'];
@@ -244,12 +270,25 @@ class ZZPageController extends AbstractInachisController
                     }
                 }
             }
+            if (!empty($request->get('post')['featureImage'])) {
+                $post->setFeatureImage(
+                    $entityManager->getRepository(Image::class)->findOneById(
+                        $request->get('post')['featureImage']
+                    )
+                );
+            }
 
             if ($form->get('publish')->isClicked()) {
                 $post->setStatus(Page::PUBLISHED);
+                if (isset($revision)) {
+                    $revision->setAction(RevisionRepository::PUBLISHED);
+                }
             }
 
             $post->setModDate(new \DateTime('now'));
+            if (!empty($post->getId())) {
+                $entityManager->persist($revision);
+            }
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -270,6 +309,14 @@ class ZZPageController extends AbstractInachisController
         $this->data['includeEditorId'] = $post->getId();
         $this->data['includeDatePicker'] = true;
         $this->data['post'] = $post;
+        $this->data['revisions'] = $entityManager->getRepository(Revision::class)
+            ->getAll(0, 25, [
+                'q.page_id = :pageId', [
+                    'pageId' => $post->getId(),
+                ]
+            ], [
+                [ 'q.versionNumber', 'DESC']
+            ]);
         return $this->render('inadmin/post__edit.html.twig', $this->data);
     }
 

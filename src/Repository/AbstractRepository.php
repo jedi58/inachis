@@ -21,7 +21,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
-     * Uses the objects setters to populat the object
+     * Uses the objects setters to populate the object
      * based on the provided values.
      *
      * @param mixed $object The object to hydrate

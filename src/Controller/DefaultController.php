@@ -31,8 +31,15 @@ class DefaultController extends AbstractInachisController
             ]
         );
 
+        $pageQuery = 'q.status = :status AND q.postDate <= :postDate AND q.type = :type';
+        $pageParameters = [
+            'status'   => Page::PUBLISHED,
+            'postDate' => new \DateTime(),
+            'type' => Page::TYPE_POST,
+        ];
         $this->data['content'] = [];
         $excludePages = [];
+
         if (!empty($series)) {
             foreach ($series as $group) {
                 if (!empty($group->getItems())) {
@@ -45,19 +52,21 @@ class DefaultController extends AbstractInachisController
             unset($series);
         }
 
+        if (!empty($excludePages)) {
+            $pageQuery .= ' AND q.id NOT IN (:excludedPages)';
+            $pageParameters['excludedPages'] = $excludePages;
+        }
+
         $pages = $entityManager->getRepository(Page::class)->getAll(
             0,
             self::ITEMS_TO_SHOW,
             [
-                'q.status = :status AND q.postDate <= :postDate AND q.id NOT IN (:excludedPages)',
-                [
-                    'status'   => Page::PUBLISHED,
-                    'postDate' => new \DateTime(),
-                    'excludedPages' => $excludePages,
-                ],
+                 $pageQuery,
+                 $pageParameters,
             ],
             'q.postDate DESC, q.modDate'
         );
+
         if (!empty($pages)) {
             foreach ($pages as $page) {
                 $this->data['content'][$page->getPostDate()->format('Ymd')] = $page;

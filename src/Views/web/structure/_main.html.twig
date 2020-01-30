@@ -6,7 +6,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>{{ settings.siteTitle }}</title>
+    <title>{% if post.title|default('') is not empty -%}
+        {{ post.title }} / {% endif %}{{ settings.siteTitle }}</title>
 
     {% include "web/structure/metadata.html.twig" %}
 

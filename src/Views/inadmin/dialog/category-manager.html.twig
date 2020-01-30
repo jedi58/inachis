@@ -1,12 +1,29 @@
+<section>
+    <form class="form">
+        <fieldset class="col span_1_of_2">
+            <p>
+                <label for="dialog__categoryManager__new">New category name</label>
+                <input class="text full-width" id="dialog__categoryManager__new" placeholder="Enter category name…" type="text" />
+            </p>
+            <p>
+                <label for="dialog__categoryManager__description">Description</label>
+                <textarea class="text full-width" id="dialog__categoryManager__description" rows="5"></textarea>
+            </p>
+        </fieldset>
+        <fieldset class="col span_1_of_2">
+            <p>
+                <label for="dialog__categoryManager__existing">
+                <input checked class="checkbox" id="dialog__categoryManager__existing" name="catParent[]" type="radio" value="-1" />
+                As top-level category</label>
+            </p>
+
 {% if categories is not empty  %}
-    {% for category in categories %}
-        <li data-value="{{ category.id }}">
-            {{ category.title }}
-            {%-  if category.children is not empty %}
-                <ol>
-                    {{ include("inadmin/dialog/category-manager.html.twig", { 'categories': category.children }) }}
-                </ol>
-            {% endif -%}
-        </li>
-    {% endfor %}
+            <p>As a sub-category of:</p>
+            <ol data-name="catParent[]">
+                {{ include("inadmin/dialog/category-manager-list.html.twig", { 'categories': categories }) }}
+            </ol>
 {% endif %}
+        </fieldset>
+    </form>
+</section>
+<script>InachisCategoryManager._init();</script>

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Series;
 use App\Form\SeriesType;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +12,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class SeriesController extends AbstractInachisController
 {
     /**
-     * @Route("/incc/series/list", methods={"GET", "POST"})
+     * @Route("/incc/series/list/{offset}/{limit}",
+     *     methods={"GET", "POST"},
+     *     requirements={
+     *          "offset": "\d+",
+     *          "limit"="\d+"
+     *     },
+     *     defaults={"offset"=0, "limit"=10}
+     * )
      * @param Request $request
      * @return Response
      */
@@ -19,11 +27,28 @@ class SeriesController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
-        $form = $this->createFormBuilder(null);
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() && !empty($request->get('items'))) {
+            foreach ($request->get('items') as $item) {
+                if ($request->get('delete') !== null) {
+                    $post = $entityManager->getRepository(Series::class)->findOneById($item);
+                    if ($post !== null) {
+                        $entityManager->getRepository(Series::class)->remove($post);
+                    }
+                }
+            }
+            return $this->redirectToRoute(
+                'app_series_list',
+                [],
+                Response::HTTP_PERMANENTLY_REDIRECT
+            );
+        }
 
         $offset = (int) $request->get('offset', 0);
         $limit = $entityManager->getRepository(Series::class)->getMaxItemsToShow();
-        $this->data['form'] = $form->getForm()->createView();
+        $this->data['form'] = $form->createView();
         $this->data['dataset'] = $entityManager->getRepository(Series::class)->getAll(
             $offset,
             $limit,
@@ -42,6 +67,7 @@ class SeriesController extends AbstractInachisController
      * @Route("/incc/series/new", methods={"GET", "POST"}, name="app_series_new")
      * @param Request $request
      * @return Response
+     * @throws \Exception
      */
     public function edit(Request $request)
     {
@@ -54,9 +80,13 @@ class SeriesController extends AbstractInachisController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {//} && $form->isValid()) {
-//            dump($request);
-//            dump($series);
-//            exit;
+            if (!empty($request->get('series')['image'])) {
+                $series->setImage(
+                    $entityManager->getRepository(Image::class)->findOneById(
+                        $request->get('series')['image']
+                    )
+                );
+            }
             if ($form->get('delete')->isClicked()) {
                 // @todo should redirect back to series list
 //                $entityManager->getRepository(Series::class)->remove($series);
@@ -87,5 +117,18 @@ class SeriesController extends AbstractInachisController
         $this->data['includeEditorId'] = $series->getId();
         $this->data['includeDatePicker'] = true;
         return $this->render('inadmin/series__edit.html.twig', $this->data);
+    }
+
+    /**
+     * @Route("/{year}-{title}", methods={"GET"})
+     * @param Request $request
+     * @param int $year
+     * @param string $title
+     * @return Response
+     */
+    public function view(Request $request, $year = 0, $title = '')
+    {
+        $this->data['series'] = $this->entityManager->getRepository(Series::class)->findOneByTitle($title);
+        return $this->render('web/series.html.twig', $this->data);
     }
 }

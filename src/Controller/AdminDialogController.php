@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Image;
+use App\Form\ImageType;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +27,21 @@ class AdminDialogController extends AbstractInachisController
     }
 
     /**
+     * @Route("/incc/ax/imageManager/get", methods={"POST"})
+     * @return mixed
+     */
+    public function getImageManagerList()
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->data['form'] = $this->createForm(ImageType::class)->createView();
+        $this->data['allowedTypes'] = Image::ALLOWED_TYPES;
+        // @todo add pagination
+        $this->data['images'] = $this->entityManager->getRepository(Image::class)->getAll();
+        $this->data['image_count'] = sizeof($this->data['images']);
+        return $this->render('inadmin/dialog/imageManager.html.twig', $this->data);
+    }
+
+    /**
      * @Route("incc/ax/categoryList/get", methods={"POST"})
      *
      * @param Request         $request
@@ -36,21 +53,12 @@ class AdminDialogController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $categories = empty($request->get('q')) ?
-            $this->entityManager->getRepository(Category::class)->findByParent(null) : // Get Root categories
-            $this->entityManager->getRepository(Category::class)->getAll(
-                0,
-                25,
-                [
-                    'q.title LIKE :title',
-                    [
-                        'title' => '%'.$request->request->get('q').'%',
-                    ],
-                ],
-                'q.title'
-            );
+            $this->entityManager->getRepository(Category::class)->findByParent(null) :
+            $this->entityManager->getRepository(Category::class)->findByTitleLike($request->request->get('q'));
         $result = [];
         // Below code is used to handle where categories exist with the same name under multiple locations
         if (!empty($categories)) {
+            $result['items'] = [];
             foreach ($categories as $category) {
                 $title = $category->getTitle();
                 if (isset($result['items'][$title])) {

@@ -6,11 +6,14 @@ use App\Form\LoginType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class AccountController.
@@ -26,25 +29,29 @@ class AccountController extends AbstractInachisController
      * AccountController constructor.
      *
      * @param EncoderFactoryInterface $encoderFactory
+     * @param Security $security
      */
-    public function __construct(EncoderFactoryInterface $encoderFactory)
+    public function __construct(EncoderFactoryInterface $encoderFactory, Security $security)
     {
         $this->encoderFactory = $encoderFactory;
+        $this->security = $security;
     }
 
     /**
      * @Route("/incc/login", name="app_account_login", methods={"GET"})
      *
      * @param Request             $request
-     * @param TranslatorInterface $translator
+     * @param AuthenticationUtils $authenticationUtils
      *
      * @return Response The response the controller results in
      */
-    public function login(Request $request, TranslatorInterface $translator)
+    public function login(Request $request, AuthenticationUtils $authenticationUtils) : Response
     {
-//        $this->redirectIfAuthenticated($request, new \Symfony\Flex\Response(null));
-        $this->redirectIfNoAdmins();
-        $authenticationUtils = $this->get('security.authentication_utils');
+        $redirectTo = $this->redirectIfAuthenticatedOrNoAdmins();
+        if (!empty($redirectTo)) {
+            return $this->redirectToRoute($redirectTo);
+        }
+
         $form = $this->createForm(LoginType::class, [
             'loginUsername' => $authenticationUtils->getLastUsername(),
         ]);
@@ -83,7 +90,11 @@ class AccountController extends AbstractInachisController
      */
     public function forgotPassword(Request $request, TranslatorInterface $translator)
     {
-        $this->redirectIfAuthenticated($request, new \Symfony\Flex\Response(null));
+        $redirectTo = $this->redirectIfAuthenticatedOrNoAdmins();
+        if (!empty($redirectTo)) {
+            return $this->redirectToRoute($redirectTo);
+        }
+
         $this->data['page']['title'] = 'Request a password reset';
         $form = $this->createFormBuilder([
             'forgot_email' => $request->get('forgot_email'),
@@ -126,7 +137,11 @@ class AccountController extends AbstractInachisController
      */
     public function forgotPasswordSent(Request $request)
     {
-        $this->redirectIfAuthenticated($request, new \Symfony\Flex\Response(null));
+        $redirectTo = $this->redirectIfAuthenticatedOrNoAdmins();
+        if (!empty($redirectTo)) {
+            return $this->redirectToRoute($redirectTo);
+        }
+
 //        if (false) { // @todo if request contains errors then use
 //            return $response->redirect('/incc/forgot-password')->send();
 //        }

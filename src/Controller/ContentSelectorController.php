@@ -4,12 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Page;
 use App\Entity\Series;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ContentSelectorController extends Controller
+class ContentSelectorController extends AbstractInachisController
 {
     /**
      * @var array
@@ -27,7 +26,9 @@ class ContentSelectorController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // @todo paginate data returned with auto-loading from Ajax
-        $this->data['pages'] = $this->getDoctrine()->getRepository(Page::class)->findAll();
+        $this->data['pages'] = $this->getDoctrine()->getRepository(Page::class)->findBy([], [
+            'title' => 'ASC'
+        ]);
         return $this->render('inadmin/dialog/content-selector.html.twig', $this->data);
     }
 
@@ -46,11 +47,13 @@ class ContentSelectorController extends Controller
                 if (!empty($page) && !empty($page->getId())) {
                     $series->addItem($page);
                 }
-                if ($page->getPostDate()->format('Y-m-d H:i:s') < $series->getFirstDate()->format('Y-m-d H:i:s')) {
-                    $series->setFirstDate($page->getPostDate()->format('Y-m-d H:i:s'));
+                $firstDate = $series->getFirstDate();
+                $lastDate = $series->getLastDate();
+                if ($firstDate === null || $page->getPostDate()->format('Y-m-d H:i:s') < $firstDate->format('Y-m-d H:i:s')) {
+                    $series->setFirstDate($page->getPostDate());
                 }
-                if ($page->getPostDate()->format('Y-m-d H:i:s') > $series->getLastDate()->format('Y-m-d H:i:s')) {
-                    $series->setLastDate($page->getPostDate()->format('Y-m-d H:i:s'));
+                if ($lastDate === null || $page->getPostDate()->format('Y-m-d H:i:s') > $lastDate->format('Y-m-d H:i:s')) {
+                    $series->setLastDate($page->getPostDate());
                 }
             }
             $series->setModDate(new \DateTime('now'));

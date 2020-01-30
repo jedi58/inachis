@@ -4,13 +4,29 @@ php:
   - 7.2
   - 7.3
   - nightly
-  
+
+before_install:
+  # Manually compile the libsodium library
+  - sudo add-apt-repository ppa:ondrej/php -y
+  - sudo apt-get update -qq
+  - sudo apt-get install -y libsodium-dev
+  #- sudo apt-get install build-essential git -y
+  #- git clone -b stable https://github.com/jedisct1/libsodium.git
+  #- cd libsodium && sudo ./configure && sudo make check && sudo make install && cd ..
+  - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
+  - composer self-update
+
+install:
+  # Manually install libsodium, because the TravisCI image doesn't provide PHP7.2 with libsodium
+  - pecl install libsodium
+  - echo "extension=sodium.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
 before_script:
 #  - pecl channel-update pecl.php.net
   - wget http://getcomposer.org/composer.phar
-  - composer require php-coveralls/php-coveralls
-  - php composer.phar install --no-interaction
-  - php composer.phar dump-autoload --optimize
+  - php -d memory_limit=-1 composer.phar require php-coveralls/php-coveralls
+  - php -d memory_limit=-1 composer.phar install --no-interaction
+  - php -d memory_limit=-1 composer.phar dump-autoload --optimize
 
 script:
   - mkdir -p ./tests/logs/

@@ -1,0 +1,69 @@
+<section class="ui-dialog-secondary-bar">
+    <form class="search">
+        <label class="ui-helper-hidden-accessible" for="ui-dialog-search-input">Search</label>
+        <input class="text ui-icon-search" id="ui-dialog-search-input" placeholder="Filter by name" type="search" />
+        <button class="material-icons" type="submit">search</button>
+    </form>
+    <p>
+        <a class="button button--positive" href="#"><span class="material-icons">cloud_upload</span> Upload Image</a>
+        <strong>{{ image_count|number_format }}</strong> images
+    </p>
+</section>
+<section class="gallery">
+{% if images is not empty %}
+    <ol>
+    {% for image in images %}
+        <li>
+            <label for="chosenImage_{{ image.id }}">
+                <img alt="{{ image.altText }}" src="{{ image.filename }}" />
+                <span>{{ image.title }}</span>
+            </label>
+            <input id="chosenImage_{{ image.id }}" name="chosenImage[]" type="radio" value="{{ image.id }}" />
+        {% if image.filename|slice(0,4) == 'http' %}
+            <em class="material-icons">link</em>
+        {% endif %}
+        </li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>No images to choose from, please add some!</p>
+{% endif %}
+</section>
+<section class="ui-dialog-image-uploader visually-hidden">
+    {{ form_start(form, {'action': path('app_resource_saveimage'), 'attr': { 'class': 'form' }}) }}
+        <fieldset class="col dropzone span_1_of_2">
+        {{
+            include('inadmin/partials/dropzone.html.twig', {
+                'dropzoneUrl': path('app_resource_uploadimage'),
+                'helpText': 'Upload image (PNG. JPEG, GIF).',
+                'paramName': 'imageFile',
+                'uploadMultiple': false,
+                'maxFilesize': 2,
+                'acceptedFiles': allowedTypes
+            })
+        }}
+        {{ form_label(form.filename) }}
+        {{ form_widget(form.filename) }}
+        </fieldset>
+
+        <fieldset class="col span_1_of_2">
+            <p>
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+            </p>
+            <p>
+                {{ form_label(form.altText) }}
+                {{ form_widget(form.altText) }}
+            </p>
+            <p>
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+            </p>
+            <p>
+                <button class="button button--positive" data-submit-url="{{ path('app_resource_saveimage') }}" type="submit">Save Image</button>
+            </p>
+        </fieldset>
+    {{ form_row(form._token) }}
+    {{ form_end(form, { 'render_rest': false }) }}
+</section>
+<script>InachisImageManager._init();</script>

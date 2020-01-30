@@ -34,7 +34,7 @@ class ImportController extends AbstractInachisController
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
 
-        foreach ($request->files as $file) {
+        foreach ($request->files->get('markdownFiles') as $file) {
             if ($file->getError() != UPLOAD_ERR_OK) {
                 return $this->json('error', 400);
             }

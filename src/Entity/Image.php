@@ -28,21 +28,15 @@ class Image extends AbstractFile
      *
      * @var int
      */
-    protected $dimensionX;
+    protected $dimensionX = 0;
     /**
      * @ORM\Column(type="integer")
      *
      * @var int
      */
-    protected $dimensionY;
+    protected $dimensionY = 0;
     /**
-     * @ORM\Column(type="string")
-     *
-     * @var string
-     */
-    protected $caption;
-    /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string
      */
@@ -53,6 +47,10 @@ class Image extends AbstractFile
      */
     public function __construct()
     {
+        $now = new \DateTime();
+        $this->setCreateDate($now);
+        $this->setModDate($now);
+        unset($now);
     }
 
     public function getDimensionX()
@@ -63,11 +61,6 @@ class Image extends AbstractFile
     public function getDimensionY()
     {
         return $this->dimensionY;
-    }
-
-    public function getCaption()
-    {
-        return $this->caption;
     }
 
     public function getAltText()
@@ -83,11 +76,6 @@ class Image extends AbstractFile
     public function setDimensionY($value)
     {
         $this->dimensionY = (int) $value;
-    }
-
-    public function setCaption($value)
-    {
-        $this->caption = $value;
     }
 
     public function setAltText($value)

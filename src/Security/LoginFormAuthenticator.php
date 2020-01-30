@@ -87,7 +87,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param mixed                 $credentials
      * @param UserProviderInterface $userProvider
      *
-     * @return \App\Entity\User|null|object|UserInterface
+     * @return User|null|object|UserInterface
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
@@ -130,6 +130,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $targetPath = $this->getTargetPath($request->getSession(), $providerKey);
         if (!$targetPath) {
             $targetPath = $this->router->generate('app_dashboard_default');
+        }
+        if ($token->getUser()->hasCredentialsExpired()) {
+            $targetPath = 'app_account_changepassword';
         }
 
         return new RedirectResponse($targetPath);

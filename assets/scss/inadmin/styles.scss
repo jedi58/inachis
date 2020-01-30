@@ -26,6 +26,7 @@ body {
 @import '../shared/_col';
 @import '../shared/_8cols';
 @import '../shared/_3cols';
+@import '../shared/_2cols';
 
 @import '../shared/_forms';
 	@import '_form__signin';
@@ -68,11 +69,17 @@ body {
 
 .switch-wrapper {
 	display: inline-block;
+	padding: 0 20px;
 	position: relative;
 	top: 3px;
 
 	div {
 		clear: none;
+	}
+
+	.switch-button-label {
+		font-size: 1em;
+		line-height: 1.3em;
 	}
 }
 
@@ -135,7 +142,7 @@ body {
 	}
 
 	.admin__nav-main__list {
-		background: #333;
+		background-color: #222;
 		height: 100%;
 		list-style-type: none;
 		font-size: 0.8em;
@@ -205,7 +212,7 @@ body {
 	}
 
 	@media #{$information-medium} {
-		background-color: #333;
+		background-color: #222;
 		color: #fff;
 		height: 100%;
 		left: 0;
@@ -347,13 +354,17 @@ body {
 	}
 }
 
+.visually-hidden {
+	display: none;
+}
+
 #series_addItem {
 	float:right;
 	margin: -5px 20px 0 0;
 }
 
 .fixed-bottom-bar {
-	background: $admin__button-bar-background-color;
+	background-color: $admin__button-bar-background-color;
 	border-top: 1px solid #ddd;
 	bottom: 0;
 	padding-left: 20px;

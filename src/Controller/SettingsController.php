@@ -19,14 +19,30 @@ class SettingsController extends AbstractInachisController
     /**
      * @Route("/incc/settings")
      */
-    public function index()
+    public function index(Request $request)
     {
+        $available_space = disk_free_space(dirname($request->server->get('SCRIPT_FILENAME')));
+        $total_space = disk_total_space(dirname($request->server->get('SCRIPT_FILENAME')));
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->data['storage']['percent'] = 75; //@todo calculate hdd space from allowance - usage
+        $this->data['storage']['percent'] = ($total_space - $available_space)/$total_space * 100;
         $this->data['counts']['page'] = $this->getDoctrine()->getManager()->getRepository(Page::class)->getAllCount();
         $this->data['counts']['series'] = $this->getDoctrine()->getManager()->getRepository(Series::class)->getAllCount();
         $this->data['counts']['tag'] = $this->getDoctrine()->getManager()->getRepository(Tag::class)->getAllCount();
         $this->data['counts']['url'] = $this->getDoctrine()->getManager()->getRepository(Url::class)->getAllCount();
+
+        $this->data['data_types'] = [
+            'raw' => $this->entityManager->getConfiguration()->getMetadataDriverImpl()->getAllClassNames()
+        ];
+        if (!empty($this->data['data_types']['raw'])) {
+            foreach ($this->data['data_types']['raw'] as $type) {
+                if (class_exists($type) && method_exists($type, 'isExportable') && $type::isExportable()) {
+                    $this->data['data_types'][$type] = $type::getName();
+                }
+            }
+            unset($this->data['data_types']['raw']);
+        }
+
         return $this->render('inadmin/settings.html.twig', $this->data);
     }
 
@@ -98,7 +114,7 @@ class SettingsController extends AbstractInachisController
     }
 
     /**
-     * @return bool
+     * @return string
      */
     private function getOpCacheStatus()
     {

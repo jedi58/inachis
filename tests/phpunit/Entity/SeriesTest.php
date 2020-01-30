@@ -41,14 +41,16 @@ class SeriesTest extends TestCase
 
     public function testGetAndSetFirstDate()
     {
-        $this->series->setFirstDate('test');
-        $this->assertEquals('test', $this->series->getFirstDate());
+        $testDate = new \DateTime();
+        $this->series->setFirstDate($testDate);
+        $this->assertEquals($testDate, $this->series->getFirstDate());
     }
 
-    public function testGetAndSetLasytDate()
+    public function testGetAndSetLastDate()
     {
-        $this->series->setLastDate('test');
-        $this->assertEquals('test', $this->series->getLastDate());
+        $testDate = new \DateTime();
+        $this->series->setLastDate($testDate);
+        $this->assertEquals($testDate, $this->series->getLastDate());
     }
 
     public function testGetAndSetItems()
