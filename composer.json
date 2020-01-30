@@ -74,6 +74,14 @@
             "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
             "security-checker security:check": "script"
         },
+        "create-skeleton": [
+            "cp -R vendor/jedi58/inachis/{bin,config,public} .",
+            "cp -R vendor/jedi58/inachis/.env.dist .env"
+        ],
+        "post-create-project-cmd": [
+            "@create-skeleton",
+            "@auto-scripts"
+        ],
         "post-install-cmd": [
             "@auto-scripts"
         ],
@@ -87,7 +95,8 @@
     "extra": {
         "symfony": {
             "id": "01C425H726J8GJGXQBKPRWG2F5",
-            "allow-contrib": false
+            "allow-contrib": false,
+            "require": "5.0.*"
         }
     }
 }
