@@ -87,7 +87,7 @@ class SeriesType extends AbstractType
                         'readOnly' => true,
                     ],
                     'format' => 'dd/MM/yyyy', // HH:mm',
-                    'html5'  => true,
+                    'html5'  => false,
                     'label'  => $this->translator->trans('admin.label.series.firstDate', [], 'messages'),
                     'label_attr' => [
                         'class' => 'date-range__label',
@@ -107,7 +107,7 @@ class SeriesType extends AbstractType
                         'readOnly' => true,
                     ],
                     'format' => 'dd/MM/yyyy', // HH:mm',
-                    'html5'  => true,
+                    'html5'  => false,
                     'label'  => $this->translator->trans('admin.label.series.lastDate', [], 'messages'),
                     'label_attr' => [
                         'class' => 'date-range__label',
