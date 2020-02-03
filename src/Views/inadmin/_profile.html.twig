@@ -5,17 +5,16 @@
 
     {% block profile %}
 
+        {{ form_start(form, {'attr': { 'class': 'form form__post form__user' }}) }}
         <div class="col span_4_of_8">
             <h2>Edit Profile</h2>
 
-            Username
+            <p>
+                {{ form_label(form.displayName) }}
+                {{ form_errors(form.displayName) }}
+                {{ form_widget(form.displayName) }}
+            </p>
 
-            Password
-            Confirm Password
-
-            Email address
-            Display Name
-            Timezone
         </div>
         <div class="col span_4_of_8">
             <a class="profile-photo" href="#">
@@ -23,6 +22,7 @@
                 <img src="/assets/imgs/incc/defaultAvatar.png" />
             </a>
         </div>
+        {{ form_end(form) }}
 
     {% endblock profile %}
 

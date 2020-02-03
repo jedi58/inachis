@@ -26,10 +26,10 @@
         {% if actions|default(null) is not empty %}
             <input class="checkbox" id="{{ type }}-{{ item.id }}__input" type="checkbox" name="items[]" value="{{ item.id }}" />
         {% endif %}
-        <a aria-label="Edit {{ item.title }}" href="/incc/{{ slug_prefix }}/{{ slug_object }}">
+        <a aria-label="Edit {% if item.title is defined %}{{ item.title }}{% elseif item.displayName is defined %}{{ item.displayName }}{% endif %}" href="/incc/{{ slug_prefix }}/{{ slug_object }}">
             <h2>
                 <!-- label for="post-{{ item.id }}__input" -->
-                {{ item.title }}
+                {% if item.title is defined %}{{ item.title }}{% elseif item.displayName is defined %}{{ item.displayName }}{% endif %}
 
                 {% if badges|default(null) is not empty %}
                     {% for badgeName,badge in badges %}
