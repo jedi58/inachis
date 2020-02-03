@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,7 +15,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, [
+            ->add('username', HiddenType::class, [
                 'attr' => [
                     'aria-labelledby' => 'user__username__label',
                     'class' => 'text full-width',
@@ -49,12 +49,17 @@ class UserType extends AbstractType
                 ],
             ])
             ->add('timezone', ChoiceType::class, [
+                'attr' => [
+                    'aria-labelledby' => 'user__timezone__label',
+                    'data-tip-content' => 'How the user will be known',
+                    'class' => 'text full-width',
+                ],
                 'choices' => array_combine(timezone_identifiers_list(), timezone_identifiers_list()),
                 'label' => 'Timezone',
+                'label_attr' => [
+                    'id' => 'user__timezone__label',
+                ],
             ])
-        //            Password
-        //            Confirm Password
-        //            Timezone
         ;
     }
 
