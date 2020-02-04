@@ -47,7 +47,7 @@ class AdminController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $entityManager->getRepository(User::class)->findOneBy(['id' => $request->get('id')]);
+        $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $request->get('id')]);
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         $this->data['user'] = $user;
