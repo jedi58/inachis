@@ -66,8 +66,9 @@ class DashboardController extends AbstractInachisController
                 'q.postDate ASC, q.modDate'
             ),
         ];
-        //dump($this->data['dashboard']['posts']->count());
-        //dump($this->data['dashboard']['posts']->getQuery()->getMaxResults());
+        $this->data['dashboard']['draftCount'] = $this->data['dashboard']['drafts']->count();
+        $this->data['dashboard']['upcomingCount'] = $this->data['dashboard']['upcoming']->count();
+        $this->data['dashboard']['publishCount'] = $this->data['dashboard']['posts']->count();
         return $this->render('inadmin/dashboard.html.twig', $this->data);
     }
 }

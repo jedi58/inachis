@@ -4,24 +4,24 @@
             <a href="#widget-posts__drafts">Drafts</a>
             <em class="badge{% if dashboard.draftCount == 0 %} badge__empty{% endif %}">{{ dashboard.draftCount }}</em>
         </li>
-        {% if dashboard is defined and dashboard.upcomingCount > 0 %}
+        {% if dashboard.upcoming|default([]) is not empty  %}
             <li>
                 <a href="#widget-posts__upcoming">Upcoming</a>
-                <em class="badge">{{ dashboard.upcoming.total }}</em>
+                <em class="badge">{{ dashboard.upcomingCount }}</em>
             </li>
         {% endif %}
         <li>
             <a href="#widget-posts__published">Latest</a>
             <em class="badge{% if dashboard.publishCount == 0 %} badge__empty{% endif %}">{{ dashboard.publishCount }}</em>
         </li>
-        {% if dashboard.comments is defined and dashboard.comments is not empty %}
+        {% if dashboard.comments|default([]) is not empty %}
             <li>
                 <a href="#widget-posts__comments">Comments</a>
             </li>
         {% endif %}
     </ul>
 
-    {% if dashboard.drafts is defined and dashboard.drafts is not empty %}
+    {% if dashboard.drafts|default([]) is not empty %}
         <ol id="widget-posts__drafts">
             {% for post in dashboard.drafts %}
                 <li>
@@ -37,7 +37,7 @@
         </div>
     {% endif %}
 
-    {% if dashboard.upcoming is defined and dashboard.upcoming is not empty %}
+    {% if dashboard.upcoming|default([]) is not empty %}
         <ol id="widget-posts__upcoming">
             {% for post in dashboard.upcoming %}
                 <li>
@@ -49,7 +49,7 @@
         </ol>
     {% endif %}
 
-    {% if dashboard.posts is defined and dashboard.posts is not empty %}
+    {% if dashboard.posts|default([]) is not empty %}
         <ol id="widget-posts__published">
             {% for post in dashboard.posts %}
                 <li>
@@ -65,7 +65,7 @@
         </div>
     {% endif %}
 
-    {% if dashboard.comments is defined and dashboard.comments is not empty %}
+    {% if dashboard.comments|default([]) is not empty %}
         <ol id="widget-posts__comments">
             {% for comment in data.comments.results %}
                 <li>{{ comment.message }}</li>
