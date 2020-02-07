@@ -139,14 +139,17 @@ class ZZPageController extends AbstractInachisController
                 [ 'type' => $type ]
             );
         }
+        $filters = array_filter($request->get('filter', []));
         $offset = (int) $request->get('offset', 0);
         $limit = $entityManager->getRepository(Page::class)->getMaxItemsToShow();
         $this->data['form'] = $form->createView();
-        $this->data['posts'] = $entityManager->getRepository(Page::class)->getAllOfTypeByPostDate(
+        $this->data['posts'] = $entityManager->getRepository(Page::class)->getFilteredOfTypeByPostDate(
+            $filters,
             $type,
             $offset,
             $limit
         );
+        $this->data['filters'] = $filters;
         $this->data['page']['offset'] = $offset;
         $this->data['page']['limit'] = $limit;
         $this->data['page']['tab'] = $type;

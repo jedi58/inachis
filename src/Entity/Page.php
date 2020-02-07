@@ -465,9 +465,9 @@ class Page
     /**
      * Sets the value of {@link subTitle}.
      *
-     * @param string $value The optional sub-title of the {@link Page}
+     * @param string|null $value The optional sub-title of the {@link Page}
      */
-    public function setSubTitle($value)
+    public function setSubTitle($value = null)
     {
         $this->subTitle = $value;
     }

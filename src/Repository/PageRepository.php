@@ -62,15 +62,41 @@ final class PageRepository extends AbstractRepository
      */
     public function getAllOfTypeByPostDate($type, $offset, $limit)
     {
+       return $this->getFilteredOfTypeByPostDate([], $type, $offset, $limit);
+    }
+
+    /**
+     * @param $filters
+     * @param $type
+     * @param $offset
+     * @param $limit
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function getFilteredOfTypeByPostDate($filters, $type, $offset, $limit)
+    {
+        $where = [
+            'q.type = :type',
+            array_merge(
+                [
+                    'type' => $type,
+                ],
+                $filters
+            )
+        ];
+        if (!empty($filters['status'])) {
+            $where[0] .= ' AND q.status = :status';
+        }
+        if (!empty($filters['visibility'])) {
+            $where[0] .= ' AND q.visibility = :visibility';
+        }
+        if (!empty($filters['keyword'])) {
+            $where[0] .= ' AND (q.title LIKE :keyword OR q.subTitle LIKE :keyword OR q.content LIKE :keyword )';
+            $where[1]['keyword'] = '%' . $where[1]['keyword'] . '%';
+        }
         return $this->getAll(
             $offset,
             $limit,
-            [
-                'q.type = :type',
-                [
-                    'type' => $type,
-                ]
-            ],
+            $where,
             [
                 [ 'q.postDate', 'DESC' ],
                 [ 'q.modDate', 'DESC' ]

@@ -1,0 +1,19 @@
+{% block filter %}
+<section class="filter">
+    {% if filters is defined and filters is not empty %}
+        {% for filter_name, filter in filters %}
+            <label for="filter__{{ filter_name|lower|spaceless }}">{{ filter_name }}</label>
+            <select name="filter[{{ filter_name|lower|spaceless }}]" id="filter__{{ filter_name|lower|spaceless }}">
+                {% for key, value in filter %}
+                    <option value="{{ key }}"{% if filter_values[filter_name|lower|spaceless]|default('') == key %} selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+        {% endfor %}
+    {% endif %}
+    {% if show_search|default(false) %}
+        <label for="filter__keyword">Search</label>
+        <input id="filter__keyword" name="filter[keyword]" type="search" value="{{ filter_values['keyword']|default('') }}" />
+        <button class="button button--info" type="submit">Search</button>
+    {% endif %}
+</section>
+{% endblock %}

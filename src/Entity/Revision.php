@@ -179,7 +179,7 @@ class Revision
         return $this->subTitle;
     }
 
-    public function setSubTitle(string $subTitle): self
+    public function setSubTitle(string $subTitle = null): self
     {
         $this->subTitle = $subTitle;
 
