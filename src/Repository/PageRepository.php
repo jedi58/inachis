@@ -62,7 +62,7 @@ final class PageRepository extends AbstractRepository
      */
     public function getAllOfTypeByPostDate($type, $offset, $limit)
     {
-       return $this->getFilteredOfTypeByPostDate([], $type, $offset, $limit);
+        return $this->getFilteredOfTypeByPostDate([], $type, $offset, $limit);
     }
 
     /**
