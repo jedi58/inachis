@@ -4,12 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Image;
+use App\Entity\Page;
 use App\Form\ImageType;
+use App\Parser\ArrayToMarkdown;
+use App\Repository\PageRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class AdminDialogController extends AbstractInachisController
 {
@@ -103,5 +110,101 @@ class AdminDialogController extends AbstractInachisController
         $this->entityManager->flush();
 
         return new JsonResponse($category, Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/incc/ax/export/get", methods={"POST"})
+     * @param Request $request
+     * @return mixed
+     */
+    public function export(Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+//        $this->data['form'] = $this->createForm(ImageType::class)->createView();
+//        $this->data['allowedTypes'] = Image::ALLOWED_TYPES;
+//        $this->data['images'] = $this->entityManager->getRepository(Image::class)->getAll(0, 250);
+//        $this->data['image_count'] = sizeof($this->data['images']);
+        return $this->render('inadmin/dialog/export.html.twig', $this->data);
+    }
+
+    /**
+     * @Route("/incc/ax/export/output", methods={"POST"})
+     * @param Request $request
+     * @param Serializer\ $serializer
+     * @return mixed
+     */
+    public function performExport(Request $request, SerializerInterface $serializer)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $posts = [];
+        if (empty($request->request->get('postId'))) {
+            return new Response(null, Response::HTTP_EXPECTATION_FAILED);
+        }
+        $posts = $this->entityManager->getRepository(Page::class)->getFilteredIds(
+            $request->request->get('postId')
+        )->getIterator()->getArrayCopy();
+        if (empty($posts)) {
+            return new Response(null, Response::HTTP_EXPECTATION_FAILED);
+        }
+
+        $normalisedAttributes = [
+            'title',
+            'subTitle',
+            'postDate',
+            'content',
+        ];
+        if (!empty($request->request->get('export_categories'))) {
+            $normalisedAttributes[] = 'categories';
+        }
+        $posts = $serializer->normalize(
+            $posts,
+            null,
+            [
+                AbstractNormalizer::ATTRIBUTES => $normalisedAttributes,
+            ]
+        );
+
+        $format = $request->request->get('export_format');
+        $response = new Response();
+        switch($format) {
+            case 'json':
+                $posts = json_encode($posts);
+                $response->headers->set('Content-Type', 'application/json');
+                break;
+
+            case 'xml':
+                $encoder = new XmlEncoder();
+                $posts = $encoder->encode($posts, '');
+                $response->headers->set('Content-Type', 'text/xml');
+                break;
+
+            case 'md':
+            default:
+                $format = 'md';
+                $markdownPosts = [];
+                // @todo use https://packagist.org/packages/maennchen/zipstream-php to zip contents
+                // export_zip
+                foreach ($posts as $post) {
+                    $markdownPosts[] = ArrayToMarkdown::parse($post);
+                }
+        }
+        $response->setContent($posts);
+
+        $filename = date('YmdHis');
+        if (!empty($request->request->get('export_name'))) {
+            $filename = $request->request->get('export_name');
+        }
+        $filename .= '.' . $format;
+
+        $response->headers->set(
+            'Content-Disposition',
+            $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                $filename
+            )
+        );
+
+        return $response;
     }
 }

@@ -20,16 +20,15 @@ var InachisDialog = {
 
     createDialog: function(event)
     {
-        var dialogWidth = $(window).width() * 0.75;
+        let dialogWidth = $(window).width() * 0.75;
         if (dialogWidth < 380) {
             dialogWidth = 376;
         }
-        var $dialogLink = $(event.currentTarget);
+        let $dialogLink = $(event.currentTarget);
         this.title = $dialogLink.data('title'),
             this.templateName = $dialogLink.data('templateName'),
             this.className = $dialogLink.data('className');//,
             //this.buttons = JSON.parse(window.atob($dialogLink.data('buttons')));
-
         this.buttons = (typeof this.buttons != 'undefined' && this.buttons instanceof Array) ? this.buttons : [ this.buttons ];
 
         $('<div id="' + this.className + '"><form class="form"><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p></form></div>').dialog(
@@ -46,6 +45,7 @@ var InachisDialog = {
                 modal: true,
                 open: $.proxy(function()
                 {
+                    $('.ui-widget-overlay').css('height', $(document).height());
                     $('.fixed-bottom-bar').toggle();
                     this.addDialogContent(this.templateName);
                 }, this),

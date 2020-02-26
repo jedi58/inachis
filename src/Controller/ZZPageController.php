@@ -69,8 +69,8 @@ class ZZPageController extends AbstractInachisController
         $this->data['post'] = $url->getContent();
         $this->data['url'] = $url->getLink();
         $series = $entityManager->getRepository(Series::class)->getSeriesByPost($this->data['post']);
-        $postIndex = $series->getItems()->indexOf($this->data['post']);
         if (!empty($series)) {
+            $postIndex = $series->getItems()->indexOf($this->data['post']);
             $this->data['series'] = [
                 'title' => $series->getTitle(),
                 'subTitle' => $series->getSubTitle(),

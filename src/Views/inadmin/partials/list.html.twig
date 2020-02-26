@@ -74,6 +74,7 @@
         result_url: url_result
     }) }}
     {% if actions|default(null) is not empty %}
+    <p class="clear">&nbsp;</p>
     <div class="fixed-bottom-bar">
         <p>
             <button class="button button--select button--select-all" type="button">
@@ -93,7 +94,7 @@
                     {% for datakey, datavalue in action.data %} data-{{ datakey }}="{{ datavalue }}"{% endfor %}
             {%- endif %}{%-
                 if action.id is defined %} id="{{ action.id }}"{% endif
-            %} name="{{ key }}" type="submit">
+            %} name="{{ key }}" type="{{ action.button_type|default('submit') }}">
             {% if action.icon is not empty %}
                 <span class="material-icons">{{ action.icon }}</span>
             {% endif %}

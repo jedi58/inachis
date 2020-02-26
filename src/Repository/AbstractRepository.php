@@ -49,10 +49,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * provided constraints.
      *
      * @param string[] $where Array of elements and string replacements
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @return int The number of entities located
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getAllCount($where = [])
     {

@@ -103,4 +103,22 @@ final class PageRepository extends AbstractRepository
             ]
         );
     }
+
+    /**
+     * @param $ids
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function getFilteredIds($ids)
+    {
+        return $this->getAll(
+            0,
+            0,
+            [
+                'q.id IN (:ids)',
+                [
+                    'ids' => $ids,
+                ]
+            ]
+        );
+    }
 }
