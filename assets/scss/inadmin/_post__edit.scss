@@ -74,3 +74,37 @@
         }
     }
 }
+
+#track_changes {
+    border: 1px solid #eee;
+    margin: 10px;
+
+    p {
+        margin: 3px;
+        padding: 5px;
+    }
+
+    ins {
+        text-decoration: none;
+        &, p {
+            background-color: rgb(181, 239, 219);
+        }
+        & p:before {
+            content: '+';
+        }
+    }
+    del {
+        text-decoration: none;
+        &, p {
+            background-color: rgb(255, 196, 193);
+        }
+        & p:before {
+            content: '-';
+        }
+    }
+    .change_block {
+        background-color: #eee;
+        margin: 10px 3px;
+        padding: 3px 0;
+    }
+}

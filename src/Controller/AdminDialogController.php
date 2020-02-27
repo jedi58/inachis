@@ -120,10 +120,6 @@ class AdminDialogController extends AbstractInachisController
     public function export(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-//        $this->data['form'] = $this->createForm(ImageType::class)->createView();
-//        $this->data['allowedTypes'] = Image::ALLOWED_TYPES;
-//        $this->data['images'] = $this->entityManager->getRepository(Image::class)->getAll(0, 250);
-//        $this->data['image_count'] = sizeof($this->data['images']);
         return $this->render('inadmin/dialog/export.html.twig', $this->data);
     }
 

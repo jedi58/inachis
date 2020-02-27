@@ -49,6 +49,7 @@ class RevisionRepository extends AbstractRepository
      * @param string $pageId
      * @return int
      * @throws NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
      */
     public function getNextVersionNumberForPageId(string $pageId)
     {
