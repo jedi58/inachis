@@ -68,18 +68,22 @@ class ZZPageController extends AbstractInachisController
         }
         $this->data['post'] = $url->getContent();
         $this->data['url'] = $url->getLink();
-        $series = $entityManager->getRepository(Series::class)->getSeriesByPost($this->data['post']);
+        $series = $entityManager->getRepository(Series::class)->getPublishedSeriesByPost($this->data['post']);
         if (!empty($series)) {
             $postIndex = $series->getItems()->indexOf($this->data['post']);
             $this->data['series'] = [
                 'title' => $series->getTitle(),
-                'subTitle' => $series->getSubTitle(),
-                // @todo change below to only append if index is in bounds
-                'previous' => $series->getItems()[$postIndex - 1],
-                'next' => $series->getItems()[$postIndex + 1],
+                'subTitle' => $series->getSubTitle()
             ];
+            if (!empty($series->getItems())) {
+                if ($postIndex - 1 >= 0) {
+                    $this->data['series']['previous'] = $series->getItems()->get($postIndex - 1);
+                }
+                if ($postIndex + 1 < $series->getItems()->count()) {
+                    $this->data['series']['next'] = $series->getItems()->get($postIndex + 1);
+                }
+            }
         }
-        unset($series);
         return $this->render('web/post.html.twig', $this->data);
     }
 
