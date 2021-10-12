@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Page;
+use App\Entity\Series;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,7 +22,7 @@ class WidgetController extends AbstractController
     public function getRecentTrips($maxDisplayCount = self::DEFAULT_MAX_DISPLAY_COUNT)
     {
         return $this->render('web/partials/recent_trips.html.twig', [
-            'trips' => $this->getPagesWithCategoryName('Trips'),
+            'trips' => $this->getRecentSeries($maxDisplayCount),
         ]);
     }
 
@@ -60,5 +61,11 @@ class WidgetController extends AbstractController
             return $doctrineManager->getRepository(Page::class)->getPagesWithCategory($category);
         }
         return [];
+    }
+
+    private function getRecentSeries(int $maxDisplayCount = null)
+    {
+        $doctrineManager = $this->getDoctrine()->getManager();
+        return $doctrineManager->getRepository(Series::class)->findBy([], ['lastDate' => 'DESC'], $maxDisplayCount);
     }
 }
