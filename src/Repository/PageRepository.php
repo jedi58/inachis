@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Category;
 use App\Entity\Page;
 use App\Entity\Url;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 final class PageRepository extends AbstractRepository
 {

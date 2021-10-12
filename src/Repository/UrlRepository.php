@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Page;
 use App\Entity\Url;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class UrlRepository extends AbstractRepository
 {
