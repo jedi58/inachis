@@ -41,15 +41,25 @@ final class PageRepository extends AbstractRepository
 
     /**
      * @param Category $category
+     * @param int $maxDisplayCount
      * @return mixed
      */
-    public function getPagesWithCategory(Category $category)
+    public function getPagesWithCategory(Category $category, int $maxDisplayCount = null)
     {
-        return $this->createQueryBuilder('p')
+        $qb = $this->createQueryBuilder('p');
+        return $qb
             ->select('p')
             ->leftJoin('p.categories', 'Page_categories')
-            ->where('Page_categories.id = :categoryId')
+            ->where(
+                $qb->expr()->andX(
+                    'Page_categories.id = :categoryId',
+                    'p.status = \'published\'',
+                    'p.type = \'post\''
+                )
+            )
+            ->orderBy('p.postDate', 'DESC')
             ->setParameter('categoryId', $category->getId())
+            ->setMaxResults($maxDisplayCount)
             ->getQuery()
             ->execute();
     }

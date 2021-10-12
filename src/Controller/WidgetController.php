@@ -33,8 +33,7 @@ class WidgetController extends AbstractController
     public function getRecentRunning($maxDisplayCount = self::DEFAULT_MAX_DISPLAY_COUNT)
     {
         return $this->render('web/partials/recent_running.html.twig', [
-            'races' => $this->getPagesWithCategoryName('Running'),
-
+            'races' => $this->getPagesWithCategoryName('Running', $maxDisplayCount),
         ]);
     }
 
@@ -45,7 +44,7 @@ class WidgetController extends AbstractController
     public function getRecentArticles($maxDisplayCount = self::DEFAULT_MAX_DISPLAY_COUNT)
     {
         return $this->render('web/partials/recent_articles.html.twig', [
-            'articles' => $this->getPagesWithCategoryName('Articles'),
+            'articles' => $this->getPagesWithCategoryName('Articles', $maxDisplayCount),
         ]);
     }
 
@@ -53,12 +52,12 @@ class WidgetController extends AbstractController
      * @param $categoryName
      * @return Page[]
      */
-    private function getPagesWithCategoryName($categoryName)
+    private function getPagesWithCategoryName($categoryName, int $maxDisplayCount = null)
     {
         $doctrineManager = $this->getDoctrine()->getManager();
         $category = $doctrineManager->getRepository(Category::class)->findOneByTitle($categoryName);
         if ($category instanceof Category) {
-            return $doctrineManager->getRepository(Page::class)->getPagesWithCategory($category);
+            return $doctrineManager->getRepository(Page::class)->getPagesWithCategory($category, $maxDisplayCount);
         }
         return [];
     }
