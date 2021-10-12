@@ -89,6 +89,8 @@ class Series
      */
     public function __construct()
     {
+        $this->items = new ArrayCollection();
+
         $currentTime = new \DateTime('now');
         $this->setCreateDate($currentTime);
         $this->setModDate($currentTime);
