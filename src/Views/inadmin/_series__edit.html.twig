@@ -81,6 +81,9 @@
             <p>
                 {{ form_widget(form.submit) }}
                 {{ form_widget(form.delete) }}
+                {%  if series.id is not empty %}
+                    <a class="button" href="{{ path('app_series_view', { 'year': series.postDate|date('Y'), 'title': series.title|lower }) }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span></a>
+                {%  endif %}
             </p>
         </div>
         {{ form_end(form) }}
