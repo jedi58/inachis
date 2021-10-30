@@ -171,7 +171,7 @@
             {%- endif %}
             {{ form_widget(form.delete) }}
             {%  if post.id is not empty and not post.isDraft %}
-                <a class="button" href="/{{ post.urls|first.link }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span></a>
+                <a class="button button--secondary" href="/{{ post.urls|first.link }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span> View Live</a>
             {%  endif %}
         </p>
     </div>
