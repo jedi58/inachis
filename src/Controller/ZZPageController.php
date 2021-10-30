@@ -56,7 +56,7 @@ class ZZPageController extends AbstractInachisController
         }
         if ($url->getContent()->isScheduledPage() || $url->getContent()->isDraft()) {
             return $this->redirectToRoute(
-                'app_dashboard_default',
+                'app_default_homepage',
                 []
             );
         }
