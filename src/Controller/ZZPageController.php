@@ -361,4 +361,56 @@ class ZZPageController extends AbstractInachisController
             $request->server()->get('REQUEST_URI')
         ) ? Page::TYPE_POST : Page::TYPE_PAGE;
     }
+
+    /**
+     * @Route(
+     *     "/tag/{tagName}",
+     *     methods={"GET"}
+     * )
+     * @param Request $request
+     * @param string $tagName
+     * @return mixed
+     */
+    public function getPostsByTag(Request $request, string $tagName)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $tag = $entityManager->getRepository(Tag::class)->findOneByTitle($tagName);
+        if (!$tag instanceof Tag) {
+            throw new NotFoundHttpException(
+                sprintf(
+                    '%s does not exist',
+                    $tagName
+                )
+            );
+        }
+        $this->data['content'] = $entityManager->getRepository(Page::class)->getPagesWithTag($tag);
+
+        return $this->render('web/homepage.html.twig', $this->data);
+    }
+
+    /**
+     * @Route(
+     *     "/category/{categoryName}",
+     *     methods={"GET"}
+     * )
+     * @param Request $request
+     * @param string $categoryName
+     * @return mixed
+     */
+    public function getPostsByCategory(Request $request, string $categoryName)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $category = $entityManager->getRepository(Category::class)->findOneByTitle($categoryName);
+        if (!$category instanceof Category) {
+            throw new NotFoundHttpException(
+                sprintf(
+                    '%s does not exist',
+                    $categoryName
+                )
+            );
+        }
+        $this->data['content'] = $entityManager->getRepository(Page::class)->getPagesWithCategory($category);
+
+        return $this->render('web/homepage.html.twig', $this->data);
+    }
 }
