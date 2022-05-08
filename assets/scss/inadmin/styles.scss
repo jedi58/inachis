@@ -5,7 +5,7 @@ $information-medium: "screen and (min-width: 480px)";
 $information-large: "screen and (min-width: 480px)";
 
 $admin__container--collapsed-width: 45px;
-$admin__container--expanded-width: 150px;
+$admin__container--expanded-width: 200px;
 $admin__container-button--hover: #0cf;
 $admin__container-add-button: #069;
 $admin__search_color: gray;
@@ -260,6 +260,8 @@ body {
 
 		&.admin__container--expanded {
 			width: $admin__container--expanded-width;
+			border-radius: 1.5em;
+			margin: 0.5em;
 
 			ul {
 				li {

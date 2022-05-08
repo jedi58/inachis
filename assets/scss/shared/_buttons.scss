@@ -4,10 +4,11 @@ $button--negative--active-color: #900;
 $button--negative--hover-color: lighten($button--negative--active-color, 10);
 $button--info--active-color: #999;
 $button--info--hover-color: darken($button--info--active-color, 10);
-
+$button--default-active-color: #d9e7cb;
+$button--default-hover-color: darken($button--default-active-color, 10);
 
 .button {
-	border-radius: 5px;
+	border-radius: 1.5em;
 	font-size: 1.05em;
 	padding: 10px 20px;
 
@@ -17,6 +18,15 @@ $button--info--hover-color: darken($button--info--active-color, 10);
 
 	span {
 		vertical-align: middle;
+	}
+
+	&.button--secondary {
+		background-color: $button--default-active-color;
+		border: 1px solid $button--default-active-color;
+
+		&:hover {
+			background-color: $button--default-hover-color;
+		}
 	}
 	
 	&.button--positive {

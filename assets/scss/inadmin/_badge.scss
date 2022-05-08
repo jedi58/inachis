@@ -8,14 +8,18 @@
 
 
 	.ui-state-active & {
-		background-color: #069;
+		background-color: #ccc;
 	}
 
 	&.badge__draft, &.badge__default {
-		background-color: #069;
+		background-color: #900;
+	}
+
+	&.badge__scheduled {
+		background-color: #393;
 	}
 
 	&.badge__private {
-		background-color: #333;
+		background-color: #f70;
 	}
 }
