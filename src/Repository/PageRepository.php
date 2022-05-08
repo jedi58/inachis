@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Page;
+use App\Entity\Tag;
 use App\Entity\Url;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -42,12 +43,13 @@ final class PageRepository extends AbstractRepository
     /**
      * @param Category $category
      * @param int $maxDisplayCount
+     * @param int $offset
      * @return mixed
      */
-    public function getPagesWithCategory(Category $category, int $maxDisplayCount = null)
+    public function getPagesWithCategory(Category $category, int $maxDisplayCount = null, int $offset = 0)
     {
         $qb = $this->createQueryBuilder('p');
-        return $qb
+        $qb = $qb
             ->select('p')
             ->leftJoin('p.categories', 'Page_categories')
             ->where(
@@ -58,7 +60,41 @@ final class PageRepository extends AbstractRepository
                 )
             )
             ->orderBy('p.postDate', 'DESC')
-            ->setParameter('categoryId', $category->getId())
+            ->setParameter('categoryId', $category->getId());
+        if ($offset > 0) {
+            $qb = $qb->setFirstResult($offset);
+        }
+        return $qb
+            ->setMaxResults($maxDisplayCount)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * @param Tag $tag
+     * @param int $maxDisplayCount
+     * @param int $offset
+     * @return mixed
+     */
+    public function getPagesWithTag(Tag $tag, int $maxDisplayCount = null, int $offset = 0)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb = $qb
+            ->select('p')
+            ->leftJoin('p.tags', 'Page_tags')
+            ->where(
+                $qb->expr()->andX(
+                    'Page_tags.id = :tagId',
+                    'p.status = \'published\'',
+                    'p.type = \'post\''
+                )
+            )
+            ->orderBy('p.postDate', 'DESC')
+            ->setParameter('tagId', $tag->getId());
+        if ($offset > 0) {
+            $qb = $qb->setFirstResult($offset);
+        }
+        return $qb
             ->setMaxResults($maxDisplayCount)
             ->getQuery()
             ->execute();
