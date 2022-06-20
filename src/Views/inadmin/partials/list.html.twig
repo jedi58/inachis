@@ -7,7 +7,10 @@
 
     {{ include('inadmin/partials/filters.html.twig') }}
 
-    <p class="pagination--info">Showing {{ offset + 1 }} to {{ min(offset + limit, total) }} of {{ total }}</p>
+    <p class="pagination--info">
+        <span class="material-icons">info</span>
+        Showing {{ offset + 1 }} to {{ min(offset + limit, total) }} of {{ total }}
+    </p>
 
     {% for item in dataset.iterator %}
         {% if '.' in slug %}
@@ -106,7 +109,7 @@
     {% endif %}
     {{ form_end(form) }}
 
-{% elseif filter_values is not empty %}
+{% elseif filter_values|default(null) is not empty %}
     {% include 'inadmin/partials/filters.html.twig' with {
         'filters': filters,
         'filter_values': filter_values,

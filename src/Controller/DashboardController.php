@@ -63,7 +63,7 @@ class DashboardController extends AbstractInachisController
                         'postDate' => new \DateTime(),
                     ],
                 ],
-                'q.postDate ASC, q.modDate'
+                'q.postDate DESC, q.modDate'
             ),
         ];
         $this->data['dashboard']['draftCount'] = $this->data['dashboard']['drafts']->count();

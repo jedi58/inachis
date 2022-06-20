@@ -330,15 +330,6 @@ class ZZPageController extends AbstractInachisController
     }
 
     /**
-     * @Route("/incc/search/results", methods={"GET", "POST"})
-     */
-    public function getSearchResults()
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        return new Response('<html><body>Show search results</body></html>');
-    }
-
-    /**
      * @Route(
      *     "/{page}",
      *     methods={"GET"}

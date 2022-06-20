@@ -13,6 +13,13 @@ $(document).ready(function() {
 		$($(this).attr('data-target')).toggle();
 	});
 
+	var $filterOptions = $('.filter .filter__toggle');
+	$filterOptions.on('click', function()
+	{
+		$('#filter__options').toggle();
+		$(this).toggleClass('selected');
+	});
+
 	// https://select2.github.io/examples.html
 	$('.js-select').each(function ()
 	{
