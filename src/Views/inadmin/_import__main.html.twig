@@ -22,11 +22,11 @@
         {{
             include('inadmin/partials/dropzone.html.twig', {
                 'dropzoneUrl': path('app_import_index'),
-                'helpText': 'Upload posts using markdown files (.MD), or multiple at the same time from a .ZIP file.',
+                'helpText': 'Upload posts using markdown files (.md), or JSON files (.json).',
                 'paramName': 'markdownFiles',
                 'uploadMultiple': true,
                 'maxFilesize': 2,
-                'acceptedFiles': 'text/plain,.md'
+                'acceptedFiles': 'text/plain,.md,.json'
             })
         }}
         </form>

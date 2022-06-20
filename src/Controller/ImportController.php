@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Page;
 use App\Entity\Url;
 use App\Parser\MarkdownFileParser;
 use App\Utils\UrlNormaliser;
@@ -33,19 +34,74 @@ class ImportController extends AbstractInachisController
     {
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
+        $lastResponse = $this->json('success', 200);
 
         foreach ($request->files->get('markdownFiles') as $file) {
             if ($file->getError() != UPLOAD_ERR_OK) {
                 return $this->json('error', 400);
             }
-            $parser = new MarkdownFileParser();
-            $post = $parser->parse($this->getDoctrine()->getManager(), file_get_contents($file->getRealPath()));
+            $lastResponse = $this->processFile($file);
+            if ($lastResponse->getStatusCode() > 299) {
+                break;
+            }
+        }
+        return $lastResponse;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function processFile($file)
+    {
+        $postObjects = [];
+        switch($file->getMimeType())
+        {
+            case 'application/json':
+                $postObjects = array_merge(
+                    [],
+                    json_decode(file_get_contents($file->getRealPath()))
+                );
+                break;
+
+            case 'application/zip':
+                // @todo: Implement ZIP parser
+                break;
+
+            default:
+                // parse just MD file
+                $parser = new MarkdownFileParser();
+                $postObjects = array_merge(
+                    [],
+                    $parser->parse(
+                        $this->getDoctrine()->getManager(),
+                        file_get_contents($file->getRealPath())
+                    )
+                );
+        }
+
+        foreach ($postObjects as $object) {
+            $post = $object;
+            if (gettype($object) === 'object' && get_class($object) !== 'Page') {
+                $post = new Page(
+                    $object->title ?? '',
+                    $object->content ?? '',
+                    null,
+                    $object->type ?? Page::TYPE_POST
+                );
+                $post->setSubTitle($object->subTitle ?? '');
+                $post->setPostDate(
+                    date_create_from_format(
+                        \DateTimeInterface::ISO8601,
+                        $object->postDate
+                    ) ?? time()
+                );
+            }
             if ($post->getTitle() !== '' && $post->getContent() !== '') {
                 $newLink = $post->getPostDateAsLink() . '/' .
                     UrlNormaliser::toUri(
                         $post->getTitle() .
                         ($post->getSubTitle() !== '' ? ' ' . $post->getSubTitle() : '')
-                );
+                    );
                 if (!empty(
                     $this->getDoctrine()->getManager()->getRepository(Url::class)->findOneByLink($newLink)
                 )) {

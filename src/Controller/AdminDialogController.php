@@ -128,6 +128,7 @@ class AdminDialogController extends AbstractInachisController
      * @param Request $request
      * @param Serializer\ $serializer
      * @return mixed
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function performExport(Request $request, SerializerInterface $serializer)
     {
@@ -149,9 +150,14 @@ class AdminDialogController extends AbstractInachisController
             'subTitle',
             'postDate',
             'content',
+            'featureSnippet',
+            'featureImage',
         ];
         if (!empty($request->request->get('export_categories'))) {
             $normalisedAttributes[] = 'categories';
+        }
+        if (!empty($request->request->get('export_tags'))) {
+            $normalisedAttributes[] = 'tags';
         }
         $posts = $serializer->normalize(
             $posts,
