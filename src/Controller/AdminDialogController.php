@@ -169,7 +169,7 @@ class AdminDialogController extends AbstractInachisController
 
         $format = $request->request->get('export_format');
         $response = new Response();
-        switch($format) {
+        switch ($format) {
             case 'json':
                 $posts = json_encode($posts);
                 $response->headers->set('Content-Type', 'application/json');
