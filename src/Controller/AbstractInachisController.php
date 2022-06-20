@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -22,14 +23,12 @@ abstract class AbstractInachisController extends AbstractController
      */
     protected $data = [];
 
-    public function setDefaults()
+    public function setDefaults(ContainerInterface $container)
     {
         $this->entityManager = $this->getDoctrine()->getManager();
         $this->data = [
             'settings' => [
-                'siteTitle' => $this->container->has('app.title') ?
-                    $this->container->get('app.title') :
-                    null,
+                'siteTitle' => $container->getParameter('app.title'),
                 'domain' => $this->getProtocolAndHostname(),
                 'google' => [],
                 'language' => $this->container->has('locale') ?
@@ -37,11 +36,11 @@ abstract class AbstractInachisController extends AbstractController
                     'en',
                 'textDirection' => 'ltr',
                 'abstract' => '',
-                'fb_app_id' => $this->container->has('app.fb_app_id') ?
-                    $this->container->get('app.fb_app_id') :
+                'fb_app_id' => $container->has('app.fb_app_id') ?
+                    $container->get('app.fb_app_id') :
                     null,
-                'twitter' => $this->container->has('app.twitter') ?
-                    $this->container->get('app.twitter') :
+                'twitter' => $container->has('app.twitter') ?
+                    $container->get('app.twitter') :
                     null,
             ],
             'notifications' => [],
