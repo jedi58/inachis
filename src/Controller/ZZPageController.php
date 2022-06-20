@@ -22,6 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ZZPageController extends AbstractInachisController
 {
+    const ITEMS_TO_SHOW = 20;
+
     /**
      * @Route(
      *     "/{year}/{month}/{day}/{title}",
@@ -383,6 +385,8 @@ class ZZPageController extends AbstractInachisController
                 )
             );
         }
+        $this->data['filterName'] = 'tag';
+        $this->data['filterValue'] = $tagName;
         $this->data['content'] = $entityManager->getRepository(Page::class)->getPagesWithTag($tag);
 
         return $this->render('web/homepage.html.twig', $this->data);
@@ -409,6 +413,8 @@ class ZZPageController extends AbstractInachisController
                 )
             );
         }
+        $this->data['filterName'] = 'category';
+        $this->data['filterValue'] = $categoryName;
         $this->data['content'] = $entityManager->getRepository(Page::class)->getPagesWithCategory($category);
 
         return $this->render('web/homepage.html.twig', $this->data);

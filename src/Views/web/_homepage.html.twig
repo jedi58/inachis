@@ -1,6 +1,19 @@
 {% extends "web/structure/main.html.twig" %}
 {% block content %}
 
+    {% if filterName|default('') is not empty %}
+<div class="section group">
+    <div class="col span_1_of_8"></div>
+    <div class="col span_6_of_8">
+        <article class="blogbox">
+            <h2>{{ filterName|title }}: {{ filterValue }}</h2>
+            <p>Found <strong>{{ content|length }}</strong> post{% if content|length > 1 %}s{% endif %}.</p>
+        </article>
+    </div>
+    <div class="col span_1_of_8"></div>
+</div>
+    {% endif %}
+
     {% for post in content %}
         {% include 'web/structure/post-feature.html.twig' %}
     {% endfor %}
