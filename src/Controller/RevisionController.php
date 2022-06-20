@@ -16,7 +16,7 @@ class RevisionController extends AbstractInachisController
     /**
      * @Route("/incc/page/diff/{id}", methods={"GET"})
      */
-    public function diff (Request $request)
+    public function diff(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $revision = $entityManager->getRepository(Revision::class)->findOneById(

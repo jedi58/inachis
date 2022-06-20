@@ -54,8 +54,7 @@ class ImportController extends AbstractInachisController
     private function processFile($file)
     {
         $postObjects = [];
-        switch($file->getMimeType())
-        {
+        switch ($file->getMimeType()) {
             case 'application/json':
                 $postObjects = array_merge(
                     [],
