@@ -61,6 +61,20 @@ class SeriesType extends AbstractType
                 ],
                 'required' => false,
             ])
+            ->add('url', TextType::class, [
+                'attr' => [
+                    'aria-labelledby' => 'url_label',
+                    'aria-required'   => 'false',
+                    'class' => 'editor__url text',
+                    'pattern' => '[0-9a-zA-ZÀ-ž\-]{5,}',
+                    'placeholder'     => $this->translator->trans('admin.placeholder.series.url', [], 'messages'),
+                ],
+                'label'      => $this->translator->trans('admin.label.series.url', [], 'messages'),
+                'label_attr' => [
+                    'id' => 'url_label',
+                ],
+                'required' => true,
+            ])
             ->add('description', TextareaType::class, [
                 'attr' => [
                     'aria-labelledby' => 'description_label',
@@ -119,11 +133,10 @@ class SeriesType extends AbstractType
                 ])
                 ->add('addItem', ButtonType::class, [
                     'attr' => [
-                        'class' => 'button button--information content-selector__link',
+                        'class' => 'button button--info content-selector__link',
                     ],
                     'label' => $this->translator->trans('admin.button.addItem', [], 'messages'),
                 ])
-//            ->add('items')
             ;
         }
         $builder
@@ -144,6 +157,12 @@ class SeriesType extends AbstractType
                     'class' => 'button button--negative',
                 ],
                 'label' => $this->translator->trans('admin.button.delete', [], 'messages'),
+            ])
+            ->add('remove', SubmitType::class, [
+                'attr' => [
+                    'class' => 'button button--negative',
+                ],
+                'label' => $this->translator->trans('admin.button.remove', [], 'messages'),
             ])
         ;
     }

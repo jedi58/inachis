@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Image;
+use App\Entity\Page;
 use App\Entity\Series;
 use App\Form\SeriesType;
+use App\Utils\UrlNormaliser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,12 +35,23 @@ class SeriesController extends AbstractInachisController
         if ($form->isSubmitted() && $form->isValid() && !empty($request->get('items'))) {
             foreach ($request->get('items') as $item) {
                 if ($request->get('delete') !== null) {
-                    $post = $entityManager->getRepository(Series::class)->findOneById($item);
-                    if ($post !== null) {
-                        $entityManager->getRepository(Series::class)->remove($post);
+                    $deleteItem = $entityManager->getRepository(Series::class)->findOneById($item);
+                    if ($deleteItem !== null) {
+                        $entityManager->getRepository(Series::class)->remove($deleteItem);
                     }
                 }
+//                if ($request->get('privacy') !== null) {
+//                    $post = $entityManager->getRepository(Series::class)->findOneById($item);
+//                    if ($post !== null) {
+//                        $post->setVisibility(Page::VIS_PRIVATE);
+//                        $post->setModDate(new \DateTime('now'));
+//                        $entityManager->persist($post);
+//                    }
+//                }
             }
+//            if ($request->get('privacy') !== null) {
+//                $entityManager->flush();
+//            }
             return $this->redirectToRoute(
                 'app_series_list',
                 [],
@@ -54,7 +67,8 @@ class SeriesController extends AbstractInachisController
             $limit,
             [],
             [
-                [ 'q.lastDate', 'DESC' ]
+//                [ 'q.lastDate', 'DESC' ]
+                [ 'q.title', 'ASC' ]
             ]
         );
         $this->data['page']['offset'] = $offset;
@@ -87,14 +101,25 @@ class SeriesController extends AbstractInachisController
                     )
                 );
             }
+            if (empty($request->get('series')['url'])) {
+                $series->setUrl(
+                    UrlNormaliser::toUri($series->getTitle())
+                );
+            }
+            if ($form->get('remove')->isClicked()) {
+                $deleteItems = $entityManager->getRepository(Page::class)->findBy([
+                    'id' => $request->get('series')['itemList']
+                ]);
+                foreach ($deleteItems as $deleteItem) {
+                    $series->getItems()->removeElement($deleteItem);
+                }
+                if (empty($series->getItems())) {
+                    $series->setFirstDate(null)->setLastDate(null);
+                }
+            }
             if ($form->get('delete')->isClicked()) {
-                // @todo should redirect back to series list
-//                $entityManager->getRepository(Series::class)->remove($series);
-//                return $this->redirectToRoute(
-//                    'app_dashboard_default',
-//                    [],
-//                    Response::HTTP_PERMANENTLY_REDIRECT
-//                );
+                $entityManager->getRepository(Series::class)->remove($series);
+                return $this->redirect($this->generateUrl('app_series_list'));
             }
 
             $series->setModDate(new \DateTime('now'));
@@ -126,9 +151,12 @@ class SeriesController extends AbstractInachisController
      * @param string $title
      * @return Response
      */
-    public function view(Request $request, $year = 0, $title = '')
+    public function view(Request $request, int $year, string $title)
     {
-        $this->data['series'] = $this->entityManager->getRepository(Series::class)->findOneByTitle($title);
+        $this->data['series'] = $this->entityManager->getRepository(Series::class)->getSeriesByYearAndUrl(
+            $year,
+            $title
+        );
         return $this->render('web/series.html.twig', $this->data);
     }
 }

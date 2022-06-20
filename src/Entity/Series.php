@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,6 +31,11 @@ class Series
      */
     protected $subTitle;
     /**
+     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
+     * @var string
+     */
+    protected $url;
+    /**
      * @ORM\Column(type="text", nullable=true)
      *
      * @var string
@@ -48,7 +54,7 @@ class Series
      */
     protected $lastDate;
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Page")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Page", inversedBy="App\Entity\Series", fetch="EAGER")
      * @ORM\JoinTable(
      *     name="Series_pages",
      *     joinColumns={
@@ -60,7 +66,7 @@ class Series
      * )
      * @ORM\OrderBy({"postDate" = "ASC"})
      *
-     * @var ArrayCollection|Page[] The array of pages in the series
+     * @var Collection|Page[] The array of pages in the series
      */
     protected $items = [];
     /**
@@ -69,7 +75,7 @@ class Series
      *
      * @var Image
      */
-    protected $image = '';
+    protected $image;
     /**
      * @ORM\Column(type="datetime")
      *
@@ -152,6 +158,26 @@ class Series
     public function setSubTitle($subTitle)
     {
         $this->subTitle = $subTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param mixed $url
+     *
+     * @return $this
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
 
         return $this;
     }

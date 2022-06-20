@@ -190,6 +190,11 @@ class Page
      * @var ArrayCollection|Tag[] The array of tags assigned to the post/page
      */
     protected $tags;
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Series", inversedBy="items")
+     * @var Collection|Series[]  The array of Series that contains this page
+     */
+    protected $series;
 
     /**
      * Default constructor for {@link Page}.
@@ -213,6 +218,7 @@ class Page
         $this->urls = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->series = new ArrayCollection();
     }
 
     /**
@@ -443,6 +449,14 @@ class Page
     }
 
     /**
+     * @return Collection
+     */
+    public function getSeries() : Collection
+    {
+        return $this->series;
+    }
+
+    /**
      * Sets the value of {@link id}.
      *
      * @param string $value The UUID of the {@link Page}
@@ -634,6 +648,14 @@ class Page
     }
 
     /**
+     * @param array $series
+     */
+    public function setSeries(array $series)
+    {
+        $this->series = $series;
+    }
+
+    /**
      * Adds a {@link Url} to the {@link Page}.
      *
      * @param Url $url The new {@link Url} to add to the {@link Page}
@@ -748,7 +770,7 @@ class Page
             new \DateTimeZone($this->getTimezone())
         );
 
-        return $postDate->format('YmdHis') > $today->format('YmdHis');
+        return $this->getStatus() == Page::PUBLISHED && $postDate->format('YmdHis') > $today->format('YmdHis');
     }
 
     /**
