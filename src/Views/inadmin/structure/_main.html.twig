@@ -31,8 +31,8 @@
             </ul>
         </section>
         <section class="admin__search">
-            <form action="{{ path('app_zzpage_getsearchresults') }}" method="post">
-                <input type="search" name="q" id="q" />
+            <form action="{{ path('app_zzpage_getpostlistadmin', {'type': 'post'}) }}" method="post">
+                <input type="search" name="filter[keyword]" id="q" />
                 <label for="q" class="material-icons">search</label>
                 <button class="material-icons mobile-only" type="submit">search</button>
             </form>
@@ -85,6 +85,9 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="admin__view-site"><a href="/"><i class="material-icons">exit_to_app</i><span> View Site</span></a></li>
+
                 <li class="admin__nav-expand"><a href="#expand"><i class="material-icons">keyboard_arrow_right</i><span> Expand</span></a></li>
                 <li class="admin__nav-collapse"><a href="#collapse"><i class="material-icons">keyboard_arrow_left</i><span> Collapse</span></a></li>
             </ul>
