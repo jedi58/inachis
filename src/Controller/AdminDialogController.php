@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Image;
 use App\Entity\Page;
+use App\Entity\Tag;
 use App\Form\ImageType;
 use App\Parser\ArrayToMarkdown;
 use App\Repository\PageRepository;
@@ -43,7 +44,7 @@ class AdminDialogController extends AbstractInachisController
         $this->data['form'] = $this->createForm(ImageType::class)->createView();
         $this->data['allowedTypes'] = Image::ALLOWED_TYPES;
         // @todo add pagination
-        $this->data['images'] = $this->entityManager->getRepository(Image::class)->getAll();
+        $this->data['images'] = $this->entityManager->getRepository(Image::class)->getAll(0, 250);
         $this->data['image_count'] = sizeof($this->data['images']);
         return $this->render('inadmin/dialog/imageManager.html.twig', $this->data);
     }
@@ -169,7 +170,7 @@ class AdminDialogController extends AbstractInachisController
 
         $format = $request->request->get('export_format');
         $response = new Response();
-        switch($format) {
+        switch ($format) {
             case 'json':
                 $posts = json_encode($posts);
                 $response->headers->set('Content-Type', 'application/json');
@@ -208,5 +209,40 @@ class AdminDialogController extends AbstractInachisController
         );
 
         return $response;
+    }
+
+    /**
+     * @Route("incc/ax/tagList/get", methods={"POST"})
+     *
+     * @param Request         $request
+     * @param LoggerInterface $logger
+     *
+     * @return string
+     */
+    public function getTagManagerListContent(Request $request, LoggerInterface $logger)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $tags = $this->entityManager->getRepository(Tag::class)->findByTitleLike($request->request->get('q'));
+        $result = [];
+        // Below code is used to handle where tags exist with the same name under multiple locations
+        if (!empty($tags)) {
+            $result['items'] = [];
+            foreach ($tags as $tag) {
+                $title = $tag->getTitle();
+                $result['items'][$title] = (object) [
+                    'id'   => $tag->getId(),
+                    'text' => $title,
+                ];
+            }
+            $result = array_values($result['items']);
+        }
+
+        return new JsonResponse(
+            [
+                'items'      => $result,
+                'totalCount' => count($result),
+            ],
+            Response::HTTP_OK
+        );
     }
 }
