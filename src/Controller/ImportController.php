@@ -45,7 +45,7 @@ class ImportController extends AbstractInachisController
                     UrlNormaliser::toUri(
                         $post->getTitle() .
                         ($post->getSubTitle() !== '' ? ' ' . $post->getSubTitle() : '')
-                );
+                    );
                 if (!empty(
                     $this->getDoctrine()->getManager()->getRepository(Url::class)->findOneByLink($newLink)
                 )) {
