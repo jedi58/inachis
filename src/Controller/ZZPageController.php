@@ -63,7 +63,7 @@ class ZZPageController extends AbstractInachisController
         if (!$url->isDefault()) {
             $url = $entityManager->getRepository(Url::class)->getDefaultUrl($url->getContent());
             if (!empty($url) && $url->isDefault()) {
-                return new RedirectResponse($url->getLink(), Response::HTTP_PERMANENTLY_REDIRECT);
+                return new RedirectResponse('/' . $url->getLink(), Response::HTTP_PERMANENTLY_REDIRECT);
             }
         }
         $this->data['post'] = $url->getContent();

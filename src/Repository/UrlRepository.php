@@ -42,7 +42,7 @@ class UrlRepository extends AbstractRepository
      */
     public function getDefaultUrl(Page $page)
     {
-        return $this->getEntityManager()->findOneBy(
+        return $this->findOneBy(
             [
                 'content' => $page,
                 'default' => true,
