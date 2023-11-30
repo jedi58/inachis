@@ -5,104 +5,130 @@
 
     {{- form_errors(form) -}}
 
-    <p class="pagination--info">Showing {{ offset + 1 }} to {{ min(offset + limit, total) }} of {{ total }}</p>
+    {{ include('inadmin/partials/filters.html.twig') }}
 
-    {% for item in dataset.iterator %}
-        {% if '.' in slug %}
-            {% set slug_exploded = slug|split('.')  %}
-            {% set slug_object = item %}
-            {% for part in slug_exploded %}
-                {% if '[' in part %}
-                    {% set part = part|split('[')[0] %}
-                    {% set slug_object = attribute(slug_object, part)[0] %}
-                {% else %}
-                    {% set slug_object = attribute(slug_object, part) %}
+    <section class="paginated-list">
+        <p class="pagination--info">
+            Showing {{ offset + 1 }} to {{ min(offset + limit, total) }} of {{ total }}
+        </p>
+
+        {% for item in dataset.iterator %}
+            {% if '.' in slug %}
+                {% set slug_exploded = slug|split('.')  %}
+                {% set slug_object = item %}
+                {% for part in slug_exploded %}
+                    {% if '[' in part %}
+                        {% set part = part|split('[')[0] %}
+                        {% set slug_object = attribute(slug_object, part)[0] %}
+                    {% else %}
+                        {% set slug_object = attribute(slug_object, part) %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% set slug_object = attribute(item, slug) %}
+            {% endif %}
+        <article id="{{ type ~ '-' ~ item.id }}" class="{{ type }} {{ additional_classes|default(null) }} hentry">
+            {% if actions|default(null) is not empty %}
+                <input class="checkbox" id="{{ type }}-{{ item.id }}__input" type="checkbox" name="items[]" value="{{ item.id }}" />
+            {% endif %}
+            <a aria-label="Edit {% if item.title is defined %}{{ item.title }}{% elseif item.displayName is defined %}{{ item.displayName }}{% endif %}" href="/incc/{{ slug_prefix }}/{{ slug_object }}">
+                <h2>
+                    <!-- label for="post-{{ item.id }}__input" -->
+                    {% if item.title is defined %}
+                        {{ item.title }}
+                    {% elseif item.displayName is defined %}
+                        {{ item.displayName }}
+                    {% endif %}
+
+                    {% if item.subTitle|default(null) is not empty %}
+                        &mdash; {{ item.subTitle }}
+                    {% endif %}
+
+                    {% if badges|default(null) is not empty %}
+                        {% for badgeName,badge in badges %}
+                            {%- if attribute(item, badge.field) == badge.condition %}
+                                <span class="badge {{ badge.className }}">{{ badgeName }}</span>
+                            {% endif -%}
+                        {% endfor %}
+                    {% endif %}
+                </h2>
+            </a>
+            <p>
+                {{ attribute(item, snippet_description|default('content'))|markdown|striptags|slice(0, 300) }}
+                {% if attribute(item, snippet_description|default('content'))|markdown|striptags|length > 300 %}…{% endif %}
+            </p>
+            {% if item.modDate is defined %}
+                {% set timezone = session.user.timezone|default(item.timezone|default('UTC')) %}
+            <p class="date">
+                {% if item.postDate|default(false) %}
+                <span class="material-icons">schedule</span>
+                 Post date: <em>{{ item.postDate|date('jS F Y \\a\\t H:i', timezone) }}</em>
                 {% endif %}
-            {% endfor %}
-        {% else %}
-            {% set slug_object = attribute(item, slug) %}
-        {% endif %}
-    <article id="{{ type ~ '-' ~ item.id }}" class="{{ type }} {{ additional_classes|default(null) }} hentry">
+                {% if item.items is defined %}
+                    {% if item.firstDate is not empty %}
+                <span class="material-icons">schedule</span>{{ item.firstDate|date("F j, Y") }} to {{ item.lastDate|date("F j, Y") }}
+                    {% endif %}
+                <span class="material-icons">library_books</span> <strong>{{ item.items|length }}</strong> posts
+                {% endif %}
+                <span class="material-icons">schedule</span>
+                 Last modified: <em>{{ item.modDate|date('jS F Y \\a\\t H:i', timezone) }}</em>
+            </p>
+            {% endif %}
+        </article>
+        {%  endfor %}
+
+        {{ include('inadmin/partials/pagination.html.twig', {
+            offset: offset + 1,
+            limit: limit,
+            maxResults: total,
+            maxPagesToShow: 4,
+            result_url: url_result
+        }) }}
         {% if actions|default(null) is not empty %}
-            <input class="checkbox" id="{{ type }}-{{ item.id }}__input" type="checkbox" name="items[]" value="{{ item.id }}" />
-        {% endif %}
-        <a aria-label="Edit {{ item.title }}" href="/incc/{{ slug_prefix }}/{{ slug_object }}">
-            <h2>
-                <!-- label for="post-{{ item.id }}__input" -->
-                {{ item.title }}
-
-                {% if badges|default(null) is not empty %}
-                    {% for badgeName,badge in badges %}
-                        {%- if attribute(item, badge.field) == badge.condition %}
-                            <span class="badge {{ badge.className }}">{{ badgeName }}</span>
-                        {% endif -%}
-                    {% endfor %}
+        <div class="fixed-bottom-bar">
+            <p>
+                <button class="button button--select button--select-all" type="button">
+                    <span class="material-icons">select_all</span>
+                    Select all
+                </button>
+                <button class="button button--select button--select-none" type="button">
+                    <span class="material-icons">filter_none</span>
+                    Select none
+                </button>
+                <span class="divider"></span>
+                <span class="error ui-state-error error-select">Select content to see actions</span>
+                <span>with selected:</span>
+            {% for key, action in actions %}
+                <button class="button {{ action.button_class|default(null) }}"{%-
+                    if action.data is defined and action.data is not empty %}
+                        {% for datakey, datavalue in action.data %} data-{{ datakey }}="{{ datavalue }}"{% endfor %}
+                {%- endif %}{%-
+                    if action.id is defined %} id="{{ action.id }}"{% endif
+                %} name="{{ key }}" type="{{ action.button_type|default('submit') }}">
+                {% if action.icon is not empty %}
+                    <span class="material-icons">{{ action.icon }}</span>
                 {% endif %}
-            </h2>
-        </a>
-        <p>
-            {{ attribute(item, snippet_description|default('content'))|markdown|striptags|slice(0, 300) }}
-            {% if attribute(item, snippet_description|default('content'))|markdown|striptags|length > 300 %}…{% endif %}
-        </p>
-        {% if item.modDate is defined %}
-            {% set timezone = session.user.timezone|default(item.timezone|default('UTC')) %}
-        <p class="date">
-            {% if item.postDate|default(false) %}
-            <span class="material-icons">schedule</span>
-             Post date: <em>{{ item.postDate|date('jS F Y \\a\\t H:i', timezone) }}</em>
-            {% endif %}
-            {% if item.items is defined %}
-                {% if item.firstDate is not empty %}
-            <span class="material-icons">schedule</span>{{ item.firstDate|date("F j, Y") }} to {{ item.lastDate|date("F j, Y") }}
-                {% endif %}
-            <span class="material-icons">library_books</span> <strong>{{ item.items|length }}</strong> posts
-            {% endif %}
-            <span class="material-icons">schedule</span>
-             Last modified: <em>{{ item.modDate|date('jS F Y \\a\\t H:i', timezone) }}</em>
-        </p>
+                    {{ action.title|default(null) }}
+                </button>
+            {% endfor %}
+            </p>
+        </div>
         {% endif %}
-    </article>
-    {%  endfor %}
+        {{ form_end(form) }}
+    </section>
 
-    {{ include('inadmin/partials/pagination.html.twig', {
-        offset: offset + 1,
-        limit: limit,
-        maxResults: total,
-        maxPagesToShow: 4,
-        result_url: url_result
-    }) }}
-    {% if actions|default(null) is not empty %}
-    <div class="fixed-bottom-bar">
-        <p>
-            <button class="button button--select button--select-all" type="button">
-                <span class="material-icons">select_all</span>
-                Select all
-            </button>
-            <button class="button button--select button--select-none" type="button">
-                <span class="material-icons">filter_none</span>
-                Select none
-            </button>
-            <span class="divider"></span>
-            <span class="error ui-state-error error-select">Select content to see actions</span>
-            <span>with selected:</span>
-        {% for key, action in actions %}
-            <button class="button {{ action.button_class|default(null) }}"{%-
-                if action.data is defined and action.data is not empty %}
-                    {% for datakey, datavalue in action.data %} data-{{ datakey }}="{{ datavalue }}"{% endfor %}
-            {%- endif %}{%-
-                if action.id is defined %} id="{{ action.id }}"{% endif
-            %} name="{{ key }}" type="submit">
-            {% if action.icon is not empty %}
-                <span class="material-icons">{{ action.icon }}</span>
-            {% endif %}
-                {{ action.title|default(null) }}
-            </button>
-        {% endfor %}
-        </p>
-    </div>
-    {% endif %}
-    {{ form_end(form) }}
+{% elseif filter_values|default(null) is not empty %}
+    {% include 'inadmin/partials/filters.html.twig' with {
+        'filters': filters,
+        'filter_values': filter_values,
+        'show_search': show_search
+    } only %}
 
+    <p class="content-warning">
+        <i class="material-icons">info_outline</i>
+        <span>Oops! Your filter didn't find anything!</span>
+        <a href="{{ url_result }}">Remove filter</a>
+    </p>
 {% else %}
     <p class="content-warning">
         <i class="material-icons">info_outline</i>
