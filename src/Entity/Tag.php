@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * Object for handling tags that are mapped to content.
@@ -13,10 +14,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Tag
 {
     /**
-     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      *
-     * @var string The unique identifier for the tag
+     * @var \Ramsey\Uuid\UuidInterface The unique identifier for the tag
      */
     protected $id;
     /**

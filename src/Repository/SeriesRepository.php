@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Series;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Series|null find($id, $lockMode = null, $lockVersion = null)

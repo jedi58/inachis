@@ -19,9 +19,7 @@ class SetupController extends AbstractInachisController
      */
     public function stage1(Request $request)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        // @todo remove false from if statement
-        if (false && $entityManager->getRepository(User::class)->getAllCount() > 0) {
+        if ($this->entityManager->getRepository(User::class)->getAllCount() > 0) {
             return $this->redirectToRoute(
                 'app_dashboard_default',
                 [],

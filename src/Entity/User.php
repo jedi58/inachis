@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Exception\InvalidTimezoneException;
 use App\Validator\DateValidator;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\Constraints as InachisAssert;
@@ -15,17 +17,19 @@ use App\Validator\Constraints as InachisAssert;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"usernameCanonical", "emailCanonical"})})
  */
-class User implements UserInterface //, \Serializable
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * Constant for specifying passwords have no expiry time.
      */
     const NO_PASSWORD_EXPIRY = -1;
     /**
-     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      *
-     * @var string The unique identifier for the {@link User}
+     * @var \Ramsey\Uuid\UuidInterface The unique identifier for the {@link User}
      */
     protected $id;
     /**
@@ -50,6 +54,8 @@ class User implements UserInterface //, \Serializable
     /**
      * @Assert\NotBlank()
      * @Assert\Length(max=4096)
+     * @Assert\NotCompromisedPassword
+     * @Assert\PasswordStrength
      *
      * @var string Plaintext version of password - used for validation only and is not stored
      */
@@ -162,7 +168,7 @@ class User implements UserInterface //, \Serializable
      *
      * @return string The password hash for the user
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -291,9 +297,11 @@ class User implements UserInterface //, \Serializable
      *
      * @param string $value The value to set
      */
-    public function setPassword($value) : void
+    public function setPassword($value) : self
     {
         $this->password = $value;
+
+        return $this;
     }
 
     /**
@@ -477,24 +485,33 @@ class User implements UserInterface //, \Serializable
     /**
      * @return null
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
+        return null;
     }
 
     /**
      * @return array
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return ['ROLE_ADMIN', 'ROLE_USER'];
     }
 
-    public function setRoles()
+    public function setRoles(array $roles): self
     {
+        $this->roles = $roles;
+
+        return $this;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         $this->plainPassword = null;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
     }
 }

@@ -21,7 +21,7 @@ class LoginType extends AbstractType
         $this->translator = $translator;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options) : void
     {
         $builder
             ->add('loginUsername', TextType::class, [
@@ -41,7 +41,7 @@ class LoginType extends AbstractType
             ->add('loginPassword', PasswordType::class, [
                 'attr' => [
                     'aria-labelled-by' => 'form-login__password-label',
-                    'aria-required'    => 'required',
+                    'aria-required'    => 'true',
                     'class'            => 'text',
                     'id'               => 'form-login__password',
                     'placeholder'      => $this->translator->trans('admin.label.password'),
@@ -67,7 +67,7 @@ class LoginType extends AbstractType
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver) : void
     {
         $resolver->setDefaults([
             // uncomment if you want to bind to a class

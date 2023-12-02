@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Category;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class CategoryRepository extends AbstractRepository
 {

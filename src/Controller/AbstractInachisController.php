@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Flex\Response;
 
 abstract class AbstractInachisController extends AbstractController
@@ -17,14 +18,20 @@ abstract class AbstractInachisController extends AbstractController
      * @var array
      */
     protected $errors = [];
+
     /**
      * @var array
      */
     protected $data = [];
 
+    public function __construct(EntityManagerInterface $entityManager, Security $security)
+    {
+        $this->entityManager = $entityManager;
+        $this->security = $security;
+    }
+
     public function setDefaults()
     {
-        $this->entityManager = $this->getDoctrine()->getManager();
         $this->data = [
             'settings' => [
                 'siteTitle' => $this->container->has('app.title') ?
@@ -56,7 +63,7 @@ abstract class AbstractInachisController extends AbstractController
             'post' => [
                 'featureImage' => '',
             ],
-            'session' => $this->get('security.token_storage')->getToken(),
+            'session' => $this->security->getUser(),
         ];
     }
 
@@ -178,7 +185,7 @@ abstract class AbstractInachisController extends AbstractController
         if (!empty($referrer)) {
 //            return $response->redirect($referrer)->send();
         }
-//        return $response->redirect('/inadmin/')->send();
+//        return $response->redirect('/incc/')->send();
 
         $response->prepare($request);
 

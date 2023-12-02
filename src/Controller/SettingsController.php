@@ -21,15 +21,15 @@ class SettingsController extends AbstractInachisController
      */
     public function index(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $available_space = disk_free_space(dirname($request->server->get('SCRIPT_FILENAME')));
         $total_space = disk_total_space(dirname($request->server->get('SCRIPT_FILENAME')));
-
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->data['storage']['percent'] = ($total_space - $available_space)/$total_space * 100;
-        $this->data['counts']['page'] = $this->getDoctrine()->getManager()->getRepository(Page::class)->getAllCount();
-        $this->data['counts']['series'] = $this->getDoctrine()->getManager()->getRepository(Series::class)->getAllCount();
-        $this->data['counts']['tag'] = $this->getDoctrine()->getManager()->getRepository(Tag::class)->getAllCount();
-        $this->data['counts']['url'] = $this->getDoctrine()->getManager()->getRepository(Url::class)->getAllCount();
+        $this->data['counts']['page'] = $this->entityManager->getRepository(Page::class)->getAllCount();
+        $this->data['counts']['series'] = $this->entityManager->getRepository(Series::class)->getAllCount();
+        $this->data['counts']['tag'] = $this->entityManager->getRepository(Tag::class)->getAllCount();
+        $this->data['counts']['url'] = $this->entityManager->getRepository(Url::class)->getAllCount();
 
         $this->data['data_types'] = [
             'raw' => $this->entityManager->getConfiguration()->getMetadataDriverImpl()->getAllClassNames()
@@ -104,11 +104,11 @@ class SettingsController extends AbstractInachisController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if ($request->get('confirm', false)) {
             $logger->info('Wiping all content');
-            $this->getDoctrine()->getRepository(Image::class)->wipe($logger);
-            $this->getDoctrine()->getRepository(Page::class)->wipe($logger);
-            $this->getDoctrine()->getRepository(Series::class)->wipe($logger);
-            $this->getDoctrine()->getRepository(Tag::class)->wipe($logger);
-            $this->getDoctrine()->getRepository(Url::class)->wipe($logger);
+            $this->entityManager->getRepository(Image::class)->wipe($logger);
+            $this->entityManager->getRepository(Page::class)->wipe($logger);
+            $this->entityManager->getRepository(Series::class)->wipe($logger);
+            $this->entityManager->getRepository(Tag::class)->wipe($logger);
+            $this->entityManager->getRepository(Url::class)->wipe($logger);
         }
         return $this->redirectToRoute('app_settings_index');
     }
@@ -116,7 +116,7 @@ class SettingsController extends AbstractInachisController
     /**
      * @return string
      */
-    private function getOpCacheStatus()
+    private function getOpCacheStatus(): string
     {
         if (function_exists('opcache_get_status') && opcache_get_status()) {
             return 'PHP OpCache';
@@ -124,6 +124,6 @@ class SettingsController extends AbstractInachisController
         if (extension_loaded('apc') && ini_get('apc.enabled')) {
             return 'APC';
         }
-        return '';
+        return 'n/a';
     }
 }

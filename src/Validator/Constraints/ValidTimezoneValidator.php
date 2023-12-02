@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class ValidTimezoneValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof ValidTimezone) {
             throw new UnexpectedValueException($constraint, ValidTimezone::class);

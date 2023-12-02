@@ -10,14 +10,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractInachisController
 {
     const ITEMS_TO_SHOW = 10;
-
+    
     /**
      * @Route("/", methods={"GET"})
      */
     public function homepage()
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $series = $entityManager->getRepository(Series::class)->getAll(
+        $series = $this->entityManager->getRepository(Series::class)->getAll(
             0,
             self::ITEMS_TO_SHOW,
             [
@@ -39,7 +38,6 @@ class DefaultController extends AbstractInachisController
         ];
         $this->data['content'] = [];
         $excludePages = [];
-
         if (!empty($series)) {
             foreach ($series as $group) {
                 if (!empty($group->getItems())) {
@@ -57,7 +55,7 @@ class DefaultController extends AbstractInachisController
             $pageParameters['excludedPages'] = $excludePages;
         }
 
-        $pages = $entityManager->getRepository(Page::class)->getAll(
+        $pages = $this->entityManager->getRepository(Page::class)->getAll(
             0,
             self::ITEMS_TO_SHOW,
             [

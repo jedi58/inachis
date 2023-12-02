@@ -24,7 +24,6 @@ class UrlController extends AbstractInachisController
     public function list(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $entityManager = $this->getDoctrine()->getManager();
         // @todo add code for handling deleting of URLs and setting as default
 //        if ($form->isSubmitted()) && $form->isValid()) {
 //            if ($form->get('delete')->isClicked()) {

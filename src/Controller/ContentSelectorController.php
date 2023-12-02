@@ -21,8 +21,9 @@ class ContentSelectorController extends AbstractInachisController
 
     /**
      * @Route("/incc/ax/contentSelector/get", methods={"POST"})
+     * @param Request $request
      */
-    public function contentList()
+    public function contentList(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // @todo paginate data returned with auto-loading from Ajax

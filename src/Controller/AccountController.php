@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Form\LoginType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -21,24 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AccountController extends AbstractInachisController
 {
     /**
-     * @var EncoderFactoryInterface
-     */
-    private $encoderFactory;
-
-    /**
-     * AccountController constructor.
-     *
-     * @param EncoderFactoryInterface $encoderFactory
-     * @param Security $security
-     */
-    public function __construct(EncoderFactoryInterface $encoderFactory, Security $security)
-    {
-        $this->encoderFactory = $encoderFactory;
-        $this->security = $security;
-    }
-
-    /**
-     * @Route("/incc/login", name="app_account_login", methods={"GET"})
+     * @Route("/incc/login", name="app_account_login", methods={"GET","POST"})
      *
      * @param Request             $request
      * @param AuthenticationUtils $authenticationUtils
@@ -51,7 +34,6 @@ class AccountController extends AbstractInachisController
         if (!empty($redirectTo)) {
             return $this->redirectToRoute($redirectTo);
         }
-
         $form = $this->createForm(LoginType::class, [
             'loginUsername' => $authenticationUtils->getLastUsername(),
         ]);
@@ -64,24 +46,17 @@ class AccountController extends AbstractInachisController
     }
 
     /**
-     * @Route("/incc/login", name="app_account_login_action", methods={"POST"})
-     */
-    public function loginAction()
-    {
-    }
-
-    /**
-     * @Route("/incc/signout", name="security_logout", methods={"POST"})
+     * @Route("/incc/signout", name="app_logout", methods={"GET"})
      *
      * @throws \Exception
      */
-    public function logoutAction()
+    public function logout(): never
     {
-        throw new \Exception('this should not be reached!');
+        throw new \Exception('Don\'t forget to activate logout in security.yaml');
     }
 
     /**
-     * @Route("/incc/forgot-password", methods={"GET"})
+     * @Route("/incc/forgot-password", methods={"GET","POST"})
      *
      * @param Request             $request
      * @param TranslatorInterface $translator
@@ -146,5 +121,21 @@ class AccountController extends AbstractInachisController
 //            return $response->redirect('/incc/forgot-password')->send();
 //        }
         return $this->render('inadmin/forgot-password-sent.html.twig');
+    }
+
+    public function register(UserPasswordHasherInterface $passwordHasher): Response
+    {
+        // ... e.g. get the user data from a registration form
+//        $user = new User(...);
+//        $plaintextPassword = ...;
+//
+//        // hash the password (based on the security.yaml config for the $user class)
+//        $hashedPassword = $passwordHasher->hashPassword(
+//            $user,
+//            $plaintextPassword
+//        );
+//        $user->setPassword($hashedPassword);
+
+        // ...
     }
 }

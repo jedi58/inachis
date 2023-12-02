@@ -26,16 +26,15 @@ class SeriesController extends AbstractInachisController
     public function list(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $entityManager = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && !empty($request->get('items'))) {
             foreach ($request->get('items') as $item) {
                 if ($request->get('delete') !== null) {
-                    $post = $entityManager->getRepository(Series::class)->findOneById($item);
-                    if ($post !== null) {
-                        $entityManager->getRepository(Series::class)->remove($post);
+                    $deleteItem = $this->entityManager->getRepository(Series::class)->findOneById($item);
+                    if ($deleteItem !== null) {
+                        $this->entityManager->getRepository(Series::class)->remove($deleteItem);
                     }
                 }
             }
@@ -47,9 +46,9 @@ class SeriesController extends AbstractInachisController
         }
 
         $offset = (int) $request->get('offset', 0);
-        $limit = $entityManager->getRepository(Series::class)->getMaxItemsToShow();
+        $limit = $this->entityManager->getRepository(Series::class)->getMaxItemsToShow();
         $this->data['form'] = $form->createView();
-        $this->data['dataset'] = $entityManager->getRepository(Series::class)->getAll(
+        $this->data['dataset'] = $this->entityManager->getRepository(Series::class)->getAll(
             $offset,
             $limit,
             [],
@@ -72,9 +71,8 @@ class SeriesController extends AbstractInachisController
     public function edit(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $entityManager = $this->getDoctrine()->getManager();
         $series = $request->get('id') !== null ?
-            $entityManager->getRepository(Series::class)->findOneById($request->get('id')):
+            $this->entityManager->getRepository(Series::class)->findOneById($request->get('id')):
             new Series();
         $form = $this->createForm(SeriesType::class, $series);
         $form->handleRequest($request);
@@ -82,7 +80,7 @@ class SeriesController extends AbstractInachisController
         if ($form->isSubmitted()) {//} && $form->isValid()) {
             if (!empty($request->get('series')['image'])) {
                 $series->setImage(
-                    $entityManager->getRepository(Image::class)->findOneById(
+                    $this->entityManager->getRepository(Image::class)->findOneById(
                         $request->get('series')['image']
                     )
                 );

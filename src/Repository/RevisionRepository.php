@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Page;
 use App\Entity\Revision;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use \Doctrine\ORM\NonUniqueResultException;
 
 /**
@@ -49,6 +49,7 @@ class RevisionRepository extends AbstractRepository
      * @param string $pageId
      * @return int
      * @throws NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
      */
     public function getNextVersionNumberForPageId(string $pageId)
     {
@@ -60,6 +61,11 @@ class RevisionRepository extends AbstractRepository
             ->getSingleScalarResult()) + 1;
     }
 
+    /**
+     * @param Page $page
+     * @return Revision
+     * @throws \Exception
+     */
     public function deleteAndRecordByPage(Page $page): Revision
     {
         $this->createQueryBuilder('r')

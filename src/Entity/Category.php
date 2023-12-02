@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * Object for handling categories on a site.
@@ -15,10 +16,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Category
 {
     /**
-     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      *
-     * @var string
+     * @var \Ramsey\Uuid\UuidInterface
      */
     protected $id;
     /**
@@ -283,6 +286,6 @@ class Category
             return $this->getTitle();
         }
 
-        return $this->getParent()->getFullPath().'/'.$this->getTitle();
+        return $this->getParent()->getFullPath() . '/' . $this->getTitle();
     }
 }

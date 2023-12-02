@@ -21,7 +21,7 @@ class DashboardController extends AbstractInachisController
     public function default(Request $request, TranslatorInterface $translator)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $entityManager = $this->getDoctrine()->getManager();
+
         $this->data['page'] = [
             'tab'   => 'dashboard',
             'title' => 'Dashboard',
@@ -30,7 +30,7 @@ class DashboardController extends AbstractInachisController
             'draftCount'    => 0,
             'publishCount'  => 0,
             'upcomingCount' => 0,
-            'drafts'        => $entityManager->getRepository(Page::class)->getAll(
+            'drafts'        => $this->entityManager->getRepository(Page::class)->getAll(
                 0,
                 5,
                 [
@@ -41,7 +41,7 @@ class DashboardController extends AbstractInachisController
                 ],
                 'q.postDate ASC, q.modDate'
             ),
-            'upcoming' => $entityManager->getRepository(Page::class)->getAll(
+            'upcoming' => $this->entityManager->getRepository(Page::class)->getAll(
                 0,
                 5,
                 [
@@ -53,7 +53,7 @@ class DashboardController extends AbstractInachisController
                 ],
                 'q.postDate ASC, q.modDate'
             ),
-            'posts' => $entityManager->getRepository(Page::class)->getAll(
+            'posts' => $this->entityManager->getRepository(Page::class)->getAll(
                 0,
                 5,
                 [
@@ -63,11 +63,12 @@ class DashboardController extends AbstractInachisController
                         'postDate' => new \DateTime(),
                     ],
                 ],
-                'q.postDate ASC, q.modDate'
+                'q.postDate DESC, q.modDate'
             ),
         ];
-        //dump($this->data['dashboard']['posts']->count());
-        //dump($this->data['dashboard']['posts']->getQuery()->getMaxResults());
+        $this->data['dashboard']['draftCount'] = $this->data['dashboard']['drafts']->count();
+        $this->data['dashboard']['upcomingCount'] = $this->data['dashboard']['upcoming']->count();
+        $this->data['dashboard']['publishCount'] = $this->data['dashboard']['posts']->count();
         return $this->render('inadmin/dashboard.html.twig', $this->data);
     }
 }

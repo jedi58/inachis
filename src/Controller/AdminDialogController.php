@@ -4,12 +4,20 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Image;
+use App\Entity\Page;
+use App\Entity\Tag;
 use App\Form\ImageType;
+use App\Parser\ArrayToMarkdown;
+use App\Repository\PageRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class AdminDialogController extends AbstractInachisController
 {

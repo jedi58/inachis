@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * Object for handling custom URLs that are mapped to content.
@@ -17,10 +18,12 @@ class Url
      */
     const DEFAULT_URL_SIZE_LIMIT = 255;
     /**
-     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      *
-     * @var string The unique identifier for the Url
+     * @var \Ramsey\Uuid\UuidInterface The unique identifier for the Url
      */
     protected $id;
     /**

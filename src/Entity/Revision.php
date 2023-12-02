@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use App\Exception\InvalidTimezoneException;
 
 /**
@@ -13,11 +14,12 @@ use App\Exception\InvalidTimezoneException;
 class Revision
 {
     /**
-     * @ORM\Column(type="string", unique=true, nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="uuid", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      *
-     * @var string
+     * @var \Ramsey\Uuid\UuidInterface
      */
     private $id;
     /**
@@ -179,7 +181,7 @@ class Revision
         return $this->subTitle;
     }
 
-    public function setSubTitle(string $subTitle): self
+    public function setSubTitle(string $subTitle = null): self
     {
         $this->subTitle = $subTitle;
 

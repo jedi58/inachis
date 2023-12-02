@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SeriesRepository")
@@ -11,11 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Series
 {
     /**
-     * @ORM\Column(type="string", unique=true, nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="uuid", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      *
-     * @var string
+     * @var \Ramsey\Uuid\UuidInterface
      */
     protected $id;
     /**
@@ -48,7 +51,7 @@ class Series
      */
     protected $lastDate;
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Page")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Page", inversedBy="series", fetch="EAGER")
      * @ORM\JoinTable(
      *     name="Series_pages",
      *     joinColumns={
@@ -60,7 +63,7 @@ class Series
      * )
      * @ORM\OrderBy({"postDate" = "ASC"})
      *
-     * @var ArrayCollection|Page[] The array of pages in the series
+     * @var Collection|Page[] The array of pages in the series
      */
     protected $items = [];
     /**
@@ -69,7 +72,7 @@ class Series
      *
      * @var Image
      */
-    protected $image = '';
+    protected $image;
     /**
      * @ORM\Column(type="datetime")
      *

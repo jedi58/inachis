@@ -31,7 +31,7 @@ class SeriesType extends AbstractType
         $this->transformer = $transformer;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options) : void
     {
         $builder
             ->add('title', TextType::class, [
@@ -148,7 +148,7 @@ class SeriesType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver) : void
     {
         $resolver->setDefaults([
             'attr' => [

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Page;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,6 +14,13 @@ class WidgetController extends AbstractController
      * @var int Default number of items to be shown by "widgets"
      */
     const DEFAULT_MAX_DISPLAY_COUNT = 10;
+
+    protected $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
     /**
      * @param int $maxDisplayCount
@@ -52,12 +60,14 @@ class WidgetController extends AbstractController
      * @param $categoryName
      * @return Page[]
      */
-    private function getPagesWithCategoryName($categoryName)
+    private function getPagesWithCategoryName($categoryName, int $maxDisplayCount = null)
     {
-        $doctrineManager = $this->getDoctrine()->getManager();
-        $category = $doctrineManager->getRepository(Category::class)->findOneByTitle($categoryName);
+        $category = $this->entityManager->getRepository(Category::class)->findOneByTitle($categoryName);
         if ($category instanceof Category) {
-            return $doctrineManager->getRepository(Page::class)->getPagesWithCategory($category);
+            return $this->entityManager->getRepository(Page::class)->getPagesWithCategory(
+                $category,
+                $maxDisplayCount
+            );
         }
         return [];
     }

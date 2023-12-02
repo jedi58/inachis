@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use App\Exception\InvalidTimezoneException;
 
 /**
@@ -39,11 +41,12 @@ class Page
      */
     const TYPE_POST = 'post';
     /**
-     * @ORM\Column(type="string", unique=true, nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="uuid", unique=true, nullable=false)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      *
-     * @var string
+     * @var \Ramsey\Uuid\UuidInterface
      */
     protected $id;
     /**
@@ -761,12 +764,12 @@ class Page
         return $this->status === self::DRAFT;
     }
 
-    public function isExportable()
+    public static function isExportable(): bool
     {
         return true;
     }
 
-    public function getName()
+    public static function getName(): string
     {
         return 'Pages and Posts';
     }
