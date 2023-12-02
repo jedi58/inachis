@@ -150,7 +150,7 @@
                         <td>{{ revision.action }}</td>
                         <td>
                     {% if revision.content is not empty %}
-                            <button class="button button--info" type="button"><span class="material-icons">compare_arrows</span> View Version</button>
+                            <a href="{{ path('app_revision_diff', { 'id': revision.id} ) }}" class="button button--info" type="button"><span class="material-icons">compare_arrows</span> View Version</a>
                             <button class="button button--info" type="button"><span class="material-icons">save_alt</span> Download</button>
                             <button class="button button--negative" type="button"><span class="material-icons">undo</span> Revert</button>
                     {% endif %}
@@ -167,11 +167,11 @@
         <p>
             {{ form_widget(form.submit) }}
             {%- if post.status != "published" %}
-                <button type="submit" class="button button--info" name="publish">{% if post.postDate > date() %}Schedule{% else %}Publish{% endif %}</button>
+                <button type="submit" class="button button--secondary button--info" name="publish">{% if post.postDate > date() %}Schedule{% else %}Publish{% endif %}</button>
             {%- endif %}
             {{ form_widget(form.delete) }}
             {%  if post.id is not empty and not post.isDraft %}
-                <a class="button" href="/{{ post.urls|first.link }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span></a>
+                <a class="button button--secondary" href="/{{ post.urls|first.link }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span> View Live</a>
             {%  endif %}
         </p>
     </div>

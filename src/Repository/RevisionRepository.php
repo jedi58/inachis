@@ -20,6 +20,7 @@ class RevisionRepository extends AbstractRepository
     const PUBLISHED = 'Published';
     const UPDATED = 'Updated';
     const VISIBILITY_CHANGE = 'Visibility changed to %s';
+    const REVERTED = 'Reverted to version %s';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -73,12 +74,13 @@ class RevisionRepository extends AbstractRepository
             ->where('r.page_id = :pageId')
             ->setParameter('pageId', $page->getId());
         $revision = new Revision();
-        return $revision
+        $revision
             ->setPageId($page->getId())
             ->setTitle($page->getTitle())
             ->setSubTitle($page->getSubTitle())
             ->setUser()
             ->setModDate(new \DateTime())
             ->setAction(self::DELETED);
+        return $revision;
     }
 }
