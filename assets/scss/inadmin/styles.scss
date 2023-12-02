@@ -260,6 +260,8 @@ body {
 
 		&.admin__container--expanded {
 			width: $admin__container--expanded-width;
+			border-radius: 1.5em;
+			margin: 0.5em;
 
 			ul {
 				li {
@@ -350,6 +352,7 @@ body {
 
 	.admin__body-container {
 		margin-left: $admin__container--collapsed-width + 15;
+		margin-right: 1em;
 		//padding-top:20px;
 	}
 }

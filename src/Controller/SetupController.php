@@ -26,28 +26,8 @@ class SetupController extends AbstractInachisController
                 Response::HTTP_PERMANENTLY_REDIRECT
             );
         }
-        $form = $this->createForm(SetupStage1Type::class, [
-            'defaultUrl' => 'https://'.$request->getHttpHost(),
-        ]);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-        }
-//        if ($request->method('post') && !empty($request->paramsPost()->get('username')) && !empty($request->paramsPost()->get('password'))) {
-//            if (Application::getInstance()->getService('auth')->create(
-//                $request->paramsPost()->get('username'),
-//                $request->paramsPost()->get('password'),
-//                array(
-//                    'displayName' => $request->paramsPost()->get('name'),
-//                    'email' => $request->paramsPost()->get('email')
-//                )
-//            )) {
-//                return $response->redirect('/inadmin/signin')->send();
-//            }
-//        }
 
-        $this->data['page']['title'] = 'Inachis Install - Step 1';
-        $this->data['form'] = $form->createView();
-
+        $this->data['page']['title'] = 'Inachis Install';
         return $this->render('setup/stage-1.html.twig', $this->data);
     }
 }
