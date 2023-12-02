@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Page;
+use App\Entity\Tag;
 use App\Entity\Url;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -41,15 +42,60 @@ final class PageRepository extends AbstractRepository
 
     /**
      * @param Category $category
+     * @param int $maxDisplayCount
+     * @param int $offset
      * @return mixed
      */
-    public function getPagesWithCategory(Category $category)
+    public function getPagesWithCategory(Category $category, int $maxDisplayCount = null, int $offset = 0)
     {
-        return $this->createQueryBuilder('p')
+        $qb = $this->createQueryBuilder('p');
+        $qb = $qb
             ->select('p')
             ->leftJoin('p.categories', 'Page_categories')
-            ->where('Page_categories.id = :categoryId')
-            ->setParameter('categoryId', $category->getId())
+            ->where(
+                $qb->expr()->andX(
+                    'Page_categories.id = :categoryId',
+                    'p.status = \'published\'',
+                    'p.type = \'post\''
+                )
+            )
+            ->orderBy('p.postDate', 'DESC')
+            ->setParameter('categoryId', $category->getId());
+        if ($offset > 0) {
+            $qb = $qb->setFirstResult($offset);
+        }
+        return $qb
+            ->setMaxResults($maxDisplayCount)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * @param Tag $tag
+     * @param int $maxDisplayCount
+     * @param int $offset
+     * @return mixed
+     */
+    public function getPagesWithTag(Tag $tag, int $maxDisplayCount = null, int $offset = 0)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb = $qb
+            ->select('p')
+            ->leftJoin('p.tags', 'Page_tags')
+            ->where(
+                $qb->expr()->andX(
+                    'Page_tags.id = :tagId',
+                    'p.status = \'published\'',
+                    'p.type = \'post\''
+                )
+            )
+            ->orderBy('p.postDate', 'DESC')
+            ->setParameter('tagId', $tag->getId());
+        if ($offset > 0) {
+            $qb = $qb->setFirstResult($offset);
+        }
+        return $qb
+            ->setMaxResults($maxDisplayCount)
             ->getQuery()
             ->execute();
     }
@@ -62,18 +108,62 @@ final class PageRepository extends AbstractRepository
      */
     public function getAllOfTypeByPostDate($type, $offset, $limit)
     {
+        return $this->getFilteredOfTypeByPostDate([], $type, $offset, $limit);
+    }
+
+    /**
+     * @param $filters
+     * @param $type
+     * @param $offset
+     * @param $limit
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function getFilteredOfTypeByPostDate($filters, $type, $offset, $limit)
+    {
+        $where = [
+            'q.type = :type',
+            array_merge(
+                [
+                    'type' => $type,
+                ],
+                $filters
+            )
+        ];
+        if (!empty($filters['status'])) {
+            $where[0] .= ' AND q.status = :status';
+        }
+        if (!empty($filters['visibility'])) {
+            $where[0] .= ' AND q.visibility = :visibility';
+        }
+        if (!empty($filters['keyword'])) {
+            $where[0] .= ' AND (q.title LIKE :keyword OR q.subTitle LIKE :keyword OR q.content LIKE :keyword )';
+            $where[1]['keyword'] = '%' . $where[1]['keyword'] . '%';
+        }
         return $this->getAll(
             $offset,
             $limit,
-            [
-                'q.type = :type',
-                [
-                    'type' => $type,
-                ]
-            ],
+            $where,
             [
                 [ 'q.postDate', 'DESC' ],
                 [ 'q.modDate', 'DESC' ]
+            ]
+        );
+    }
+
+    /**
+     * @param $ids
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function getFilteredIds($ids)
+    {
+        return $this->getAll(
+            0,
+            0,
+            [
+                'q.id IN (:ids)',
+                [
+                    'ids' => $ids,
+                ]
             ]
         );
     }

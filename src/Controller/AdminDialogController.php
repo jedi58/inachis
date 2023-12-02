@@ -112,4 +112,137 @@ class AdminDialogController extends AbstractInachisController
 
         return new JsonResponse($category, Response::HTTP_OK);
     }
+
+    /**
+     * @Route("/incc/ax/export/get", methods={"POST"})
+     * @param Request $request
+     * @return mixed
+     */
+    public function export(Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        return $this->render('inadmin/dialog/export.html.twig', $this->data);
+    }
+
+    /**
+     * @Route("/incc/ax/export/output", methods={"POST"})
+     * @param Request $request
+     * @param Serializer\ $serializer
+     * @return mixed
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
+    public function performExport(Request $request, SerializerInterface $serializer)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $posts = [];
+        if (empty($request->request->get('postId'))) {
+            return new Response(null, Response::HTTP_EXPECTATION_FAILED);
+        }
+        $posts = $this->entityManager->getRepository(Page::class)->getFilteredIds(
+            $request->request->get('postId')
+        )->getIterator()->getArrayCopy();
+        if (empty($posts)) {
+            return new Response(null, Response::HTTP_EXPECTATION_FAILED);
+        }
+
+        $normalisedAttributes = [
+            'title',
+            'subTitle',
+            'postDate',
+            'content',
+            'featureSnippet',
+            'featureImage',
+        ];
+        if (!empty($request->request->get('export_categories'))) {
+            $normalisedAttributes[] = 'categories';
+        }
+        if (!empty($request->request->get('export_tags'))) {
+            $normalisedAttributes[] = 'tags';
+        }
+        $posts = $serializer->normalize(
+            $posts,
+            null,
+            [
+                AbstractNormalizer::ATTRIBUTES => $normalisedAttributes,
+            ]
+        );
+
+        $format = $request->request->get('export_format');
+        $response = new Response();
+        switch ($format) {
+            case 'json':
+                $posts = json_encode($posts);
+                $response->headers->set('Content-Type', 'application/json');
+                break;
+
+            case 'xml':
+                $encoder = new XmlEncoder();
+                $posts = $encoder->encode($posts, '');
+                $response->headers->set('Content-Type', 'text/xml');
+                break;
+
+            case 'md':
+            default:
+                $format = 'md';
+                $markdownPosts = [];
+                // @todo use https://packagist.org/packages/maennchen/zipstream-php to zip contents
+                // export_zip
+                foreach ($posts as $post) {
+                    $markdownPosts[] = ArrayToMarkdown::parse($post);
+                }
+        }
+        $response->setContent($posts);
+
+        $filename = date('YmdHis');
+        if (!empty($request->request->get('export_name'))) {
+            $filename = $request->request->get('export_name');
+        }
+        $filename .= '.' . $format;
+
+        $response->headers->set(
+            'Content-Disposition',
+            $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                $filename
+            )
+        );
+
+        return $response;
+    }
+
+    /**
+     * @Route("incc/ax/tagList/get", methods={"POST"})
+     *
+     * @param Request         $request
+     * @param LoggerInterface $logger
+     *
+     * @return string
+     */
+    public function getTagManagerListContent(Request $request, LoggerInterface $logger)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $tags = $this->entityManager->getRepository(Tag::class)->findByTitleLike($request->request->get('q'));
+        $result = [];
+        // Below code is used to handle where tags exist with the same name under multiple locations
+        if (!empty($tags)) {
+            $result['items'] = [];
+            foreach ($tags as $tag) {
+                $title = $tag->getTitle();
+                $result['items'][$title] = (object) [
+                    'id'   => $tag->getId(),
+                    'text' => $title,
+                ];
+            }
+            $result = array_values($result['items']);
+        }
+
+        return new JsonResponse(
+            [
+                'items'      => $result,
+                'totalCount' => count($result),
+            ],
+            Response::HTTP_OK
+        );
+    }
 }

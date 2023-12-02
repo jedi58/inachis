@@ -50,6 +50,7 @@ abstract class AbstractInachisController extends AbstractController
                 'twitter' => $this->container->has('app.twitter') ?
                     $this->container->get('app.twitter') :
                     null,
+                'geotagContent' => false,
             ],
             'notifications' => [],
             'page'          => [

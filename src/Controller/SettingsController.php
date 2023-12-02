@@ -53,14 +53,20 @@ class SettingsController extends AbstractInachisController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->data['check'] = [
-            'cache_writable' => '',
+            'app' => [
+                'name' => '',
+                'version' => '',
+                'version_ok' => '',
+                'dir' => [
+                    'cache_writable' => '',
+                ],
+            ],
             'php' => [
                 'required_version' => '7.1.0',
                 'current_version' => phpversion(),
 
                 'accelerator' => $this->getOpCacheStatus(),
                 'default_socket_timeout' => ini_get('default_socket_timeout'),
-                'magic_quotes_disabled' => !get_magic_quotes_gpc(),
                 'short_tags_disabled' => ini_get('short_open_tag'),
                 'session' => [
                     'name' => ini_get('session.name'),

@@ -9,16 +9,32 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ResourceController extends AbstractController
+class ResourceController extends AbstractInachisController
 {
     /**
-     * @Route("/resource", name="resource")
+     * @Route("/incc/resources", methods={"GET"})
+     * @param Request $request
+     * @return null
+     * @throws \Exception
      */
-    public function index()
+    public function resourcesList(Request $request)
     {
-        return $this->render('resource/index.html.twig', [
-            'controller_name' => 'ResourceController',
-        ]);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);
+        $offset = (int) $request->get('offset', 0);
+        $limit = $this->entityManager->getRepository(Image::class)->getMaxItemsToShow();
+        $this->data['dataset'] = $this->entityManager->getRepository(Image::class)->getAll(
+            $offset,
+            $limit
+        );
+        $this->data['form'] = $form->createView();
+        $this->data['page']['offset'] = $offset;
+        $this->data['page']['limit'] = $limit;
+        $this->data['page']['title'] = 'Users';
+
+        return $this->render('inadmin/_resources.html.twig', $this->data);
     }
 
     /**
@@ -28,6 +44,7 @@ class ResourceController extends AbstractController
      */
     public function uploadImage(Request $request) : JsonResponse
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         dump($request);
     }
 
@@ -38,6 +55,7 @@ class ResourceController extends AbstractController
      */
     public function saveImage(Request $request) : JsonResponse
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $image = null;
 //        if (!empty($request->files))
 //        {

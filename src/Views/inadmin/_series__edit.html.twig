@@ -28,6 +28,15 @@
                     {{ form_errors(form.subTitle) }}
                     {{ form_widget(form.subTitle) }}
                 </p>
+                {% if series.id is not empty %}
+                <p>
+                    {{ form_label(form.url) }}
+                    {{ form_errors(form.url) }}
+                    /{{ series.firstDate|date('Y') }}-{{ form_widget(form.url) }}
+                </p>
+                {% else %}
+                    {{ form_widget(form.url, {'type': 'hidden', 'attr': {'pattern': ''}}) }}
+                {% endif %}
                 <p>
                     {{ form_label(form.description) }}
                     {{ form_errors(form.description) }}
@@ -35,35 +44,39 @@
                 </p>
             </fieldset>
         </div>
-        <div class="col span_2_of_8 content__edit">
+        <div class="col span_2_of_8 content__edit edit__list">
             {% if series.id is not empty %}<p class="float_right">{{ form_widget(form.addItem) }}</p>{% endif %}
             <h2>
                 {% trans %}admin.series.contents.title{% endtrans %}
                 <span class="badge">{{ series.items|length }}</span>
             </h2>
             {% if series.id is not empty %}
-                {{ form_errors(form.firstDate) }}
-                {{ form_errors(form.lastDate) }}
-                <p>
-                    {{ form_label(form.firstDate) }}
-                    {{ form_label(form.lastDate) }}
-                </p>
-                <p>
-                    {{ form_widget(form.firstDate) }}
-                    {{ form_widget(form.lastDate) }}
-                </p>
-
-                <p></p>
 
                 {% if series.items is not empty %}
+                <p>
+                    {{ form_label(form.firstDate) }}
+                    {{ form_errors(form.firstDate) }}
+                    {{ form_widget(form.firstDate) }}
+                </p>
+                <p>
+                    {{ form_label(form.lastDate) }}
+                    {{ form_errors(form.lastDate) }}
+                    {{ form_widget(form.lastDate) }}
+                </p>
                     <ol>
                     {% for item in series.items %}
                         <li>
-                            <a href="/incc/{{ item.type }}/{{ item.urls|first.link }}">
-                                {{ item.title }}{% if item.subTitle is not empty %} - {{ item.subTitle }}{% endif %}</a>
+                            <input type="checkbox" name="series[itemList][]" id="series_item_{{ loop.index }}" value="{{ item.id }}" />
+                            <a href="/incc/{{ item.type }}/{{ item.urls|first.link }}"><span class="material-icons">edit_note</span></a>
+                            <label id="series_item_{{ loop.index }}_label" for="series_item_{{ loop.index }}">
+                               {{ item.title }}{% if item.subTitle is not empty %} - {{ item.subTitle }}{% endif %}</label>
                         </li>
                     {% endfor %}
                     </ol>
+                    <p>
+                        With Selected:
+                        {{ form_widget(form.remove) }}
+                    </p>
                 {% else %}
                     <p class="content-warning">
                         <i class="material-icons">info_outline</i>
@@ -81,9 +94,13 @@
             <p>
                 {{ form_widget(form.submit) }}
                 {{ form_widget(form.delete) }}
+                {%  if series.id is not empty and series.items|length > 0 %}
+                    <a class="button" href="{{ path('app_series_view', { 'year': series.lastDate|date('Y'), 'title': series.url}) }}" target="_blank" title="View Live"><span class="material-icons">exit_to_app</span></a>
+                {%  endif %}
             </p>
         </div>
-        {{ form_end(form) }}
+        {{ form_row(form._token) }}
+        {{ form_end(form, {render_rest: false}) }}
 
     {% endblock series_edit %}
 

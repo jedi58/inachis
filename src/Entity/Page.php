@@ -193,6 +193,11 @@ class Page
      * @var ArrayCollection|Tag[] The array of tags assigned to the post/page
      */
     protected $tags;
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Series", inversedBy="items")
+     * @var Collection|Series[]  The array of Series that contains this page
+     */
+    protected $series;
 
     /**
      * Default constructor for {@link Page}.
@@ -446,6 +451,14 @@ class Page
     }
 
     /**
+     * @return Collection
+     */
+    public function getSeries() : Collection
+    {
+        return $this->series;
+    }
+
+    /**
      * Sets the value of {@link id}.
      *
      * @param string $value The UUID of the {@link Page}
@@ -453,6 +466,8 @@ class Page
     public function setId($value)
     {
         $this->id = $value;
+
+        return $this;
     }
 
     /**
@@ -463,16 +478,20 @@ class Page
     public function setTitle($value)
     {
         $this->title = $value;
+
+        return $this;
     }
 
     /**
      * Sets the value of {@link subTitle}.
      *
-     * @param string $value The optional sub-title of the {@link Page}
+     * @param string|null $value The optional sub-title of the {@link Page}
      */
-    public function setSubTitle($value)
+    public function setSubTitle($value = null)
     {
         $this->subTitle = $value;
+
+        return $this;
     }
 
     /**
@@ -483,6 +502,8 @@ class Page
     public function setContent($value)
     {
         $this->content = $value;
+
+        return $this;
     }
 
     /**
@@ -493,6 +514,8 @@ class Page
     public function setAuthor(User $value = null)
     {
         $this->author = $value;
+
+        return $this;
     }
 
     /**
@@ -503,6 +526,8 @@ class Page
     public function setFeatureImage($value)
     {
         $this->featureImage = $value;
+
+        return $this;
     }
 
     /**
@@ -513,6 +538,8 @@ class Page
     public function setFeatureSnippet($value)
     {
         $this->featureSnippet = $value;
+
+        return $this;
     }
 
     /**
@@ -523,6 +550,8 @@ class Page
     public function setStatus($value)
     {
         $this->status = $this->isValidStatus($value) ? $value : self::DRAFT;
+
+        return $this;
     }
 
     /**
@@ -533,6 +562,8 @@ class Page
     public function setVisibility($value)
     {
         $this->visibility = (bool) $value;
+
+        return $this;
     }
 
     /**
@@ -543,6 +574,8 @@ class Page
     public function setCreateDate(\DateTime $value = null)
     {
         $this->createDate = $value;
+
+        return $this;
     }
 
     /**
@@ -553,6 +586,8 @@ class Page
     public function setPostDate(\DateTime $value = null)
     {
         $this->postDate = $value;
+
+        return $this;
     }
 
     /**
@@ -563,6 +598,8 @@ class Page
     public function setModDate(\DateTime $value = null)
     {
         $this->modDate = $value;
+
+        return $this;
     }
 
     /**
@@ -579,6 +616,8 @@ class Page
             );
         }
         $this->timezone = $value;
+
+        return $this;
     }
 
     /**
@@ -599,6 +638,8 @@ class Page
     public function setAllowComments($value = true)
     {
         $this->allowComments = (bool) $value;
+
+        return $this;
     }
 
     /**
@@ -614,6 +655,8 @@ class Page
             throw new \Exception(sprintf('`%s` is not a valid page type', $type));
         }
         $this->type = $type;
+
+        return $this;
     }
 
     /**
@@ -624,6 +667,8 @@ class Page
     public function setLatlong($value)
     {
         $this->latlong = $value;
+
+        return $this;
     }
 
     /**
@@ -634,6 +679,16 @@ class Page
     public function setSharingMessage($value)
     {
         $this->sharingMessage = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param array $series
+     */
+    public function setSeries(array $series)
+    {
+        $this->series = $series;
     }
 
     /**
@@ -751,7 +806,7 @@ class Page
             new \DateTimeZone($this->getTimezone())
         );
 
-        return $postDate->format('YmdHis') > $today->format('YmdHis');
+        return $this->getStatus() == Page::PUBLISHED && $postDate->format('YmdHis') > $today->format('YmdHis');
     }
 
     /**

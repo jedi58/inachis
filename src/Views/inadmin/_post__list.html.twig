@@ -42,6 +42,11 @@
                         'condition': 'draft',
                         'className': 'badge__draft'
                     },
+                    'scheduled': {
+                        'field': 'isScheduledPage',
+                        'condition': true,
+                        'className': 'badge__scheduled'
+                    },
                     'private': {
                         'field': 'visibility',
                         'condition': false,
@@ -50,16 +55,8 @@
                 },
 
                 'actions': {
-                    'delete': {
-                        'button_class': 'button--negative button--delete',
-                        'data': {
-                            'form-action': ''
-                        },
-                        'icon': 'delete_forever',
-                        'title': 'Delete',
-                    },
                     'private': {
-                        'button_class': 'button--privacy',
+                        'button_class': 'button--secondary button--privacy',
                         'data': {
                             'form-action': ''
                         },
@@ -67,14 +64,35 @@
                         'title': 'Make private',
                     },
                     'public': {
-                        'button_class': 'button--privacy',
+                        'button_class': 'button--secondary button--privacy',
                         'data': {
                             'form-action': ''
                         },
                         'icon': 'remove_red_eye',
                         'title': 'Make public',
                     },
-                }
+                    'export': {
+                        'button_class': 'button--secondary button--export dialog__link',
+                        'button_type': 'button',
+                        'data': {
+                            'buttons': 'eyJ0ZXh0IjoiRXhwb3J0IiwiY2xhc3MiOiJidXR0b24gYnV0dG9uLS1wb3NpdGl2ZSJ9',
+                            'class-name': 'dialog__export',
+                            'form-action': '',
+                            'template-name': 'export',
+                            'title': 'Export content'
+                        },
+                        'icon': 'cloud_download',
+                        'title': 'Export'
+                    },
+                    'delete': {
+                        'button_class': 'button--negative button--delete',
+                        'data': {
+                            'form-action': ''
+                        },
+                        'icon': 'delete_forever',
+                        'title': 'Delete',
+                    }
+                },
 
                 'filters': {
                     'Status': {

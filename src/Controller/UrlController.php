@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Url;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +25,8 @@ class UrlController extends AbstractInachisController
     public function list(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);
         // @todo add code for handling deleting of URLs and setting as default
 //        if ($form->isSubmitted()) && $form->isValid()) {
 //            if ($form->get('delete')->isClicked()) {
@@ -31,17 +34,18 @@ class UrlController extends AbstractInachisController
 //            }
 //        }
         $offset = (int) $request->get('offset', 0);
-        $limit = $entityManager->getRepository(Url::class)->getMaxItemsToShow();
-        $this->data['urls'] = $entityManager->getRepository(Url::class)->getAll(
+        $limit = $this->entityManager->getRepository(Url::class)->getMaxItemsToShow();
+        $this->data['dataset'] = $this->entityManager->getRepository(Url::class)->getAll(
             $offset,
             $limit,
             [],
             [
-                ['q.content', 'desc'],
+//                ['q.content', 'desc'],
                 ['q.default', 'desc'],
                 ['q.link', 'asc'],
             ]
         );
+        $this->data['form'] = $form->createView();
         $this->data['page']['offset'] = $offset;
         $this->data['page']['limit'] = $limit;
         $this->data['page']['title'] = 'URLs';

@@ -14,6 +14,7 @@ use App\Form\PostType;
 use App\Repository\RevisionRepository;
 use App\Utils\ContentRevisionCompare;
 use Doctrine\ORM\EntityManager;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ZZPageController extends AbstractInachisController
 {
+    const ITEMS_TO_SHOW = 20;
+
     /**
      * @Route(
      *     "/{year}/{month}/{day}/{title}",
@@ -55,7 +58,7 @@ class ZZPageController extends AbstractInachisController
         }
         if ($url->getContent()->isScheduledPage() || $url->getContent()->isDraft()) {
             return $this->redirectToRoute(
-                'app_dashboard_default',
+                'app_default_homepage',
                 []
             );
         }
@@ -69,15 +72,24 @@ class ZZPageController extends AbstractInachisController
         $this->data['url'] = $url->getLink();
         $series = $this->entityManager->getRepository(Series::class)->getPublishedSeriesByPost($this->data['post']);
         if (!empty($series)) {
+            $postIndex = $series->getItems()->indexOf($this->data['post']);
             $this->data['series'] = [
                 'title' => $series->getTitle(),
-                'subTitle' => $series->getSubTitle(),
-                // @todo change below to only append if index is in bounds
-                'previous' => $series->getItems()[$postIndex - 1],
-                'next' => $series->getItems()[$postIndex + 1],
+                'subTitle' => $series->getSubTitle()
             ];
+            if (!empty($series->getItems())) {
+                if ($postIndex - 1 >= 0) {
+                    $this->data['series']['previous'] = $series->getItems()->get($postIndex - 1);
+                }
+                if ($postIndex + 1 < $series->getItems()->count()) {
+                    $this->data['series']['next'] = $series->getItems()->get($postIndex + 1);
+                }
+            }
         }
-        unset($series);
+        $crawlerDetect = new CrawlerDetect();
+        if (!$crawlerDetect->isCrawler()) {
+            // record page hit by day
+        }
         return $this->render('web/post.html.twig', $this->data);
     }
 
@@ -136,14 +148,17 @@ class ZZPageController extends AbstractInachisController
                 [ 'type' => $type ]
             );
         }
+        $filters = array_filter($request->get('filter', []));
         $offset = (int) $request->get('offset', 0);
         $limit = $this->entityManager->getRepository(Page::class)->getMaxItemsToShow();
         $this->data['form'] = $form->createView();
         $this->data['posts'] = $this->entityManager->getRepository(Page::class)->getFilteredOfTypeByPostDate(
+            $filters,
             $type,
             $offset,
             $limit
         );
+        $this->data['filters'] = $filters;
         $this->data['page']['offset'] = $offset;
         $this->data['page']['limit'] = $limit;
         $this->data['page']['tab'] = $type;
@@ -318,15 +333,6 @@ class ZZPageController extends AbstractInachisController
     }
 
     /**
-     * @Route("/incc/search/results", methods={"GET", "POST"})
-     */
-    public function getSearchResults()
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        return new Response('<html><body>Show search results</body></html>');
-    }
-
-    /**
      * @Route(
      *     "/{page}",
      *     methods={"GET"}
@@ -350,5 +356,59 @@ class ZZPageController extends AbstractInachisController
             '/\/incc\/([0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*|post)/',
             $request->server()->get('REQUEST_URI')
         ) ? Page::TYPE_POST : Page::TYPE_PAGE;
+    }
+
+    /**
+     * @Route(
+     *     "/tag/{tagName}",
+     *     methods={"GET"}
+     * )
+     * @param Request $request
+     * @param string $tagName
+     * @return mixed
+     */
+    public function getPostsByTag(Request $request, string $tagName)
+    {
+        $tag = $entityManager->getRepository(Tag::class)->findOneByTitle($tagName);
+        if (!$tag instanceof Tag) {
+            throw new NotFoundHttpException(
+                sprintf(
+                    '%s does not exist',
+                    $tagName
+                )
+            );
+        }
+        $this->data['filterName'] = 'tag';
+        $this->data['filterValue'] = $tagName;
+        $this->data['content'] = $this->entityManager->getRepository(Page::class)->getPagesWithTag($tag);
+
+        return $this->render('web/homepage.html.twig', $this->data);
+    }
+
+    /**
+     * @Route(
+     *     "/category/{categoryName}",
+     *     methods={"GET"}
+     * )
+     * @param Request $request
+     * @param string $categoryName
+     * @return mixed
+     */
+    public function getPostsByCategory(Request $request, string $categoryName)
+    {
+        $category = $this->entityManager->getRepository(Category::class)->findOneByTitle($categoryName);
+        if (!$category instanceof Category) {
+            throw new NotFoundHttpException(
+                sprintf(
+                    '%s does not exist',
+                    $categoryName
+                )
+            );
+        }
+        $this->data['filterName'] = 'category';
+        $this->data['filterValue'] = $categoryName;
+        $this->data['content'] = $this->entityManager->getRepository(Page::class)->getPagesWithCategory($category);
+
+        return $this->render('web/homepage.html.twig', $this->data);
     }
 }

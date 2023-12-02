@@ -33,6 +33,11 @@ class Series
      */
     protected $subTitle;
     /**
+     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
+     * @var string
+     */
+    protected $url;
+    /**
      * @ORM\Column(type="text", nullable=true)
      *
      * @var string
@@ -92,6 +97,8 @@ class Series
      */
     public function __construct()
     {
+        $this->items = new ArrayCollection();
+
         $currentTime = new \DateTime('now');
         $this->setCreateDate($currentTime);
         $this->setModDate($currentTime);
@@ -153,6 +160,26 @@ class Series
     public function setSubTitle($subTitle)
     {
         $this->subTitle = $subTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param mixed $url
+     *
+     * @return $this
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
 
         return $this;
     }

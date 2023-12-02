@@ -13,6 +13,25 @@ class TagRepository extends AbstractRepository
         parent::__construct($registry, Tag::class);
     }
 
+    /**
+     * @param $title
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function findByTitleLike($title)
+    {
+        return $this->getAll(
+            0,
+            25,
+            [
+                'q.title LIKE :title',
+                [
+                    'title' => '%' . $title . '%',
+                ],
+            ],
+            'q.title'
+        );
+    }
+
     /*
     public function findBySomething($value)
     {
