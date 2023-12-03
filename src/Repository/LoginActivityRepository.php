@@ -17,5 +17,4 @@ class LoginActivityRepository extends AbstractRepository
     {
         parent::__construct($registry, LoginActivity::class);
     }
-
 }

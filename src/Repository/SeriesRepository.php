@@ -48,7 +48,7 @@ class SeriesRepository extends AbstractRepository
             ->select('s')
             ->leftJoin('s.items', 'Series_pages')
             ->where(
-                    'Series_pages.id = :pageId' //,
+                'Series_pages.id = :pageId' //,
             )
             ->setParameter('pageId', $page->getId())
             ->getQuery()
