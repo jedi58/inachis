@@ -1,8 +1,8 @@
 {% block stylesheets %}
     <link href="{{ settings.domain }}/assets/css/incc/styles.min.css" media="screen" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css" integrity="sha384-O0uNvm7Rktk+buKssiHCajN92EfoOP1Q2JfRh7mxJ+v8ozx8154C3QWgV7CQh2Uk" media="screen" rel="stylesheet" type="text/css"  crossorigin="anonymous">
+{%- if is_granted('ROLE_USER') %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" integrity="sha384-HIipfSYbpCkh5/1V87AWAeR5SUrNiewznrUrtNz1ux4uneLhsAKzv/0FnMbj3m6g" media="screen" rel="stylesheet" type="text/css" crossorigin="anonymous">
 
     {% if includeDatePicker|default(false) %}
@@ -10,6 +10,8 @@
     {% endif %}
 
     {% if includeEditor|default(false) %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css" />
+    <link rel="stylesheet" href="https://raw.githubusercontent.com/hjzheng/markdown-electron/main/src/renderer/src/assets/easymde.dark.min.css" />
     {% endif %}
+{% endif %}
 {% endblock stylesheets %}
