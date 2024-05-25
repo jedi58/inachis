@@ -16,6 +16,11 @@
             <img alt="An image of an Inachis io butterfly" class="admin__form__brand" src="/assets/imgs/incc/inachis.png" />
 
             {{ form_start(form, {attr: {class: 'form form__login', autocomplete: false}}) }}
+            {% if error %}
+                <div class="flash-notice">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% elseif expired %}
+                <div class="flash-notice">Your session has expired.</div>
+            {% endif %}
             {{ form_widget(form) }}
             {{ form_end(form) }}
 
