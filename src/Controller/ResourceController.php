@@ -7,37 +7,55 @@ use App\Form\ImageType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-class ResourceController extends AbstractController
+class ResourceController extends AbstractInachisController
 {
     /**
-     * @Route("/resource", name="resource")
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
      */
-    public function index()
+    #[Route("/incc/resources", methods: [ "GET" ])]
+    public function resourcesList(Request $request): Response
     {
-        return $this->render('resource/index.html.twig', [
-            'controller_name' => 'ResourceController',
-        ]);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);
+        $offset = (int) $request->get('offset', 0);
+        $limit = $this->entityManager->getRepository(Image::class)->getMaxItemsToShow();
+        $this->data['dataset'] = $this->entityManager->getRepository(Image::class)->getAll(
+            $offset,
+            $limit
+        );
+        $this->data['form'] = $form->createView();
+        $this->data['page']['offset'] = $offset;
+        $this->data['page']['limit'] = $limit;
+        $this->data['page']['title'] = 'Users';
+
+        return $this->render('inadmin/_resources.html.twig', $this->data);
     }
 
     /**
-     * @Route("/incc/resource/image/upload", methods={"POST", "PUT"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function uploadImage(Request $request) : JsonResponse
+    #[Route("/incc/resource/image/upload", methods: [ "POST", "PUT" ])]
+    public function uploadImage(Request $request): JsonResponse
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         dump($request);
     }
 
     /**
-     * @Route("/incc/resource/image/save", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function saveImage(Request $request) : JsonResponse
+    #[Route("/incc/resource/image/save", methods: [ "POST" ])]
+    public function saveImage(Request $request): JsonResponse
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $image = null;
 //        if (!empty($request->files))
 //        {

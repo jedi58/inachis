@@ -34,7 +34,7 @@ class PostType extends AbstractType
         $this->transformer = $transformer;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $categories = $options['data']->getCategories();
         $tags = $options['data']->getTags();
@@ -159,7 +159,8 @@ class PostType extends AbstractType
                     'class'            => 'js-select halfwidth',
                     'data-tags'        => 'true',
                     'data-tip-content' => $this->translator->trans('admin.tip.content.post.tags', [], 'messages'),
-                    'selected'         => 'selected',
+                    'data-url'         => $this->router->generate('app_admindialog_gettagmanagerlistcontent'),
+//                    'selected'         => 'selected',
                 ],
                 'choices'      => $options['data']->getTags()->toArray(),
                 'choice_label' => 'title',
@@ -175,20 +176,20 @@ class PostType extends AbstractType
                 'multiple' => true,
                 'required' => false,
             ])
-//            ->add('latlong', TextType::class, [
-//                'attr' => [
-//                    'aria-labelledby' => 'latlong_label',
-//                    'aria-required' => 'false',
-//                    'class' => 'ui-map',
-//                    'data-google-key' => '{{ settings.google.key }}',
-//                    'data-tip-content' => 'Please enter a location name, postcode, zip code, or longitude/latitude to search for the location.',
-//                ],
-//                'label' => 'Location',
-//                'label_attr' => [
-//                    'id' => 'latlong_label'
-//                ],
-//                'required' => false,
-//            ])
+            ->add('latlong', TextType::class, [
+                'attr' => [
+                    'aria-labelledby' => 'latlong_label',
+                    'aria-required' => 'false',
+                    'class' => 'ui-map',
+                    'data-google-key' => '{{ settings.google.key }}',
+                    'data-tip-content' => 'Please enter a location name, postcode, zip code, or longitude/latitude to search for the location.',
+                ],
+                'label' => 'Location',
+                'label_attr' => [
+                    'id' => 'latlong_label'
+                ],
+                'required' => false,
+            ])
             ->add('featureSnippet', TextareaType::class, [
                 'attr' => [
                     'aria-labelledby' => 'teaser_label',
@@ -235,7 +236,7 @@ class PostType extends AbstractType
 //        $builder->get('tags')->addModelTransformer($this->transformer);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'attr' => [

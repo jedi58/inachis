@@ -4,22 +4,24 @@ namespace App\Controller;
 
 use App\Entity\Page;
 use App\Entity\Revision;
+use App\Repository\RevisionRepository;
 use Jfcherng\Diff\DiffHelper;
 use Jfcherng\Diff\Factory\RendererFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 class RevisionController extends AbstractInachisController
 {
     /**
-     * @Route("/incc/page/diff/{id}", methods={"GET"})
+     * @param Request $request
+     * @return Response
      */
-    public function diff(Request $request)
+    #[Route("/incc/page/diff/{id}", methods: [ "GET" ])]
+    public function diff(Request $request): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $revision = $entityManager->getRepository(Revision::class)->findOneById(
+        $revision = $this->entityManager->getRepository(Revision::class)->findOneById(
             $request->get('id')
         );
         if (empty($revision) || empty($revision->getPageId())) {
@@ -27,11 +29,16 @@ class RevisionController extends AbstractInachisController
                 sprintf('Version history could not be found for %s', $request->get('id'))
             );
         }
-        $page = $entityManager->getRepository(Page::class)->findOneById($revision->getPageId());
+        $page = $this->entityManager->getRepository(Page::class)->findOneById($revision->getPageId());
+        if (empty($page) || empty($page->getId())) {
+            throw new NotFoundHttpException(
+                sprintf('Page could not be found for revision %s', $request->get('id'))
+            );
+        }
         $trackChanges = [
             'content' => json_decode(DiffHelper::calculate(
-                $revision->getContent(),
-                $page->getContent(),
+                $revision->getContent() ?? '',
+                $page->getContent() ?? '',
                 'Json',
                 [
                     'context' => 0,
@@ -44,7 +51,7 @@ class RevisionController extends AbstractInachisController
 
         $this->data['page']['title'] = 'Compare Revisions';
         $this->data['title'] = json_decode(
-            DiffHelper::calculate($revision->getTitle(), $page->getTitle(), 'Json', [], [
+            DiffHelper::calculate($revision->getTitle() ?? '', $page->getTitle() ?? '', 'Json', [], [
                 'detailLevel' => 'word',
                 'outputTagAsString' => true,
             ])
@@ -53,7 +60,7 @@ class RevisionController extends AbstractInachisController
             $this->data['title'] = $page->getTitle();
         }
         $this->data['subTitle'] = json_decode(
-            DiffHelper::calculate($revision->getSubTitle(), $page->getSubTitle(), 'Json')
+            DiffHelper::calculate($revision->getSubTitle() ?? '', $page->getSubTitle() ?? '', 'Json')
         );
         if (empty($this->data['subTitle'])) {
             $this->data['subTitle'] = $page->getSubTitle();
@@ -61,11 +68,12 @@ class RevisionController extends AbstractInachisController
         $this->data['content'] = mb_split(PHP_EOL, $revision->getContent());
         foreach ($trackChanges['content'] as $changeGroup) {
             foreach ($changeGroup as $change) {
-                if (in_array($change->tag, [ 'rep', 'del' ])) {
+                if (in_array($change->tag, ['rep', 'del'])) {
                     $this->data['content'][$change->old->offset] = $change;
                 }
             }
         }
+        $this->data['link'] = $page->getUrls()[0]->getLink();
 
         return $this->render('inadmin/track_changes.html.twig', $this->data);
     }

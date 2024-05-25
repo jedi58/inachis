@@ -3,70 +3,86 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use App\Exception\InvalidTimezoneException;
 
 /**
  * Object for handling {@link Page} revisions
- * @ORM\Entity(repositoryClass="App\Repository\RevisionRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"page_id", "user_id"})})
  */
+#[ORM\Entity(repositoryClass: 'App\Repository\RevisionRepository', readOnly: false)]
+#[ORM\Index(name: 'search_idx', columns: [ 'page_id', 'user_id' ])]
 class Revision
 {
     /**
-     * @ORM\Column(type="string", unique=true, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     *
+     * @var \Ramsey\Uuid\UuidInterface
+     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private $id;
+
+    /**
+     * @var
+     */
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    private $page_id;
+
+    /**
+     * @var inr
+     */
+    #[ORM\Column(type: 'integer', nullable: false)]
+    private $versionNumber = 0;
+
+    /**
      * @var string
      */
-    private $id;
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    private $page_id;
-    /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    private $versionNumber = 0;
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $action;
+
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     *
      * @var string The title of the {@link Page}
      */
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     protected $title;
+
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
      * @var string An optional sub-title for the {@link Page}
      */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected $subTitle = null;
+
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @var text The contents of the revision
      */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $content;
+
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", cascade={"detach"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     *
      * @var User The author for the {@link Page}
      */
+    #[ORM\ManyToOne(targetEntity: 'App\Entity\User', cascade: ['detach'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     private $user;
+
     /**
-     * @ORM\Column(type="datetime")
-     *
      * @var string The date the {@link Page} was last modified
      */
+    #[ORM\Column(type: 'datetime')]
     protected $modDate;
 
+    /**
+     * @return string|null
+     */
     public function getId(): ?string
     {
         return $this->id;
     }
 
+    /**
+     * @param string $id
+     * @return $this
+     */
     public function setId(string $id): self
     {
         $this->id = $id;
@@ -74,11 +90,18 @@ class Revision
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPageId(): ?string
     {
         return $this->page_id;
     }
 
+    /**
+     * @param string $page_id
+     * @return $this
+     */
     public function setPageId(string $page_id): self
     {
         $this->page_id = $page_id;
@@ -86,6 +109,9 @@ class Revision
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getVersionNumber(): ?int
     {
         return $this->versionNumber;
@@ -111,7 +137,7 @@ class Revision
      *
      * @return string The date the {@link Page} was last modified
      */
-    public function getModDate()
+    public function getModDate() : \DateTime
     {
         return $this->modDate;
     }
@@ -179,7 +205,7 @@ class Revision
         return $this->subTitle;
     }
 
-    public function setSubTitle(string $subTitle = null): self
+    public function setSubTitle(?string $subTitle = null): self
     {
         $this->subTitle = $subTitle;
 

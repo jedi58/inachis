@@ -61,6 +61,11 @@ class RevisionRepository extends AbstractRepository
             ->getSingleScalarResult()) + 1;
     }
 
+    /**
+     * @param Page $page
+     * @return Revision
+     * @throws \Exception
+     */
     public function deleteAndRecordByPage(Page $page): Revision
     {
         $this->createQueryBuilder('r')
@@ -68,12 +73,13 @@ class RevisionRepository extends AbstractRepository
             ->where('r.page_id = :pageId')
             ->setParameter('pageId', $page->getId());
         $revision = new Revision();
-        return $revision
+        $revision
             ->setPageId($page->getId())
             ->setTitle($page->getTitle())
             ->setSubTitle($page->getSubTitle())
             ->setUser()
             ->setModDate(new \DateTime())
             ->setAction(self::DELETED);
+        return $revision;
     }
 }

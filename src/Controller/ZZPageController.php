@@ -13,40 +13,41 @@ use App\Entity\Url;
 use App\Form\PostType;
 use App\Repository\RevisionRepository;
 use App\Utils\ContentRevisionCompare;
+use App\Utils\ReadingTime;
 use Doctrine\ORM\EntityManager;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ZZPageController extends AbstractInachisController
 {
     const ITEMS_TO_SHOW = 20;
 
     /**
-     * @Route(
-     *     "/{year}/{month}/{day}/{title}",
-     *     methods={"GET"},
-     *     requirements={
-     *          "year": "\d+",
-     *          "month": "\d+",
-     *          "day": "\d+"
-     *     }
-     * )
      * @param Request $request
      * @param int $year
      * @param int $month
      * @param int $day
      * @param string $title
-     * @return mixed
+     * @return Response
      * @throws NotFoundHttpException
      */
-    public function getPost(Request $request, $year, $month, $day, $title)
+    #[Route(
+        "/{year}/{month}/{day}/{title}",
+        methods: ["GET" ],
+        requirements: [
+            "year" => "\d+",
+            "month" => "\d+",
+            "day" => "\d+"
+        ]
+    )]
+    public function getPost(Request $request, $year, $month, $day, $title): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $url = $entityManager->getRepository(Url::class)->findOneByLink(
-            ltrim($request->getRequestUri(), '/')
+        $url = $this->entityManager->getRepository(Url::class)->findOneByLink(
+            ltrim(strtok($request->getRequestUri(), '?'), '/')
         );
         if (empty($url)) {
             throw new NotFoundHttpException(
@@ -63,14 +64,15 @@ class ZZPageController extends AbstractInachisController
             );
         }
         if (!$url->isDefault()) {
-            $url = $entityManager->getRepository(Url::class)->getDefaultUrl($url->getContent());
+            $url = $this->entityManager->getRepository(Url::class)->getDefaultUrl($url->getContent());
             if (!empty($url) && $url->isDefault()) {
-                return new RedirectResponse($url->getLink(), Response::HTTP_PERMANENTLY_REDIRECT);
+                return new RedirectResponse('/' . $url->getLink(), Response::HTTP_PERMANENTLY_REDIRECT);
             }
         }
         $this->data['post'] = $url->getContent();
         $this->data['url'] = $url->getLink();
-        $series = $entityManager->getRepository(Series::class)->getPublishedSeriesByPost($this->data['post']);
+        $this->data['textStats'] = ReadingTime::getWordCountAndReadingTime($this->data['post']->getContent());
+        $series = $this->entityManager->getRepository(Series::class)->getPublishedSeriesByPost($this->data['post']);
         if (!empty($series)) {
             $postIndex = $series->getItems()->indexOf($this->data['post']);
             $this->data['series'] = [
@@ -86,59 +88,66 @@ class ZZPageController extends AbstractInachisController
                 }
             }
         }
+        $crawlerDetect = new CrawlerDetect();
+        if (!$crawlerDetect->isCrawler()) {
+            // record page hit by day
+        }
         return $this->render('web/post.html.twig', $this->data);
     }
 
     /**
-     * @Route(
-     *     "/incc/{type}/list/{offset}/{limit}",
-     *     methods={"GET", "POST"},
-     *     requirements={
-     *          "type": "post|page",
-     *          "offset": "\d+",
-     *          "limit"="\d+"
-     *     },
-     *     defaults={"offset"=0, "limit"=10}
-     * )
      * @param Request $request
      * @param string $type
-     * @return null
+     * @return Response
      * @throws \Exception
      */
-    public function getPostListAdmin(Request $request, $type = 'post')
+    #[Route(
+        "/incc/{type}/list/{offset}/{limit}",
+        methods: [ "GET", "POST" ],
+        requirements: [
+            "type" => "post|page",
+            "offset" => "\d+",
+            "limit" => "\d+"
+        ],
+        defaults: [ "offset" => 0, "limit" => 10 ]
+    )]
+    public function getPostListAdmin(Request $request, $type = 'post'): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $entityManager = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() && !empty($request->get('items'))) {
             foreach ($request->get('items') as $item) {
                 if ($request->request->has('delete')) {
-                    $post = $entityManager->getRepository(Page::class)->findOneById($item);
+                    $post = $this->entityManager->getRepository(Page::class)->findOneById($item);
                     if ($post !== null) {
-                        $entityManager->getRepository(Page::class)->remove($post);
-                        $entityManager->getRepository(Revision::class)->deleteAndRecordByPage($post);
+                        $this->entityManager->getRepository(Revision::class)->deleteAndRecordByPage($post);
+                        $this->entityManager->getRepository(Page::class)->remove($post);
                     }
                 }
                 if ($request->request->has('private') || $request->request->has('public')) {
-                    $post = $entityManager->getRepository(Page::class)->findOneById($item);
+                    $post = $this->entityManager->getRepository(Page::class)->findOneById($item);
                     if ($post !== null) {
                         $post->setVisibility(
                             $request->request->has('private') ? Page::VIS_PRIVATE : Page::VIS_PUBLIC
                         );
                         $post->setModDate(new \DateTime('now'));
-                        $entityManager->persist($post);
+                        $this->entityManager->persist($post);
                     }
                 }
+//                if ($request->request->has('export')) {
+//                    echo 'export';
+//                    die;
+//                }
             }
             if ($request->request->has('private') || $request->request->has('public')) {
-                $revision = $entityManager->getRepository(Revision::class)->hydrateNewRevisionFromPage($post);
+                $revision = $this->entityManager->getRepository(Revision::class)->hydrateNewRevisionFromPage($post);
                 $revision = $revision
                     ->setContent('')
                     ->setAction(sprintf(RevisionRepository::VISIBILITY_CHANGE, $post->getVisibility()));
-                $entityManager->persist($revision);
+                $this->entityManager->persist($revision);
 
-                $entityManager->flush();
+                $this->entityManager->flush();
             }
             return $this->redirectToRoute(
                 'app_zzpage_getpostlistadmin',
@@ -147,9 +156,9 @@ class ZZPageController extends AbstractInachisController
         }
         $filters = array_filter($request->get('filter', []));
         $offset = (int) $request->get('offset', 0);
-        $limit = $entityManager->getRepository(Page::class)->getMaxItemsToShow();
+        $limit = $this->entityManager->getRepository(Page::class)->getMaxItemsToShow();
         $this->data['form'] = $form->createView();
-        $this->data['posts'] = $entityManager->getRepository(Page::class)->getFilteredOfTypeByPostDate(
+        $this->data['posts'] = $this->entityManager->getRepository(Page::class)->getFilteredOfTypeByPostDate(
             $filters,
             $type,
             $offset,
@@ -164,40 +173,39 @@ class ZZPageController extends AbstractInachisController
     }
 
     /**
-     * @Route(
-     *     "/incc/{type}/{title}",
-     *     methods={"GET", "POST"},
-     *     defaults={"type": "post"},
-     *     requirements={
-     *          "type": "post|page"
-     *     }
-     * )
-     * @Route(
-     *     "/incc/{type}/{year}/{month}/{day}/{title}",
-     *     methods={"GET", "POST"},
-     *     requirements={
-     *          "type": "post",
-     *          "year": "\d+",
-     *          "month": "\d+",
-     *          "day": "\d+"
-     *     }
-     * )
-     *
      * @param Request $request
      * @param ContentRevisionCompare $contentRevisionCompare
      * @param string $type
      * @param string $title
-     * @return mixed
+     * @return Response
      * @throws \Exception
      *
      * @return mixed
      */
-    public function getPostAdmin(Request $request, ContentRevisionCompare $contentRevisionCompare, $type = 'post', $title = null)
+    #[Route(
+        "/incc/{type}/{title}",
+        methods: [ "GET", "POST" ],
+        defaults: [ "type" => "post" ],
+        requirements: [
+            "type" => "post|page"
+        ]
+    )]
+    #[Route(
+        "/incc/{type}/{year}/{month}/{day}/{title}",
+        methods: [ "GET", "POST" ],
+        requirements: [
+            "type" => "post",
+            "year" => "\d+",
+            "month" => "\d+",
+            "day" => "\d+"
+        ]
+    )]
+    public function getPostAdmin(Request $request, ContentRevisionCompare $contentRevisionCompare, $type = 'post', $title = null): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $entityManager = $this->getDoctrine()->getManager();
+
         $url = preg_replace('/\/?incc\/(page|post)\/?/', '', $request->getRequestUri());
-        $url = $entityManager->getRepository(Url::class)->findByLink($url);
+        $url = $this->entityManager->getRepository(Url::class)->findByLink($url);
         $title = $title === 'new' ? null : $title;
         // If content with this URL doesn't exist, then redirect
         if (empty($url) && null !== $title) {
@@ -207,13 +215,13 @@ class ZZPageController extends AbstractInachisController
             );
         }
         $post = null !== $title ?
-            $entityManager->getRepository(Page::class)->findOneById($url[0]->getContent()->getId()) :
+            $this->entityManager->getRepository(Page::class)->findOneById($url[0]->getContent()->getId()) :
             $post = new Page();
         if ($post->getId() === null) {
             $post->setType($type);
         }
         if (!empty($post->getId())) {
-            $revision = $entityManager->getRepository(Revision::class)->hydrateNewRevisionFromPage($post);
+            $revision = $this->entityManager->getRepository(Revision::class)->hydrateNewRevisionFromPage($post);
             $revision = $revision->setAction(RevisionRepository::UPDATED);
         }
         $form = $this->createForm(PostType::class, $post);
@@ -221,15 +229,15 @@ class ZZPageController extends AbstractInachisController
 
         if ($form->isSubmitted()) {//} && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
-                $entityManager->getRepository(Page::class)->remove($post);
-                $entityManager->getRepository(Revision::class)->deleteAndRecordByPage($post);
+                $this->entityManager->getRepository(Page::class)->remove($post);
+                $this->entityManager->getRepository(Revision::class)->deleteAndRecordByPage($post);
                 return $this->redirectToRoute(
                     'app_dashboard_default',
                     [],
                     Response::HTTP_PERMANENTLY_REDIRECT
                 );
             }
-            $post->setAuthor($this->get('security.token_storage')->getToken()->getUser());
+            $post->setAuthor($this->getUser());
             if (null !== $request->get('publish')) {
                 $post->setStatus(Page::PUBLISHED);
                 if (isset($revision)) {
@@ -260,7 +268,7 @@ class ZZPageController extends AbstractInachisController
                 $newCategories = $request->get('post')['categories'];
                 if (!empty($newCategories)) {
                     foreach ($newCategories as $newCategory) {
-                        $category = $entityManager->getRepository(Category::class)->findOneById($newCategory);
+                        $category = $this->entityManager->getRepository(Category::class)->findOneById($newCategory);
                         if (!empty($category)) {
                             $post->getCategories()->add($category);
                         }
@@ -271,7 +279,7 @@ class ZZPageController extends AbstractInachisController
                 $newTags = $request->get('post')['tags'];
                 if (!empty($newTags)) {
                     foreach ($newTags as $newTag) {
-                        $tag = $entityManager->getRepository(Tag::class)->findOneById($newTag);
+                        $tag = $this->entityManager->getRepository(Tag::class)->findOneById($newTag);
                         if (empty($tag)) {
                             $tag = new Tag($newTag);
                         }
@@ -281,7 +289,7 @@ class ZZPageController extends AbstractInachisController
             }
             if (!empty($request->get('post')['featureImage'])) {
                 $post->setFeatureImage(
-                    $entityManager->getRepository(Image::class)->findOneById(
+                    $this->entityManager->getRepository(Image::class)->findOneById(
                         $request->get('post')['featureImage']
                     )
                 );
@@ -296,10 +304,10 @@ class ZZPageController extends AbstractInachisController
 
             $post->setModDate(new \DateTime('now'));
             if (!empty($post->getId())) {
-                $entityManager->persist($revision);
+                $this->entityManager->persist($revision);
             }
-            $entityManager->persist($post);
-            $entityManager->flush();
+            $this->entityManager->persist($post);
+            $this->entityManager->flush();
 
             $this->addFlash('notice', 'Content saved.');
             return $this->redirect(
@@ -318,7 +326,7 @@ class ZZPageController extends AbstractInachisController
         $this->data['includeEditorId'] = $post->getId();
         $this->data['includeDatePicker'] = true;
         $this->data['post'] = $post;
-        $this->data['revisions'] = $entityManager->getRepository(Revision::class)
+        $this->data['revisions'] = $this->entityManager->getRepository(Revision::class)
             ->getAll(0, 25, [
                 'q.page_id = :pageId', [
                     'pageId' => $post->getId(),
@@ -330,14 +338,11 @@ class ZZPageController extends AbstractInachisController
     }
 
     /**
-     * @Route(
-     *     "/{page}",
-     *     methods={"GET"}
-     * )
      * @param Request $request
-     * @return mixed
+     * @return Response
      */
-    public function getPage(Request $request)
+    #[Route("/{page}", methods: [ "GET" ])]
+    public function getPage(Request $request): Response
     {
         return $this->getPost($request, 0, 0, 0, '');
     }
@@ -347,7 +352,7 @@ class ZZPageController extends AbstractInachisController
      * @param Request $request
      * @return string The result of testing the current URL
      */
-    private function getContentType(Request $request)
+    private function getContentType(Request $request): string
     {
         return 1 === preg_match(
             '/\/incc\/([0-9]{4}\/[0-9]{2}\/[0-9]{2}\/.*|post)/',
@@ -356,18 +361,14 @@ class ZZPageController extends AbstractInachisController
     }
 
     /**
-     * @Route(
-     *     "/tag/{tagName}",
-     *     methods={"GET"}
-     * )
      * @param Request $request
      * @param string $tagName
-     * @return mixed
+     * @return Response
      */
-    public function getPostsByTag(Request $request, string $tagName)
+    #[Route("/tag/{tagName}", methods: [ "GET" ])]
+    public function getPostsByTag(Request $request, string $tagName): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $tag = $entityManager->getRepository(Tag::class)->findOneByTitle($tagName);
+        $tag = $this->entityManager->getRepository(Tag::class)->findOneByTitle($tagName);
         if (!$tag instanceof Tag) {
             throw new NotFoundHttpException(
                 sprintf(
@@ -378,24 +379,20 @@ class ZZPageController extends AbstractInachisController
         }
         $this->data['filterName'] = 'tag';
         $this->data['filterValue'] = $tagName;
-        $this->data['content'] = $entityManager->getRepository(Page::class)->getPagesWithTag($tag);
+        $this->data['content'] = $this->entityManager->getRepository(Page::class)->getPagesWithTag($tag);
 
         return $this->render('web/homepage.html.twig', $this->data);
     }
 
     /**
-     * @Route(
-     *     "/category/{categoryName}",
-     *     methods={"GET"}
-     * )
      * @param Request $request
      * @param string $categoryName
-     * @return mixed
+     * @return Response
      */
-    public function getPostsByCategory(Request $request, string $categoryName)
+    #[Route("/category/{categoryName}", methods: [ "GET" ])]
+    public function getPostsByCategory(Request $request, string $categoryName): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $category = $entityManager->getRepository(Category::class)->findOneByTitle($categoryName);
+        $category = $this->entityManager->getRepository(Category::class)->findOneByTitle($categoryName);
         if (!$category instanceof Category) {
             throw new NotFoundHttpException(
                 sprintf(
@@ -406,7 +403,7 @@ class ZZPageController extends AbstractInachisController
         }
         $this->data['filterName'] = 'category';
         $this->data['filterValue'] = $categoryName;
-        $this->data['content'] = $entityManager->getRepository(Page::class)->getPagesWithCategory($category);
+        $this->data['content'] = $this->entityManager->getRepository(Page::class)->getPagesWithCategory($category);
 
         return $this->render('web/homepage.html.twig', $this->data);
     }

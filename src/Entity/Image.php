@@ -3,43 +3,45 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * Object for handling images on a site.
- *
- * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
- * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"title", "filename", "filetype"})})
  */
+#[ORM\Entity(repositoryClass: 'App\Repository\ImageRepository', readOnly: false)]
+#[ORM\Index(name: 'search_idx', columns: ['title', 'filename', 'filetype'])]
 class Image extends AbstractFile
 {
-    /**
-     * @ORM\Id @ORM\Column(type="string", unique=true, nullable=false)
-     * @ORM\GeneratedValue(strategy="UUID")
-     *
-     * @var string The unique identifier for the image
-     */
-    protected $id;
     /**
      * @const string RegExp for allowed mime-types
      */
     const ALLOWED_TYPES = 'image\/(png|p?jpeg|gif)';
+
     /**
-     * @ORM\Column(type="integer")
-     *
+     * @var \Ramsey\Uuid\UuidInterface The unique identifier for the image
+     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    protected $id;
+
+    /**
      * @var int
      */
+    #[ORM\Column(type: 'integer')]
     protected $dimensionX = 0;
+
     /**
-     * @ORM\Column(type="integer")
-     *
      * @var int
      */
+    #[ORM\Column(type: 'integer')]
     protected $dimensionY = 0;
+
     /**
-     * @ORM\Column(type="string", nullable=true)
-     *
      * @var string
      */
+    #[ORM\Column(type: 'string', nullable: true)]
     protected $altText;
 
     /**
@@ -53,33 +55,60 @@ class Image extends AbstractFile
         unset($now);
     }
 
-    public function getDimensionX()
+    /**
+     * @return int
+     */
+    public function getDimensionX(): int
     {
         return $this->dimensionX;
     }
 
-    public function getDimensionY()
+    /**
+     * @return int
+     */
+    public function getDimensionY(): int
     {
         return $this->dimensionY;
     }
 
-    public function getAltText()
+    /**
+     * @return string
+     */
+    public function getAltText(): ?string
     {
         return $this->altText;
     }
 
-    public function setDimensionX($value)
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function setDimensionX(int $value): self
     {
         $this->dimensionX = (int) $value;
+
+        return $this;
     }
 
-    public function setDimensionY($value)
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function setDimensionY(int $value): self
     {
         $this->dimensionY = (int) $value;
+
+        return $this;
     }
 
-    public function setAltText($value)
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setAltText(?string $value): self
     {
         $this->altText = $value;
+
+        return $this;
     }
 }

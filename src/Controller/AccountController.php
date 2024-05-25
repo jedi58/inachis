@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Form\LoginType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -21,74 +21,45 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AccountController extends AbstractInachisController
 {
     /**
-     * @var EncoderFactoryInterface
-     */
-    private $encoderFactory;
-
-    /**
-     * AccountController constructor.
-     *
-     * @param EncoderFactoryInterface $encoderFactory
-     * @param Security $security
-     */
-    public function __construct(EncoderFactoryInterface $encoderFactory, Security $security)
-    {
-        $this->encoderFactory = $encoderFactory;
-        $this->security = $security;
-    }
-
-    /**
-     * @Route("/incc/login", name="app_account_login", methods={"GET"})
-     *
      * @param Request             $request
      * @param AuthenticationUtils $authenticationUtils
-     *
      * @return Response The response the controller results in
      */
-    public function login(Request $request, AuthenticationUtils $authenticationUtils) : Response
+    #[Route("/incc/login", name: "app_account_login", methods: [ "GET", "POST" ])]
+    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         $redirectTo = $this->redirectIfAuthenticatedOrNoAdmins();
         if (!empty($redirectTo)) {
             return $this->redirectToRoute($redirectTo);
         }
-
         $form = $this->createForm(LoginType::class, [
             'loginUsername' => $authenticationUtils->getLastUsername(),
         ]);
         $form->handleRequest($request);
         $this->data['page']['title'] = 'Sign In';
         $this->data['form'] = $form->createView();
+        $this->data['expired'] = $request->query->has('expired');
         $this->data['error'] = $authenticationUtils->getLastAuthenticationError();
 
         return $this->render('inadmin/signin.html.twig', $this->data);
     }
 
     /**
-     * @Route("/incc/login", name="app_account_login_action", methods={"POST"})
-     */
-    public function loginAction()
-    {
-    }
-
-    /**
-     * @Route("/incc/signout", name="security_logout", methods={"POST"})
-     *
      * @throws \Exception
      */
-    public function logoutAction()
+    #[Route("/incc/logout", name: "app_logout", methods: [ "GET", "POST" ])]
+    public function logout(): never
     {
-        throw new \Exception('this should not be reached!');
+        throw new \Exception('Don\'t forget to activate logout in security.yaml');
     }
 
     /**
-     * @Route("/incc/forgot-password", methods={"GET"})
-     *
      * @param Request             $request
      * @param TranslatorInterface $translator
-     *
      * @return Response
      */
-    public function forgotPassword(Request $request, TranslatorInterface $translator)
+    #[Route("/incc/forgot-password", methods: [ "GET", "POST" ])]
+    public function forgotPassword(Request $request, TranslatorInterface $translator): Response
     {
         $redirectTo = $this->redirectIfAuthenticatedOrNoAdmins();
         if (!empty($redirectTo)) {
@@ -129,13 +100,11 @@ class AccountController extends AbstractInachisController
     }
 
     /**
-     * @Route("/incc/forgot-password", methods={"POST"})
-     *
      * @param Request $request
-     *
      * @return Response
      */
-    public function forgotPasswordSent(Request $request)
+    #[Route("/incc/forgot-password", methods: [ "POST" ])]
+    public function forgotPasswordSent(Request $request): Response
     {
         $redirectTo = $this->redirectIfAuthenticatedOrNoAdmins();
         if (!empty($redirectTo)) {
@@ -146,5 +115,21 @@ class AccountController extends AbstractInachisController
 //            return $response->redirect('/incc/forgot-password')->send();
 //        }
         return $this->render('inadmin/forgot-password-sent.html.twig');
+    }
+
+    public function register(UserPasswordHasherInterface $passwordHasher): Response
+    {
+        // ... e.g. get the user data from a registration form
+//        $user = new User(...);
+//        $plaintextPassword = ...;
+//
+//        // hash the password (based on the security.yaml config for the $user class)
+//        $hashedPassword = $passwordHasher->hashPassword(
+//            $user,
+//            $plaintextPassword
+//        );
+//        $user->setPassword($hashedPassword);
+
+        // ...
     }
 }

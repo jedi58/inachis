@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Series;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,9 +21,6 @@ class SeriesRepository extends AbstractRepository
 
     /**
      * @param Series $series
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function remove(Series $series)
     {
@@ -30,7 +28,10 @@ class SeriesRepository extends AbstractRepository
         $this->getEntityManager()->flush();
     }
 
-    public function getSeriesByPost($page)
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function getSeriesByPost(string $page): mixed
     {
         return $this->createQueryBuilder('s')
             ->select('s')
@@ -41,7 +42,7 @@ class SeriesRepository extends AbstractRepository
             ->getOneOrNullResult();
     }
 
-    public function getPublishedSeriesByPost($page)
+    public function getPublishedSeriesByPost(string $page)
     {
         $qb = $this->createQueryBuilder('s');
         return $qb

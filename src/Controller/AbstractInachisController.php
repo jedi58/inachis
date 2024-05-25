@@ -3,45 +3,48 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Flex\Response;
 
 abstract class AbstractInachisController extends AbstractController
 {
     protected $security;
     protected $entityManager;
-    /**
-     * @var array
-     */
     protected $errors = [];
-    /**
-     * @var array
-     */
     protected $data = [];
 
-    public function setDefaults(ContainerInterface $container)
+    public function __construct(EntityManagerInterface $entityManager, Security $security)
     {
-        $this->entityManager = $this->getDoctrine()->getManager();
+        $this->entityManager = $entityManager;
+        $this->security = $security;
+    }
+
+    /**
+     * @return void
+     */
+    public function setDefaults(): void
+    {
         $this->data = [
             'settings' => [
-                'siteTitle' => $container->getParameter('app.title'),
+                'siteTitle' => $_ENV['APP_TITLE'],//$this->getParameter('app.config.title') ?: 'Untitled Site',
                 'domain' => $this->getProtocolAndHostname(),
                 'google' => [],
-                'language' => $this->container->has('locale') ?
-                    $this->container->get('locale') :
+                'language' => //$this->getParameter('app.config.locale') ?
+                    //$this->getParameter('app.config.locale') :
                     'en',
                 'textDirection' => 'ltr',
                 'abstract' => '',
-                'fb_app_id' => $container->has('app.fb_app_id') ?
-                    $container->get('app.fb_app_id') :
-                    null,
-                'twitter' => $container->has('app.twitter') ?
-                    $container->get('app.twitter') :
-                    null,
+                'geotagContent' => false,
+//                'fb_app_id' => null !== $this->getParameter('app.social.fb_app_id') ?
+//                    $this->getParameter('app.social.fb_app_id') :
+//                    null,
+//                'twitter' => null !== $this->getParameter('app.social.twitter') ?
+//                    $this->getParameter('app.social.twitter') :
+//                    null,
             ],
             'notifications' => [],
             'page'          => [
@@ -55,7 +58,7 @@ abstract class AbstractInachisController extends AbstractController
             'post' => [
                 'featureImage' => '',
             ],
-            'session' => $this->get('security.token_storage')->getToken(),
+            'session' => $this->security->getUser(),
         ];
     }
 
@@ -90,7 +93,7 @@ abstract class AbstractInachisController extends AbstractController
      * Returns the result of testing if a user is currently signed in
      * @return bool Status of user authentication
      */
-    private function isAuthenticated()
+    private function isAuthenticated() : bool
     {
         return $this->security instanceof Security &&
             $this->security->getUser() instanceof User &&
@@ -102,7 +105,7 @@ abstract class AbstractInachisController extends AbstractController
      *
      * @return string[] The array of errors
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
@@ -114,9 +117,9 @@ abstract class AbstractInachisController extends AbstractController
      *
      * @return string|null The requested error message if set
      */
-    public function getError($error)
+    public function getError(string $error): ?string
     {
-        return isset($this->errors[$error]) ? $this->errors[$error] : null;
+        return $this->errors[$error] ?? null;
     }
 
     /**
@@ -126,7 +129,7 @@ abstract class AbstractInachisController extends AbstractController
      * @param string $error   Unique identifier for the error
      * @param string $message The friendly message for the error
      */
-    public function addError($error, $message)
+    public function addError(string $error, string $message): void
     {
         $this->errors[$error] = (string) $message;
     }
@@ -134,11 +137,12 @@ abstract class AbstractInachisController extends AbstractController
     /**
      * @return string
      */
-    public function redirectIfNoAdmins()
+    public function redirectIfNoAdmins(): string
     {
         if ($this->entityManager->getRepository(User::class)->count([]) == 0) {
             return 'app_setup_stage1';
         }
+        return '';
     }
 
     /**
@@ -147,17 +151,18 @@ abstract class AbstractInachisController extends AbstractController
      *
      * @return string
      */
-    public function redirectIfAuthenticated()
+    public function redirectIfAuthenticated(): string
     {
         if ($this->isAuthenticated()) {
             return 'app_dashboard_default';
         }
+        return '';
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function redirectIfAuthenticatedOrNoAdmins()
+    public function redirectIfAuthenticatedOrNoAdmins(): ?string
     {
         return $this->redirectIfAuthenticated() ?: $this->redirectIfNoAdmins();
     }
@@ -169,15 +174,15 @@ abstract class AbstractInachisController extends AbstractController
      * @param Request  $request
      * @param Response $response The response object from the router
      *
-     * @return mixed
+     * @return Response
      */
-    public function redirectToReferrerOrDashboard(Request $request, Response $response)
+    public function redirectToReferrerOrDashboard(Request $request, Response $response): Response
     {
         $referrer = $request->getSession()->get('referrer');
         if (!empty($referrer)) {
 //            return $response->redirect($referrer)->send();
         }
-//        return $response->redirect('/inadmin/')->send();
+//        return $response->redirect('/incc/')->send();
 
         $response->prepare($request);
 

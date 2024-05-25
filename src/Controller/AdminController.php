@@ -6,25 +6,25 @@ use App\Entity\User;
 use App\Form\UserType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AdminController extends AbstractInachisController
 {
     /**
-     * @Route("/incc/user-management", methods={"GET", "POST"})
      * @param Request $request
-     * @return null
+     * @return Response
      * @throws \Exception
      */
-    public function adminList(Request $request)
+    #[Route("/incc/user-management", methods: [ 'GET', 'POST' ])]
+    public function adminList(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $entityManager = $this->getDoctrine()->getManager();
+
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         $offset = (int) $request->get('offset', 0);
-        $limit = $entityManager->getRepository(User::class)->getMaxItemsToShow();
-        $this->data['dataset'] = $entityManager->getRepository(User::class)->getAll(
+        $limit = $this->entityManager->getRepository(User::class)->getMaxItemsToShow();
+        $this->data['dataset'] = $this->entityManager->getRepository(User::class)->getAll(
             $offset,
             $limit
         );
@@ -37,19 +37,29 @@ class AdminController extends AbstractInachisController
     }
 
     /**
-     * @Route("/incc/user/{id}", methods={"GET", "POST"})
      * @param Request $request
      * @param string $id
-     * @return null
+     * @return Response
      * @throws \Exception
      */
-    public function adminDetails(Request $request, string $id)
+    #[Route("/incc/user/{id}", methods: [ "GET", "POST" ])]
+    public function adminDetails(Request $request, string $id): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $entityManager = $this->getDoctrine()->getManager();
-        $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $request->get('id')]);
+
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $request->get('id')]);
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $user->setModDate(new \DateTime('now'));
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
+            $this->addFlash('notice', 'User details saved.');
+            return $this->redirect('/incc/user/' . $user->getId());
+        }
+
         $this->data['user'] = $user;
         $this->data['form'] = $form->createView();
         $this->data['page']['title'] = 'Profile';

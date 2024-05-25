@@ -5,19 +5,16 @@ namespace App\Controller;
 use App\Entity\Page;
 use App\Entity\Series;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DefaultController extends AbstractInachisController
 {
     const ITEMS_TO_SHOW = 10;
-
-    /**
-     * @Route("/", methods={"GET"})
-     */
-    public function homepage()
+    
+    #[Route("/", methods: [ "GET" ])]
+    public function homepage(): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $series = $entityManager->getRepository(Series::class)->getAll(
+        $series = $this->entityManager->getRepository(Series::class)->getAll(
             0,
             self::ITEMS_TO_SHOW,
             [
@@ -39,7 +36,6 @@ class DefaultController extends AbstractInachisController
         ];
         $this->data['content'] = [];
         $excludePages = [];
-
         if (!empty($series)) {
             foreach ($series as $group) {
                 if (!empty($group->getItems())) {
@@ -57,7 +53,7 @@ class DefaultController extends AbstractInachisController
             $pageParameters['excludedPages'] = $excludePages;
         }
 
-        $pages = $entityManager->getRepository(Page::class)->getAll(
+        $pages = $this->entityManager->getRepository(Page::class)->getAll(
             0,
             self::ITEMS_TO_SHOW,
             [
