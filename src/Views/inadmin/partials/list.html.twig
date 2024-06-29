@@ -7,7 +7,7 @@
 
     {{ include('inadmin/partials/filters.html.twig') }}
 
-    <section class="paginated-list">
+    <section class="paginated-list{%- if zebra|default(false) %} zebra{% endif %}">
         <p class="pagination--info">
             Showing {{ offset + 1 }} to {{ min(offset + limit, total) }} of {{ total }}
         </p>
@@ -54,13 +54,8 @@
                         &mdash; {{ item.subTitle }}
                     {% endif %}
 
-                    {% if badges|default(null) is not empty %}
-                        {% for badgeName,badge in badges %}
-                            {%- if attribute(item, badge.field) == badge.condition %}
-                                <span class="badge {{ badge.className }}">{{ badgeName }}</span>
-                            {% endif -%}
-                        {% endfor %}
-                    {% endif %}
+                    {{ include('inadmin/partials/badge.html.twig') }}
+
                 {% if inline|default(false) == false %}
                 </h2>
                 {% else %}
