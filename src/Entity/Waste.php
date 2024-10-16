@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
-use App\Exception\InvalidTimezoneException;
 
 /**
  * Object for handling {@link Waste} contents
@@ -27,6 +26,14 @@ class Waste
      */
     private $sourceType;
     /**
+     * @ORM\Column(type="string", length=255, nulllable=false)
+     */
+    private $sourceName;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $title;
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $content;
@@ -44,11 +51,18 @@ class Waste
      */
     protected $modDate;
 
+    /**
+     * @return string|null
+     */
     public function getId(): ?string
     {
         return $this->id;
     }
 
+    /**
+     * @param string $id
+     * @return $this
+     */
     public function setId(string $id): self
     {
         $this->id = $id;
@@ -56,11 +70,18 @@ class Waste
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSourceType(): ?string
     {
         return $this->sourceType;
     }
 
+    /**
+     * @param string $sourceType
+     * @return $this
+     */
     public function setSourceType(string $sourceType): self
     {
         $this->sourceType = $sourceType;
@@ -68,21 +89,75 @@ class Waste
         return $this;
     }
 
+
     /**
-     * Returns the value of {@link modDate}.
-     *
-     * @return string The date the {@link Page} was last modified
+     * @return string|null
      */
-    public function getModDate()
+    public function getSourceName(): ?string
+    {
+        return $this->sourceName;
+    }
+
+    /**
+     * @param string $sourceName
+     * @return $this
+     */
+    public function setSourceName(string $sourceName): self
+    {
+        $this->sourceName = $sourceName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     * @return $this
+     */
+    public function setTitle($title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string|null $content
+     * @return $this
+     */
+    public function setContent(?string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTimeInterface|null The date the content was deleted
+     */
+    public function getModDate(): ?\DateTimeInterface
     {
         return $this->modDate;
     }
 
     /**
-     * Sets the value of {@link modDate}.
-     *
-     * @param \DateTime $value The date to set
-     * @return Revision
+     * @param \DateTimeInterface $value
+     * @return $this
      */
     public function setModDate(\DateTime $value = null): self
     {
@@ -103,23 +178,11 @@ class Waste
      * Sets the value of {@link author}.
      *
      * @param User $value The UUID of user adding the {@link Waste}
-     * @return Revision
+     * @return $this
      */
     public function setUser(User $value = null): self
     {
         $this->user = $value;
-
-        return $this;
-    }
-
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function setContent(?string $content): self
-    {
-        $this->content = $content;
 
         return $this;
     }
